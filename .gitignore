@@ -1,0 +1,4 @@
+# kontrolliert, welche Dateien nicht ins repository genommen werden
+build/
+.idea/
+.gradle/
