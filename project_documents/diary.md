@@ -4,7 +4,8 @@ Heute haben wir ein Brainstorming gemacht und unser Spiel provisorisch festgeleg
 Wir werden voraussichtlich ein Spiel machen, welches gleich oder ähnlich wie Okey funktioniert. 
 ## 9.3.2024
 Arbeit am ersten Meilenstein:
-Mockup kreieren 
-requirement analysis 
-Festlegung auf einen Namen: JavaTiles
-erste Ideen fürs Design
+- Mockup kreieren
+- requirement analysis und Networking Achievements angefangen
+- Festlegung auf einen Namen: JavaTiles
+- erste Ideen fürs Design
+- PowerPoint-Präsentation angefangen
