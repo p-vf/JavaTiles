@@ -9,3 +9,7 @@ Arbeit am ersten Meilenstein:
 - Festlegung auf einen Namen: JavaTiles
 - erste Ideen fürs Design
 - PowerPoint-Präsentation angefangen
+## 12.3.2024
+- Powerpoint beendet
+- requirement analysis und Networking Achievements weiterentwickelt
+- Gruppenname: vonUken
