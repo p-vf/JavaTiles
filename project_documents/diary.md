@@ -13,3 +13,8 @@ Arbeit am ersten Meilenstein:
 - Powerpoint beendet
 - requirement analysis und Networking Achievements weiterentwickelt
 - Gruppenname: vonUken
+## 13.3.2024
+-weitere Bearbeitung an der Präsentation
+-Gant-Project ausgebaut
+-Gruppeneinteilung: Client: Boran, Robin Server: Istref, Pascal
+
