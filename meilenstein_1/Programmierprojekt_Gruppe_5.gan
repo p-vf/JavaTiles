@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Programmierprojekt_Gruppe_5" company="" webLink="http://" view-date="2024-03-06" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3305" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="Programmierprojekt_Gruppe_5" company="" webLink="http://" view-date="2024-03-10" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3305" locale="de_DE">
     <description/>
-    <view zooming-state="default:3" id="gantt-chart">
-        <field id="tpd3" name="Name" width="200" order="0"/>
-        <field id="tpd4" name="Begin date" width="75" order="1"/>
-        <field id="tpd5" name="End date" width="75" order="2"/>
-        <field id="tpd15" name="Notes" width="20" order="3"/>
+    <view zooming-state="default:2" id="gantt-chart">
+        <field id="tpd3" name="Vorgang" width="200" order="0"/>
+        <field id="tpd4" name="Anfang" width="75" order="1"/>
+        <field id="tpd5" name="Ende" width="75" order="2"/>
+        <field id="tpd15" name="Notizen" width="20" order="3"/>
         <option id="filter.completedTasks" value="false"/>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
         <option id="filter.inProgressTodayTasks" value="false"/>
-        <option id="color.recent"><![CDATA[#f4f4f4]]></option>
+        <option id="color.recent"><![CDATA[#990099 #f4f4f4]]></option>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="210" order="0"/>
-        <field id="1" name="Default role" width="86" order="1"/>
+        <field id="0" name="Ressource" width="210" order="0"/>
+        <field id="1" name="Rolle" width="86" order="1"/>
     </view>
     <!-- -->
     <calendars>
