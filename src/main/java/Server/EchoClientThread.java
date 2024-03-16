@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,7 +13,7 @@ public class EchoClientThread implements Runnable {
     this.socket = socket;
   }
   public void run() {
-    String msg = "EchoServer: Verbindung " + name;
+    String msg = "Server.EchoServer: Verbindung " + name;
     System.out.println(msg + " hergestellt");
     try {
       InputStream in = socket.getInputStream();

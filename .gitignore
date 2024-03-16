@@ -1,4 +1,8 @@
-# kontrolliert, welche Dateien nicht ins repository genommen werden
+# kontrolliert, welche Dateien nicht ins Repository genommen werden
 build/
 .idea/
 .gradle/
+**/.DS_store
+*.class
+*.jar
+*.log
