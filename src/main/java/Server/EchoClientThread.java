@@ -9,6 +9,10 @@ import java.util.ArrayList;
 public class EchoClientThread implements Runnable {
   private int name;
   private Socket socket;
+  private OutputStream out;
+  private InputStream in;
+  private static final int PING_TIMEOUT = 15000;
+
   public EchoClientThread(int name, Socket socket) {
     this.name = name;
     this.socket = socket;
@@ -19,28 +23,39 @@ public class EchoClientThread implements Runnable {
     String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
     System.out.println("Result: " + parseRequest(request).toString());
   }
+
   @Override
   public void run() {
     String msg = "Server.EchoServer: Verbindung " + name;
+
     System.out.println(msg + " hergestellt");
     try {
-      InputStream in = socket.getInputStream();
-      OutputStream out = socket.getOutputStream();
-      out.write(("cs108:"+msg+"\r\n").getBytes());
+      socket.setSoTimeout(PING_TIMEOUT);
+      in = socket.getInputStream();
+      out = socket.getOutputStream();
+
+      out.write(("cs108:" + msg + "\r\n").getBytes());
+      Thread pthread = new Thread(new PingThread(out, PING_TIMEOUT - 5000));
+      pthread.start();
+
       int c = 0;
       StringBuilder requestBuilder = new StringBuilder();
+
       while (c != -1) {
         c = in.read();
         requestBuilder.append((char) c);
-        char last = requestBuilder.charAt(requestBuilder.length()-1);
-        char secondLast = requestBuilder.charAt(requestBuilder.length()-2);
-        if (last == '\n' && secondLast == '\r') {
+
+        char last = requestBuilder.charAt(requestBuilder.length() - 1);
+        char secondLast = requestBuilder.charAt(requestBuilder.length() - 2);
+
+        if (secondLast == '\r' && last == '\n') {
           String request = requestBuilder.toString();
           handleRequest(request);
           requestBuilder.delete(0, requestBuilder.length() - 1);
         }
         System.out.write((char) c);
       }
+
     } catch (IOException e) {
       System.err.println(e.toString());
     }
@@ -53,7 +68,7 @@ public class EchoClientThread implements Runnable {
    *
    * @param request Zeichenfolge mit im Netzwerkprotokoll definierter Form.
    * @return eine ArrayList, welche den Command und seine Argumente als String enthält.
-   * */
+   */
   private static ArrayList<String> parseRequest(String request) {
     char[] chars = request.toCharArray();
     // only handles a command with up to 9 arguments..
@@ -97,6 +112,7 @@ public class EchoClientThread implements Runnable {
     }
     return command;
   }
+
   private void handleRequest(String request) {
     ArrayList<String> arguments = parseRequest(request);
     Protocol command = Protocol.valueOf(arguments.remove(0));
