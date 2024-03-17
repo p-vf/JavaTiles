@@ -19,12 +19,10 @@ Arbeit am ersten Meilenstein:
 - Gruppeneinteilung: Client: Boran, Robin Server: Istref, Pascal
 ## 15.3.2024
 - Syntax fürs Netzwerkprotokoll festgelegt und erste Einträge gemacht
+- genaue Arbeitsteilung(spezifizierung der To-Do-Liste)
+- Besprechung des 2ten Meilensteins
 ## 16.3.2024
 - das Netzwerkprotokoll weitergeführt 
 - am Server-Client-Code gearbeitet(Ping-Pong)
 
-
-## 15.3.2024
--genaue Arbeitsteilung(spezifizierung der To-Do-Liste)
--Besprechung des 2ten Meilensteins
 
