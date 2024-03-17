@@ -14,9 +14,15 @@ Arbeit am ersten Meilenstein:
 - requirement analysis und Networking Achievements weiterentwickelt
 - Gruppenname: vonUken
 ## 13.3.2024
--weitere Bearbeitung an der Präsentation
--Gant-Project ausgebaut
--Gruppeneinteilung: Client: Boran, Robin Server: Istref, Pascal
+- weitere Bearbeitung an der Präsentation
+- Gant-Project ausgebaut
+- Gruppeneinteilung: Client: Boran, Robin Server: Istref, Pascal
+## 15.3.2024
+- Syntax fürs Netzwerkprotokoll festgelegt und erste Einträge gemacht
+## 16.3.2024
+- das Netzwerkprotokoll weitergeführt 
+- am Server-Client-Code gearbeitet(Ping-Pong)
+
 
 ## 15.3.2024
 -genaue Arbeitsteilung(spezifizierung der To-Do-Liste)
