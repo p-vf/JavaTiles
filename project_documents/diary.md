@@ -24,3 +24,7 @@ Arbeit am ersten Meilenstein:
 - am Server-Client-Code gearbeitet(Ping-Pong)
 
 
+## 15.3.2024
+-genaue Arbeitsteilung(spezifizierung der To-Do-Liste)
+-Besprechung des 2ten Meilensteins
+
