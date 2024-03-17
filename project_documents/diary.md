@@ -18,3 +18,7 @@ Arbeit am ersten Meilenstein:
 -Gant-Project ausgebaut
 -Gruppeneinteilung: Client: Boran, Robin Server: Istref, Pascal
 
+## 15.3.2024
+-genaue Arbeitsteilung(spezifizierung der To-Do-Liste)
+-Besprechung des 2ten Meilensteins
+
