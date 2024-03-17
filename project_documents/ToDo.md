@@ -19,4 +19,4 @@
 
 # Fragen bis Tutorat 18.3.:
 - Wo müssen die Decks gespeichert werden?
-- Muss in der Chat-Nachricht im Protokoll auch der Sender angegeben werden? 
+- Muss in der Chat-Nachricht im Protokoll auch der Sender angegeben werden?
