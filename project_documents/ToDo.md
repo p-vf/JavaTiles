@@ -7,7 +7,7 @@
 
 # Meilenstein 2: 25.03
 - gitignore(Pascal)
-- Protocol definieren(alle) 
+- Server.Protocol definieren(alle) 
 - Client Chat(alle)
 - Nickname(alle) auf Client(muss Namen wählen) und Server(überprüft ob duplikat falls ja ändert)
 - Client schlägt namen vor, falls kein Name eingegeben wurde(mit whoami)
