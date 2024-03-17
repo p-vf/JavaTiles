@@ -12,6 +12,7 @@ public class EchoClientThread implements Runnable {
     this.name = name;
     this.socket = socket;
   }
+  @Override
   public void run() {
     String msg = "Server.EchoServer: Verbindung " + name;
     System.out.println(msg + " hergestellt");
@@ -22,7 +23,7 @@ public class EchoClientThread implements Runnable {
       int c;
       while ((c = in.read()) != -1) {
         out.write((char) c);
-        System.out.println((char) c);
+        System.out.write((char) c);
       }
     } catch (IOException e) {
       System.err.println(e.toString());
