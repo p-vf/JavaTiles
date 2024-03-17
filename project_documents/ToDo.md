@@ -20,3 +20,6 @@
 # Fragen bis Tutorat 18.3.:
 - Wo müssen die Decks gespeichert werden?
 - Muss in der Chat-Nachricht im Protokoll auch der Sender angegeben werden?
+- Wann muss der Ping austausch starten?
+- Wie kann man von mehreren Threads auf einen OutputStream schreiben / von einem InputStream lesen?
+- (follow up auf vorherige Frage) oder muss das problem anders gelöst werden?

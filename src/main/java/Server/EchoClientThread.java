@@ -26,6 +26,7 @@ public class EchoClientThread implements Runnable {
 
   @Override
   public void run() {
+    // TODO handle SocketTimeoutException, SocketException
     String msg = "Server.EchoServer: Verbindung " + name;
 
     System.out.println(msg + " hergestellt");
