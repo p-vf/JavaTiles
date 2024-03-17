@@ -17,4 +17,10 @@ Arbeit am ersten Meilenstein:
 - weitere Bearbeitung an der Präsentation
 - Gant-Project ausgebaut
 - Gruppeneinteilung: Client: Boran, Robin Server: Istref, Pascal
+## 15.3.2024
+- Syntax fürs Netzwerkprotokoll festgelegt und erste Einträge gemacht
+## 16.3.2024
+- das Netzwerkprotokoll weitergeführt 
+- am Server-Client-Code gearbeitet(Ping-Pong)
+
 
