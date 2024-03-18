@@ -1,4 +1,5 @@
 package Client;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 public class LoginClient {
     private final Scanner scanner = new Scanner(System.in);
@@ -9,16 +10,32 @@ public class LoginClient {
     }
 
     public String enterUsername() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter username:");
-        return scanner.nextLine();
+        String username = scanner.nextLine();
+        while(username.length()>15){
+            System.out.println("Name zu lang:");
+            username = scanner.nextLine();
+        }
+        if(username.isEmpty()){
+            username = System.getProperty("user.name"); //whoami 
+
+
+        }
+        return username;
     }
-    public int enterLobbyNumber(){
-        Scanner scanner = new Scanner(System.in);
+    public int enterLobbyNumber() {
         System.out.println("Enter lobby number:");
-        return scanner.nextInt();
+        int lobbyNumber = 0;
+        try{
+        lobbyNumber = scanner.nextInt();}
+        catch(InputMismatchException e){
+            System.out.println("Geben Sie eine Zahl ein.");
+        }
+        return lobbyNumber;
 
     }
+
+
 
     public static void main(String[] args){
         LoginClient login = new LoginClient();
