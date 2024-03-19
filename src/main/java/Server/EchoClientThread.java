@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class EchoClientThread implements Runnable {
   private int id;
-  private String nickname;
+  public String nickname;
   private final EchoServer server;
   private final Socket socket;
   public SyncOutputStreamHandler syncOut;
@@ -118,6 +118,16 @@ public class EchoClientThread implements Runnable {
     // TODO handle all cases
     switch (command) {
       case LOGI:
+        String newNickname = arguments.get(1);
+        ArrayList<String> names = server.getNicknames();
+
+        for (int i = 0; i < names.size(); i++) {
+          if(newNickname.equals(names.get(i))){
+            newNickname += "_";
+            i = 0;
+          }
+        }
+        nickname = newNickname;
         break;
       case LOGO:
         break;

@@ -45,4 +45,16 @@ public class EchoServer {
     public synchronized void logClientOut(EchoClientThread client) {
         clientList.remove(client);
     }
+
+    public ArrayList<String> getNicknames() {
+        ArrayList<String> nicknames = new ArrayList<>();
+        for (EchoClientThread client : clientList) {
+            if (client.nickname != null && !client.nickname.isEmpty()) {
+                nicknames.add(client.nickname);
+            }
+        }
+        return nicknames;
+    }
+
 }
+
