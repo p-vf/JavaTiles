@@ -19,6 +19,7 @@ public class PingThread implements Runnable {
         syncOut.writeData("PING\r\n".getBytes());
         Thread.sleep(interval);
       }
+
     } catch(IOException | InterruptedException e) {
       e.printStackTrace();
     }

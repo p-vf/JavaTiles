@@ -25,7 +25,7 @@ Arbeit am ersten Meilenstein:
 - das Netzwerkprotokoll weitergeführt 
 - am Server-Client-Code gearbeitet(Ping-Pong)
 ## 17.3.2024
-- Scanner für Client-Login definiert
+- Client-Login definiert
 - Ping Funktion auf Server und Client integriert(erste Version)
 - Client handling
 - Client Chat-Funktion.

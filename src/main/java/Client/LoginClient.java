@@ -1,15 +1,27 @@
 package Client;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 public class LoginClient {
     private final Scanner scanner = new Scanner(System.in);
+    private String username = System.getProperty("user.name");
+    private int lobbyNumber = 0;
 
+    
 
     public void closeScanner(){
         scanner.close();
     }
 
-    public String enterUsername() {
+    public String getUsername(){
+        return this.username;
+    }
+
+    public int getLobbyNumber(){
+        return this.lobbyNumber;
+    }
+    public void setUsername() {
         System.out.println("Enter username:");
         String username = scanner.nextLine();
         while(username.length()>15){
@@ -17,21 +29,21 @@ public class LoginClient {
             username = scanner.nextLine();
         }
         if(username.isEmpty()){
-            username = System.getProperty("user.name"); //whoami 
+            username = System.getProperty("user.name"); //whoami
 
 
         }
-        return username;
+        this.username= username;
     }
-    public int enterLobbyNumber() {
+    public void setLobbyNumber() {
         System.out.println("Enter lobby number:");
         int lobbyNumber = 0;
-        try{
-        lobbyNumber = scanner.nextInt();}
-        catch(InputMismatchException e){
+        try {
+            lobbyNumber = scanner.nextInt();
+        } catch (InputMismatchException e) {
             System.out.println("Geben Sie eine Zahl ein.");
         }
-        return lobbyNumber;
+        this.lobbyNumber = lobbyNumber;
 
     }
 
@@ -39,9 +51,12 @@ public class LoginClient {
 
     public static void main(String[] args){
         LoginClient login = new LoginClient();
-        System.out.println(login.enterUsername());
-        System.out.println(login.enterLobbyNumber());
-        login.closeScanner();
+        System.out.println(login.getUsername());
+        System.out.println(login.getLobbyNumber());
+        login.setUsername();
+        login.setLobbyNumber();
+        System.out.println(login.getUsername());
+        System.out.println(login.getLobbyNumber());
     }
 
 
