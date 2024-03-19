@@ -1,14 +1,12 @@
 package Client;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
 
 public class ClientPingThread implements Runnable {
-    private OutputStream out;
+    private SyncOutputStreamHandler syncOut;
     private int interval;
-    public ClientPingThread(OutputStream out, int interval) {
-        this.out = out;
+    public ClientPingThread(SyncOutputStreamHandler syncOut, int interval) {
+        this.syncOut = syncOut;
         this.interval = interval;
     }
 
@@ -16,7 +14,7 @@ public class ClientPingThread implements Runnable {
     public void run() {
         try {
             while (true) {
-                out.write("PING".getBytes());
+                syncOut.writeData("PING\r\n".getBytes());
                 Thread.sleep(interval);
             }
 
@@ -25,4 +23,3 @@ public class ClientPingThread implements Runnable {
         }
     }
 }
-
