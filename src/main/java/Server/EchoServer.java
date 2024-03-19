@@ -41,6 +41,19 @@ public class EchoServer {
             }
         }
     }
+    public void broadcastMessage(byte[] data, EchoClientThread sender) {
+        for (EchoClientThread client : clientList) {
+            if (client == sender) {
+                continue;
+            }
+            try {
+                client.syncOut.writeData(data);
+            } catch (IOException e) {
+                client.logout();
+                clientList.remove(client);
+            }
+        }
+    }
 
     public synchronized void logClientOut(EchoClientThread client) {
         clientList.remove(client);
@@ -56,5 +69,17 @@ public class EchoServer {
         return nicknames;
     }
 
+    public void sendMessageToNickname(byte[] data, String nickname) {
+        for (var client : clientList) {
+            if (client.nickname.equals(nickname)) {
+                try {
+                    client.syncOut.writeData(data);
+                } catch (IOException e) {
+                    // TODO bessere Fehlerabhandlung
+                    e.printStackTrace(System.err);
+                }
+            }
+        }
+    }
 }
 

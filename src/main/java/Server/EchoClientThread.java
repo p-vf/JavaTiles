@@ -112,6 +112,18 @@ public class EchoClientThread implements Runnable {
     return command;
   }
 
+  private static boolean readFlag(String flag) {
+    boolean whisper = false;
+    if (flag.equals("t")) {
+      whisper = true;
+    } else if (flag.equals("f")) {
+      //whisper = false;
+    } else {
+      // TODO sollte nicht so abgehandelt werden..
+      throw new Error("flag is neither \"t\" nor \"f\"\n");
+    }
+    return whisper;
+  }
   private void handleRequest(String request) {
     ArrayList<String> arguments = parseRequest(request);
     Protocol command = Protocol.valueOf(arguments.remove(0));
@@ -142,6 +154,16 @@ public class EchoClientThread implements Runnable {
       case EMPT:
         break;
       case CATC:
+        String w = arguments.get(0); // whisper flag
+        String msg = arguments.get(1); // chat-message
+        String sender = nickname;
+        boolean whisper = readFlag(w);
+        String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
+        if (whisper) {
+          server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
+        } else {
+          server.broadcastMessage(cmd.getBytes(), this);
+        }// TODO send response if successful (+CATC)
         break;
       case CATS:
         break;
