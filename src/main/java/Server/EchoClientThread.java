@@ -2,20 +2,23 @@ package Server;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 public class EchoClientThread implements Runnable {
-  private int name;
-  private Socket socket;
-  private OutputStream out;
+  private int id;
+  private String nickname;
+  private final EchoServer server;
+  private final Socket socket;
+  public SyncOutputStreamHandler syncOut;
   private InputStream in;
   private static final int PING_TIMEOUT = 15000;
 
-  public EchoClientThread(int name, Socket socket) {
-    this.name = name;
+  public EchoClientThread(int id, Socket socket, EchoServer server) {
+    this.id = id;
     this.socket = socket;
+    this.server = server;
   }
 
   // for testing purposes
@@ -27,16 +30,16 @@ public class EchoClientThread implements Runnable {
   @Override
   public void run() {
     // TODO handle SocketTimeoutException, SocketException
-    String msg = "Server.EchoServer: Verbindung " + name;
+    String msg = "Server: Verbindung " + id;
 
     System.out.println(msg + " hergestellt");
     try {
       socket.setSoTimeout(PING_TIMEOUT);
       in = socket.getInputStream();
-      out = socket.getOutputStream();
+      syncOut = new SyncOutputStreamHandler(socket.getOutputStream());
+      syncOut.writeData((msg + "\r\n").getBytes());
 
-      out.write(("cs108:" + msg + "\r\n").getBytes());
-      Thread pthread = new Thread(new PingThread(out, PING_TIMEOUT - 5000));
+      Thread pthread = new Thread(new PingThread(syncOut, PING_TIMEOUT - 5000));
       pthread.start();
 
       int c = 0;
@@ -58,7 +61,12 @@ public class EchoClientThread implements Runnable {
       }
 
     } catch (IOException e) {
-      System.err.println(e.toString());
+      //System.out.println("EchoClientThread with id:" + id);
+      if (e instanceof SocketTimeoutException) {
+        // TODO somehow remove client from clientList
+        logout();
+      }
+      e.printStackTrace(System.err);
     }
   }
 
@@ -141,6 +149,17 @@ public class EchoClientThread implements Runnable {
         break;
       case PONG:
         break;
+    }
+  }
+
+  public void logout() {
+    try {
+      server.logClientOut(this);
+      socket.close();
+      in.close();
+      syncOut.close();
+    } catch (IOException e) {
+      e.printStackTrace(System.err);
     }
   }
 }
