@@ -1,7 +1,9 @@
 package Server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -42,28 +44,15 @@ public class EchoClientThread implements Runnable {
       Thread pthread = new Thread(new PingThread(syncOut, PING_TIMEOUT - 5000));
       pthread.start();
 
-      int c = 0;
-      StringBuilder requestBuilder = new StringBuilder();
+      BufferedReader bReader = new BufferedReader(new InputStreamReader(in));
 
-      while (c != -1) {
-        c = in.read();
-        requestBuilder.append((char) c);
-
-        char last = requestBuilder.charAt(requestBuilder.length() - 1);
-        char secondLast = requestBuilder.charAt(requestBuilder.length() - 2);
-
-        if (secondLast == '\r' && last == '\n') {
-          String request = requestBuilder.toString();
-          handleRequest(request);
-          requestBuilder.delete(0, requestBuilder.length() - 1);
-        }
-        System.out.write((char) c);
+      while(true){
+        String request = bReader.readLine();
+        handleRequest(request);
       }
-
     } catch (IOException e) {
       //System.out.println("EchoClientThread with id:" + id);
       if (e instanceof SocketTimeoutException) {
-        // TODO somehow remove client from clientList
         logout();
       }
       e.printStackTrace(System.err);
