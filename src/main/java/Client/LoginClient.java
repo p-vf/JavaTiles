@@ -3,7 +3,7 @@ package Client;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class LoginClient {
+public class LoginClient{
     private final Scanner scanner = new Scanner(System.in);
     private String username = System.getProperty("user.name");
     private int lobbyNumber = 0;
@@ -38,14 +38,21 @@ public class LoginClient {
     public void setLobbyNumber() {
         System.out.println("Enter lobby number:");
         int lobbyNumber = 0;
+        while(true){
         try {
             lobbyNumber = scanner.nextInt();
+            break;
         } catch (InputMismatchException e) {
             System.out.println("Geben Sie eine Zahl ein.");
+            scanner.nextLine();
+
+        }
         }
         this.lobbyNumber = lobbyNumber;
 
     }
+
+
 
 
 
