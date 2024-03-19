@@ -1,11 +1,17 @@
 Oft verwendete Parameter und ihre Einschränkungen:
-<nickname>,<whisperrecipient>: Spielername ohne Leerschlag, mit maximaler Länge 15. (stellt Spielername dar)
+<lobbyfull>,<nametaken>,<valid>,<won>,<whisper>: entweder "t" oder "f", stellt booleschen Wert dar (true/false)
+<nickname>,<whisperrecipient>,<sender>: Spielername ohne Leerschlag, mit maximaler Länge 15. (stellt Spielername dar)
 <msg>: Mit Anführungszeichen begrenzte Zeichenfolge, welche Anführungszeichen mit \" darstellt. (Stellt Nachricht dar)
 <n>: Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)
 <drawstack>: entweder "m" oder "p" (stellt entweder Hauptstapel oder Nachbarsstapel dar)
-<tile>: eine Repräsentation eines Spielsteins 
+<tile>: eine Repräsentation eines Spielsteins
+    (Vorschlag: <zahl><farbe>, wobei <zahl> eine Zahl von 01 bis 13 ist (immer zwei Ziffern lang)
+    und <farbe> der erste Buchstabe der Farbe, die der Stein hat, ist.)
+<deck>: eine Repräsentation des Spielerdecks
+    (Vorschlag: <tile_1><tile_2>...<tile_20> wobei <tile_N> die gleiche darstellung wie <tile> hat)
 <gamestate>: eine Repräsentation des Spielzustandes
-TODO spezifizieren der Darstellung von <tile> und <gamestate>
+TODO festlegen der Darstellung von <tile> und <deck>
+TODO festlegen, was alles in <gamestate> gespeichert werden muss.
 
 LOGI <n> <nickname>                       von Client
 +LOGI <lobbyfull> <nametaken>                  
@@ -43,7 +49,8 @@ PUTT <tile> <deck>                        von Client
 
 PWIN <nickname>                           von Server
 +PWIN
-    Command wird gesendet, wenn das Spiel vom Spieler mit Name nickname gewonnen wird. 
+    Command wird gesendet, wenn das Spiel vom Spieler mit Name nickname gewonnen wird.
+
 
 EMPT                                      von Server
 +EMPT
@@ -62,10 +69,11 @@ CATC <whisper> "<msg>" [<whisperrecipient>]  von Client
     Beispiel:
         CATC t "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin
 
-CATS <whisper> "<msg>" [<whisperrecipient>]  von Server
+CATS <whisper> "<msg>" <sender>          von Server
 +CATS
     In diesem Command wird die Nachricht eines Clients an einen oder mehrere Clients in der Lobby weitergeleitet. 
-    Die Nachricht wird nur an alle Clients in der Lobby weitergeleitet, wenn whisper "f" ist. 
+    Die Nachricht wird nur an alle Clients in der Lobby weitergeleitet, wenn whisper vom zugehörigen CATC command "f" ist.
+    Der sender ist der Nickname des Clients, der die Nachricht gesendet hat.
     Die Nachricht in msg muss so aussehen wie bei CATC. 
     Beispiel:
         CATS t "Ich werde gewinnen heheheh" boran
@@ -73,5 +81,5 @@ CATS <whisper> "<msg>" [<whisperrecipient>]  von Server
 PING                                      von Server / Client
 +PING
     Die Ping-Nachricht wird alle 10 Sekunden gesendet, um Verbindungsunterbrüche zu testen. 
-    Falls keine antwort innerhalb von 5 sekunden zurückkommt, wird die Verbindung beendet. 
+    Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird die Verbindung beendet.
     
