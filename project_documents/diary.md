@@ -29,6 +29,16 @@ Arbeit am ersten Meilenstein:
 - Ping Funktion auf Server und Client integriert(erste Version)
 - Client handling
 - Client Chat-Funktion.
+## 19.3.2024
+- Beim Clientlogin eine get-Methode für den Username und einige Felder hinzugefügt, um Daten an den Server weiter zu schicken.
+- Beim Server die Methode logClientOut hinzugefügt, um bei Fehlverbindungen den Client rauszuwerfen.
+- Beim EchoClientThread die Methode logout implementiert und bei Fehlerbehandlungen eingefügt.
+- Die Klasse SyncOutputStreamHandler hinzugefügt um sicherzustellen, dass die Threads nicht in einen Konflikt geraten, sondern synchronisiert sind.
+- Die run-Methode von Echoclientthread verbessert, weil sie nicht richtig funktioniert hat.
+- Es wurde ein ClientPingThread erstellt um Pings an den Server zu schicken, welcher im EchoClient aktiviert wird.
+- Eine erste Implementation des Chats durch die Klasse Clienthandler.
+- Der SyncOutputStreamHandler auf der Client Seite wurde auch implementiert aus dem gleichen Grund wie es auf der Serverseite geschehen ist.
+- Eine erste Implementation des switch Case LOGI wurde erstellt, bei der auch eine getNicknames Methode im Server erstellt wurde.
 
 
 
