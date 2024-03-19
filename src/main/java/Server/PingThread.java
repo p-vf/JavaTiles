@@ -5,10 +5,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class PingThread implements Runnable {
-  private OutputStream out;
+  private SyncOutputStreamHandler syncOut;
   private int interval;
-  public PingThread(OutputStream out, int interval) {
-    this.out = out;
+  public PingThread(SyncOutputStreamHandler syncOut, int interval) {
+    this.syncOut = syncOut;
     this.interval = interval;
   }
 
@@ -16,7 +16,7 @@ public class PingThread implements Runnable {
   public void run() {
     try {
       while (true) {
-        out.write("PING".getBytes());
+        syncOut.writeData("PING\r\n".getBytes());
         Thread.sleep(interval);
       }
 
