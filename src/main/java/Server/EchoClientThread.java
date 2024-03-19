@@ -49,6 +49,7 @@ public class EchoClientThread implements Runnable {
       while(true){
         String request = bReader.readLine();
         handleRequest(request);
+        System.out.println("Recieved: " + request);
       }
     } catch (IOException e) {
       //System.out.println("EchoClientThread with id:" + id);
