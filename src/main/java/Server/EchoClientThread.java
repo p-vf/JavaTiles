@@ -124,7 +124,7 @@ public class EchoClientThread implements Runnable {
     }
     return whisper;
   }
-  private void handleRequest(String request) {
+  private void handleRequest(String request) throws IOException {
     ArrayList<String> arguments = parseRequest(request);
     Protocol command = Protocol.valueOf(arguments.remove(0));
     // TODO handle all cases
@@ -139,8 +139,9 @@ public class EchoClientThread implements Runnable {
             i = 0;
           }
         }
-        // TODO send actualname back to client
+
         nickname = newNickname;
+        syncOut.writeData(("+LOGI " + nickname + "\r\n").getBytes());
         break;
       case LOGO:
         break;
@@ -160,12 +161,14 @@ public class EchoClientThread implements Runnable {
         String sender = nickname;
         boolean whisper = readFlag(w);
         // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
+        //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
         String cmd = "CATS " + w + " \"" + msg + "\" " + sender + "\r\n";
         if (whisper) {
           server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
         } else {
           server.broadcastMessage(cmd.getBytes(), this);
-        }// TODO send response if successful (+CATC)
+        }
+        syncOut.writeData("+CATC\r\n".getBytes());
         break;
       case CATS:
         break;
