@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+/**
+ * This class represents a thread for handling communication with a client in the EchoServer.
+ */
 public class EchoClientThread implements Runnable {
   private int id;
   public String nickname;
@@ -17,6 +20,13 @@ public class EchoClientThread implements Runnable {
   private InputStream in;
   private static final int PING_TIMEOUT = 15000;
 
+  /**
+   * Constructor of the EchoClientThread class.
+   *
+   * @param id The id-number of the client which is always larger than 0.
+   * @param socket The socket that is used to create the connection between client and server.
+   * @param server The server which gets connected to the client.
+   *  */
   public EchoClientThread(int id, Socket socket, EchoServer server) {
     this.id = id;
     this.socket = socket;
@@ -49,7 +59,7 @@ public class EchoClientThread implements Runnable {
       while(true){
         String request = bReader.readLine();
         handleRequest(request);
-        System.out.println("Recieved: " + request);
+        System.out.println("Received: " + request);
       }
     } catch (IOException e) {
       //System.out.println("EchoClientThread with id:" + id);
@@ -145,6 +155,8 @@ public class EchoClientThread implements Runnable {
         syncOut.writeData(("+LOGI " + nickname + "\r\n").getBytes());
         break;
       case LOGO:
+        logout();
+        syncOut.writeData(("+LOGO " + nickname + "\r\n").getBytes());
         break;
       case STAT:
         break;
