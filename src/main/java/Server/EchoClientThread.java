@@ -139,6 +139,7 @@ public class EchoClientThread implements Runnable {
             i = 0;
           }
         }
+        // TODO send actualname back to client
         nickname = newNickname;
         break;
       case LOGO:
@@ -158,7 +159,8 @@ public class EchoClientThread implements Runnable {
         String msg = arguments.get(1); // chat-message
         String sender = nickname;
         boolean whisper = readFlag(w);
-        String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
+        // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
+        String cmd = "CATS " + w + " \"" + msg + "\" " + sender + "\r\n";
         if (whisper) {
           server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
         } else {

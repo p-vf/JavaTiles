@@ -14,15 +14,16 @@ TODO festlegen der Darstellung von <tile> und <deck>
 TODO festlegen, was alles in <gamestate> gespeichert werden muss.
 
 LOGI <n> <nickname>                       von Client
-+LOGI <lobbyfull> <nametaken>                  
++LOGI <lobbyfull> <actualname>
     Login auf Server in Lobby n mit Spielername nickname.
-    Als Antwort kommen flags, die aussagen, ob die Lobby schon voll ist
-    und ob der name schon existiert.
+    Als Antwort kommt eine flag lobbyfull, die aussagt, ob die Lobby schon voll ist, und
+    ein Spielername actualname, welcher der Name ist, welcher der Spieler effektiv erhält.
 
 NAME <nickname>                           von Client
-+NAME <nametaken>
++NAME <actualname>
     Wird gesendet, wenn der User seinen Spielernamen verändern will.
-    Als Flag kommt zurück, ob der Name schon existiert. 
+    In der Antwort ist das Argument actualname enthalten, welches den effektiven Spielernamen
+    enthält, welchen der Spieler erhalten hat.
 
 LOGO                                      von Client
 +LOGO
