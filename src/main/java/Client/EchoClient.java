@@ -9,7 +9,9 @@ public class EchoClient {
   private static final int PING_TIMEOUT = 15000;
   public static SyncOutputStreamHandler syncOut;
 
-  private String nickname = System.getProperty("user.name");
+  private static String nickname = System.getProperty("user.name");
+
+
 
   private static ArrayList<String> parseRequest(String request) {
     char[] chars = request.toCharArray();
@@ -55,22 +57,30 @@ public class EchoClient {
     return command;
   }
 
-  public static String handleInput(String input){
-     ArrayList<String> arguments = parseRequest(input);
-     String inputcommand = arguments.get(0);
-     switch(inputcommand){
-       //case "/nickname":
-         //break;
+  public static String handleInput(String input) {
+    ArrayList<String> arguments = parseRequest(input);
+    String inputCommand = arguments.remove(0);
+    switch (inputCommand) {
+      case "/nickname":
+        nickname = input;
+        return "NICK "+ input;
 
-       case"/chat":
-         String message = "CATC"+arguments.get(1);
-         return message;
+      case "/chat":
+        if (arguments.get(0).equals("/w")) {
+          String whispermessage = "CATC " + "t " + arguments.get(1) + arguments.get(2);
+          return whispermessage;
+        } else {
+          String message = "CATC " + "f " + arguments.get(0);
+          return message;
+        }
 
-       default:
-         return input;
-     }
+      default:
+        return "";
+    }
 
   }
+
+
 
 
   public static void main(String[] args) {
@@ -88,7 +98,17 @@ public class EchoClient {
 
       sock.setSoTimeout(PING_TIMEOUT);
 
+
+
+
+
+
       LoginClient login = new LoginClient();
+      nickname = login.setUsername();
+      String logindata = "LOGI " + login.setLobbyNumber()+ " "+ nickname ;
+
+      syncOut.writeData(logindata.getBytes());
+      syncOut.writeData("\r\n".getBytes());
 
 
       BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));

@@ -125,6 +125,7 @@ public class EchoClientThread implements Runnable {
     return whisper;
   }
   private void handleRequest(String request) throws IOException {
+    try{
     ArrayList<String> arguments = parseRequest(request);
     Protocol command = Protocol.valueOf(arguments.remove(0));
     // TODO handle all cases
@@ -176,6 +177,11 @@ public class EchoClientThread implements Runnable {
         break;
       case PONG:
         break;
+      default:
+        break;
+    }}
+    catch(IndexOutOfBoundsException e){
+      syncOut.writeData("fehlerhafte Eingabe \r\n".getBytes());
     }
   }
 
