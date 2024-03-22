@@ -96,14 +96,14 @@ public class EchoClient {
 
   }
 
-  public String handleRequest(String request){
+  public void handleRequest(String request){
     ArrayList<String> arguments = parseRequest(request);
     String requestCommand = arguments.remove(0);
     switch (requestCommand) {
-      case "CATC":
-        return arguments.get(2) + ": " +arguments.get(1);
+      case "CATS":
+        System.out.println(arguments.get(2) + ": " +arguments.get(1));
       default:
-        return request;
+        System.out.println(request);
 
 
     }
