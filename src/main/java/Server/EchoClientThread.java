@@ -169,13 +169,19 @@ public class EchoClientThread implements Runnable {
           String newNickname = arguments.get(1);
           ArrayList<String> names = server.getNicknames();
 
-          for (int i = 0; i < names.size(); i++) {
-            if (newNickname.equals(names.get(i))) {
-              newNickname += "_";
-              i = 0;
+          // Überprüfen, ob der neue Nickname bereits vorhanden ist
+          if (names.contains(newNickname)) {
+            int counter = 1;
+            String originalNickname = newNickname;
+
+            // Solange ein Duplikat gefunden wird, erhöhe den Zähler und versuche es erneut
+            while (names.contains(newNickname)) {
+              newNickname = originalNickname + "_" + counter;
+              counter++;
             }
           }
 
+          // Sobald ein eindeutiger Nickname gefunden wurde, setze ihn als neuen Nickname
           nickname = newNickname;
           syncOut.writeData(("+LOGI " + nickname + "\r\n").getBytes());
         }
