@@ -59,12 +59,12 @@ public class EchoClientThread implements Runnable {
 
       while(true){
         String request = bReader.readLine();
+        System.out.println("Received: " + request);
         if (request.charAt(0) == '+') {
           handleResponse(request);
         } else {
           handleRequest(request);
         }
-        System.out.println("Received: " + request);
       }
     } catch (IOException e) {
       //System.out.println("EchoClientThread with id:" + id);
@@ -165,6 +165,7 @@ public class EchoClientThread implements Runnable {
     // TODO handle all cases
       switch (command) {
         case LOGI -> {
+          // TODO correct this code, in the moment the nicknames aren't unique in some cases (for some reason)
           String newNickname = arguments.get(1);
           ArrayList<String> names = server.getNicknames();
 
@@ -200,6 +201,8 @@ public class EchoClientThread implements Runnable {
           // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
           //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
           String cmd = "CATS " + w + " \"" + msg + "\" " + sender + "\r\n";
+
+          // TODO this whisper functionality doesn't work yet
           if (whisper) {
             server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
           } else {
@@ -210,6 +213,9 @@ public class EchoClientThread implements Runnable {
         case CATS -> {
         }
         case PING -> syncOut.writeData("+PING\r\n".getBytes());
+        case NAME -> {
+          // TODO handle this request
+        }
         default -> {
         }
       }

@@ -11,4 +11,5 @@ public enum ProtocolRequest {
   CATC,
   CATS,
   PING,
+  NAME,
 }

@@ -19,7 +19,7 @@ public class PingThread implements Runnable {
       while (true) {
         syncOut.writeData("PING\r\n".getBytes());
         lastRequestTimeMillis = currentTimeMillis();
-        wait(maximalResponseTimeMillis);
+        wait(maximalResponseTimeMillis - 5000); // TODO remove -5000
         long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
         if (timeWaited >= maximalResponseTimeMillis) {
           // TODO refactor in a way such that this thread can log out the client and log out here
