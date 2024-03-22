@@ -67,25 +67,24 @@ public class EchoClient {
 
       case "/chat":
         if (arguments.get(0).equals("/w")) {
-          String text = "\""+arguments.get(2);
+          String message = "\""+arguments.get(2);
 
           for(int i = 3; i< arguments.size(); i++){
-            text = text + " "+ arguments.get(i);
+            message = message + " "+ arguments.get(i);
           }
-          text = text + "\"";
+          message = message + "\"";
 
-          String whispermessage = "CATC " + "t " + text +" "+ arguments.get(1);
-          return whispermessage;
+          return "CATC " + "t " + message +" "+ arguments.get(1);
+
         }
         else {
-          String text = "\""+arguments.get(0);
+          String message = "\""+arguments.get(0);
 
           for(int i = 1; i< arguments.size(); i++){
-            text = text +" "+ arguments.get(i);
+            message = message +" "+ arguments.get(i);
           }
-          text = text + "\"";
-          String message = "CATC " + "f " + text;
-          return message;
+          message = message + "\"";
+            return "CATC " + "f " + message;
         }
 
       case"/logout":
@@ -95,6 +94,19 @@ public class EchoClient {
         return "";
     }
 
+  }
+
+  public String handleRequest(String request){
+    ArrayList<String> arguments = parseRequest(request);
+    String requestCommand = arguments.remove(0);
+    switch (requestCommand) {
+      case "CATC":
+        return arguments.get(2) + ": " +arguments.get(1);
+      default:
+        return request;
+
+
+    }
   }
 
 

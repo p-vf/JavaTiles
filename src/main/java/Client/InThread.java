@@ -16,10 +16,11 @@ public class InThread implements Runnable {
         if ((len = in.read(b)) == -1) {
           break;
         }
-        String message =new String(b, 0, len);
+        String request =new String(b, 0, len);
+        EchoClient echoClient = new EchoClient();
         // Comment the line below to display PING messages
-        if(!message.trim().equals("PING")&&!message.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
-          System.out.write(b,0,len);
+        if(!request.trim().equals("PING")&&!request.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
+          echoClient.handleRequest(request);
         }
       }
     } catch (IOException e) {
