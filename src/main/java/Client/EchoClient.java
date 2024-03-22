@@ -63,14 +63,28 @@ public class EchoClient {
     switch (inputCommand) {
       case "/nickname":
         nickname = input;
-        return "NICK "+ input;
+        return "NAME "+ input;
 
       case "/chat":
         if (arguments.get(0).equals("/w")) {
-          String whispermessage = "CATC " + "t " + arguments.get(1) + arguments.get(2);
+          String text = "\""+arguments.get(2);
+
+          for(int i = 3; i< arguments.size(); i++){
+            text = text + " "+ arguments.get(i);
+          }
+          text = text + "\"";
+
+          String whispermessage = "CATC " + "t " + text +" "+ arguments.get(1);
           return whispermessage;
-        } else {
-          String message = "CATC " + "f " + arguments.get(0);
+        }
+        else {
+          String text = "\""+arguments.get(0);
+
+          for(int i = 1; i< arguments.size(); i++){
+            text = text +" "+ arguments.get(i);
+          }
+          text = text + "\"";
+          String message = "CATC " + "f " + text;
           return message;
         }
 
