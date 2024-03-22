@@ -1,6 +1,6 @@
 package Server;
 
-public enum Protocol {
+public enum ProtocolRequest {
   LOGI,
   LOGO,
   STAT,
@@ -11,5 +11,4 @@ public enum Protocol {
   CATC,
   CATS,
   PING,
-  PONG,
 }

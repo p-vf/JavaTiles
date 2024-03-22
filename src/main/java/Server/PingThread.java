@@ -1,15 +1,16 @@
 package Server;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
+
+import static java.lang.System.currentTimeMillis;
 
 public class PingThread implements Runnable {
   private SyncOutputStreamHandler syncOut;
-  private int interval;
-  public PingThread(SyncOutputStreamHandler syncOut, int interval) {
+  private long maximalResponseTimeMillis;
+  private long lastRequestTimeMillis;
+  public PingThread(SyncOutputStreamHandler syncOut, int maximalResponseTimeMillis) {
     this.syncOut = syncOut;
-    this.interval = interval;
+    this.maximalResponseTimeMillis = maximalResponseTimeMillis;
   }
 
   @Override
@@ -17,9 +18,14 @@ public class PingThread implements Runnable {
     try {
       while (true) {
         syncOut.writeData("PING\r\n".getBytes());
-        Thread.sleep(interval);
+        lastRequestTimeMillis = currentTimeMillis();
+        wait(maximalResponseTimeMillis);
+        long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
+        if (timeWaited >= maximalResponseTimeMillis) {
+          // TODO refactor in a way such that this thread can log out the client and log out here
+          //logout();
+        }
       }
-
     } catch(IOException | InterruptedException e) {
       e.printStackTrace();
     }
