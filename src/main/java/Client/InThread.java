@@ -18,7 +18,7 @@ public class InThread implements Runnable {
         }
         String message =new String(b, 0, len);
         // Comment the line below to display PING messages
-        if(!message.trim().equals("PING")||!message.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
+        if(!message.trim().equals("PING")&&!message.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
           System.out.write(b,0,len);
         }
       }
