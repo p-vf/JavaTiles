@@ -88,6 +88,9 @@ public class EchoClient {
           return message;
         }
 
+      case"/logout":
+        return "LOGO";
+
       default:
         return "";
     }
