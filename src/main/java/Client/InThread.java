@@ -17,10 +17,10 @@ public class InThread implements Runnable {
           break;
         }
         String request =new String(b, 0, len);
-
+        EchoClient echoClient = new EchoClient();
         // Comment the line below to display PING messages
         if(!request.trim().equals("PING")&&!request.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
-          System.out.write(b, 0, len);
+          echoClient.handleRequest(request);
         }
       }
     } catch (IOException e) {
