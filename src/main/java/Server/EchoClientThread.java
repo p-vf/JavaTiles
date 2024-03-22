@@ -19,6 +19,7 @@ public class EchoClientThread implements Runnable {
   public SyncOutputStreamHandler syncOut;
   private InputStream in;
   private static final int PING_TIMEOUT = 15000;
+  private Thread pingThread;
 
   /**
    * Constructor of the EchoClientThread class.
@@ -51,14 +52,18 @@ public class EchoClientThread implements Runnable {
       syncOut = new SyncOutputStreamHandler(socket.getOutputStream());
       syncOut.writeData((msg + "\r\n").getBytes());
 
-      Thread pthread = new Thread(new PingThread(syncOut, PING_TIMEOUT - 5000));
-      pthread.start();
+      pingThread = new Thread(new PingThread(syncOut, PING_TIMEOUT - 5000));
+      pingThread.start();
 
       BufferedReader bReader = new BufferedReader(new InputStreamReader(in));
 
       while(true){
         String request = bReader.readLine();
-        handleRequest(request);
+        if (request.charAt(0) == '+') {
+          handleResponse(request);
+        } else {
+          handleRequest(request);
+        }
         System.out.println("Received: " + request);
       }
     } catch (IOException e) {
@@ -67,6 +72,25 @@ public class EchoClientThread implements Runnable {
         logout();
       }
       e.printStackTrace(System.err);
+    }
+  }
+
+  private void handleResponse(String response) {
+    ArrayList<String> arguments = parseRequest(response);
+    String cmdStr = arguments.remove(0);
+    cmdStr = cmdStr.substring(1);
+    // TODO add log, if cmdStr is not of size 4
+    ProtocolResponse command = ProtocolResponse.valueOf(cmdStr);
+    switch (command) {
+      case PWIN -> {
+      }
+      case EMPT -> {
+      }
+      case CATS -> {
+      }
+      case PING -> {
+        pingThread.notify();
+      }
     }
   }
 
@@ -137,61 +161,59 @@ public class EchoClientThread implements Runnable {
   private void handleRequest(String request) throws IOException {
     try{
     ArrayList<String> arguments = parseRequest(request);
-    Protocol command = Protocol.valueOf(arguments.remove(0));
+    ProtocolRequest command = ProtocolRequest.valueOf(arguments.remove(0));
     // TODO handle all cases
-    switch (command) {
-      case LOGI:
-        String newNickname = arguments.get(1);
-        ArrayList<String> names = server.getNicknames();
+      switch (command) {
+        case LOGI -> {
+          String newNickname = arguments.get(1);
+          ArrayList<String> names = server.getNicknames();
 
-        for (int i = 0; i < names.size(); i++) {
-          if(newNickname.equals(names.get(i))){
-            newNickname += "_";
-            i = 0;
+          for (int i = 0; i < names.size(); i++) {
+            if (newNickname.equals(names.get(i))) {
+              newNickname += "_";
+              i = 0;
+            }
           }
-        }
 
-        nickname = newNickname;
-        syncOut.writeData(("+LOGI " + nickname + "\r\n").getBytes());
-        break;
-      case LOGO:
-        logout();
-        syncOut.writeData(("+LOGO " + nickname + "\r\n").getBytes());
-        break;
-      case STAT:
-        break;
-      case DRAW:
-        break;
-      case PUTT:
-        break;
-      case PWIN:
-        break;
-      case EMPT:
-        break;
-      case CATC:
-        String w = arguments.get(0); // whisper flag
-        String msg = arguments.get(1); // chat-message
-        String sender = nickname;
-        boolean whisper = readFlag(w);
-        // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
-        //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
-        String cmd = "CATS " + w + " \"" + msg + "\" " + sender + "\r\n";
-        if (whisper) {
-          server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
-        } else {
-          server.broadcastMessage(cmd.getBytes(), this);
+          nickname = newNickname;
+          syncOut.writeData(("+LOGI " + nickname + "\r\n").getBytes());
         }
-        syncOut.writeData("+CATC\r\n".getBytes());
-        break;
-      case CATS:
-        break;
-      case PING:
-        break;
-      case PONG:
-        break;
-      default:
-        break;
-    }}
+        case LOGO -> {
+          syncOut.writeData(("+LOGO\r\n").getBytes());
+          logout();
+        }
+        case STAT -> {
+        }
+        case DRAW -> {
+        }
+        case PUTT -> {
+        }
+        case PWIN -> {
+        }
+        case EMPT -> {
+        }
+        case CATC -> {
+          String w = arguments.get(0); // whisper flag
+          String msg = arguments.get(1); // chat-message
+          String sender = nickname;
+          boolean whisper = readFlag(w);
+          // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
+          //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
+          String cmd = "CATS " + w + " \"" + msg + "\" " + sender + "\r\n";
+          if (whisper) {
+            server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
+          } else {
+            server.broadcastMessage(cmd.getBytes(), this);
+          }
+          syncOut.writeData("+CATC\r\n".getBytes());
+        }
+        case CATS -> {
+        }
+        case PING -> syncOut.writeData("+PING\r\n".getBytes());
+        default -> {
+        }
+      }
+    }
     catch(IndexOutOfBoundsException e){
       syncOut.writeData("fehlerhafte Eingabe \r\n".getBytes());
     }
