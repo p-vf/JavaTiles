@@ -103,7 +103,7 @@ public class EchoClient {
       case "CATS":
         System.out.println(arguments.get(2) + ": " +arguments.get(1));
       default:
-        System.out.println(request);
+        System.out.println("");
 
 
     }
