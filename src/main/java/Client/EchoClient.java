@@ -23,7 +23,7 @@ public class EchoClient {
             if (isInsideString) {
               sb.append(' ');
             } else {
-              String currentArg = sb.toString();
+              String currentArg = sb.toString().trim(); // Hier wird das Arg getrimmt
               if (!currentArg.isEmpty()) { // Check if the argument is not empty
                 command.add(currentArg);
               }
@@ -44,7 +44,7 @@ public class EchoClient {
               isInsideString = true;
             } else {
               isInsideString = false;
-              command.add(sb.toString());
+              command.add(sb.toString().trim()); // Trim the argument
               sb = new StringBuilder();
             }
             break;
@@ -53,9 +53,10 @@ public class EchoClient {
         }
       }
       if (!sb.isEmpty()) {
-        command.add(sb.toString());
+        command.add(sb.toString().trim()); // Trim the argument
       }
-      return command;}
+      return command;
+    }
   public static String handleInput(String input) {
     ArrayList<String> arguments = parseRequest(input);
     String inputCommand = arguments.remove(0);
@@ -81,7 +82,7 @@ public class EchoClient {
           String message = "\""+arguments.get(0);
 
           for(int i = 1; i< arguments.size(); i++){
-            message = message +" "+ arguments.get(i);
+            message = message + " " + arguments.get(i);
           }
           message = message + "\"";
             return "CATC " + "f " + message;
