@@ -40,5 +40,20 @@ Arbeit am ersten Meilenstein:
 - Der SyncOutputStreamHandler auf der Client Seite wurde auch implementiert aus dem gleichen Grund wie es auf der Serverseite geschehen ist.
 - Eine erste Implementation des switch Case LOGI wurde erstellt, bei der auch eine getNicknames Methode im Server erstellt wurde.
 
+## 21.3.2024
+- Clientsite: Input von Consoler wird nun durch Handler bearbeitet:
+ - CATC: Chat für die Clientseite implementiert.
+ - LOGIN wurde implementiert.
+ - Funktion NAME implementiert um den nickname zu ändern.
+ - in InThread if-Block eingeführt, der dafür sorgt, dass bei Bedarf PING nicht mehr in der Console ausgegeben wird.
+
+## 22.3.2024
+- PING-Funktion optimiert, sodass auf PINGS mit einem PONG gewantwortet wird und die Erfassung einer PING nachricht ausschlaggebend für den Erhalt der Verbindung ist.
+- Im Client wurde der Request-handler eingeführt, der dafür sorgt, dass Anfragen vom Server bearbeitet werden können.
+- messages und whispermessages können nun in vollen Texten verschickt werden.
+- Logout Funktion auf der Client Seite implementiert.
+- Möglichkeit hinzugefügt PING-messages auf der Console zu verbergen, als Hilfe bei Tests.
+- Login-Funktion auf Server wurde auf Server Seite optimiert.
+
 
 
