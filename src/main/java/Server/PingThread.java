@@ -30,7 +30,7 @@ public class PingThread implements Runnable {
         }
         long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
         if (timeWaited >= maxResponseTimeMillis) {
-          parent.logout();
+          //parent.logout();
         }
       }
     } catch(IOException | InterruptedException e) {

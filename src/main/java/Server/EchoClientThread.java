@@ -199,7 +199,7 @@ public class EchoClientThread implements Runnable {
           // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
           //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
           String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
-
+          System.out.println(cmd);
           // TODO this whisper functionality doesn't work yet
           if (whisper) {
             server.sendToNickname(cmd, arguments.get(2));

@@ -12,51 +12,50 @@ public class EchoClient {
   private static String nickname = System.getProperty("user.name");
 
 
+    private static ArrayList<String> parseRequest(String request) {
+      char[] chars = request.toCharArray();
+      ArrayList<String> command = new ArrayList<>();
+      boolean isInsideString = false;
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < chars.length; i++) {
+        switch (chars[i]) {
+          case ' ':
+            if (isInsideString) {
+              sb.append(' ');
+            } else {
+              String currentArg = sb.toString();
+              if (!currentArg.isEmpty()) { // Check if the argument is not empty
+                command.add(currentArg);
+              }
+              sb = new StringBuilder();
+            }
+            break;
 
-  private static ArrayList<String> parseRequest(String request) {
-    char[] chars = request.toCharArray();
-    // only handles a command with up to 9 arguments..
-    ArrayList<String> command = new ArrayList<>();
-    boolean isInsideString = false;
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < chars.length; i++) {
-      switch (chars[i]) {
-        case ' ':
-          if (isInsideString) {
-            sb.append(' ');
-          } else {
-            command.add(sb.toString());
-            sb = new StringBuilder();
-          }
-          break;
-
-        case '\\':
-          if (i < chars.length - 1 && chars[i + 1] == '"' && isInsideString) {
-            sb.append('"');
-            i++;
-          } else {
-            sb.append('\\');
-          }
-          break;
-        case '"':
-          if (!isInsideString) {
-            isInsideString = true;
-          } else {
-            isInsideString = false;
-            command.add(sb.toString());
-            sb = new StringBuilder();
-          }
-          break;
-        default:
-          sb.append(chars[i]);
+          case '\\':
+            if (i < chars.length - 1 && chars[i + 1] == '"' && isInsideString) {
+              sb.append('"');
+              i++;
+            } else {
+              sb.append('\\');
+            }
+            break;
+          case '"':
+            if (!isInsideString) {
+              isInsideString = true;
+            } else {
+              isInsideString = false;
+              command.add(sb.toString());
+              sb = new StringBuilder();
+            }
+            break;
+          default:
+            sb.append(chars[i]);
+        }
       }
-    }
-    if (!sb.isEmpty()) {
-      command.add(sb.toString());
-    }
-    return command;
-  }
-
+      if (!sb.isEmpty()) {
+        command.add(sb.toString());
+      }
+      return command;}
   public static String handleInput(String input) {
     ArrayList<String> arguments = parseRequest(input);
     String inputCommand = arguments.remove(0);
@@ -99,12 +98,16 @@ public class EchoClient {
 
   public void handleRequest(String request){
     ArrayList<String> arguments = parseRequest(request);
+    System.out.println(arguments.toString());
     String requestCommand = arguments.remove(0);
     switch (requestCommand) {
       case "CATS":
-        System.out.println(arguments.get(2) + ": " +arguments.get(1));
+        String name = arguments.get(2);
+        System.out.println(name + ": " +arguments.get(1));
+
       default:
-        System.out.println("");
+        System.out.println(request);
+        break;
 
 
     }
