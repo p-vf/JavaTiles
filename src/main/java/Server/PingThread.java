@@ -1,19 +1,17 @@
 package Server;
 
-import Client.EchoClient;
-
 import java.io.IOException;
 import java.net.SocketException;
 
 import static java.lang.System.currentTimeMillis;
 
 public class PingThread implements Runnable {
-  private EchoClientThread parent;
-  private long maximalResponseTimeMillis;
+  private final EchoClientThread parent;
+  private final long maxResponseTimeMillis;
   private long lastRequestTimeMillis;
-  public PingThread(EchoClientThread parent, int maximalResponseTimeMillis) {
+  public PingThread(EchoClientThread parent, int maxResponseTimeMillis) {
     this.parent = parent;
-    this.maximalResponseTimeMillis = maximalResponseTimeMillis;
+    this.maxResponseTimeMillis = maxResponseTimeMillis;
   }
 
   @Override
@@ -28,12 +26,11 @@ public class PingThread implements Runnable {
 
         lastRequestTimeMillis = currentTimeMillis();
         synchronized(this) {
-          wait(maximalResponseTimeMillis - 5000); // TODO remove -5000
+          wait(maxResponseTimeMillis);
         }
         long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
-        if (timeWaited >= maximalResponseTimeMillis) {
-          // TODO refactor in a way such that this thread can log out the client and log out here
-          //logout();
+        if (timeWaited >= maxResponseTimeMillis) {
+          parent.logout();
         }
       }
     } catch(IOException | InterruptedException e) {
