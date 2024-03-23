@@ -159,11 +159,10 @@ public class EchoClientThread implements Runnable {
     boolean whisper = false;
     if (flag.equals("t")) {
       whisper = true;
-    } else if (flag.equals("f")) {
-      //whisper = false;
-    } else {
-      // TODO sollte nicht so abgehandelt werden..
-      throw new IllegalArgumentException("flag is neither \"t\" nor \"f\"\n");
+    } else if (!flag.equals("f")) {
+      // Falls flag weder "t" noch "f" ist, wird whisper auf false gesetzt
+      // Alternativ könnte man auch eine Meldung ausgeben oder andere Aktionen ausführen
+      whisper = false;
     }
     return whisper;
   }
@@ -212,7 +211,8 @@ public class EchoClientThread implements Runnable {
         case CATS -> {}
         case PING -> send("+PING");
         case NAME -> {
-          send("+NAME" + changeName(arguments.get(0)));
+          changeName(arguments.get(0));
+          send("+NAME" + nickname);
         }
         default -> {}
       }
@@ -249,11 +249,12 @@ public class EchoClientThread implements Runnable {
     out.write((str + "\r\n").getBytes());
   }
 
-  private void login(int lobbyNum, String nickname) throws IOException {
+  private void login(int lobbyNum, String newNickname) throws IOException {
     // TODO put player into a lobby
 
     // TODO maybe don't send "+LOGI ..." here but inside the switch statement?
-    send("+LOGI " + changeName(nickname));
+    changeName(newNickname);
+    send("+LOGI " + this.nickname);
   }
 
   /**
@@ -263,7 +264,7 @@ public class EchoClientThread implements Runnable {
    * @param newNickname Name, zu welchen der nickname geändert werden soll
    * @return den nickname, der der Client erhalten hat.
    */
-  private String changeName(String newNickname) {
+  private void changeName(String newNickname) {
     ArrayList<String> names = server.getNicknames();
     String actualNickname = newNickname;
     int counter = 1;
@@ -273,6 +274,6 @@ public class EchoClientThread implements Runnable {
       actualNickname = newNickname + "_" + counter;
       counter++;
     }
-    return actualNickname;
+    nickname = actualNickname;
   }
 }
