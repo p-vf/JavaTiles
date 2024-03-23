@@ -1,9 +1,6 @@
 package Server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -16,8 +13,8 @@ public class EchoClientThread implements Runnable {
   public String nickname;
   private final EchoServer server;
   private final Socket socket;
-  public SyncOutputStreamHandler syncOut;
-  private InputStream in;
+  public OutputStream out;
+  private BufferedReader bReader;
   private static final int PING_TIMEOUT = 15000;
   private Thread pingThread;
 
@@ -47,18 +44,22 @@ public class EchoClientThread implements Runnable {
 
     System.out.println(msg + " hergestellt");
     try {
-      socket.setSoTimeout(PING_TIMEOUT);
-      in = socket.getInputStream();
-      syncOut = new SyncOutputStreamHandler(socket.getOutputStream());
-      syncOut.writeData((msg + "\r\n").getBytes());
+      //socket.setSoTimeout(PING_TIMEOUT);
+      InputStream in = socket.getInputStream();
+      bReader = new BufferedReader(new InputStreamReader(in));
 
-      pingThread = new Thread(new PingThread(syncOut, PING_TIMEOUT - 5000));
+      out = socket.getOutputStream();
+      send(msg);
+
+      pingThread = new Thread(new PingThread(this, PING_TIMEOUT - 5000));
       pingThread.start();
 
-      BufferedReader bReader = new BufferedReader(new InputStreamReader(in));
+      while (true) {
+        String request;
+        try {
+          request = bReader.readLine();
+        } catch (IOException e) { break; }
 
-      while(true){
-        String request = bReader.readLine();
         System.out.println("Received: " + request);
         if (request.charAt(0) == '+') {
           handleResponse(request);
@@ -73,8 +74,13 @@ public class EchoClientThread implements Runnable {
       }
       e.printStackTrace(System.err);
     }
+    System.out.println("Server: Verbindung " + id + " abgebrochen");
   }
 
+  /**
+   * Behandelt eine Response, wie im Protokoll festgehalten.
+   * @param response stellt eine Antwort auf eine vorher gesendete Request dar, muss mit einem "+" anfangen
+   */
   private void handleResponse(String response) {
     ArrayList<String> arguments = parseRequest(response);
     String cmdStr = arguments.remove(0);
@@ -82,12 +88,9 @@ public class EchoClientThread implements Runnable {
     // TODO add log, if cmdStr is not of size 4
     ProtocolResponse command = ProtocolResponse.valueOf(cmdStr);
     switch (command) {
-      case PWIN -> {
-      }
-      case EMPT -> {
-      }
-      case CATS -> {
-      }
+      case PWIN -> {}
+      case EMPT -> {}
+      case CATS -> {}
       case PING -> {
         pingThread.notify();
       }
@@ -95,8 +98,8 @@ public class EchoClientThread implements Runnable {
   }
 
   /**
-   * Diese Methode wandelt die Zeichenfolge, welche vom Client kommt in eine Array von Strings um.
-   * Diese hat die gleiche Struktur wie der Parameter request, einfach dass alle Argumente einträge
+   * Diese Methode wandelt die Zeichenfolge, welche vom Client kommt, in ein Array von Strings um.
+   * Diese hat die gleiche Struktur wie der Parameter request, einfach, dass alle Argumente Einträge
    * in einer ArrayList sind.
    *
    * @param request Zeichenfolge mit im Netzwerkprotokoll definierter Form.
@@ -146,7 +149,13 @@ public class EchoClientThread implements Runnable {
     return command;
   }
 
-  private static boolean readFlag(String flag) {
+  /**
+   * Liest eine String, und gibt den booleschen Wert zurück, den sie darstellt.
+   * @param flag sollte entweder "f" oder "t" sein.
+   * @return den Wert, den die String repräsentiert
+   * @throws IllegalArgumentException
+   */
+  private static boolean readFlag(String flag) throws IllegalArgumentException {
     boolean whisper = false;
     if (flag.equals("t")) {
       whisper = true;
@@ -154,51 +163,35 @@ public class EchoClientThread implements Runnable {
       //whisper = false;
     } else {
       // TODO sollte nicht so abgehandelt werden..
-      throw new Error("flag is neither \"t\" nor \"f\"\n");
+      throw new IllegalArgumentException("flag is neither \"t\" nor \"f\"\n");
     }
     return whisper;
   }
+
+  /**
+   * Behandelt eine Request, wie im Protokoll beschrieben.
+   * @param request die Request, welche behandelt wird. Sie muss die Form wie im Protokoll definiert haben.
+   * @throws IOException
+   */
   private void handleRequest(String request) throws IOException {
     try{
-    ArrayList<String> arguments = parseRequest(request);
-    ProtocolRequest command = ProtocolRequest.valueOf(arguments.remove(0));
-    // TODO handle all cases
+      ArrayList<String> arguments = parseRequest(request);
+      // TODO change this so that incorrect input gets handled
+      ProtocolRequest command = ProtocolRequest.valueOf(arguments.remove(0));
+      // TODO handle all cases
       switch (command) {
         case LOGI -> {
-          // TODO correct this code, in the moment the nicknames aren't unique in some cases (for some reason)
-          String newNickname = arguments.get(1);
-          ArrayList<String> names = server.getNicknames();
-
-          // Überprüfen, ob der neue Nickname bereits vorhanden ist
-          if (names.contains(newNickname)) {
-            int counter = 1;
-            String originalNickname = newNickname;
-
-            // Solange ein Duplikat gefunden wird, erhöhe den Zähler und versuche es erneut
-            while (names.contains(newNickname)) {
-              newNickname = originalNickname + "_" + counter;
-              counter++;
-            }
-          }
-
-          // Sobald ein eindeutiger Nickname gefunden wurde, setze ihn als neuen Nickname
-          nickname = newNickname;
-          syncOut.writeData(("+LOGI " + nickname + "\r\n").getBytes());
+          login(Integer.parseInt(arguments.get(0)), arguments.get(1));
         }
         case LOGO -> {
-          syncOut.writeData(("+LOGO\r\n").getBytes());
+          send("+LOGO");
           logout();
         }
-        case STAT -> {
-        }
-        case DRAW -> {
-        }
-        case PUTT -> {
-        }
-        case PWIN -> {
-        }
-        case EMPT -> {
-        }
+        case STAT -> {}
+        case DRAW -> {}
+        case PUTT -> {}
+        case PWIN -> {}
+        case EMPT -> {}
         case CATC -> {
           String w = arguments.get(0); // whisper flag
           String msg = arguments.get(1); // chat-message
@@ -206,39 +199,80 @@ public class EchoClientThread implements Runnable {
           boolean whisper = readFlag(w);
           // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
           //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
-          String cmd = "CATS " + w + " \"" + msg + "\" " + sender + "\r\n";
+          String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
 
           // TODO this whisper functionality doesn't work yet
           if (whisper) {
-            server.sendMessageToNickname(cmd.getBytes(), arguments.get(2));
+            server.sendToNickname(cmd, arguments.get(2));
           } else {
-            server.broadcastMessage(cmd.getBytes(), this);
+            server.sendBroadcast(cmd, this);
           }
-          syncOut.writeData("+CATC\r\n".getBytes());
+          send("+CATC");
         }
-        case CATS -> {
-        }
-        case PING -> syncOut.writeData("+PING\r\n".getBytes());
+        case CATS -> {}
+        case PING -> send("+PING");
         case NAME -> {
-          // TODO handle this request
+          send("+NAME" + changeName(arguments.get(0)));
         }
-        default -> {
-        }
+        default -> {}
       }
     }
     catch(IndexOutOfBoundsException e){
-      syncOut.writeData("fehlerhafte Eingabe \r\n".getBytes());
+      send("fehlerhafte Eingabe");
     }
   }
 
+  /**
+   * Diese Methode endet die Verbindung zum Client.
+   * Sie sollte aufgerufen werden, wenn ein Verbindungsunterbruch
+   * erkennt wurde, oder sich der Client ausloggen will.
+   */
   public void logout() {
     try {
       server.logClientOut(this);
       socket.close();
-      in.close();
-      syncOut.close();
+      bReader.close();
+      out.close();
     } catch (IOException e) {
       e.printStackTrace(System.err);
     }
+  }
+
+  /**
+   * Diese Methode schickt eine Zeichenfolge zum Client.
+   * Diese Zeichenfolge wird mit carriage-return und line-feed ergänzt ("\r\n")
+   *
+   * @param str Zeichenfolge, welche zum Client geschickt wird
+   * @throws IOException Wird geworfen, wenn der OutputStream eine IOException wirft
+   */
+  public synchronized void send(String str) throws IOException {
+    out.write((str + "\r\n").getBytes());
+  }
+
+  private void login(int lobbyNum, String nickname) throws IOException {
+    // TODO put player into a lobby
+
+    // TODO maybe don't send "+LOGI ..." here but inside the switch statement?
+    send("+LOGI " + changeName(nickname));
+  }
+
+  /**
+   * Diese Methode ändert den Namen des Spielers zum gegebenen Namen, falls dieser noch nicht existiert.
+   * Ansonsten wird der Name so abgeändert, dass dieser auf dem Server eindeutig ist.
+   *
+   * @param newNickname Name, zu welchen der nickname geändert werden soll
+   * @return den nickname, der der Client erhalten hat.
+   */
+  private String changeName(String newNickname) {
+    ArrayList<String> names = server.getNicknames();
+    String actualNickname = newNickname;
+    int counter = 1;
+
+    // Solange ein Duplikat gefunden wird, erhöhe den Zähler und versuche es erneut
+    while (names.contains(actualNickname)) {
+      actualNickname = newNickname + "_" + counter;
+      counter++;
+    }
+    return actualNickname;
   }
 }
