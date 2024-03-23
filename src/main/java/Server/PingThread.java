@@ -1,29 +1,36 @@
 package Server;
 
 import java.io.IOException;
+import java.net.SocketException;
 
 import static java.lang.System.currentTimeMillis;
 
 public class PingThread implements Runnable {
-  private SyncOutputStreamHandler syncOut;
-  private long maximalResponseTimeMillis;
+  private final EchoClientThread parent;
+  private final long maxResponseTimeMillis;
   private long lastRequestTimeMillis;
-  public PingThread(SyncOutputStreamHandler syncOut, int maximalResponseTimeMillis) {
-    this.syncOut = syncOut;
-    this.maximalResponseTimeMillis = maximalResponseTimeMillis;
+  public PingThread(EchoClientThread parent, int maxResponseTimeMillis) {
+    this.parent = parent;
+    this.maxResponseTimeMillis = maxResponseTimeMillis;
   }
 
   @Override
   public void run() {
     try {
       while (true) {
-        syncOut.writeData("PING\r\n".getBytes());
+        try {
+          parent.send("PING");
+        } catch (SocketException e) { // passiert wahrscheinlich, wenn das Socket geschlossen worden ist..
+          break;
+        }
+
         lastRequestTimeMillis = currentTimeMillis();
-        wait(maximalResponseTimeMillis - 5000); // TODO remove -5000
+        synchronized(this) {
+          wait(maxResponseTimeMillis);
+        }
         long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
-        if (timeWaited >= maximalResponseTimeMillis) {
-          // TODO refactor in a way such that this thread can log out the client and log out here
-          //logout();
+        if (timeWaited >= maxResponseTimeMillis) {
+          parent.logout();
         }
       }
     } catch(IOException | InterruptedException e) {

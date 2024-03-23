@@ -62,8 +62,9 @@ public class EchoClient {
     String inputCommand = arguments.remove(0);
     switch (inputCommand) {
       case "/nickname":
-        nickname = input;
-        return "NAME "+ input;
+        String changedName = arguments.get(0);
+        nickname = changedName;
+        return "NAME "+ changedName;
 
       case "/chat":
         if (arguments.get(0).equals("/w")) {
