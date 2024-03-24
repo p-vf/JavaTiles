@@ -68,13 +68,13 @@ public class EchoClient {
 
       case "/chat":
         if (arguments.get(0).equals("/w")) {
-          String message = "\""+arguments.get(2);
+          String message = "\""+"(whispered)"+arguments.get(2);
 
           for(int i = 3; i< arguments.size(); i++){
             message = message + " "+ arguments.get(i);
           }
           message = message + "\"";
-
+          System.out.println("CATC " + "t " + message +" "+ arguments.get(1));
           return "CATC " + "t " + message +" "+ arguments.get(1);
 
         }
@@ -99,12 +99,23 @@ public class EchoClient {
 
   public void handleRequest(String request){
     ArrayList<String> arguments = parseRequest(request);
-    System.out.println(arguments.toString());
     String requestCommand = arguments.remove(0);
     switch (requestCommand) {
       case "CATS":
+
         String name = arguments.get(2);
         System.out.println(name + ": " +arguments.get(1));
+
+        break;
+
+      case "+LOGI":
+        System.out.println("You have been logged in as: "+ arguments.get(0));
+        break;
+
+      case "+NAME":
+        this.nickname = arguments.get(0);
+        System.out.println("Your nickname has been changed to: "+this.nickname);
+        break;
 
       default:
         System.out.println(request);
@@ -170,6 +181,8 @@ public class EchoClient {
       System.exit(1);
     }
   }
+
+
 
 
   private void setNickname(String nickname) {
