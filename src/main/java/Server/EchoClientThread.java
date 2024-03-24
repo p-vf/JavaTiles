@@ -21,6 +21,8 @@ public class EchoClientThread implements Runnable {
   private static final int PING_TIMEOUT = 15000;
   private Thread pingThread;
 
+  private final Object pingLock = new Object();
+
   /**
    * Constructor of the EchoClientThread class.
    *
@@ -96,8 +98,10 @@ public class EchoClientThread implements Runnable {
       case PWIN -> {}
       case EMPT -> {}
       case CATS -> {}
-      case PING -> {
-        pingThread.notify();
+      case PING ->{
+        synchronized (pingThread) {
+          pingThread.notify(); //
+        }
       }
     }
   }
