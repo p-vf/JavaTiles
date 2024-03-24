@@ -55,5 +55,14 @@ Arbeit am ersten Meilenstein:
 - Möglichkeit hinzugefügt PING-messages auf der Console zu verbergen, als Hilfe bei Tests.
 - Login-Funktion auf Server wurde auf Server Seite optimiert.
 
+## 23.3.2024
+- Auf der Server Seite wurde das vorgehen beim Ouput geändert, nämlich haben wir die Klasse SyncOutputStreamHandler gelöscht und dafür die Methode
+send hinzugefügt.
+- Nickname change wurde implementiert und verbessert auf beiden Seiten.
+- PingThread Verbesserung für den Fall, dass man die Verbindung verliert.
+- Unnötige Klassen wurden gelöscht.
+- Parserequest Methode wurde auf Client Seite verbessert, weil sie vorher nicht wie gewünscht funktioniert hat.
+- Auf der Serverseite wurde die Javadoc erstellt.
+
 
 

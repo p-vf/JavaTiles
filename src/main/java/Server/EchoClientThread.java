@@ -6,7 +6,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 /**
- * This class represents a thread for handling communication with a client.
+ * This class represents a thread for handling communication with a client by reading and responding to inputs.
  */
 public class EchoClientThread implements Runnable {
   private int id;
