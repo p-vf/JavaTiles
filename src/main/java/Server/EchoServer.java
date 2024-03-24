@@ -81,7 +81,10 @@ public class EchoServer {
 
   /**
    * Retrieves the list of nicknames of all connected clients.
+   *
    * @return An ArrayList containing the nicknames of all connected clients.
+   * @author Pascal von Fellenberg
+   * @author Istref Uka
    */
   public ArrayList<String> getNicknames() {
     ArrayList<String> nicknames = new ArrayList<>();

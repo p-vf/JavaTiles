@@ -8,6 +8,9 @@ import static java.lang.System.currentTimeMillis;
 /**
  * The PingThread class represents a thread responsible for sending periodic PING messages
  * to a client to check for responsiveness.
+ * 
+ * @author Pascal von Fellenberg
+ * @author Istref Uka
  */
 public class PingThread implements Runnable {
   private final EchoClientThread parent;
