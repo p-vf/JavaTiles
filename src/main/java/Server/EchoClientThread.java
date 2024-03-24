@@ -6,7 +6,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 /**
- * This class represents a thread for handling communication with a client in the EchoServer.
+ * This class represents a thread for handling communication with a client.
  */
 public class EchoClientThread implements Runnable {
   private int id;
@@ -61,13 +61,14 @@ public class EchoClientThread implements Runnable {
         } catch (IOException e) { break; }
 
         System.out.println("Received: " + request);
-        if (request.charAt(0) == '+') {
+        if (!request.isEmpty() && request.charAt(0) == '+') { //request kann null sein, wenn es
+          // keine Readline gibt, falls Client Verbindung verliert.
           handleResponse(request);
         } else {
           handleRequest(request);
         }
       }
-    } catch (IOException e) {
+    } catch (IOException | NullPointerException e) {
       //System.out.println("EchoClientThread with id:" + id);
       if (e instanceof SocketTimeoutException) {
         logout();
@@ -78,8 +79,9 @@ public class EchoClientThread implements Runnable {
   }
 
   /**
-   * Behandelt eine Response, wie im Protokoll festgehalten.
-   * @param response stellt eine Antwort auf eine vorher gesendete Request dar, muss mit einem "+" anfangen
+   * Handles a Response as documented in the protocol.
+   *
+   * @param response Represents a response to a previously sent request, must start with a "+".
    */
   private void handleResponse(String response) {
     ArrayList<String> arguments = parseRequest(response);
@@ -98,13 +100,13 @@ public class EchoClientThread implements Runnable {
   }
 
   /**
-   * Diese Methode wandelt die Zeichenfolge, welche vom Client kommt, in ein Array von Strings um.
-   * Diese hat die gleiche Struktur wie der Parameter request, einfach, dass alle Argumente Einträge
-   * in einer ArrayList sind.
+   * This method converts the string coming from the client into an array of strings.
+   * It has the same structure as the request parameter, just that all arguments are entries in an ArrayList.
    *
-   * @param request Zeichenfolge mit im Netzwerkprotokoll definierter Form.
-   * @return eine ArrayList, welche den Command und seine Argumente als String enthält.
+   * @param request String with a defined format in the network protocol.
+   * @return An ArrayList containing the command and its arguments as strings.
    */
+
   private static ArrayList<String> parseRequest(String request) {
     char[] chars = request.toCharArray();
     // only handles a command with up to 9 arguments..
@@ -117,7 +119,10 @@ public class EchoClientThread implements Runnable {
           if (isInsideString) {
             sb.append(' ');
           } else {
+            String currentArg = sb.toString().trim();
+            if(!currentArg.isEmpty()){
             command.add(sb.toString());
+            }
             sb = new StringBuilder();
           }
           break;
@@ -149,12 +154,15 @@ public class EchoClientThread implements Runnable {
     return command;
   }
 
+
   /**
-   * Liest eine String, und gibt den booleschen Wert zurück, den sie darstellt.
-   * @param flag sollte entweder "f" oder "t" sein.
-   * @return den Wert, den die String repräsentiert
+   * Reads a string and returns the boolean value it represents.
+   *
+   * @param flag Should be either "f" or "t".
+   * @return The value represented by the string.
    * @throws IllegalArgumentException
    */
+
   private static boolean readFlag(String flag) throws IllegalArgumentException {
     boolean whisper = false;
     if (flag.equals("t")) {
@@ -168,10 +176,12 @@ public class EchoClientThread implements Runnable {
   }
 
   /**
-   * Behandelt eine Request, wie im Protokoll beschrieben.
-   * @param request die Request, welche behandelt wird. Sie muss die Form wie im Protokoll definiert haben.
+   * Handles a request as described in the protocol.
+   *
+   * @param request The request being handled. It must have the form defined in the protocol.
    * @throws IOException
    */
+
   private void handleRequest(String request) throws IOException {
     try{
       ArrayList<String> arguments = parseRequest(request);
@@ -192,20 +202,7 @@ public class EchoClientThread implements Runnable {
         case PWIN -> {}
         case EMPT -> {}
         case CATC -> {
-          String w = arguments.get(0); // whisper flag
-          String msg = arguments.get(1); // chat-message
-          String sender = nickname;
-          boolean whisper = readFlag(w);
-          // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
-          //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
-          String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
-          System.out.println(cmd);
-          // TODO this whisper functionality doesn't work yet
-          if (whisper) {
-            server.sendToNickname(cmd, arguments.get(2));
-          } else {
-            server.sendBroadcast(cmd, this);
-          }
+          chatHandler(arguments);
           send("+CATC");
         }
         case CATS -> {}
@@ -223,13 +220,13 @@ public class EchoClientThread implements Runnable {
   }
 
   /**
-   * Diese Methode endet die Verbindung zum Client.
-   * Sie sollte aufgerufen werden, wenn ein Verbindungsunterbruch
-   * erkennt wurde, oder sich der Client ausloggen will.
+   * Ends the connection to the client.
+   * This method should be called when a connection interruption is detected or when the client wants to log out.
    */
+
   public void logout() {
     try {
-      server.logClientOut(this);
+      server.removeClient(this);
       socket.close();
       bReader.close();
       out.close();
@@ -239,16 +236,24 @@ public class EchoClientThread implements Runnable {
   }
 
   /**
-   * Diese Methode schickt eine Zeichenfolge zum Client.
-   * Diese Zeichenfolge wird mit carriage-return und line-feed ergänzt ("\r\n")
+   * Sends a string to the client.
+   * This string is supplemented with carriage return and line feed ("\r\n").
    *
-   * @param str Zeichenfolge, welche zum Client geschickt wird
-   * @throws IOException Wird geworfen, wenn der OutputStream eine IOException wirft
+   * @param str String to be sent to the client.
+   * @throws IOException Thrown if the OutputStream throws an IOException.
    */
   public synchronized void send(String str) throws IOException {
     out.write((str + "\r\n").getBytes());
   }
 
+  /**
+   * Logs in a player with the given lobby number and nickname.
+   * Puts the player into a lobby if necessary.
+   *
+   * @param lobbyNum The number of the lobby to which the player should be assigned.
+   * @param newNickname The new nickname of the player.
+   * @throws IOException If an I/O error occurs while logging in.
+   */
   private void login(int lobbyNum, String newNickname) throws IOException {
     // TODO put player into a lobby
 
@@ -257,12 +262,13 @@ public class EchoClientThread implements Runnable {
     send("+LOGI " + this.nickname);
   }
 
+
   /**
-   * Diese Methode ändert den Namen des Spielers zum gegebenen Namen, falls dieser noch nicht existiert.
-   * Ansonsten wird der Name so abgeändert, dass dieser auf dem Server eindeutig ist.
+   * Changes the player's name to the given name if it does not already exist.
+   * Otherwise, the name is modified so that it is unique on the server.
    *
-   * @param newNickname Name, zu welchen der nickname geändert werden soll
-   * @return den nickname, der der Client erhalten hat.
+   * @param newNickname The name to which the nickname should be changed.
+   * @return The nickname received by the client.
    */
   private void changeName(String newNickname) {
     ArrayList<String> names = server.getNicknames();
@@ -275,5 +281,27 @@ public class EchoClientThread implements Runnable {
       counter++;
     }
     nickname = actualNickname;
+  }
+
+  /**
+   * Handles a chat request by either sending it to everyone or just to one specific person.
+   *
+   * @param arguments The arguments of the chat request.
+   */
+  private void chatHandler(ArrayList<String> arguments){
+    String w = arguments.get(0); // whisper flag
+    String msg = arguments.get(1); // chat-message
+    String sender = nickname;
+    boolean whisper = readFlag(w);
+    // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
+    //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
+    String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
+
+    if (whisper) {
+      server.sendToNickname(cmd, arguments.get(2));
+    } else {
+      server.sendBroadcast(cmd, this);
+    }
+
   }
 }

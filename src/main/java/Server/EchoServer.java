@@ -5,6 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * The EchoServer class represents a simple server that listens for client connections
+ * on a specified port and handles communication with multiple clients concurrently.
+ */
 public class EchoServer {
   private volatile ArrayList<EchoClientThread> clientList;
   private ServerSocket serverSocket;
@@ -13,6 +17,10 @@ public class EchoServer {
     EchoServer s = new EchoServer();
   }
 
+  /**
+   * Constructs a new EchoServer instance.
+   * Creates a ServerSocket and listens for incoming client connections.
+   */
   private EchoServer() {
     int cnt = 0;
     try {
@@ -32,6 +40,7 @@ public class EchoServer {
     }
   }
 
+
   private void sendBroadcast(String str) {
     for (EchoClientThread client : clientList) {
       try {
@@ -43,6 +52,11 @@ public class EchoServer {
     }
   }
 
+  /**
+   * Sends a message to all connected clients except the sender.
+   * @param str The message to be broadcasted to all clients.
+   * @param sender The client thread sending the message.
+   */
   public void sendBroadcast(String str, EchoClientThread sender) {
     for (EchoClientThread client : clientList) {
       if (client == sender) {
@@ -57,10 +71,18 @@ public class EchoServer {
     }
   }
 
-  public synchronized void logClientOut(EchoClientThread client) {
+  /**
+   * Removes a client from the server.
+   * @param client The client thread to be logged out.
+   */
+  public synchronized void removeClient(EchoClientThread client) {
     clientList.remove(client);
   }
 
+  /**
+   * Retrieves the list of nicknames of all connected clients.
+   * @return An ArrayList containing the nicknames of all connected clients.
+   */
   public ArrayList<String> getNicknames() {
     ArrayList<String> nicknames = new ArrayList<>();
     for (EchoClientThread client : clientList) {
@@ -71,8 +93,13 @@ public class EchoServer {
     return nicknames;
   }
 
+  /**
+   * Sends a message to a client with the specified nickname.
+   * @param str The message to be sent to the client.
+   * @param nickname The nickname of the client to whom the message is to be sent.
+   */
   public void sendToNickname(String str, String nickname) {
-    for (var client : clientList) {
+    for (EchoClientThread client : clientList) {
       if (client.nickname.equals(nickname)) {
         try {
           client.send(str);
