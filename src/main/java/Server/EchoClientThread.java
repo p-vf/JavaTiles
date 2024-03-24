@@ -119,7 +119,10 @@ public class EchoClientThread implements Runnable {
           if (isInsideString) {
             sb.append(' ');
           } else {
+            String currentArg = sb.toString().trim();
+            if(!currentArg.isEmpty()){
             command.add(sb.toString());
+            }
             sb = new StringBuilder();
           }
           break;
