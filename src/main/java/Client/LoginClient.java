@@ -3,36 +3,42 @@ package Client;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * The LoginClient class enables user login functionality by prompting the user to set a username and lobby number.
+ */
 public class LoginClient {
     private final Scanner scanner = new Scanner(System.in);
-    private String username = System.getProperty("user.name");
-    private int lobbyNumber = 0;
 
 
-    public void closeScanner() {
-        scanner.close();
-    }
-
-
+    /**
+     * Prompts the user to set a username.
+     * If the username is longer than 15 characters, it prompts the user again until a valid username is provided.
+     * If the username is empty, it sets the username to the system's username (whoami).
+     *
+     * @return the username set by the user
+     */
     public String setUsername() {
-        Scanner scanner2 = new Scanner(System.in);
         System.out.println("Enter username:");
-        String username = scanner2.nextLine();
+        String username = scanner.nextLine();
         while (username.length() > 15) {
             System.out.println("Name zu lang:");
-            username = scanner2.nextLine();
+            username = scanner.nextLine();
         }
         if (username.isEmpty()) {
             username = System.getProperty("user.name"); //whoami
 
 
         }
-        this.username = username;
         return username;
     }
 
+    /**
+     * Prompts the user to set a lobby number.
+     * It validates whether the input is a valid number and prompts the user again until a valid number is provided.
+     *
+     * @return the lobby number set by the user
+     */
     public int setLobbyNumber() {
-        Scanner scanner3 = new Scanner(System.in);
         System.out.println("Enter lobby number:");
         int lobbyNumber = 0;
         while (true) {
@@ -45,7 +51,6 @@ public class LoginClient {
 
             }
         }
-        this.lobbyNumber = lobbyNumber;
         return lobbyNumber;
 
     }

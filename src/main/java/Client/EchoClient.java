@@ -1,17 +1,108 @@
 package Client;
 
+import Server.EchoServer;
+import Server.PingThread;
+
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-
+/**
+ * The EchoClient class represents a client in our application.
+ * It connects to a server and allows users to send Strings and perform actions.
+ * This class handles input/output operations and communication with the server.
+ */
 public class EchoClient {
-  private static final int PING_TIMEOUT = 15000;
-  public static SyncOutputStreamHandler syncOut;
 
-  private static String nickname = System.getProperty("user.name");
+  private final Socket socket; // The socket for communication with the server
+
+  public final OutputStream out; // Output stream to send messages to the server
+  private final InputStream in; // Input stream to receive messages from the server
+  private static final BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
+  // Buffered reader for user input
+
+ // private Thread pingThread;
+
+  private static String nickname; // Nickname of the player
 
 
+  /**
+   * Constructs a new EchoClient with the given socket.
+   *
+   * @param socket the socket for communication with the server
+   * @throws IOException if an I/O error occurs when creating the client
+   */
+  public EchoClient(Socket socket) throws IOException{
+    this.socket = socket;
+    this.out = socket.getOutputStream();
+    this.in = socket.getInputStream();
+  }
+
+
+  /**
+   * The main method to start the client.
+   * It connects to the server, sets up input/output streams,
+   * handles user input, and communicates with the server.
+   *
+   * @param args the command-line arguments to specify the server's hostname and port
+   */
+  public static void main(String[] args) {
+    try {
+      Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
+      EchoClient client = new EchoClient(sock);
+      InThread th = new InThread(client.in, client);
+      Thread iT = new Thread(th);
+      iT.start();
+
+     //ping(client);
+
+      LoginClient login = new LoginClient();
+      nickname = login.setUsername();
+      String logindata = "LOGI " + login.setLobbyNumber() + " " + nickname;
+
+      client.send(logindata);
+
+
+      String line = " ";
+      while (true) {
+        line = bReader.readLine();
+        if (line.equalsIgnoreCase("QUIT")) {
+          break;
+        }
+
+
+        client.send(handleInput(line,client));
+
+      }
+
+      System.out.println("terminating...");
+      client.in.close();
+      client.out.close();
+      client.socket.close();
+    }
+    catch (IOException e){
+
+      System.err.println(e.toString());
+      System.exit(1);
+    }
+
+
+  }
+ // public static void ping(EchoClient client){
+   // client.pingThread = new Thread(new pingThread(client, 15000));
+   // client.pingThread.start();
+  //}
+
+  /**
+   * Parses a request string into individual command arguments.
+   * This method splits the input request string into separate arguments based on spaces,
+   * while respecting quoted strings and escape characters
+   *
+   * @param request The request string to parse
+   * @return An ArrayList containing individual command arguments extracted from the request string
+   */
     private static ArrayList<String> parseRequest(String request) {
       char[] chars = request.toCharArray();
       ArrayList<String> command = new ArrayList<>();
@@ -57,7 +148,25 @@ public class EchoClient {
       }
       return command;
     }
-  public static String handleInput(String input) {
+
+  /**
+   * Sends a message to the server.
+   *
+   * @param str the message to send
+   * @throws IOException if an I/O error occurs while sending the message
+   */
+  public synchronized void send(String str) throws IOException {
+    out.write((str + "\r\n").getBytes());
+  }
+
+  /**
+   * Parses the user input and performs corresponding actions.
+   *
+   * @param input the input string provided by the user
+   * @param client the client object
+   * @return a string representing the message to be sent to the server
+   */
+  public static String handleInput(String input, EchoClient client) {
     ArrayList<String> arguments = parseRequest(input);
     String inputCommand = arguments.remove(0);
     switch (inputCommand) {
@@ -68,7 +177,7 @@ public class EchoClient {
 
       case "/chat":
         if (arguments.get(0).equals("/w")) {
-          String message = "\""+"(whispered)"+arguments.get(2);
+          String message = "\""+"(whispered) "+arguments.get(2);
 
           for(int i = 3; i< arguments.size(); i++){
             message = message + " "+ arguments.get(i);
@@ -96,8 +205,13 @@ public class EchoClient {
     }
 
   }
-
-  public void handleRequest(String request){
+  /**
+   * Handles incoming requests from the server and performs corresponding actions.
+   *
+   * @param request the request received from the server
+   * @param client the client object
+   */
+  public static void handleRequest(String request, EchoClient client) throws IOException {
     ArrayList<String> arguments = parseRequest(request);
     String requestCommand = arguments.remove(0);
     switch (requestCommand) {
@@ -113,8 +227,21 @@ public class EchoClient {
         break;
 
       case "+NAME":
-        this.nickname = arguments.get(0);
-        System.out.println("Your nickname has been changed to: "+this.nickname);
+        nickname = arguments.get(0);
+        System.out.println("Your nickname has been changed to: "+nickname);
+        break;
+
+      case"+LOGO":
+        System.out.println("You have been logged out.");
+        client.logout();
+        break;
+
+      case"PING":
+       //client.send("+PING");
+        break;
+
+      case"+PING":
+        //client.pingThread.notify();
         break;
 
       default:
@@ -123,71 +250,22 @@ public class EchoClient {
 
 
     }
+
   }
-
-
-
-
-  public static void main(String[] args) {
+  /**
+   * Logs out the client from the server.
+   * Closes the socket, input and output streams.
+   */
+  public void logout() {
     try {
-      Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
-      InputStream in = sock.getInputStream();
-      OutputStream out = sock.getOutputStream();
-      syncOut = new SyncOutputStreamHandler(out);
-      InThread th = new InThread(in);
-      Thread iT = new Thread(th);
-      iT.start();
-
-      Thread cpthread = new Thread(new ClientPingThread(syncOut, 10000));
-      cpthread.start();
-
-      sock.setSoTimeout(PING_TIMEOUT);
-
-
-
-
-
-
-      LoginClient login = new LoginClient();
-      nickname = login.setUsername();
-      String logindata = "LOGI " + login.setLobbyNumber()+ " "+ nickname ;
-
-      syncOut.writeData(logindata.getBytes());
-      syncOut.writeData("\r\n".getBytes());
-
-
-      BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
-      String line = " ";
-      while (true) {
-        line = conin.readLine();
-        if (line.equalsIgnoreCase("QUIT")) {
-          break;
-        }
-
-
-
-        syncOut.writeData(handleInput(line).getBytes());
-        syncOut.writeData("\r\n".getBytes());
-
-      }
-
-      System.out.println("terminating...");
-      in.close();
+      socket.close();
+      bReader.close();
       out.close();
-      sock.close();
     } catch (IOException e) {
-
-      System.err.println(e.toString());
-      System.exit(1);
+      e.printStackTrace(System.err);
     }
   }
 
 
-
-
-  private void setNickname(String nickname) {
-    this.nickname = nickname;
-
-  }
 }
 

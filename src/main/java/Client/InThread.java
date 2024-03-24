@@ -3,11 +3,33 @@ package Client;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static Client.EchoClient.handleRequest;
+
+/**
+ * The InThread class represents a thread responsible for handling incoming messages from the server.
+ * It reads messages from the input stream and processes them accordingly.
+ */
 public class InThread implements Runnable {
-  InputStream in;
-  public InThread(InputStream in) {
+
+  public EchoClient client; // The associated client object
+  InputStream in; // The input stream to read messages from
+
+
+  /**
+   * Constructs a new InThread with the given input stream and client.
+   *
+   * @param in the input stream to read messages from
+   * @param client the associated client object
+   */
+  public InThread(InputStream in, EchoClient client) {
     this.in = in;
+    this.client = client;
   }
+
+  /**
+   * Runs the thread to continuously read messages from the input stream and handle them.
+   * It delegates the handling of messages to the handleRequest method in EchoClient class.
+   */
   public void run() {
     int len;
     byte[] b = new byte[100];
@@ -17,15 +39,15 @@ public class InThread implements Runnable {
           break;
         }
         String request =new String(b, 0, len);
-        EchoClient echoClient = new EchoClient();
+
         // Comment the line below to display PING messages
-        if(!request.trim().equals("PING")&&!request.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
-          echoClient.handleRequest(request);
+       // if(!request.trim().equals("PING")&&!request.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
+          handleRequest(request,client);
         }
-      }
+     // }
     } catch (IOException e) {
       System.err.println(e.toString());
-      System.exit(1);
+      System.exit(1); // Terminate the program on I/O error
     }
   }
 }
