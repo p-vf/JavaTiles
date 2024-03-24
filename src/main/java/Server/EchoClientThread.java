@@ -212,7 +212,7 @@ public class EchoClientThread implements Runnable {
         case PING -> send("+PING");
         case NAME -> {
           changeName(arguments.get(0));
-          send("+NAME" + nickname);
+          send("+NAME " + nickname);
         }
         default -> {}
       }
