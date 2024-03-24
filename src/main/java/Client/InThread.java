@@ -39,12 +39,9 @@ public class InThread implements Runnable {
           break;
         }
         String request =new String(b, 0, len);
-
-        // Comment the line below to display PING messages
-       // if(!request.trim().equals("PING")&&!request.trim().equals("+PING")){ //trim(), to remove the leading and trailing whitespace
-          handleRequest(request,client);
+          handleRequest(request, client);
         }
-     // }
+
     } catch (IOException e) {
       System.err.println(e.toString());
       System.exit(1); // Terminate the program on I/O error

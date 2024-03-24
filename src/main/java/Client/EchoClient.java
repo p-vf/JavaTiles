@@ -1,13 +1,13 @@
 package Client;
 
 import Server.EchoServer;
-import Server.PingThread;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 /**
  * The EchoClient class represents a client in our application.
@@ -23,7 +23,7 @@ public class EchoClient {
   private static final BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
   // Buffered reader for user input
 
- // private Thread pingThread;
+  private Thread pingThread;
 
   private static String nickname; // Nickname of the player
 
@@ -56,7 +56,7 @@ public class EchoClient {
       Thread iT = new Thread(th);
       iT.start();
 
-     //ping(client);
+     ping(client);
 
       LoginClient login = new LoginClient();
       nickname = login.setUsername();
@@ -90,10 +90,10 @@ public class EchoClient {
 
 
   }
- // public static void ping(EchoClient client){
-   // client.pingThread = new Thread(new pingThread(client, 15000));
-   // client.pingThread.start();
-  //}
+  public static void ping(EchoClient client){
+    client.pingThread = new Thread(new PingThread(client, 10000));
+    client.pingThread.start();
+  }
 
   /**
    * Parses a request string into individual command arguments.
@@ -237,11 +237,14 @@ public class EchoClient {
         break;
 
       case"PING":
-       //client.send("+PING");
+        //System.out.println("PING");
+        client.send("+PING");
         break;
 
-      case"+PING":
-        //client.pingThread.notify();
+      case "+PING":
+        //System.out.println("+PING");
+        synchronized (client.pingThread){
+        client.pingThread.notify();}
         break;
 
       default:
@@ -261,6 +264,7 @@ public class EchoClient {
       socket.close();
       bReader.close();
       out.close();
+      System.out.println("You have been logged out.");
     } catch (IOException e) {
       e.printStackTrace(System.err);
     }

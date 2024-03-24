@@ -40,18 +40,6 @@ public class EchoServer {
     }
   }
 
-
-  private void sendBroadcast(String str) {
-    for (EchoClientThread client : clientList) {
-      try {
-        client.send(str);
-      } catch (IOException e) {
-        client.logout();
-        clientList.remove(client);
-      }
-    }
-  }
-
   /**
    * Sends a message to all connected clients except the sender.
    * @param str The message to be broadcasted to all clients.
