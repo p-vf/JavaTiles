@@ -1,9 +1,52 @@
 # README
-This is a readme file. It typically includes some information about your project. 
-For more information about readmes, you can either [read a guide](https://github.com/18F/open-source-guide/blob/18f-pages/pages/making-readmes-readable.md) or have a look at the readmes of popular open-source projects such as [Swift by Apple](https://github.com/apple/swift) or [Tensorflow](https://github.com/tensorflow/tensorflow).
+# Java Tiles: Online Multiplayer Okey Game
 
-Readme files are typically formatted in Markdown. 
-However, there are platform-specific flavors, so for this project, you can make full use of the [Gitlab markdown syntax](https://docs.gitlab.com/ee/user/markdown.html), for example when talking about a :bug: (bug) or if your code is slow like a :snail:.
-You can also tag people using @username and reference issues using '#1', where 1 is the issue number. For more features, consult the linked Gitlab syntax guide. 
+Java Tiles is an ongoing project aimed at developing an online multiplayer version of the classic game Okey. Players can currently join the server as clients and engage in chat interactions. Developed by vonUken, this project promises to deliver an immersive gaming experience once completed.
 
-If you don't like reading documentation, [here's a cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+## Introduction
+
+Welcome to Java Tiles! This project aims to bring the beloved game of Okey to your fingertips, enabling players to enjoy thrilling matches with friends and family from anywhere in the world. While the game is still in development, the current version allows players to connect to the server as clients and chat with each other.
+
+## Installation and Usage Instructions
+
+### For End-Users:
+
+1. **Java Installation:**
+   - Ensure you have Java installed on your system. If not, download and install Java from the [official website](https://www.java.com).
+
+2. **Download Java Tiles Client:**
+   - Download the `Client` folder from the GitHub repository.
+
+3. **Run Java Tiles Client:**
+   - Open your IDE.
+   - Navigate to the directory where you downloaded the `Client` folder.
+   - Run the EchoClient.java file
+   - It is important to note the ip-adress and portnumber as inputarguments
+   - Follow the prompts to connect to the server and start chatting.
+
+### For Server Hosts:
+
+1. **Java Installation:**
+   - Ensure you have Java installed on your system. If not, download and install Java from the [official website](https://www.java.com).
+
+2. **Download Java Tiles Server:**
+   - Download the `Server` folder from the GitHub repository.
+
+3. **Run Java Tiles Server:**
+   - Open your IDE.
+   - Navigate to the directory where you downloaded the `Server` folder.
+   - Run the EchoServer.java file to start the server
+   
+## Known Issues
+
+1. **Disconnection on Some Commands:**
+   - Some commands may lead to disconnection from the server. This issue is being addressed and will be resolved in future updates.
+
+## Contributing
+
+We welcome contributions from the community to improve Java Tiles. Feel free to submit bug reports, feature requests, or pull requests on our GitHub repository. Your feedback and contributions are greatly appreciated!
+
+
+## Contact
+
+For any inquiries or support, please contact us at [robin.goekcen@stud.unibas.ch, i.uka@stud.unibas.ch, pascal.vonfellenber@stud.unibas.ch, boran.goekcen@stud.unibas.ch].
