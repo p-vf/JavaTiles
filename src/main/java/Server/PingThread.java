@@ -12,9 +12,10 @@ import static java.lang.System.currentTimeMillis;
  * @author Pascal von Fellenberg
  * @author Istref Uka
  */
-public class PingThread implements Runnable {
+public class PingThread extends Thread {
   private final EchoClientThread parent;
   private final long maxResponseTimeMillis;
+  private static final long PING_INTERVALL = 1000;
   private long lastRequestTimeMillis;
 
   /**
@@ -34,17 +35,20 @@ public class PingThread implements Runnable {
         try {
           parent.send("PING");
         } catch (SocketException e) { // passiert wahrscheinlich, wenn das Socket geschlossen worden ist..
+          System.out.println("Socket wurde geschlossen");
           break;//TODO Handle this exception
         }
 
         lastRequestTimeMillis = currentTimeMillis();
-        synchronized(this) {
+        synchronized (this) {
           wait(maxResponseTimeMillis);
         }
         long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
         if (timeWaited >= maxResponseTimeMillis) {
-         //parent.logout();
+          System.out.println("Logging Client " + parent.id + " out due to timeout.");
+          parent.logout();
         }
+        Thread.sleep(PING_INTERVALL);
       }
     } catch(IOException | InterruptedException e) {
       e.printStackTrace();

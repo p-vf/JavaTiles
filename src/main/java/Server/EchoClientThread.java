@@ -12,14 +12,14 @@ import java.util.ArrayList;
  * @author Istref Uka
  */
 public class EchoClientThread implements Runnable {
-  private int id;
+  public int id;
   public String nickname;
   private final EchoServer server;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
   private static final int PING_TIMEOUT = 15000;
-  private Thread pingThread;
+  private final PingThread pingThread;
 
   private final Object pingLock = new Object();
 
@@ -34,6 +34,16 @@ public class EchoClientThread implements Runnable {
     this.id = id;
     this.socket = socket;
     this.server = server;
+    try {
+      InputStream in = socket.getInputStream();
+      bReader = new BufferedReader(new InputStreamReader(in));
+      out = socket.getOutputStream();
+    } catch(IOException e) {
+      e.printStackTrace(System.err);
+    }
+
+    pingThread = new PingThread(this, PING_TIMEOUT);
+    pingThread.start();
   }
 
   // for testing purposes
@@ -49,15 +59,7 @@ public class EchoClientThread implements Runnable {
 
     System.out.println(msg + " hergestellt");
     try {
-      //socket.setSoTimeout(PING_TIMEOUT);
-      InputStream in = socket.getInputStream();
-      bReader = new BufferedReader(new InputStreamReader(in));
-
-      out = socket.getOutputStream();
       send(msg);
-
-      pingThread = new Thread(new PingThread(this, PING_TIMEOUT - 5000));
-      pingThread.start();
 
       while (true) {
         String request;
@@ -100,7 +102,7 @@ public class EchoClientThread implements Runnable {
       case CATS -> {}
       case PING ->{
         synchronized (pingThread) {
-          pingThread.notify(); //
+          pingThread.notify();
         }
       }
     }
