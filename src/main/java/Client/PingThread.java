@@ -4,14 +4,15 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import static java.lang.System.currentTimeMillis;
-
 /**
  * The PingThread class represents a thread responsible for sending periodic PING messages
- * to a client to check for responsiveness.
+ * to the server to check for responsiveness.
+ * If no response is received within the specified maximum response time, the client is logged out.
+ * This class extends Thread and overrides the run method to define the thread's behavior.
  *
  * @author Pascal von Fellenberg
- * @author Istref Uka
  */
+
 public class PingThread extends Thread {
     private final EchoClient parent;
     private final long maxResponseTimeMillis;
@@ -20,14 +21,21 @@ public class PingThread extends Thread {
 
     /**
      * Constructs a new PingThread instance.
-     * @param parent The parent EchoClientThread associated with this PingThread.
-     * @param maxResponseTimeMillis The maximum response time allowed for a PING message, in milliseconds.
+     *
+     * @param parent the EchoClient associated with this PingThread
+     * @param maxResponseTimeMillis the maximum response time allowed for a PING message, in milliseconds
      */
+
     public PingThread(EchoClient parent, int maxResponseTimeMillis) {
         this.parent = parent;
         this.maxResponseTimeMillis = maxResponseTimeMillis;
     }
-
+    /**
+     * The run method of the PingThread.
+     * This method defines the behavior of the thread, which involves sending PING messages
+     * to the server at regular intervals and handling responses.
+     * If no response is received within the specified maximum response time, the client is logged out.
+     */
     @Override
     public void run() {
         try {

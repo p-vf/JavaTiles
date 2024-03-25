@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 /**
  * The LoginClient class enables user login functionality by prompting the user to set a username and lobby number.
+ *
+ * @author Boran Gökcen
+ * @author Robin Gökcen
  */
 public class LoginClient {
     private final Scanner scanner = new Scanner(System.in);

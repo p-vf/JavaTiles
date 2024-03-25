@@ -8,6 +8,9 @@ import static Client.EchoClient.handleRequest;
 /**
  * The InThread class represents a thread responsible for handling incoming messages from the server.
  * It reads messages from the input stream and processes them accordingly.
+ *
+ * @author Boran Gökcen
+ * @author Pascal von Fellenberg
  */
 public class InThread implements Runnable {
 

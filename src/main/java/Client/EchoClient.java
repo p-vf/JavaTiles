@@ -13,6 +13,10 @@ import java.util.Arrays;
  * The EchoClient class represents a client in our application.
  * It connects to a server and allows users to send Strings and perform actions.
  * This class handles input/output operations and communication with the server.
+ *
+ * @author Boran Gökcen
+ * @author Robin Gökcen
+ * @author Pascal von Fellenberg
  */
 public class EchoClient {
 
@@ -23,7 +27,7 @@ public class EchoClient {
   private static final BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
   // Buffered reader for user input
 
-  private Thread pingThread;
+  private Thread pingThread;// Thread responsible for sending periodic PING messages to the server.
 
   private static String nickname; // Nickname of the player
 
@@ -90,6 +94,13 @@ public class EchoClient {
 
 
   }
+  /**
+   * Initiates a new PingThread for the specified EchoClient.
+   * This method creates a new thread responsible for sending periodic PING messages
+   * to the server to check for responsiveness.
+   *
+   * @param client the EchoClient for which to start the ping thread
+   */
   public static void ping(EchoClient client){
     client.pingThread = new PingThread(client, 10000);
     client.pingThread.start();
