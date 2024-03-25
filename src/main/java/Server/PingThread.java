@@ -46,7 +46,7 @@ public class PingThread extends Thread {
           long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
 
           if (timeWaited >= maxResponseTimeMillis) {
-            System.out.println("Client Nr. " + parent.id + " wird ausgeloggt, da das Timeout von "+ (double)maxResponseTimeMillis/1000.0 + " überschritten wurde. ");
+            System.out.println("Client Nr. " + parent.id + " wird ausgeloggt, da das Timeout von "+ (double)maxResponseTimeMillis/1000.0 + " Sekunden überschritten wurde. ");
             parent.logout();
           }
         }

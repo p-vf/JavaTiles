@@ -91,7 +91,7 @@ public class EchoClient {
 
   }
   public static void ping(EchoClient client){
-    client.pingThread = new Thread(new PingThread(client, 10000));
+    client.pingThread = new PingThread(client, 10000);
     client.pingThread.start();
   }
 
@@ -216,10 +216,8 @@ public class EchoClient {
     String requestCommand = arguments.remove(0);
     switch (requestCommand) {
       case "CATS":
-
         String name = arguments.get(2);
         System.out.println(name + ": " +arguments.get(1));
-
         break;
 
       case "+LOGI":
@@ -231,20 +229,21 @@ public class EchoClient {
         System.out.println("Your nickname has been changed to: "+nickname);
         break;
 
-      case"+LOGO":
+      case "+LOGO":
         System.out.println("You have been logged out.");
         client.logout();
         break;
 
-      case"PING":
+      case "PING":
         //System.out.println("PING");
         client.send("+PING");
         break;
 
       case "+PING":
         //System.out.println("+PING");
-        synchronized (client.pingThread){
-        client.pingThread.notify();}
+        synchronized (client.pingThread) {
+          client.pingThread.notify();
+        }
         break;
 
       default:
