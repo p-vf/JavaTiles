@@ -64,5 +64,14 @@ send hinzugefügt.
 - Parserequest Methode wurde auf Client Seite verbessert, weil sie vorher nicht wie gewünscht funktioniert hat.
 - Auf der Serverseite wurde die Javadoc erstellt.
 
+## 24.3.2024
+- ParseRequest Methode auf Seiten des Servers so implementiert, dass leere Strings ignoriert werden.
+- handleRequest Methode ausgebaut auf dem Client, weil einige noch fehlten.
+- Javadoc leicht ausgebaut auf Server Seite
+- Readme erstellt.
+- QA Konzept haben wir geschrieben
 
+## 25.3.2024
+- Beide PING Klassen wurden überarbeitet, da sie noch bugs enthielten.
+- Javadoc auch auf Clientseite erstellt.
 
