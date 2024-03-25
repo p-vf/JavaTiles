@@ -9,19 +9,19 @@ import java.util.ArrayList;
  * The EchoServer class represents a simple server that listens for client connections
  * on a specified port and handles communication with multiple clients concurrently.
  */
-public class EchoServer {
-  private volatile ArrayList<EchoClientThread> clientList;
+public class Server {
+  private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
 
   public static void main(String[] args) {
-    EchoServer s = new EchoServer();
+    Server s = new Server();
   }
 
   /**
    * Constructs a new EchoServer instance.
    * Creates a ServerSocket and listens for incoming client connections.
    */
-  private EchoServer() {
+  private Server() {
     int cnt = 0;
     try {
       System.out.println("Warte auf Verbindung auf Port 8090..");
@@ -29,7 +29,7 @@ public class EchoServer {
       clientList = new ArrayList<>();
       while (true) {
         Socket socket = serverSocket.accept();
-        EchoClientThread eC = new EchoClientThread(++cnt, socket, this);
+        ClientThread eC = new ClientThread(++cnt, socket, this);
         clientList.add(eC);
         Thread eCT = new Thread(eC);
         eCT.start();
@@ -45,8 +45,8 @@ public class EchoServer {
    * @param str The message to be broadcasted to all clients.
    * @param sender The client thread sending the message.
    */
-  public void sendBroadcast(String str, EchoClientThread sender) {
-    for (EchoClientThread client : clientList) {
+  public void sendBroadcast(String str, ClientThread sender) {
+    for (ClientThread client : clientList) {
       if (client == sender) {
         continue;
       }
@@ -63,7 +63,7 @@ public class EchoServer {
    * Removes a client from the server.
    * @param client The client thread to be logged out.
    */
-  public synchronized void removeClient(EchoClientThread client) {
+  public synchronized void removeClient(ClientThread client) {
     clientList.remove(client);
   }
 
@@ -76,7 +76,7 @@ public class EchoServer {
    */
   public ArrayList<String> getNicknames() {
     ArrayList<String> nicknames = new ArrayList<>();
-    for (EchoClientThread client : clientList) {
+    for (ClientThread client : clientList) {
       if (client.nickname != null && !client.nickname.isEmpty()) {
         nicknames.add(client.nickname);
       }
@@ -90,7 +90,7 @@ public class EchoServer {
    * @param nickname The nickname of the client to whom the message is to be sent.
    */
   public void sendToNickname(String str, String nickname) {
-    for (EchoClientThread client : clientList) {
+    for (ClientThread client : clientList) {
       if (client.nickname.equals(nickname)) {
         try {
           client.send(str);

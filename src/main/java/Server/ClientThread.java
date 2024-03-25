@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * @author Pascal von Fellenberg
  * @author Istref Uka
  */
-public class EchoClientThread implements Runnable {
+public class ClientThread implements Runnable {
   public int id;
   public String nickname;
-  private final EchoServer server;
+  private final Server server;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
@@ -30,7 +30,7 @@ public class EchoClientThread implements Runnable {
    * @param socket The socket that is used to create the connection between client and server.
    * @param server The server which gets connected to the client.
    *  */
-  public EchoClientThread(int id, Socket socket, EchoServer server) {
+  public ClientThread(int id, Socket socket, Server server) {
     this.id = id;
     this.socket = socket;
     this.server = server;
