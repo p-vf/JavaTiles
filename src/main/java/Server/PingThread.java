@@ -32,21 +32,23 @@ public class PingThread extends Thread {
   public void run() {
     try {
       while (true) {
-        try {
-          parent.send("PING");
-        } catch (SocketException e) { // passiert wahrscheinlich, wenn das Socket geschlossen worden ist..
-          System.out.println("Socket wurde geschlossen");
-          break;//TODO Handle this exception
-        }
-
-        lastRequestTimeMillis = currentTimeMillis();
         synchronized (this) {
+          try {
+            parent.send("PING");
+          } catch (SocketException e) { // passiert wahrscheinlich, wenn das Socket geschlossen worden ist..
+            System.out.println("Socket wurde geschlossen");
+            break;//TODO Handle this exception
+          }
+
+          lastRequestTimeMillis = currentTimeMillis();
           wait(maxResponseTimeMillis);
-        }
-        long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
-        if (timeWaited >= maxResponseTimeMillis) {
-          System.out.println("Logging Client " + parent.id + " out due to timeout.");
-          parent.logout();
+
+          long timeWaited = currentTimeMillis() - lastRequestTimeMillis;
+
+          if (timeWaited >= maxResponseTimeMillis) {
+            System.out.println("Client Nr. " + parent.id + " wird ausgeloggt, da das Timeout von "+ (double)maxResponseTimeMillis/1000.0 + " überschritten wurde. ");
+            parent.logout();
+          }
         }
         Thread.sleep(PING_INTERVALL);
       }
