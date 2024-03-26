@@ -1,5 +1,8 @@
 package Server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,10 +13,12 @@ import java.util.ArrayList;
  * on a specified port and handles communication with multiple clients concurrently.
  */
 public class Server {
+  public static final Logger LOGGER = LogManager.getLogger();
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
 
   public static void main(String[] args) {
+    System.out.println("Logging level: " + LOGGER.getLevel().toString());
     Server s = new Server();
   }
 
