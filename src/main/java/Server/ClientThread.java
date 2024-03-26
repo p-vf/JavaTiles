@@ -5,6 +5,10 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class represents a thread for handling communication with a client by reading and responding to inputs.
  *
@@ -12,6 +16,7 @@ import java.util.ArrayList;
  * @author Istref Uka
  */
 public class ClientThread implements Runnable {
+  public static final Logger LOGGER = LogManager.getLogger();
   public int id;
   public String nickname;
   private final Server server;
@@ -57,7 +62,7 @@ public class ClientThread implements Runnable {
     // TODO handle SocketTimeoutException, SocketException
     String msg = "Server: Verbindung " + id;
 
-    System.out.println(msg + " hergestellt");
+    LOGGER.debug(msg + " hergestellt");
     try {
       send(msg);
 
@@ -67,7 +72,7 @@ public class ClientThread implements Runnable {
           request = bReader.readLine();
         } catch (IOException e) { break; }
 
-        System.out.println("Received: " + request);
+        LOGGER.debug("received: " + request);
         if (!request.isEmpty() && request.charAt(0) == '+') { //request kann null sein, wenn es
           // keine Readline gibt, falls Client Verbindung verliert.
           handleResponse(request);
@@ -82,7 +87,7 @@ public class ClientThread implements Runnable {
       }
       e.printStackTrace(System.err);
     }
-    System.out.println("Server: Verbindung " + id + " abgebrochen");
+    LOGGER.debug("Server: Verbindung " + id + " abgebrochen");
   }
 
   /**
@@ -251,6 +256,7 @@ public class ClientThread implements Runnable {
    */
   public synchronized void send(String str) throws IOException {
     out.write((str + "\r\n").getBytes());
+    LOGGER.debug("sent: " + str);
   }
 
   /**

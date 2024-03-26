@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="CoreConfig" status="INFO">
+    <Properties>
+        <Property name="loggingPattern">[%d{MM-dd HH:mm:ss.SSS}][%-5level][%t] %C{1} - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${loggingPattern}"/>
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+        <RollingFile name="File">
+            <FileName>logs/cs108.log</FileName>
+            <FilePattern>logs/%d{yyyy-MM-dd-hh}-%i.log.zip</FilePattern>
+            <PatternLayout pattern="${loggingPattern}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="3000 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+            <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="ch.unibas.dmi.dbis.cs108" level="INFO" additivity="true"/>
+        <Logger name="ch.unibas.dmi.dbis.cs108.gui" level="TRACE" additivity="true"/>
+        <Logger name="Server.ClientThread" level="DEBUG" additivity="true"/>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
