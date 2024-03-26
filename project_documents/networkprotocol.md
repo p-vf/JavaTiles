@@ -1,9 +1,14 @@
 # Einige Eigenheiten unseres Protokolls
 - Unser Protokoll ist Verbindungsbasiert, das heisst jeder Client hat eine feste Socket-Verbindung mit dem Server.  
 Aus dieser Gegebenheit können viele Informationen von den Commands ausgelassen werden (z. B. wer der Absender ist), da sie sich jeweils aus dem Kontext ergeben. 
-- Separator unseres Protokolls: Leerschlag ("` `")  
+- Jede Request in unserem Netzwerkprotokoll sieht wie folgt aus:  
+```<commandname> <arg_1> <arg_2> ... [<optionalarg_1> ...] [<debugmessage>]```  
+wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te argument ist. 
+- Jede Response hat den gleichen Aufbau wie eine Request, jedoch wird ein ``+`` am Anfang angehängt:  
+``+<commandname> ...``
 - Jedes Argument kann im Prinzip Leerschläge beinhalten (siehe Beschreibung des Parameters `<msg>`).
-Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nur dort explizit erwähnt. 
+Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nur dort explizit erwähnt.
+
 
 | Parameter                                                          | Beschreibung                                                                                                                                                                                                          |
 |--------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

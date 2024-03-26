@@ -95,7 +95,7 @@ public class ClientThread implements Runnable {
     String cmdStr = arguments.remove(0);
     cmdStr = cmdStr.substring(1);
     // TODO add log, if cmdStr is not of size 4
-    ProtocolResponse command = ProtocolResponse.valueOf(cmdStr);
+    Protocol.Response command = Protocol.Response.valueOf(cmdStr);
     switch (command) {
       case PWIN -> {}
       case EMPT -> {}
@@ -195,7 +195,7 @@ public class ClientThread implements Runnable {
     try{
       ArrayList<String> arguments = parseRequest(request);
       // TODO change this so that incorrect input gets handled
-      ProtocolRequest command = ProtocolRequest.valueOf(arguments.remove(0));
+      Protocol.Request command = Protocol.Request.valueOf(arguments.remove(0));
       // TODO handle all cases
       switch (command) {
         case LOGI -> {
@@ -208,19 +208,17 @@ public class ClientThread implements Runnable {
         case STAT -> {}
         case DRAW -> {}
         case PUTT -> {}
-        case PWIN -> {}
-        case EMPT -> {}
         case CATC -> {
           chatHandler(arguments);
           send("+CATC");
         }
-        case CATS -> {}
         case PING -> send("+PING");
         case NAME -> {
           changeName(arguments.get(0));
           send("+NAME " + nickname);
         }
-        default -> {}
+        case LLOB -> {}
+        case JLOB -> {}
       }
     }
     catch(IndexOutOfBoundsException e){
