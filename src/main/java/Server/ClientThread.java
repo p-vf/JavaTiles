@@ -26,8 +26,6 @@ public class ClientThread implements Runnable {
   private static final int PING_TIMEOUT = 15000;
   private final PingThread pingThread;
 
-  private final Object pingLock = new Object();
-
   /**
    * Constructor of the EchoClientThread class.
    *
@@ -106,7 +104,7 @@ public class ClientThread implements Runnable {
       case PWIN -> {}
       case EMPT -> {}
       case CATS -> {}
-      case PING ->{
+      case PING -> {
         synchronized (pingThread) {
           pingThread.receivedResponse = true;
         }
@@ -205,7 +203,7 @@ public class ClientThread implements Runnable {
       // TODO handle all cases
       switch (command) {
         case LOGI -> {
-          login(Integer.parseInt(arguments.get(0)), arguments.get(1));
+          login(arguments.get(0));
         }
         case LOGO -> {
           send("+LOGO");
@@ -261,16 +259,12 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Logs in a player with the given lobby number and nickname.
-   * Puts the player into a lobby if necessary.
+   * Logs the player in with a given nickname
    *
-   * @param lobbyNum The number of the lobby to which the player should be assigned.
    * @param newNickname The new nickname of the player.
    * @throws IOException If an I/O error occurs while logging in.
    */
-  private void login(int lobbyNum, String newNickname) throws IOException {
-    // TODO put player into a lobby
-
+  private void login(String newNickname) throws IOException {
     // TODO maybe don't send "+LOGI ..." here but inside the switch statement?
     changeName(newNickname);
     send("+LOGI " + this.nickname);
