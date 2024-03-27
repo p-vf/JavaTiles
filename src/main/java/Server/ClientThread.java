@@ -48,6 +48,7 @@ public class ClientThread implements Runnable {
     }
 
     pingThread = new PingThread(this, PING_TIMEOUT);
+    pingThread.setName("PingThread-" + id);
     pingThread.start();
   }
 
@@ -107,7 +108,7 @@ public class ClientThread implements Runnable {
       case CATS -> {}
       case PING ->{
         synchronized (pingThread) {
-          pingThread.notify();
+          pingThread.receivedResponse = true;
         }
       }
     }

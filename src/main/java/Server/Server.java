@@ -39,7 +39,7 @@ public class Server {
         Socket socket = serverSocket.accept();
         ClientThread eC = new ClientThread(++cnt, socket, this);
         clientList.add(eC);
-        Thread eCT = new Thread(eC);
+        Thread eCT = new Thread(eC, "ClientThread-" + cnt);
         eCT.start();
       }
     } catch (IOException e) {
