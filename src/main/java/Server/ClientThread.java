@@ -225,7 +225,7 @@ public class ClientThread implements Runnable {
         case JLOB -> {}
       }
     }
-    catch(IndexOutOfBoundsException e){
+    catch(IndexOutOfBoundsException | NumberFormatException e){
       send("fehlerhafte Eingabe");
     }
   }
