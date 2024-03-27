@@ -18,19 +18,22 @@ public class Server {
   private ServerSocket serverSocket;
 
   public static void main(String[] args) {
-    System.out.println("Logging level: " + LOGGER.getLevel().toString());
-    Server s = new Server();
+    if (args.length < 1) {
+      LOGGER.fatal("No port number given.");
+    }
+    LOGGER.info("Logging level: " + LOGGER.getLevel().toString());
+    Server s = new Server(Integer.parseInt(args[0]));
   }
 
   /**
    * Constructs a new EchoServer instance.
    * Creates a ServerSocket and listens for incoming client connections.
    */
-  private Server() {
+  private Server(int port) {
     int cnt = 0;
     try {
-      System.out.println("Warte auf Verbindung auf Port 8090..");
-      serverSocket = new ServerSocket(8090);
+      System.out.println("Warte auf Verbindung auf Port " + port + "..");
+      serverSocket = new ServerSocket(port);
       clientList = new ArrayList<>();
       while (true) {
         Socket socket = serverSocket.accept();

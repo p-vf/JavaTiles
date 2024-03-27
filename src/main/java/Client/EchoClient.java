@@ -50,6 +50,7 @@ public class EchoClient {
    */
   public static void main(String[] args) {
     try {
+      // TODO man muss beim Start dieser Funktion den Nicknamen als optionalen Parameter angeben können (in args[2])
       Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
       EchoClient client = new EchoClient(sock);
       InThread th = new InThread(client.in, client);
