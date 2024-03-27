@@ -15,7 +15,7 @@ import static java.lang.System.currentTimeMillis;
  */
 
 public class PingThread extends Thread {
-  private final EchoClient parent;
+  private final Client parent;
   private final long maxResponseTimeMillis;
   private static final long PING_INTERVALL = 1000;
   public long timeLastResponse;
@@ -28,7 +28,7 @@ public class PingThread extends Thread {
    * @param maxResponseTimeMillis the maximum response time allowed for a PING message, in milliseconds
    */
 
-  public PingThread(EchoClient parent, int maxResponseTimeMillis) {
+  public PingThread(Client parent, int maxResponseTimeMillis) {
     this.parent = parent;
     this.maxResponseTimeMillis = maxResponseTimeMillis;
     timeLastResponse = currentTimeMillis();

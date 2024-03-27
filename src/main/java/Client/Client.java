@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Robin Gökcen
  * @author Pascal von Fellenberg
  */
-public class EchoClient {
+public class Client {
 
   private final Socket socket; // The socket for communication with the server
 
@@ -34,7 +34,7 @@ public class EchoClient {
    * @param socket the socket for communication with the server
    * @throws IOException if an I/O error occurs when creating the client
    */
-  public EchoClient(Socket socket) throws IOException{
+  public Client(Socket socket) throws IOException{
     this.socket = socket;
     this.out = socket.getOutputStream();
     this.in = socket.getInputStream();
@@ -52,7 +52,7 @@ public class EchoClient {
     try {
       // TODO man muss beim Start dieser Funktion den Nicknamen als optionalen Parameter angeben können (in args[2])
       Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
-      EchoClient client = new EchoClient(sock);
+      Client client = new Client(sock);
       InThread th = new InThread(client.in, client);
       Thread iT = new Thread(th);
       iT.start();
@@ -61,7 +61,7 @@ public class EchoClient {
 
       LoginClient login = new LoginClient();
       nickname = login.setUsername();
-      String logindata = "LOGI " + login.setLobbyNumber() + " " + nickname;
+      String logindata = "LOGI " + " " + nickname;
 
       client.send(logindata);
 
@@ -85,8 +85,7 @@ public class EchoClient {
     }
     catch (IOException e){
 
-      System.err.println(e.toString());
-      System.exit(1);
+      System.out.println("Your connection to the server has been lost");
     }
 
 
@@ -98,7 +97,7 @@ public class EchoClient {
    *
    * @param client the EchoClient for which to start the ping thread
    */
-  public static void ping(EchoClient client){
+  public static void ping(Client client){
     client.pingThread = new PingThread(client, 10000);
     client.pingThread.start();
   }
@@ -174,7 +173,7 @@ public class EchoClient {
    * @param client the client object
    * @return a string representing the message to be sent to the server
    */
-  public static String handleInput(String input, EchoClient client) {
+  public static String handleInput(String input, Client client) {
     ArrayList<String> arguments = parseRequest(input);
     String inputCommand = arguments.remove(0);
     switch (inputCommand) {
@@ -219,7 +218,7 @@ public class EchoClient {
    * @param request the request received from the server
    * @param client the client object
    */
-  public static void handleRequest(String request, EchoClient client) throws IOException {
+  public static void handleRequest(String request, Client client) throws IOException {
     ArrayList<String> arguments = parseRequest(request);
     String requestCommand = arguments.remove(0);
     switch (requestCommand) {
@@ -273,7 +272,7 @@ public class EchoClient {
       out.close();
       System.out.println("You have been logged out.");
     } catch (IOException e) {
-      e.printStackTrace(System.err);
+      System.out.println("You have been logged out.");
     }
   }
 

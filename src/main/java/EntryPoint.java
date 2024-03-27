@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import Client.Client;
 
 public class EntryPoint {
   public static void main(String[] args) {
@@ -12,7 +12,7 @@ public class EntryPoint {
         if (args.length == 3) {
           arguments = new String[] { arguments[0], arguments[1], args[2] };
         }
-        Client.EchoClient.main(arguments);
+        Client.main(arguments);
       }
       case "server" -> Server.Server.main(new String[] {args[1]});
       default -> System.out.println("Fatal: Das erste Argument muss entweder \"client\" oder \"server\" sein.");

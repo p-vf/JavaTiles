@@ -3,7 +3,7 @@ package Client;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static Client.EchoClient.handleRequest;
+import static Client.Client.handleRequest;
 
 /**
  * The InThread class represents a thread responsible for handling incoming messages from the server.
@@ -14,7 +14,7 @@ import static Client.EchoClient.handleRequest;
  */
 public class InThread implements Runnable {
 
-  public EchoClient client; // The associated client object
+  public Client client; // The associated client object
   InputStream in; // The input stream to read messages from
 
 
@@ -24,7 +24,7 @@ public class InThread implements Runnable {
    * @param in the input stream to read messages from
    * @param client the associated client object
    */
-  public InThread(InputStream in, EchoClient client) {
+  public InThread(InputStream in, Client client) {
     this.in = in;
     this.client = client;
   }

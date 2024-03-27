@@ -10,9 +10,6 @@ import java.util.Scanner;
  * @author Robin Gökcen
  */
 public class LoginClient {
-    private final Scanner scanner = new Scanner(System.in);
-
-
     /**
      * Prompts the user to set a username.
      * If the username is longer than 15 characters, it prompts the user again until a valid username is provided.
@@ -21,6 +18,7 @@ public class LoginClient {
      * @return the username set by the user
      */
     public String setUsername() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter username:");
         String username = scanner.nextLine();
         while (username.length() > 15) {
@@ -30,33 +28,14 @@ public class LoginClient {
         if (username.isEmpty()) {
             username = System.getProperty("user.name"); //whoami
 
+            scanner.close();
+
 
         }
         return username;
     }
 
-    /**
-     * Prompts the user to set a lobby number.
-     * It validates whether the input is a valid number and prompts the user again until a valid number is provided.
-     *
-     * @return the lobby number set by the user
-     */
-    public int setLobbyNumber() {
-        System.out.println("Enter lobby number:");
-        int lobbyNumber = 0;
-        while (true) {
-            try {
-                lobbyNumber = scanner.nextInt();
-                break;
-            } catch (InputMismatchException e) {
-                System.out.println("Geben Sie eine Zahl ein.");
-                scanner.nextLine();
 
-            }
-        }
-        return lobbyNumber;
-
-    }
 }
 
 
