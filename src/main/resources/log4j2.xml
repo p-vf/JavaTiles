@@ -22,7 +22,7 @@
     <Loggers>
         <Logger name="ch.unibas.dmi.dbis.cs108" level="INFO" additivity="true"/>
         <Logger name="ch.unibas.dmi.dbis.cs108.gui" level="TRACE" additivity="true"/>
-        <Logger name="Server.ClientThread" level="DEBUG" additivity="true"/>
+        <Logger name="server.ClientThread" level="DEBUG" additivity="true"/>
         <Root level="DEBUG">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>

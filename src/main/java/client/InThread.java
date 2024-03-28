@@ -1,9 +1,9 @@
-package Client;
+package client;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static Client.Client.handleRequest;
+import static client.Client.handleRequest;
 
 /**
  * The InThread class represents a thread responsible for handling incoming messages from the server.

@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 /**
  * This enum represents the possible response and request types in the server-client protocol that the server must be able to handle.
