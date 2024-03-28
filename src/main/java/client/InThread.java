@@ -1,7 +1,9 @@
 package client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 
 import static client.Client.handleRequest;
@@ -24,7 +26,7 @@ public class InThread implements Runnable {
   /**
    * Constructs a new InThread with the given input stream and client.
    *
-   * @param in the input stream to read messages from
+   * @param in     the input stream to read messages from
    * @param client the associated client object
    */
   public InThread(InputStream in, Client client) {
@@ -37,27 +39,23 @@ public class InThread implements Runnable {
    * It delegates the handling of messages to the handleRequest method in EchoClient class.
    */
   public void run() {
-    int len;
-    byte[] b = new byte[100];
-    try {
-      while (true) {
-        if ((len = in.read(b)) == -1) {
-          break;
-        }
-        String request = new String(b, 0, len);
-        if (request.charAt(0) != '+') {
+    while (true) {
+      String message;
+      BufferedReader bufferRead = new BufferedReader(new InputStreamReader(in));
+      try {
+        message = bufferRead.readLine();
 
-          handleRequest(request, client);
+        if (message.charAt(0) != '+') {
+          handleRequest(message, client);
+
         } else {
-
-          handleResponse(request, client);
+          handleResponse(message, client);
         }
 
+      } catch (IOException e) {
+        System.err.println(e.toString());
+        System.exit(1); // Terminate the program on I/O error
       }
-    }
-      catch (IOException e) {
-      System.err.println(e.toString());
-      System.exit(1); // Terminate the program on I/O error
     }
   }
 }
