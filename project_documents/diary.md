@@ -75,3 +75,27 @@ send hinzugefügt.
 - Beide PING Klassen wurden überarbeitet, da sie noch bugs enthielten.
 - Javadoc auch auf Clientseite erstellt.
 
+## 28.3.2024 Meeting (Robin, Pascal, Boran)
+  - Besprechung der Bewertung des letzten Meilensteins
+  - weitere Vorgehensweisen:
+ - Besprechung wie unsere eigenen Änderungen gemerged werden können.
+   - Auf der Clientseite werden nun die requests mit Enums geregelt.
+   - Commands werden nun von einer Klasse decoded und encoded (package utils.NetworkUtils).
+ - Besprechung des QA Konzepts:
+   - Unit Tests implementieren
+   - Erste Versuche mit Metrics Reloaded
+ - Erste Schritte zur Implementation der Spiellogik besprochen
+
+ - wie könnten wir chronologisch vorgehen (erste Implementation):
+    - Serverseite:
+      - Lobbies
+      - Broadcast
+      - Gamestate 
+      - Spiellogik implementation
+
+    - Clientseite:   
+      - JLOB Join lobby Funktionalität
+      - LLOB zeige Lobbies an
+      - /all Command für broadcast
+      - Spiellogik implementation 
+      - Chat GUI
