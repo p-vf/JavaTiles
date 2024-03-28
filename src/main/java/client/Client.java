@@ -165,6 +165,36 @@ public class Client {
       return command;
     }
 
+  private static ArrayList<String> parseInput(String request) {
+    ArrayList<String> command = new ArrayList<>();
+    StringBuilder sb = new StringBuilder();
+    boolean inQuotes = false;
+
+    for (int i = 0; i < request.length(); i++) {
+      char c = request.charAt(i);
+
+      if (c == '"') {
+        inQuotes = !inQuotes;
+        if (!inQuotes) {
+          command.add(sb.insert(0, '"').append('"').toString());
+          sb.setLength(0);
+        }
+      } else if (c == ' ' && !inQuotes) {
+        if (sb.length() > 0) {
+          command.add(sb.toString());
+          sb.setLength(0);
+        }
+      } else {
+        sb.append(c);
+      }
+    }
+
+    if (sb.length() > 0) {
+      command.add(sb.toString());
+    }
+
+    return command;
+  }
   /**
    * Sends a message to the server.
    *
@@ -183,7 +213,7 @@ public class Client {
    * @return a string representing the message to be sent to the server
    */
   public static String handleInput(String input, Client client) {
-    ArrayList<String> arguments = parseRequest(input);
+    ArrayList<String> arguments = parseInput(input);
     String inputCommand = arguments.remove(0);
     switch (inputCommand) {
       case "/nickname":
