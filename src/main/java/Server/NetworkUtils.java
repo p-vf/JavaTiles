@@ -2,6 +2,7 @@ package Server;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NetworkUtils {
 
@@ -9,10 +10,16 @@ public class NetworkUtils {
   public static void main(String[] args) {
     String req = "CATC t \"\\\"bruh \\\"  skldjf wpeoi -.öelppoweir\" bruh b";
     System.out.println(req);
-    System.out.println(parseProtocolMessage(req));
+    System.out.println(decodeProtocolMessage(req));
     req = "hello brother how are you doing";
     System.out.println(req);
-    System.out.println(parseProtocolMessage(req));
+    System.out.println(decodeProtocolMessage(req));
+
+
+    ArrayList<String> msg = new ArrayList<>(Arrays.asList("CATC", "sldkfj", "sldkfj ", "\" helloliaonjasölmükoihjw3efpopodsufijewölk'sdfök32141\"\" \" "));
+    System.out.println(msg);
+    System.out.println(decodeProtocolMessage(encodeProdocolMessage(msg)));
+
 
   }
 
@@ -24,7 +31,7 @@ public class NetworkUtils {
    * @param request String with a defined format in the network protocol.
    * @return An ArrayList containing the command and its arguments as strings.
    */
-  public static ArrayList<String> parseProtocolMessage(String request) {
+  public static ArrayList<String> decodeProtocolMessage(String request) {
     char[] chars = request.toCharArray();
     ArrayList<String> command = new ArrayList<>();
     boolean isInsideString = false;
@@ -57,5 +64,27 @@ public class NetworkUtils {
     }
     command.add(sb.toString());
     return command;
+  }
+
+  public static String encodeProdocolMessage(ArrayList<String> command) {
+    StringBuilder sb = new StringBuilder();
+    for (String s : command) {
+      if (s.contains(" ") || s.contains("\"")) {
+        sb.append("\"");
+        for (char c : s.toCharArray()) {
+          if (c == '\"') {
+            sb.append("\\\"");
+          } else {
+            sb.append(c);
+          }
+        }
+        sb.append("\"");
+      } else {
+        sb.append(s);
+      }
+      sb.append(" ");
+    }
+    sb.deleteCharAt(sb.length()-1);
+    return sb.toString();
   }
 }

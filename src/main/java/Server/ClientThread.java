@@ -52,7 +52,7 @@ public class ClientThread implements Runnable {
   // for testing purposes
   public static void main(String[] args) {
     String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
-    System.out.println("Result: " + NetworkUtils.parseProtocolMessage(request).toString());
+    System.out.println("Result: " + NetworkUtils.decodeProtocolMessage(request).toString());
   }
 
   @Override
@@ -94,7 +94,7 @@ public class ClientThread implements Runnable {
    * @param response Represents a response to a previously sent request, must start with a "+".
    */
   private void handleResponse(String response) {
-    ArrayList<String> arguments = NetworkUtils.parseProtocolMessage(response);
+    ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(response);
     String cmdStr = arguments.remove(0);
     cmdStr = cmdStr.substring(1);
     // TODO add log, if cmdStr is not of size 4
@@ -141,7 +141,7 @@ public class ClientThread implements Runnable {
 
   private void handleRequest(String request) throws IOException {
     try{
-      ArrayList<String> arguments = NetworkUtils.parseProtocolMessage(request);
+      ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(request);
       // TODO change this so that incorrect input gets handled
       Protocol.Request command = Protocol.Request.valueOf(arguments.remove(0));
       // TODO handle all cases
