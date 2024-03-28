@@ -3,6 +3,7 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class NetworkUtils {
 
@@ -20,16 +21,18 @@ public class NetworkUtils {
     System.out.println(msg);
     System.out.println(decodeProtocolMessage(encodeProtocolMessage(msg)));
 
+    System.out.println(encodeProtocolMessage("lskdfj", "sldkfj", "weoiablkn"));
+
 
   }
 
 
   /**
-   * This method parses a Message of the format from the Protocol.
-   * It separates the command and each argument and puts them into an ArrayList.
+   * Decodes a message conforming to the network protocol into an ArrayList of Strings,
+   * the first element being the command name and the rest being arguments to said command.
    *
    * @param request String with a defined format in the network protocol.
-   * @return An ArrayList containing the command and its arguments as strings.
+   * @return An ArrayList having as first element the command name and the rest being arguments to the command.
    */
   public static ArrayList<String> decodeProtocolMessage(String request) {
     char[] chars = request.toCharArray();
@@ -66,6 +69,12 @@ public class NetworkUtils {
     return command;
   }
 
+  /**
+   * Takes Strings in an ArrayList and combines them into a String that can be sent via Socket, conforming to the protocols rules.
+   *
+   * @param command ArrayList of Strings with the first element being the command name and the rest being arguments to said command.
+   * @return String encoded in a way that conforms to the network protocol.
+   */
   public static String encodeProtocolMessage(ArrayList<String> command) {
     StringBuilder sb = new StringBuilder();
     for (String s : command) {
@@ -86,5 +95,18 @@ public class NetworkUtils {
     }
     sb.deleteCharAt(sb.length()-1);
     return sb.toString();
+  }
+
+  /**
+   * Takes Strings and combines them into a String that can be sent via Socket, conforming to the protocols rules.
+   *
+   * @param command Name of the command that is to be encoded
+   * @param args Arguments of the command that are to be encoded
+   * @return Encoded String
+   */
+  public static String encodeProtocolMessage(String command, String... args) {
+    ArrayList<String> input = new ArrayList<>(List.of(command));
+    input.addAll(List.of(args));
+    return encodeProtocolMessage(input);
   }
 }
