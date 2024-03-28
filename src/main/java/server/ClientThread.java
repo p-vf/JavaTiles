@@ -24,7 +24,7 @@ public class ClientThread implements Runnable {
   public OutputStream out;
   private BufferedReader bReader;
   private static final int PING_TIMEOUT = 15000;
-  private final PingThread pingThread;
+  private final ServerPingThread pingThread;
 
   /**
    * Constructor of the EchoClientThread class.
@@ -45,7 +45,7 @@ public class ClientThread implements Runnable {
       e.printStackTrace(System.err);
     }
 
-    pingThread = new PingThread(this, PING_TIMEOUT);
+    pingThread = new ServerPingThread(this, PING_TIMEOUT);
     pingThread.setName("PingThread-" + id);
     pingThread.start();
   }

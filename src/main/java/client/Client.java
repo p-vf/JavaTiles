@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -108,7 +107,7 @@ public class Client {
    * @param client the EchoClient for which to start the ping thread
    */
   public static void ping(Client client){
-    client.pingThread = new PingThread(client, 10000);
+    client.pingThread = new ClientPingThread(client, 10000);
     client.pingThread.start();
   }
 
@@ -333,6 +332,7 @@ public class Client {
         System.out.println("You have been logged out.");
       } catch (IOException e) {
         System.out.println("You have been logged out.");
+        System.exit(0);
       }
     }
 
