@@ -4,6 +4,14 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
+import Client.Clientprotocol.*;
+
+
 
 /**
  * The EchoClient class represents a client in our application.
@@ -26,6 +34,8 @@ public class Client {
   private Thread pingThread;// Thread responsible for sending periodic PING messages to the server.
 
   private static String nickname; // Nickname of the player
+
+  public static final Logger LOGGER = LogManager.getLogger();
 
 
   /**
@@ -219,63 +229,113 @@ public class Client {
    * @param client the client object
    */
   public static void handleRequest(String request, Client client) throws IOException {
+    try{
     ArrayList<String> arguments = parseRequest(request);
     String requestCommand = arguments.remove(0);
-    switch (requestCommand) {
-      case "CATS":
+    RequestType requestType = RequestType.valueOf(requestCommand);
+
+    switch(requestType){
+
+      case CATS:
         String name = arguments.get(2);
-        System.out.println(name + ": " +arguments.get(1));
+        System.out.println(name + ": " + arguments.get(1));
+      break;
+
+      case PING:
+        client.send("+PING");
+        //System.out.println("+PING");
         break;
 
-      case "+LOGI":
-        System.out.println("You have been logged in as: "+ arguments.get(0));
+      case PWIN:
         break;
 
-      case "+NAME":
+      case EMPT:
+        break;
+
+      default:
+        break;}}
+      catch(IllegalArgumentException e){
+      LOGGER.debug(e); //should look into that starts IllegalArgument Exception at the start
+
+    }
+
+
+  }
+
+
+
+    public static void handleResponse (String request, Client client) throws IOException {
+    try{
+    ArrayList<String> arguments = parseRequest(request);
+    String responsecommand = arguments.remove(0);
+    String requestWithoutPlus = responsecommand.substring(1);
+    ResponseType responseType = ResponseType.valueOf(requestWithoutPlus);
+    switch(responseType){
+
+      case PING:
+        synchronized(client.pingThread){
+          client.pingThread.notify();
+          //System.out.println("PING");
+        }
+        break;
+
+      case LOGI:
+        System.out.println("You have been logged in as: " + arguments.get(0));
+        break;
+
+      case NAME:
         nickname = arguments.get(0);
-        System.out.println("Your nickname has been changed to: "+nickname);
+        System.out.println("Your nickname has been changed to: " + nickname);
         break;
 
-      case "+LOGO":
+      case LOGO:
         System.out.println("You have been logged out.");
         client.logout();
         break;
 
-      case "PING":
-        //System.out.println("PING");
-        client.send("+PING");
+      case LLOB:
         break;
 
-      case "+PING":
-        //System.out.println("+PING");
-        synchronized (client.pingThread) {
-          client.pingThread.notify();
-        }
+      case JLOB:
+        break;
+
+      case CATC:
+        break;
+
+      case STAT:
+        break;
+
+      case DRAW:
+        break;
+
+      case PUTT:
         break;
 
       default:
-        System.out.println(request);
-        break;
+        break;}}
+      catch(IllegalArgumentException e){
+      System.out.println("");
+      }
+    }
 
 
+
+
+    /**
+     * Logs out the client from the server.
+     * Closes the socket, input and output streams.
+     */
+    public void logout () {
+      try {
+        socket.close();
+        bReader.close();
+        out.close();
+        System.out.println("You have been logged out.");
+      } catch (IOException e) {
+        System.out.println("You have been logged out.");
+      }
     }
 
   }
-  /**
-   * Logs out the client from the server.
-   * Closes the socket, input and output streams.
-   */
-  public void logout() {
-    try {
-      socket.close();
-      bReader.close();
-      out.close();
-      System.out.println("You have been logged out.");
-    } catch (IOException e) {
-      System.out.println("You have been logged out.");
-    }
-  }
 
-
-}
 

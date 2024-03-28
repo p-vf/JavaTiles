@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static Client.Client.handleRequest;
+import static Client.Client.handleResponse;
 
 /**
  * The InThread class represents a thread responsible for handling incoming messages from the server.
@@ -41,11 +42,18 @@ public class InThread implements Runnable {
         if ((len = in.read(b)) == -1) {
           break;
         }
-        String request =new String(b, 0, len);
+        String request = new String(b, 0, len);
+        if (request.charAt(0) != '+') {
+
           handleRequest(request, client);
+        } else {
+
+          handleResponse(request, client);
         }
 
-    } catch (IOException e) {
+      }
+    }
+      catch (IOException e) {
       System.err.println(e.toString());
       System.exit(1); // Terminate the program on I/O error
     }
