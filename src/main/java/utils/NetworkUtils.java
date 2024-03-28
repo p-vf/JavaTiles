@@ -18,7 +18,7 @@ public class NetworkUtils {
 
     ArrayList<String> msg = new ArrayList<>(Arrays.asList("CATC", "sldkfj", "sldkfj ", "\" helloliaonjasölmükoihjw3efpopodsufijewölk'sdfök32141\"\" \" "));
     System.out.println(msg);
-    System.out.println(decodeProtocolMessage(encodeProdocolMessage(msg)));
+    System.out.println(decodeProtocolMessage(encodeProtocolMessage(msg)));
 
 
   }
@@ -66,7 +66,7 @@ public class NetworkUtils {
     return command;
   }
 
-  public static String encodeProdocolMessage(ArrayList<String> command) {
+  public static String encodeProtocolMessage(ArrayList<String> command) {
     StringBuilder sb = new StringBuilder();
     for (String s : command) {
       if (s.contains(" ") || s.contains("\"")) {

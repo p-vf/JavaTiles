@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import client.Clientprotocol.*;
 
+import static utils.NetworkUtils.*;
 
 
 /**
@@ -70,7 +71,7 @@ public class Client {
 
       LoginClient login = new LoginClient();
       nickname = login.setUsername();
-      String logindata = "LOGI " + " " + nickname;
+      String logindata = "LOGI " + nickname;
 
       client.send(logindata);
 
@@ -258,44 +259,45 @@ public class Client {
    * @param client the client object
    */
   public static void handleRequest(String request, Client client) throws IOException {
+    String requestCommand;
+    ArrayList<String> arguments = decodeProtocolMessage(request);
+    requestCommand = arguments.remove(0);
     try{
-    ArrayList<String> arguments = parseRequest(request);
-    String requestCommand = arguments.remove(0);
-    RequestType requestType = RequestType.valueOf(requestCommand);
+      RequestType requestType = RequestType.valueOf(requestCommand);
 
-    switch(requestType){
+      switch(requestType){
 
-      case CATS:
-        String name = arguments.get(2);
-        System.out.println(name + ": " + arguments.get(1));
-      break;
+        case CATS:
+          String name = arguments.get(2);
+          System.out.println(name + ": " + arguments.get(1));
+          break;
 
-      case PING:
-        client.send("+PING");
-        //System.out.println("+PING");
-        break;
+        case PING:
+          client.send("+PING");
+          //System.out.println("+PING");
+          break;
 
-      case PWIN:
-        break;
+        case PWIN:
+          break;
 
-      case EMPT:
-        break;
+        case EMPT:
+          break;
 
-      default:
-        break;}}
-      catch(IllegalArgumentException e){
-      LOGGER.debug(e); //should look into that starts IllegalArgument Exception at the start
+        default:
+          break;
+      }
+    }
+    catch(IllegalArgumentException e){
+      LOGGER.debug("IllegalArgument: \"" + requestCommand + "\""); //should look into that starts IllegalArgument Exception at the start
 
     }
-
-
   }
 
 
 
     public static void handleResponse (String request, Client client) throws IOException {
     try{
-    ArrayList<String> arguments = parseRequest(request);
+    ArrayList<String> arguments = decodeProtocolMessage(request);
     String responsecommand = arguments.remove(0);
     String requestWithoutPlus = responsecommand.substring(1);
     ResponseType responseType = ResponseType.valueOf(requestWithoutPlus);
