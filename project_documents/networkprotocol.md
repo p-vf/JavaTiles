@@ -20,11 +20,11 @@ Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nu
 | `<tile>`                                                           | Eine Repräsentation eines Spielsteins<br>(Vorschlag: `<zahl><farbe>`, wobei `<zahl>` eine Zahl zwischen `01` und `13` (immer zwei Ziffern lang) und `<farbe>` der erste Buchstabe der Farbe, die der Stein hat, ist.) |
 | `<deck>`                                                           | Eine Repräsentation des Spielerdecks<br>(Vorschlag: `<tile_1><tile_2>...<tile_20>` wobei `<tile_N>` die gleiche darstellung wie `<tile>` hat)                                                                         |
 | `<gamestate>`                                                      | Eine Repräsentation des Spielzustandes                                                                                                                                                                                |
-| `<lobbies>`                                                        | Eine Repräsentation von Lobbys<br>(`<n_1>:<s_1>,<n_2>:<s_2>,...` wobei `n_M` die Lobbynummer und `s_M` die Anz. Spieler von Lobby `M` ist.)                                                                           |
+| `<games>`                                                          | Eine Repräsentation von Lobbys<br>(`<n_1>:<s_1>,<n_2>:<s_2>,...` wobei `n_M` die Lobbynummer und `s_M` die Anz. Spieler von Lobby `M` ist.)                                                                           |
 
 
-🔴***TODO*** festlegen der Darstellung von <tile>, <deck> und <lobbies>  
-🔴***TODO*** festlegen, was alles in <gamestate> gespeichert werden muss
+🔴***TODO*** festlegen der Darstellung von `<tile>`, `<deck>`, `<playerlist>` und `<games>`  
+🔴***TODO*** festlegen, was alles in `<gamestate>` gespeichert werden muss
 
 ---
 
@@ -60,16 +60,36 @@ Dieser Command funktioniert gleich wie der ``LOGI``-Command.
 
 ---
 
-## Lobbies anzeigen
-| Command | Response          | Sender     |
-|---------|-------------------|------------|
-| `LLOB`  | `+LLOB <lobbies>` | Client     |
+## Spieler auf Server auflisten
+| Command | Response             | Sender |
+|---------|----------------------|--------|
+| `LPLA`  | `+LPLA <playerlist>` | Client |
+### Beschreibung
+Listet die Spieler auf, die mit dem Server verbunden sind. 
+
+---
+
+## Spieler in Lobby auflisten
+| Command | Response             | Sender |
+|---------|----------------------|--------|
+| `LLPL`  | `+LLPL <playerlist>` | Client |
+### Beschreibung
+Listet die Spieler auf, die in der Lobby sind.
+🔴***TODO*** aktualisieren, sobald klar ist, ob nur spieler von der eigenen Lobby aufgelistet werden sollen.
+
+---
+
+## Laufende und beendete Spiele / Lobbys auflisten
+| Command | Response        | Sender     |
+|---------|-----------------|------------|
+| `LGAM`  | `+LGAM <games>` | Client     |
 ### Beschreibung
 Wird geschickt, wenn der Client alle Lobbys auflisten will. 
 
 ### Beispiel
-Client: ```LLOB```  
-Server: ``+LLOB 23:4,12:2,3:1``
+🔴***TODO*** dieses Beispiel aktualisieren, sobald Darstellung von `<games>` klar.
+Client: ```LGAM```  
+Server: ``+LGAM 23:4,12:2,3:1``
 
 (Hier hat der Server drei Lobbys, jeweils mit Lobbynummer `23`, `12` und `3` und einer Anzahl von Spielern von jeweils `4`, `2` und `1`.)
 
@@ -123,7 +143,7 @@ Der Client will eine Karte vom Stack aufheben, der Server gibt die Tile zurück.
 
 ---
 
-## Tile ablegen
+## Stein ablegen
 | Command              | Response              | Sender |
 |----------------------|-----------------------|--------|
 | `PUTT <tile> <deck>` | `+PUTT <valid> <won>` | Client |
@@ -174,7 +194,7 @@ Sie enthält eine Flag `<whisper>`. Falls diese den Wert `t` hat, muss der
 optionale Parameter `<whisperrecipient>` definiert werden, der der Nickname des Spielers ist, an den sie gerichtet ist. 
 Der Parameter `<msg>` ist der Inhalt der Nachricht. 
 
-🔴***TODO***: `<whisper>` muss durch einen Wert ersetzt werden, der drei Werte darstellen kann (global, lobby oder whisper)
+🔴***TODO***: `<whisper>` muss durch einen Wert ersetzt werden, der drei Werte darstellen kann (broadcast, lobby oder whisper)
 
 ### Beispiel
 Client: `CATC t "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
@@ -194,7 +214,7 @@ Die Nachricht wird nur an alle Clients in der Lobby weitergeleitet, wenn `<whisp
 `<sender>` ist der Nickname des Clients, der die Nachricht gesendet hat.
 ``<msg>`` ist die Nachricht, die versendet wird.
 
-🔴***TODO***: `<whisper>` muss durch einen Wert ersetzt werden, der drei Werte darstellen kann (global, lobby oder whisper)
+🔴***TODO***: `<whisper>` muss durch einen Wert ersetzt werden, der drei Werte darstellen kann (broadcast, lobby oder whisper)
 
 ### Beispiel
 Server: `CATS t "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" boran`
@@ -209,7 +229,7 @@ Client: `+CATS`
 |---------|----------|-----------------|
 | `PING`  | `+PING`  | Server / Client |
 ### Beschreibung
-Die Ping-Nachricht konstant gesendet (mit einem Delay von ca. 1 Sekunde (exakte Dauer nicht sehr wichtig)), um Verbindungsunterbrüche aufzuspüren. 
+Die Ping-Nachricht wird konstant gesendet (mit einem Delay von ca. 1 Sekunde (exakte Dauer nicht sehr wichtig)), um Verbindungsunterbrüche aufzuspüren. 
 Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird die Verbindung beendet.
 
 ___

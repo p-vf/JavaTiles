@@ -1,6 +1,5 @@
-package Client;
+package client;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**

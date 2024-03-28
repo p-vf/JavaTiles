@@ -1,4 +1,4 @@
-import Client.Client;
+import client.Client;
 
 public class EntryPoint {
   public static void main(String[] args) {
@@ -14,7 +14,7 @@ public class EntryPoint {
         }
         Client.main(arguments);
       }
-      case "server" -> Server.Server.main(new String[] {args[1]});
+      case "server" -> server.Server.main(new String[] {args[1]});
       default -> System.out.println("Fatal: Das erste Argument muss entweder \"client\" oder \"server\" sein.");
     }
     // TODO maybe handle incorrect IP-address and port

@@ -1,13 +1,13 @@
-package Server;
+package server;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.NetworkUtils;
 
 /**
  * This class represents a thread for handling communication with a client by reading and responding to inputs.
@@ -53,7 +53,7 @@ public class ClientThread implements Runnable {
   // for testing purposes
   public static void main(String[] args) {
     String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
-    System.out.println("Result: " + parseRequest(request).toString());
+    System.out.println("Result: " + NetworkUtils.decodeProtocolMessage(request).toString());
   }
 
   @Override
@@ -95,7 +95,7 @@ public class ClientThread implements Runnable {
    * @param response Represents a response to a previously sent request, must start with a "+".
    */
   private void handleResponse(String response) {
-    ArrayList<String> arguments = parseRequest(response);
+    ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(response);
     String cmdStr = arguments.remove(0);
     cmdStr = cmdStr.substring(1);
     // TODO add log, if cmdStr is not of size 4
@@ -110,61 +110,6 @@ public class ClientThread implements Runnable {
         }
       }
     }
-  }
-
-  /**
-   * This method converts the string coming from the client into an array of strings.
-   * It has the same structure as the request parameter, just that all arguments are entries in an ArrayList.
-   *
-   * @param request String with a defined format in the network protocol.
-   * @return An ArrayList containing the command and its arguments as strings.
-   */
-
-  private static ArrayList<String> parseRequest(String request) {
-    char[] chars = request.toCharArray();
-    // only handles a command with up to 9 arguments..
-    ArrayList<String> command = new ArrayList<>();
-    boolean isInsideString = false;
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < chars.length; i++) {
-      switch (chars[i]) {
-        case ' ':
-          if (isInsideString) {
-            sb.append(' ');
-          } else {
-            String currentArg = sb.toString().trim();
-            if(!currentArg.isEmpty()){
-            command.add(sb.toString());
-            }
-            sb = new StringBuilder();
-          }
-          break;
-
-        case '\\':
-          if (i < chars.length - 1 && chars[i + 1] == '"' && isInsideString) {
-            sb.append('"');
-            i++;
-          } else {
-            sb.append('\\');
-          }
-          break;
-        case '"':
-          if (!isInsideString) {
-            isInsideString = true;
-          } else {
-            isInsideString = false;
-            command.add(sb.toString());
-            sb = new StringBuilder();
-          }
-          break;
-        default:
-          sb.append(chars[i]);
-      }
-    }
-    if (!sb.isEmpty()) {
-      command.add(sb.toString());
-    }
-    return command;
   }
 
 
@@ -197,7 +142,7 @@ public class ClientThread implements Runnable {
 
   private void handleRequest(String request) throws IOException {
     try{
-      ArrayList<String> arguments = parseRequest(request);
+      ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(request);
       // TODO change this so that incorrect input gets handled
       Protocol.Request command = Protocol.Request.valueOf(arguments.remove(0));
       // TODO handle all cases
@@ -213,7 +158,7 @@ public class ClientThread implements Runnable {
         case DRAW -> {}
         case PUTT -> {}
         case CATC -> {
-          chatHandler(arguments);
+          handleChat(arguments);
           send("+CATC");
         }
         case PING -> send("+PING");
@@ -225,7 +170,7 @@ public class ClientThread implements Runnable {
         case JLOB -> {}
       }
     }
-    catch(IndexOutOfBoundsException e){
+    catch(IndexOutOfBoundsException | NumberFormatException e){
       send("fehlerhafte Eingabe");
     }
   }
@@ -296,7 +241,7 @@ public class ClientThread implements Runnable {
    *
    * @param arguments The arguments of the chat request.
    */
-  private void chatHandler(ArrayList<String> arguments){
+  private void handleChat(ArrayList<String> arguments){
     String w = arguments.get(0); // whisper flag
     String msg = arguments.get(1); // chat-message
     String sender = nickname;

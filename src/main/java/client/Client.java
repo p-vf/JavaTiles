@@ -1,4 +1,4 @@
-package Client;
+package client;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import Client.Clientprotocol.*;
+import client.Clientprotocol.*;
 
 
 
