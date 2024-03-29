@@ -169,12 +169,25 @@ public class ClientThread implements Runnable {
           changeName(arguments.get(0));
           send(encodeProtocolMessage("+NAME", nickname));
         }
-        case LLOB -> {}
-        case JLOB -> {}
+        case LGAM -> {}
+        case LLPL -> {
+        }
+        case LPLA -> {
+        }
+        case JLOB -> {
+          int lobbyNumber = Integer.parseInt(arguments.get(0));
+          synchronized (server.lobbies) {
+            int lobbyIndex = server.lobbyIndex(lobbyNumber);
+            if (lobbyIndex == -1) {
+              lobbyIndex = server.createLobby(lobbyNumber);
+            }
+            server.joinLobby(lobbyIndex, this);
+          }
+        }
       }
     }
     catch(IndexOutOfBoundsException | NumberFormatException e){
-      send(encodeProtocolMessage(cmdStr, "Fehlerhafte Eingabe"));
+      LOGGER.error("Fehlerhafte Nachricht vom Client: " + request);
     }
   }
 

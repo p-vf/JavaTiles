@@ -17,6 +17,8 @@ public class Server {
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
 
+  public final ArrayList<Lobby> lobbies = new ArrayList<>();
+
   public static void main(String[] args) {
     if (args.length < 1) {
       LOGGER.fatal("No port number given.");
@@ -108,6 +110,23 @@ public class Server {
         }
       }
     }
+  }
+
+  public int lobbyIndex(int lobbyNumber) {
+    for (int i = 0; i < lobbies.size(); i++) {
+      if (lobbies.get(i).lobbyNumber == lobbyNumber) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  public void joinLobby(int lobbyIndex, ClientThread client) {
+    lobbies.get(lobbyIndex).addPlayer(client);
+  }
+  public int createLobby(int lobbyNumber) {
+    lobbies.add(new Lobby(lobbyNumber));
+    return lobbies.size() - 1;
   }
 }
 

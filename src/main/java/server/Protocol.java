@@ -36,7 +36,13 @@ public class Protocol {
     NAME,
 
     // list lobbies:
-    LLOB,
+    LGAM,
+
+    // list players in lobby:
+    LLPL,
+
+    // list players on server:
+    LPLA,
 
     // join lobby:
     JLOB,
