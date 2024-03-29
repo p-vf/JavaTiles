@@ -3,6 +3,7 @@ package client;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,6 +97,7 @@ public class Client {
     catch (IOException e){
 
       System.out.println("Your connection to the server has been lost");
+
     }
 
 
@@ -112,95 +114,12 @@ public class Client {
     client.pingThread.start();
   }
 
-  /**
-   * Parses a request string into individual command arguments.
-   * This method splits the input request string into separate arguments based on spaces,
-   * while respecting quoted strings and escape characters
-   *
-   * @param request The request string to parse
-   * @return An ArrayList containing individual command arguments extracted from the request string
-   */
-    private static ArrayList<String> parseRequest(String request) {
-      char[] chars = request.toCharArray();
-      ArrayList<String> command = new ArrayList<>();
-      boolean isInsideString = false;
-      StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < chars.length; i++) {
-        switch (chars[i]) {
-          case ' ':
-            if (isInsideString) {
-              sb.append(' ');
-            } else {
-              String currentArg = sb.toString().trim(); // Hier wird das Arg getrimmt
-              if (!currentArg.isEmpty()) { // Check if the argument is not empty
-                command.add(currentArg);
-              }
-              sb = new StringBuilder();
-            }
-            break;
 
-          case '\\':
-            if (i < chars.length - 1 && chars[i + 1] == '"' && isInsideString) {
-              sb.append('"');
-              i++;
-            } else {
-              sb.append('\\');
-            }
-            break;
-          case '"':
-            if (!isInsideString) {
-              isInsideString = true;
-            } else {
-              isInsideString = false;
-              command.add(sb.toString().trim()); // Trim the argument
-              sb = new StringBuilder();
-            }
-            break;
-          default:
-            sb.append(chars[i]);
-        }
-      }
-      if (!sb.isEmpty()) {
-        command.add(sb.toString().trim()); // Trim the argument
-      }
-      return command;
-    }
-
-  private static ArrayList<String> parseInput(String request) {
-    ArrayList<String> command = new ArrayList<>();
-    StringBuilder sb = new StringBuilder();
-    boolean inQuotes = false;
-
-    for (int i = 0; i < request.length(); i++) {
-      char c = request.charAt(i);
-
-      if (c == '"') {
-        inQuotes = !inQuotes;
-        if (!inQuotes) {
-          command.add(sb.insert(0, '"').append('"').toString());
-          sb.setLength(0);
-        }
-      } else if (c == ' ' && !inQuotes) {
-        if (sb.length() > 0) {
-          command.add(sb.toString());
-          sb.setLength(0);
-        }
-      } else {
-        sb.append(c);
-      }
-    }
-
-    if (sb.length() > 0) {
-      command.add(sb.toString());
-    }
-
-    return command;
-  }
   /**
    * Sends a message to the server.
    *
    * @param str the message to send
-   * @throws IOException if an I/O error occurs while sending the message
+   * @throws IOException if an I/O error occurs while sending the encoded message
    */
   public synchronized void send(String str) throws IOException {
     out.write((str + "\r\n").getBytes());
@@ -214,41 +133,51 @@ public class Client {
    * @return a string representing the message to be sent to the server
    */
   public static String handleInput(String input, Client client) {
-    ArrayList<String> arguments = parseInput(input);
+    String[] argumentsarray = input.split(" ");
+    LOGGER.debug(Arrays.toString(argumentsarray));
+    ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
     String inputCommand = arguments.remove(0);
+    String[] todebug = arguments.toArray(new String[0]);
+    LOGGER.debug(Arrays.toString(todebug));
     switch (inputCommand) {
       case "/nickname":
         String changedName = arguments.get(0);
         nickname = changedName;
-        return "NAME "+ changedName;
+
+        return encodeProtocolMessage("NAME",changedName);
 
       case "/chat":
         if (arguments.get(0).equals("/w")) {
-          String message = "\""+"(whispered) "+arguments.get(2);
+          String message = "(whispered) "+arguments.get(2);
 
           for(int i = 3; i< arguments.size(); i++){
             message = message + " "+ arguments.get(i);
           }
-          message = message + "\"";
-          System.out.println("CATC " + "t " + message +" "+ arguments.get(1));
-          return "CATC " + "t " + message +" "+ arguments.get(1);
+
+          LOGGER.debug(message);
+          String messageForServer = encodeProtocolMessage("CATC", "t",message,arguments.get(1));
+          LOGGER.debug(messageForServer);
+          return messageForServer;
 
         }
         else {
-          String message = "\""+arguments.get(0);
+          String message = arguments.get(0);
 
           for(int i = 1; i< arguments.size(); i++){
             message = message + " " + arguments.get(i);
           }
-          message = message + "\"";
-            return "CATC " + "f " + message;
+
+          LOGGER.debug(message);
+          String messageForServer =encodeProtocolMessage("CATC", "f",message);
+          LOGGER.debug(messageForServer);
+          return messageForServer;
         }
 
       case"/logout":
-        return "LOGO";
+        return encodeProtocolMessage("LOGO");
 
       default:
-        return "";
+        return input; //just for debug
     }
 
   }
@@ -273,7 +202,7 @@ public class Client {
           break;
 
         case PING:
-          client.send("+PING");
+          client.send(encodeProtocolMessage("+PING"));
           //System.out.println("+PING");
           break;
 
