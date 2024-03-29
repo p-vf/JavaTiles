@@ -16,7 +16,6 @@ public class Server {
   public static final Logger LOGGER = LogManager.getLogger();
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
-
   public final ArrayList<Lobby> lobbies = new ArrayList<>();
 
   public static void main(String[] args) {
@@ -55,7 +54,7 @@ public class Server {
    * @param str The message to be broadcasted to all clients.
    * @param sender The client thread sending the message.
    */
-  public void sendBroadcast(String str, ClientThread sender) {
+  public void sendToAll(String str, ClientThread sender) {
     for (ClientThread client : clientList) {
       if (client == sender) {
         continue;
@@ -65,6 +64,24 @@ public class Server {
       } catch (IOException e) {
         client.logout();
         clientList.remove(client);
+      }
+    }
+  }
+
+  /**
+   * Sends a message to a client with the specified nickname.
+   * @param str The message to be sent to the client.
+   * @param nickname The nickname of the client to whom the message is to be sent.
+   */
+  public void sendToNickname(String str, String nickname) {
+    for (ClientThread client : clientList) {
+      if (client.nickname.equals(nickname)) {
+        try {
+          client.send(str);
+        } catch (IOException e) {
+          // TODO bessere Fehlerabhandlung
+          e.printStackTrace(System.err);
+        }
       }
     }
   }
@@ -94,23 +111,6 @@ public class Server {
     return nicknames;
   }
 
-  /**
-   * Sends a message to a client with the specified nickname.
-   * @param str The message to be sent to the client.
-   * @param nickname The nickname of the client to whom the message is to be sent.
-   */
-  public void sendToNickname(String str, String nickname) {
-    for (ClientThread client : clientList) {
-      if (client.nickname.equals(nickname)) {
-        try {
-          client.send(str);
-        } catch (IOException e) {
-          // TODO bessere Fehlerabhandlung
-          e.printStackTrace(System.err);
-        }
-      }
-    }
-  }
 
   public int lobbyIndex(int lobbyNumber) {
     for (int i = 0; i < lobbies.size(); i++) {
@@ -121,8 +121,8 @@ public class Server {
     return -1;
   }
 
-  public void joinLobby(int lobbyIndex, ClientThread client) {
-    lobbies.get(lobbyIndex).addPlayer(client);
+  public boolean joinLobby(int lobbyIndex, ClientThread client) {
+    return lobbies.get(lobbyIndex).addPlayer(client);
   }
   public int createLobby(int lobbyNumber) {
     lobbies.add(new Lobby(lobbyNumber));

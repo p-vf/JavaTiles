@@ -22,6 +22,7 @@ public class ClientThread implements Runnable {
   public int id;
   public String nickname;
   private final Server server;
+  private Lobby lobby;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
@@ -181,12 +182,17 @@ public class ClientThread implements Runnable {
             if (lobbyIndex == -1) {
               lobbyIndex = server.createLobby(lobbyNumber);
             }
-            server.joinLobby(lobbyIndex, this);
+            if (server.joinLobby(lobbyIndex, this)) {
+              lobby = server.lobbies.get(lobbyIndex);
+              send("+JLOB t");
+            } else {
+              send("+JLOB f");
+            }
           }
         }
       }
     }
-    catch(IndexOutOfBoundsException | NumberFormatException e){
+    catch(IndexOutOfBoundsException | IllegalArgumentException e){
       LOGGER.error("Fehlerhafte Nachricht vom Client: " + request);
     }
   }
@@ -257,20 +263,24 @@ public class ClientThread implements Runnable {
    *
    * @param arguments The arguments of the chat request.
    */
-  private void handleChat(ArrayList<String> arguments){
-    String w = arguments.get(0); // whisper flag
-    String msg = arguments.get(1); // chat-message
+  private void handleChat(ArrayList<String> arguments) {
+    String messageType = arguments.get(0);
+    String msg = arguments.get(1);
     String sender = nickname;
-    boolean whisper = readFlag(w);
-    // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
-    //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
-    String cmd = encodeProtocolMessage("CATS", w, msg, sender);
-
-    if (whisper) {
-      server.sendToNickname(cmd, arguments.get(2));
-    } else {
-      server.sendBroadcast(cmd, this);
+    String cmd = encodeProtocolMessage("CATS", messageType, msg, sender);
+    switch (messageType) {
+      case "b" -> {
+        server.sendToAll(cmd, this);
+      }
+      case "l" -> {
+        lobby.sendToLobby(cmd, this);
+      }
+      case "w" -> {
+        server.sendToNickname(cmd, arguments.get(2));
+      }
+      default -> {
+        throw new IllegalArgumentException();
+      }
     }
-
   }
 }

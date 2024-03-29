@@ -1,8 +1,13 @@
 package server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Lobby {
+  public final static Logger LOGGER = LogManager.getLogger();
   public final int lobbyNumber;
   public ArrayList<ClientThread> players;
   public LobbyState lobbyState;
@@ -11,6 +16,7 @@ public class Lobby {
 
   public Lobby(int lobbyNumber) {
     this.lobbyNumber = lobbyNumber;
+    players = new ArrayList<>();
     lobbyState = LobbyState.OPEN;
   }
 
@@ -29,6 +35,20 @@ public class Lobby {
       return true;
     }
     return false;
+  }
+
+
+  public void sendToLobby(String cmd, ClientThread sender) {
+    for (var p : players) {
+      if (p == sender) {
+        continue;
+      }
+      try {
+        p.send(cmd);
+      } catch (IOException e) {
+        LOGGER.error("From Lobby.sendToLobby():" + e.getMessage());
+      }
+    }
   }
 }
 

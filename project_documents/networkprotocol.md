@@ -84,7 +84,6 @@ Listet die Spieler auf, die in der Lobby sind.
 |---------------------|------------------------------|------------|
 | `LGAM <gamestatus>` | `+LGAM <gamestatus> <games>` | Client     |
 ### Beschreibung
-🔴***TODO*** Diese Beschreibung aktualisieren.
 Wird geschickt, wenn der Client bestimmte Lobbies (games) auflisten will.
 ``<gamestatus>`` ist entweder `o`, `r` oder `f`, was jeweils 
 offen (**o**pen), laufend (**r**unning) oder beendet (**f**inished) bedeuten soll. 
