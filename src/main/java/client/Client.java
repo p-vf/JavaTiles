@@ -134,11 +134,11 @@ public class Client {
    */
   public static String handleInput(String input, Client client) {
     String[] argumentsarray = input.split(" ");
-    LOGGER.debug(Arrays.toString(argumentsarray));
+    //LOGGER.debug(Arrays.toString(argumentsarray));
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
     String inputCommand = arguments.remove(0);
     String[] todebug = arguments.toArray(new String[0]);
-    LOGGER.debug(Arrays.toString(todebug));
+    //LOGGER.debug(Arrays.toString(todebug));
     switch (inputCommand) {
       case "/nickname":
         String changedName = arguments.get(0);
@@ -146,32 +146,41 @@ public class Client {
 
         return encodeProtocolMessage("NAME",changedName);
 
-      case "/chat":
-        if (arguments.get(0).equals("/w")) {
-          String message = "(whispered) "+arguments.get(2);
+      case "/all":
+        String allMessage = arguments.get(0);
 
+        for(int i = 1; i< arguments.size(); i++){
+          allMessage = allMessage + " " + arguments.get(i);
+        }
+
+        //LOGGER.debug(allMessage);
+        String allMessageForServer =encodeProtocolMessage("CATC", "b",allMessage);
+        LOGGER.debug(allMessageForServer);
+        return allMessageForServer;
+
+      case "/lobby":
+        String message = arguments.get(0);
+
+        for(int i = 1; i< arguments.size(); i++){
+          message = message + " " + arguments.get(i);
+        }
+
+        //LOGGER.debug(message);
+        String messageForServer =encodeProtocolMessage("CATC", "l",message);
+        LOGGER.debug(messageForServer);
+        return messageForServer;
+
+
+      case "/whisper":
+          String whisperMessage = "(whispered) "+arguments.get(2);
           for(int i = 3; i< arguments.size(); i++){
-            message = message + " "+ arguments.get(i);
+            whisperMessage = whisperMessage + " "+ arguments.get(i);
           }
 
-          LOGGER.debug(message);
-          String messageForServer = encodeProtocolMessage("CATC", "t",message,arguments.get(1));
-          LOGGER.debug(messageForServer);
-          return messageForServer;
-
-        }
-        else {
-          String message = arguments.get(0);
-
-          for(int i = 1; i< arguments.size(); i++){
-            message = message + " " + arguments.get(i);
-          }
-
-          LOGGER.debug(message);
-          String messageForServer =encodeProtocolMessage("CATC", "f",message);
-          LOGGER.debug(messageForServer);
-          return messageForServer;
-        }
+          //LOGGER.debug(whisperMessage);
+          String whisperMessageForServer = encodeProtocolMessage("CATC", "w",whisperMessage,arguments.get(0));
+          LOGGER.debug(whisperMessageForServer);
+          return whisperMessageForServer;
 
       case"/logout":
         return encodeProtocolMessage("LOGO");
