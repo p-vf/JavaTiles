@@ -80,16 +80,28 @@ Listet die Spieler auf, die in der Lobby sind.
 ---
 
 ## Laufende und beendete Spiele / Lobbys auflisten
-| Command | Response        | Sender     |
-|---------|-----------------|------------|
-| `LGAM`  | `+LGAM <games>` | Client     |
+| Command             | Response                     | Sender     |
+|---------------------|------------------------------|------------|
+| `LGAM <gamestatus>` | `+LGAM <gamestatus> <games>` | Client     |
 ### Beschreibung
-Wird geschickt, wenn der Client alle Lobbys auflisten will. 
+🔴***TODO*** Diese Beschreibung aktualisieren.
+Wird geschickt, wenn der Client bestimmte Lobbies (games) auflisten will.
+``<gamestatus>`` ist entweder `o`, `r` oder `f`, was jeweils 
+offen (**o**pen), laufend (**r**unning) oder beendet (**f**inished) bedeuten soll. 
+Dieses Argument bestimmt, welche Spiele angezeigt werden.  
+Hat `<gamestatus>` den Wert `o`, so hat `<games>` folgende Form: `<lobbynumber_1>:<playercount_1> <lobbynumber_2>:<playercount_2> ...`.  
+Hat `<gamestatus>` den Wert `r`, so hat `<games>` folgende Form: `<lobbynumber_1> <lobbynumber_2> ...`.  
+Hat `<gamestatus>` den Wert `f`, so hat `<games>` folgende Form: `<lobbynumber_1>:[<winner_1>] <lobbynumber_2>:[<winner_2>] ...`. 
+(zu beachten: nicht bei jedem Spiel gibt es einen Gewinner, in diesem Fall darf kein `<winner_N>` angegeben werden)
 
 ### Beispiel
-🔴***TODO*** dieses Beispiel aktualisieren, sobald Darstellung von `<games>` klar.
-Client: ```LGAM```  
-Server: ``+LGAM 23:4,12:2,3:1``
+Client: ```LGAM o```  
+Server: ``+LGAM o "23:4 12:2 3:3"``  
+Client: ```LGAM r```  
+Server: ``+LGAM r "51 23"``  
+Client: ```LGAM f```  
+Server: ``+LGAM f "22:robin 1:nick 4:"``
+
 
 (Hier hat der Server drei Lobbys, jeweils mit Lobbynummer `23`, `12` und `3` und einer Anzahl von Spielern von jeweils `4`, `2` und `1`.)
 
@@ -182,45 +194,42 @@ Spiel mit einem Unentschieden beendet werden muss.
 
 # Die Kommunikation betreffend
 ## Chat-Nachricht senden (Client)
-| Command                                     | Response | Sender |
-|---------------------------------------------|----------|--------|
-| `CATC <whisper> <msg> [<whisperrecipient>]` | ` +CATC` | Client |
+| Command                                         | Response | Sender |
+|-------------------------------------------------|----------|--------|
+| `CATC <messagetype> <msg> [<whisperrecipient>]` | ` +CATC` | Client |
 
 ### Beschreibung
-Der CATC-Command wird vom Client an den Server geschickt, wenn der User eine Nachricht in den Chat schicken will.
-Der Parameter `<nickname>` gibt an, von wem die Nachricht kommt. 
-Der Server muss dann einen CATS-Command an alle/einen Client/s schicken.  
-Sie enthält eine Flag `<whisper>`. Falls diese den Wert `t` hat, muss der
-optionale Parameter `<whisperrecipient>` definiert werden, der der Nickname des Spielers ist, an den sie gerichtet ist. 
-Der Parameter `<msg>` ist der Inhalt der Nachricht. 
-
-🔴***TODO***: `<whisper>` muss durch einen Wert ersetzt werden, der drei Werte darstellen kann (broadcast, lobby oder whisper)
+Der CATC-Command wird vom Client an den Server geschickt, wenn der User eine Nachricht in den Chat schicken will.  
+Sie enthält ein Argument `<messagetype>`, welches die Reichweite der Nachricht spezifiziert (`b`,`l`,`w` für jeweils broadcast, lobby, und whisper).  
+Falls dieses den Wert `w` hat, muss der optionale Parameter `<whisperrecipient>` definiert werden.  
+Hat `<messagetype>` den Wert `b`, wird ein `CATS`-Command an alle Clients auf dem Server weitergeleitet, 
+falls `l` nur an die in der selben Lobby und falls `w` nur an den Spieler, welchen den Nickname `<whisperrecipient>` hat.  
+Der Parameter `<msg>` ist der Inhalt der Nachricht.
 
 ### Beispiel
-Client: `CATC t "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
+Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
 Server: `+CATC`
 
-(Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler `robin` weiterleiten, da die flag `<whisper>` den Wert `t` hat)
+(Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
 
 ---
 
 ## Chat-Nachricht an andere weiterleiten (Server)
-| Command                           | Response | Sender |
-|-----------------------------------|----------|--------|
-| `CATS <whisper> "<msg>" <sender>` | `+CATS`  | Server |
+| Command                             | Response | Sender |
+|-------------------------------------|----------|--------|
+| `CATS <messagetype> <msg> <sender>` | `+CATS`  | Server |
 ### Beschreibung
-In diesem Command wird die Nachricht eines Clients an einen oder mehrere Clients in der Lobby weitergeleitet. 
-Die Nachricht wird nur an alle Clients in der Lobby weitergeleitet, wenn `<whisper>` vom zugehörigen `CATC`-Command `f` ist.
+In diesem Command wird die Nachricht eines Clients an einen oder mehrere Clients weitergeleitet.  
+Dieser Command ist immer die Folge eines `CATC`-Commands. `<messagetype>` hat dann den selben Wert wie der vom zugehörigen `CATC`-Command.  
 `<sender>` ist der Nickname des Clients, der die Nachricht gesendet hat.
 ``<msg>`` ist die Nachricht, die versendet wird.
 
-🔴***TODO***: `<whisper>` muss durch einen Wert ersetzt werden, der drei Werte darstellen kann (broadcast, lobby oder whisper)
 
 ### Beispiel
-Server: `CATS t "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" boran`
+Server: `CATS w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" boran`
 Client: `+CATS`
 
-(Dies ist der `CATS`-Command, der an `robin` geschickt wird im Beispiel vom `CATC`-Command)
+(Dies ist der `CATS`-Command, der an `robin` geschickt wird im obigen Beispiel vom `CATC`-Command)
 
 ---
 
