@@ -14,9 +14,21 @@ public class Lobby implements Runnable {
     lobbyState = LobbyState.OPEN;
   }
 
-  public void startGame(int startPlayerIdx) {
+  public boolean startGame(int startPlayerIdx) {
+    if (players.size() != 4) {
+      return false;
+    }
     gameState = new GameState(startPlayerIdx);
     lobbyState = LobbyState.RUNNING;
+    return true;
+  }
+
+  public boolean addPlayer(ClientThread client) {
+    if (players.size() < 4) {
+      players.add(client);
+      return true;
+    }
+    return false;
   }
 
   @Override
