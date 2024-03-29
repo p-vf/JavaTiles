@@ -2,7 +2,7 @@ package server;
 
 import java.util.ArrayList;
 
-public class Lobby implements Runnable {
+public class Lobby {
   public final int lobbyNumber;
   public ArrayList<ClientThread> players;
   public LobbyState lobbyState;
@@ -29,11 +29,6 @@ public class Lobby implements Runnable {
       return true;
     }
     return false;
-  }
-
-  @Override
-  public void run() {
-
   }
 }
 

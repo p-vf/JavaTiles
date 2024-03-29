@@ -174,7 +174,7 @@ public class ClientThread implements Runnable {
       }
     }
     catch(IndexOutOfBoundsException | NumberFormatException e){
-      send(encodeProtocolMessage(cmdStr, "Fehlerhafte Eingabe");
+      send(encodeProtocolMessage(cmdStr, "Fehlerhafte Eingabe"));
     }
   }
 

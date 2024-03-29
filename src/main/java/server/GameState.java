@@ -28,10 +28,10 @@ public class GameState {
     for (int i = 0; i < 104; i++) {
       tiles[i] = new Tile(i, i % 13 + 1, Color.values()[i*4/104]);
     }
-    shuffleTiles(tiles);
     // add two jokers
     tiles[104] = new Tile(104, 0, BLUE);
     tiles[105] = new Tile(105, 0, RED);
+    shuffleTiles(tiles);
 
     // give 14 tiles to each player except for the player that starts, he gets 15
     playerDecks = new ArrayList<>();
