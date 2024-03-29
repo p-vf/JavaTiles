@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.NetworkUtils;
 
+import static utils.NetworkUtils.encodeProtocolMessage;
+
 /**
  * This class represents a thread for handling communication with a client by reading and responding to inputs.
  *
@@ -140,10 +142,12 @@ public class ClientThread implements Runnable {
    */
 
   private void handleRequest(String request) throws IOException {
+    ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(request);
+    String cmdStr = arguments.remove(0);
+    // TODO use encodeProtocolMessage()
     try{
-      ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(request);
       // TODO change this so that incorrect input gets handled
-      Protocol.Request command = Protocol.Request.valueOf(arguments.remove(0));
+      Protocol.Request command = Protocol.Request.valueOf(cmdStr);
       // TODO handle all cases
       switch (command) {
         case LOGI -> {
@@ -163,14 +167,14 @@ public class ClientThread implements Runnable {
         case PING -> send("+PING");
         case NAME -> {
           changeName(arguments.get(0));
-          send("+NAME " + nickname);
+          send(encodeProtocolMessage("+NAME", nickname));
         }
         case LLOB -> {}
         case JLOB -> {}
       }
     }
     catch(IndexOutOfBoundsException | NumberFormatException e){
-      send("fehlerhafte Eingabe");
+      send(encodeProtocolMessage(cmdStr, "Fehlerhafte Eingabe");
     }
   }
 
@@ -211,7 +215,7 @@ public class ClientThread implements Runnable {
   private void login(String newNickname) throws IOException {
     // TODO maybe don't send "+LOGI ..." here but inside the switch statement?
     changeName(newNickname);
-    send("+LOGI " + this.nickname);
+    send(encodeProtocolMessage("+LOGI", this.nickname));
   }
 
 
@@ -247,7 +251,7 @@ public class ClientThread implements Runnable {
     boolean whisper = readFlag(w);
     // TODO implement function that takes care of making a valid sendable command (\r\n, format, etc.)
     //  and notifies the clientthread that there will be a +CATS response from the client if successfull.
-    String cmd = "CATS " + w + " \"" + msg + "\" " + sender;
+    String cmd = encodeProtocolMessage("CATS", w, msg, sender);
 
     if (whisper) {
       server.sendToNickname(cmd, arguments.get(2));
