@@ -59,11 +59,10 @@ public class ClientThread implements Runnable {
   @Override
   public void run() {
     // TODO handle SocketTimeoutException, SocketException
-    String msg = "Server: Verbindung " + id;
 
-    LOGGER.debug(msg + " hergestellt");
+    LOGGER.info("Server: Verbindung " + id + " hergestellt");
     try {
-      send(msg);
+      //send(msg);
 
       while (true) {
         String request;
@@ -86,7 +85,7 @@ public class ClientThread implements Runnable {
       }
       e.printStackTrace(System.err);
     }
-    LOGGER.debug("Server: Verbindung " + id + " abgebrochen");
+    LOGGER.info("Server: Verbindung " + id + " abgebrochen");
   }
 
   /**
