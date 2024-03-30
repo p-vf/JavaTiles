@@ -15,7 +15,7 @@ public class Clientprotocol {
         PING,
         LOGI,
         LOGO,
-        LLOB,
+        LGAM,
         JLOB,
         CATC,
         NAME,
