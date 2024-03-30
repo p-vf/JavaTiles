@@ -73,7 +73,9 @@ public class ClientThread implements Runnable {
           request = bReader.readLine();
         } catch (IOException e) { break; }
 
-        LOGGER.debug("received: " + request);
+        if(!request.equals("PING") && !request.equals("+PING") || Server.ENABLE_PING_LOGGING) {
+          LOGGER.debug("received: " + request);
+        }
         if (!request.isEmpty() && request.charAt(0) == '+') { //request kann null sein, wenn es
           // keine Readline gibt, falls Client Verbindung verliert.
           handleResponse(request);
@@ -230,7 +232,9 @@ public class ClientThread implements Runnable {
    */
   public synchronized void send(String str) throws IOException {
     out.write((str + "\r\n").getBytes());
-    LOGGER.debug("sent: " + str);
+    if (!str.equals("PING") && !str.equals("+PING") || Server.ENABLE_PING_LOGGING) {
+      LOGGER.debug("sent: " + str);
+    }
   }
 
   /**

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public class Server {
   public static final Logger LOGGER = LogManager.getLogger();
+  public static boolean ENABLE_PING_LOGGING = false;
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
   public final ArrayList<Lobby> lobbies = new ArrayList<>();
@@ -21,6 +22,9 @@ public class Server {
   public static void main(String[] args) {
     if (args.length < 1) {
       LOGGER.fatal("No port number given.");
+    }
+    if (args.length == 2) {
+      ENABLE_PING_LOGGING = Boolean.parseBoolean(args[1]);
     }
     LOGGER.info("Logging level: " + LOGGER.getLevel().toString());
     Server s = new Server(Integer.parseInt(args[0]));
