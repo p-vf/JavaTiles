@@ -262,8 +262,114 @@ public class Client {
         client.logout();
         break;
 
-      case LLOB:
-        break;
+      case LGAM:
+        if (arguments.get(0).equals("o")) {
+
+          arguments.remove(0);
+          String argList = String.join(" ", arguments);
+          String[] status = argList.split(",");
+          String infos = String.join(":", status);
+          String[] splitString = infos.split(":");
+          int[] intArray = new int[splitString.length];
+
+          for (int i = 0; i < splitString.length; i++) {
+            intArray[i] = Integer.parseInt(splitString[i]);
+
+          }
+
+          int[] lobbies = new int[intArray.length / 2];
+          int[] players = new int[intArray.length / 2];
+
+          int indexLobby = 0;
+          int indexPlayer = 0;
+
+          for (int i = 0; i < intArray.length; i++) {
+            if (i % 2 == 0) {
+              lobbies[indexLobby] = intArray[i];
+              indexLobby++;
+            } else {
+              players[indexPlayer] = intArray[i];
+              indexPlayer++;
+            }
+          }
+
+          System.out.println("Offene Lobbies");
+          System.out.println("Lobbynummer: \tAnzahl Spieler:");
+          for (int i = 0; i < lobbies.length; i++) {
+            System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
+          }
+        }
+
+
+
+      if (arguments.get(0).equals("r")) {
+
+        arguments.remove(0);
+        String argList = String.join(" ", arguments);
+        String[] status = argList.split(",");
+        String infos = String.join(":", status);
+        String[] splitString = infos.split(":");
+        int[] intArray = new int[splitString.length];
+
+        for (int i = 0; i < splitString.length; i++) {
+          intArray[i] = Integer.parseInt(splitString[i]);
+
+        }
+
+        int[] lobbies = new int[intArray.length / 2];
+        int[] players = new int[intArray.length / 2];
+
+        int indexLobby = 0;
+        int indexPlayer = 0;
+
+        for (int i = 0; i < intArray.length; i++) {
+          if (i % 2 == 0) {
+            lobbies[indexLobby] = intArray[i];
+            indexLobby++;
+          } else {
+            players[indexPlayer] = intArray[i];
+            indexPlayer++;
+          }
+        }
+
+        System.out.println("Laufende Spiele");
+        System.out.println("Lobbynummer: \tAnzahl Spieler:");
+        for (int i = 0; i < lobbies.length; i++) {
+          System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
+        }
+      }
+
+      if (arguments.get(0).equals("f")) {
+        arguments.remove(0);
+        String argList = String.join(" ", arguments);
+        String[] status = argList.split(",");
+        String infos = String.join(":", status);
+        String[] splitString = infos.split(":");
+        int[] intArray = new int[splitString.length];
+
+        for (int i = 0; i < splitString.length; i++) {
+          intArray[i] = Integer.parseInt(splitString[i]);
+
+        }
+
+        int[] lobbies = new int[intArray.length / 2];
+
+        int indexLobby = 0;
+
+        for (int i = 0; i < intArray.length; i++) {
+          if (i % 2 == 0) {
+            lobbies[indexLobby] = intArray[i];
+            indexLobby++;
+          }
+        }
+
+        System.out.println("Beendete Spiele");
+        System.out.println("Lobbynummer: \tGewinner:");
+        for (int i = 0; i < lobbies.length; i++) {
+          System.out.println(lobbies[i] + "\t\t\t\t");
+        }
+      }
+      break;
 
       case JLOB:
         break;
