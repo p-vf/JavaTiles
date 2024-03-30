@@ -1,6 +1,8 @@
 package utils;
 
 
+import server.Lobby;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,7 +95,40 @@ public class NetworkUtils {
       }
       sb.append(" ");
     }
-    sb.deleteCharAt(sb.length()-1);
+    if (!sb.isEmpty()) {
+      sb.deleteCharAt(sb.length() - 1);
+    }
+    return sb.toString();
+  }
+
+  public static String getEncodedLobbiesWithPlayerList(ArrayList<Lobby> lobbies) {
+    ArrayList<String> msg = new ArrayList<>();
+    for (var lobby : lobbies) {
+      ArrayList<String> playerNames = new ArrayList<>();
+      msg.add(encodeProtocolMessage("Lobby " + lobby.lobbyNumber));
+      for (var player : lobby.players) {
+        playerNames.add(player.nickname);
+      }
+      msg.add(encodeProtocolMessage(playerNames));
+    }
+    return encodeProtocolMessage(msg);
+  }
+
+  public static String getBeautifullyFormattedDecodedLobbiesWithPlayerList(String receivedLobbiesList) {
+    ArrayList<String> l = decodeProtocolMessage(receivedLobbiesList);
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < l.size(); i++) {
+      for (var s : decodeProtocolMessage(l.get(i))) {
+        if (i % 2 == 1) {
+          sb.append(" ");
+        }
+        sb.append(s);
+        if (i % 2 == 0) {
+          sb.append(":");
+        }
+        sb.append("\n");
+      }
+    }
     return sb.toString();
   }
 

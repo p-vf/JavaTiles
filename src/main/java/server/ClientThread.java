@@ -172,28 +172,36 @@ public class ClientThread implements Runnable {
         }
         case LGAM -> {}
         case LLPL -> {
+          send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
         }
         case LPLA -> {
         }
         case JLOB -> {
+          if (lobby != null) {
+            send(encodeProtocolMessage("+JLOB", "f", "Already in Lobby " + lobby.lobbyNumber));
+            break;
+          }
           int lobbyNumber = Integer.parseInt(arguments.get(0));
+          boolean createdNewLobby = false;
           synchronized (server.lobbies) {
             int lobbyIndex = server.lobbyIndex(lobbyNumber);
             if (lobbyIndex == -1) {
               lobbyIndex = server.createLobby(lobbyNumber);
+              createdNewLobby = true;
             }
             if (server.joinLobby(lobbyIndex, this)) {
               lobby = server.lobbies.get(lobbyIndex);
-              send("+JLOB t");
+              send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobby.lobbyNumber));
             } else {
-              send("+JLOB f");
+              send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobby.lobbyNumber + " full already, couldn't join"));
             }
           }
         }
       }
     }
     catch(IndexOutOfBoundsException | IllegalArgumentException e){
-      LOGGER.error("Fehlerhafte Nachricht vom Client: " + request);
+      // in an ideal world, this line should never be reached:
+      LOGGER.error("Nachricht vom Client: \"" + request + "\" verursachte folgende Exception: " + e.toString());
     }
   }
 
