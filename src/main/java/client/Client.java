@@ -174,8 +174,8 @@ public class Client {
 
 
       case "/whisper":
-        String whisperMessage = "(whispered) " + arguments.get(2);
-        for (int i = 3; i < arguments.size(); i++) {
+        String whisperMessage = "(whispered) " + arguments.get(1);
+        for (int i = 2; i < arguments.size(); i++) {
           whisperMessage = whisperMessage + " " + arguments.get(i);
         }
 
