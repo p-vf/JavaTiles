@@ -7,9 +7,12 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.NetworkUtils;
 
+import utils.NetworkUtils;
+import static utils.NetworkUtils.Protocol;
 import static utils.NetworkUtils.encodeProtocolMessage;
+import static utils.NetworkUtils.Protocol.ClientRequest;
+import static utils.NetworkUtils.Protocol.ServerRequest;
 
 /**
  * This class represents a thread for handling communication with a client by reading and responding to inputs.
@@ -103,7 +106,7 @@ public class ClientThread implements Runnable {
     String cmdStr = arguments.remove(0);
     cmdStr = cmdStr.substring(1);
     // TODO add log, if cmdStr is not of size 4
-    Protocol.Response command = Protocol.Response.valueOf(cmdStr);
+    ServerRequest command = ServerRequest.valueOf(cmdStr);
     switch (command) {
       case PWIN -> {}
       case EMPT -> {}
@@ -150,7 +153,7 @@ public class ClientThread implements Runnable {
     // TODO use encodeProtocolMessage()
     try{
       // TODO change this so that incorrect input gets handled
-      Protocol.Request command = Protocol.Request.valueOf(cmdStr);
+      ClientRequest command = ClientRequest.valueOf(cmdStr);
       // TODO handle all cases
       switch (command) {
         case LOGI -> {

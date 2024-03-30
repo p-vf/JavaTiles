@@ -9,9 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import client.Clientprotocol.*;
+import utils.NetworkUtils;
 
 import static utils.NetworkUtils.*;
+import static utils.NetworkUtils.Protocol.ClientRequest;
+import static utils.NetworkUtils.Protocol.ServerRequest;
 
 
 /**
@@ -45,7 +47,7 @@ public class Client {
    * @param socket the socket for communication with the server
    * @throws IOException if an I/O error occurs when creating the client
    */
-  public Client(Socket socket) throws IOException{
+  public Client(Socket socket) throws IOException {
     this.socket = socket;
     this.out = socket.getOutputStream();
     this.in = socket.getInputStream();
@@ -68,7 +70,7 @@ public class Client {
       Thread iT = new Thread(th);
       iT.start();
 
-     ping(client);
+      ping(client);
 
       LoginClient login = new LoginClient();
       nickname = login.setUsername();
@@ -85,7 +87,7 @@ public class Client {
         }
 
 
-        client.send(handleInput(line,client));
+        client.send(handleInput(line, client));
 
       }
 
@@ -93,8 +95,7 @@ public class Client {
       client.in.close();
       client.out.close();
       client.socket.close();
-    }
-    catch (IOException e){
+    } catch (IOException e) {
 
       System.out.println("Your connection to the server has been lost");
 
@@ -102,6 +103,7 @@ public class Client {
 
 
   }
+
   /**
    * Initiates a new PingThread for the specified EchoClient.
    * This method creates a new thread responsible for sending periodic PING messages
@@ -109,7 +111,7 @@ public class Client {
    *
    * @param client the EchoClient for which to start the ping thread
    */
-  public static void ping(Client client){
+  public static void ping(Client client) {
     client.pingThread = new ClientPingThread(client, 10000);
     client.pingThread.start();
   }
@@ -128,7 +130,7 @@ public class Client {
   /**
    * Parses the user input and performs corresponding actions.
    *
-   * @param input the input string provided by the user
+   * @param input  the input string provided by the user
    * @param client the client object
    * @return a string representing the message to be sent to the server
    */
@@ -144,45 +146,45 @@ public class Client {
         String changedName = arguments.get(0);
         nickname = changedName;
 
-        return encodeProtocolMessage("NAME",changedName);
+        return encodeProtocolMessage("NAME", changedName);
 
       case "/all":
         String allMessage = arguments.get(0);
 
-        for(int i = 1; i< arguments.size(); i++){
+        for (int i = 1; i < arguments.size(); i++) {
           allMessage = allMessage + " " + arguments.get(i);
         }
 
         //LOGGER.debug(allMessage);
-        String allMessageForServer =encodeProtocolMessage("CATC", "b",allMessage);
+        String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
         LOGGER.debug(allMessageForServer);
         return allMessageForServer;
 
       case "/lobby":
         String message = arguments.get(0);
 
-        for(int i = 1; i< arguments.size(); i++){
+        for (int i = 1; i < arguments.size(); i++) {
           message = message + " " + arguments.get(i);
         }
 
         //LOGGER.debug(message);
-        String messageForServer =encodeProtocolMessage("CATC", "l",message);
+        String messageForServer = encodeProtocolMessage("CATC", "l", message);
         LOGGER.debug(messageForServer);
         return messageForServer;
 
 
       case "/whisper":
-          String whisperMessage = "(whispered) "+arguments.get(2);
-          for(int i = 3; i< arguments.size(); i++){
-            whisperMessage = whisperMessage + " "+ arguments.get(i);
-          }
+        String whisperMessage = "(whispered) " + arguments.get(2);
+        for (int i = 3; i < arguments.size(); i++) {
+          whisperMessage = whisperMessage + " " + arguments.get(i);
+        }
 
-          //LOGGER.debug(whisperMessage);
-          String whisperMessageForServer = encodeProtocolMessage("CATC", "w",whisperMessage,arguments.get(0));
-          LOGGER.debug(whisperMessageForServer);
-          return whisperMessageForServer;
+        //LOGGER.debug(whisperMessage);
+        String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
+        LOGGER.debug(whisperMessageForServer);
+        return whisperMessageForServer;
 
-      case"/logout":
+      case "/logout":
         return encodeProtocolMessage("LOGO");
 
       default:
@@ -190,20 +192,21 @@ public class Client {
     }
 
   }
+
   /**
    * Handles incoming requests from the server and performs corresponding actions.
    *
    * @param request the request received from the server
-   * @param client the client object
+   * @param client  the client object
    */
   public static void handleRequest(String request, Client client) throws IOException {
     String requestCommand;
     ArrayList<String> arguments = decodeProtocolMessage(request);
     requestCommand = arguments.remove(0);
-    try{
-      RequestType requestType = RequestType.valueOf(requestCommand);
+    try {
+      ServerRequest requestType = ServerRequest.valueOf(requestCommand);
 
-      switch(requestType){
+      switch (requestType) {
 
         case CATS:
           String name = arguments.get(2);
@@ -224,194 +227,190 @@ public class Client {
         default:
           break;
       }
-    }
-    catch(IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       LOGGER.debug("IllegalArgument: \"" + requestCommand + "\""); //should look into that starts IllegalArgument Exception at the start
 
     }
   }
 
 
+  public static void handleResponse(String request, Client client) throws IOException {
+    try {
+      ArrayList<String> arguments = decodeProtocolMessage(request);
+      String responsecommand = arguments.remove(0);
+      String requestWithoutPlus = responsecommand.substring(1);
+      ClientRequest responseType = ClientRequest.valueOf(requestWithoutPlus);
+      switch (responseType) {
 
-    public static void handleResponse (String request, Client client) throws IOException {
-    try{
-    ArrayList<String> arguments = decodeProtocolMessage(request);
-    String responsecommand = arguments.remove(0);
-    String requestWithoutPlus = responsecommand.substring(1);
-    ResponseType responseType = ResponseType.valueOf(requestWithoutPlus);
-    switch(responseType){
-
-      case PING:
-        synchronized(client.pingThread){
-          client.pingThread.notify();
-          //System.out.println("PING");
-        }
-        break;
-
-      case LOGI:
-        System.out.println("You have been logged in as: " + arguments.get(0));
-        break;
-
-      case NAME:
-        nickname = arguments.get(0);
-        System.out.println("Your nickname has been changed to: " + nickname);
-        break;
-
-      case LOGO:
-        System.out.println("You have been logged out.");
-        client.logout();
-        break;
-
-      case LGAM:
-        if (arguments.get(0).equals("o")) {
-
-          arguments.remove(0);
-          String argList = String.join(" ", arguments);
-          String[] status = argList.split(",");
-          String infos = String.join(":", status);
-          String[] splitString = infos.split(":");
-          int[] intArray = new int[splitString.length];
-
-          for (int i = 0; i < splitString.length; i++) {
-            intArray[i] = Integer.parseInt(splitString[i]);
-
+        case PING:
+          synchronized (client.pingThread) {
+            client.pingThread.notify();
+            //System.out.println("PING");
           }
+          break;
 
-          int[] lobbies = new int[intArray.length / 2];
-          int[] players = new int[intArray.length / 2];
+        case LOGI:
+          System.out.println("You have been logged in as: " + arguments.get(0));
+          break;
 
-          int indexLobby = 0;
-          int indexPlayer = 0;
+        case NAME:
+          nickname = arguments.get(0);
+          System.out.println("Your nickname has been changed to: " + nickname);
+          break;
 
-          for (int i = 0; i < intArray.length; i++) {
-            if (i % 2 == 0) {
-              lobbies[indexLobby] = intArray[i];
-              indexLobby++;
-            } else {
-              players[indexPlayer] = intArray[i];
-              indexPlayer++;
+        case LOGO:
+          System.out.println("You have been logged out.");
+          client.logout();
+          break;
+
+        case LGAM:
+          if (arguments.get(0).equals("o")) {
+
+            arguments.remove(0);
+            String argList = String.join(" ", arguments);
+            String[] status = argList.split(",");
+            String infos = String.join(":", status);
+            String[] splitString = infos.split(":");
+            int[] intArray = new int[splitString.length];
+
+            for (int i = 0; i < splitString.length; i++) {
+              intArray[i] = Integer.parseInt(splitString[i]);
+
+            }
+
+            int[] lobbies = new int[intArray.length / 2];
+            int[] players = new int[intArray.length / 2];
+
+            int indexLobby = 0;
+            int indexPlayer = 0;
+
+            for (int i = 0; i < intArray.length; i++) {
+              if (i % 2 == 0) {
+                lobbies[indexLobby] = intArray[i];
+                indexLobby++;
+              } else {
+                players[indexPlayer] = intArray[i];
+                indexPlayer++;
+              }
+            }
+
+            System.out.println("Offene Lobbies");
+            System.out.println("Lobbynummer: \tAnzahl Spieler:");
+            for (int i = 0; i < lobbies.length; i++) {
+              System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
             }
           }
 
-          System.out.println("Offene Lobbies");
-          System.out.println("Lobbynummer: \tAnzahl Spieler:");
-          for (int i = 0; i < lobbies.length; i++) {
-            System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
+
+          if (arguments.get(0).equals("r")) {
+
+            arguments.remove(0);
+            String argList = String.join(" ", arguments);
+            String[] status = argList.split(",");
+            String infos = String.join(":", status);
+            String[] splitString = infos.split(":");
+            int[] intArray = new int[splitString.length];
+
+            for (int i = 0; i < splitString.length; i++) {
+              intArray[i] = Integer.parseInt(splitString[i]);
+
+            }
+
+            int[] lobbies = new int[intArray.length / 2];
+            int[] players = new int[intArray.length / 2];
+
+            int indexLobby = 0;
+            int indexPlayer = 0;
+
+            for (int i = 0; i < intArray.length; i++) {
+              if (i % 2 == 0) {
+                lobbies[indexLobby] = intArray[i];
+                indexLobby++;
+              } else {
+                players[indexPlayer] = intArray[i];
+                indexPlayer++;
+              }
+            }
+
+            System.out.println("Laufende Spiele");
+            System.out.println("Lobbynummer: \tAnzahl Spieler:");
+            for (int i = 0; i < lobbies.length; i++) {
+              System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
+            }
           }
-        }
 
+          if (arguments.get(0).equals("f")) {
+            arguments.remove(0);
+            String argList = String.join(" ", arguments);
+            String[] status = argList.split(",");
+            String infos = String.join(":", status);
+            String[] splitString = infos.split(":");
+            int[] intArray = new int[splitString.length];
 
+            for (int i = 0; i < splitString.length; i++) {
+              intArray[i] = Integer.parseInt(splitString[i]);
 
-      if (arguments.get(0).equals("r")) {
+            }
 
-        arguments.remove(0);
-        String argList = String.join(" ", arguments);
-        String[] status = argList.split(",");
-        String infos = String.join(":", status);
-        String[] splitString = infos.split(":");
-        int[] intArray = new int[splitString.length];
+            int[] lobbies = new int[intArray.length / 2];
 
-        for (int i = 0; i < splitString.length; i++) {
-          intArray[i] = Integer.parseInt(splitString[i]);
+            int indexLobby = 0;
 
-        }
+            for (int i = 0; i < intArray.length; i++) {
+              if (i % 2 == 0) {
+                lobbies[indexLobby] = intArray[i];
+                indexLobby++;
+              }
+            }
 
-        int[] lobbies = new int[intArray.length / 2];
-        int[] players = new int[intArray.length / 2];
-
-        int indexLobby = 0;
-        int indexPlayer = 0;
-
-        for (int i = 0; i < intArray.length; i++) {
-          if (i % 2 == 0) {
-            lobbies[indexLobby] = intArray[i];
-            indexLobby++;
-          } else {
-            players[indexPlayer] = intArray[i];
-            indexPlayer++;
+            System.out.println("Beendete Spiele");
+            System.out.println("Lobbynummer: \tGewinner:");
+            for (int i = 0; i < lobbies.length; i++) {
+              System.out.println(lobbies[i] + "\t\t\t\t");
+            }
           }
-        }
+          break;
 
-        System.out.println("Laufende Spiele");
-        System.out.println("Lobbynummer: \tAnzahl Spieler:");
-        for (int i = 0; i < lobbies.length; i++) {
-          System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
-        }
+        case JLOB:
+          break;
+
+        case CATC:
+          break;
+
+        case STAT:
+          break;
+
+        case DRAW:
+          break;
+
+        case PUTT:
+          break;
+
+        default:
+          break;
       }
-
-      if (arguments.get(0).equals("f")) {
-        arguments.remove(0);
-        String argList = String.join(" ", arguments);
-        String[] status = argList.split(",");
-        String infos = String.join(":", status);
-        String[] splitString = infos.split(":");
-        int[] intArray = new int[splitString.length];
-
-        for (int i = 0; i < splitString.length; i++) {
-          intArray[i] = Integer.parseInt(splitString[i]);
-
-        }
-
-        int[] lobbies = new int[intArray.length / 2];
-
-        int indexLobby = 0;
-
-        for (int i = 0; i < intArray.length; i++) {
-          if (i % 2 == 0) {
-            lobbies[indexLobby] = intArray[i];
-            indexLobby++;
-          }
-        }
-
-        System.out.println("Beendete Spiele");
-        System.out.println("Lobbynummer: \tGewinner:");
-        for (int i = 0; i < lobbies.length; i++) {
-          System.out.println(lobbies[i] + "\t\t\t\t");
-        }
-      }
-      break;
-
-      case JLOB:
-        break;
-
-      case CATC:
-        break;
-
-      case STAT:
-        break;
-
-      case DRAW:
-        break;
-
-      case PUTT:
-        break;
-
-      default:
-        break;}}
-      catch(IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       System.out.println("");
-      }
     }
-
-
-
-
-    /**
-     * Logs out the client from the server.
-     * Closes the socket, input and output streams.
-     */
-    public void logout () {
-      try {
-        socket.close();
-        bReader.close();
-        out.close();
-        System.out.println("You have been logged out.");
-      } catch (IOException e) {
-        System.out.println("You have been logged out.");
-        System.exit(0);
-      }
-    }
-
   }
+
+
+  /**
+   * Logs out the client from the server.
+   * Closes the socket, input and output streams.
+   */
+  public void logout() {
+    try {
+      socket.close();
+      bReader.close();
+      out.close();
+      System.out.println("You have been logged out.");
+    } catch (IOException e) {
+      System.out.println("You have been logged out.");
+      System.exit(0);
+    }
+  }
+
+}
 
 
