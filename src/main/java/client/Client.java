@@ -228,8 +228,7 @@ public class Client {
           break;
       }
     } catch (IllegalArgumentException e) {
-      LOGGER.debug("IllegalArgument: \"" + requestCommand + "\""); //should look into that starts IllegalArgument Exception at the start
-
+      LOGGER.error("Request vom Server: \"" + request + "\" verursachte folgende Exception: " + e.toString());
     }
   }
 
@@ -390,7 +389,7 @@ public class Client {
           break;
       }
     } catch (IllegalArgumentException e) {
-      System.out.println("");
+      LOGGER.error("Response vom Server: \"" + request + "\" verursachte folgende Exception: " + e.toString());
     }
   }
 
