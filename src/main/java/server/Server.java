@@ -115,7 +115,13 @@ public class Server {
     return nicknames;
   }
 
-
+  /**
+   * Gets the index in the list lobbies on the server of the lobby with the specified lobbyNumber.
+   * If no lobby with the specified lobbyNumber exists, -1 is returned.
+   * @param lobbyNumber The number of the lobby.
+   * @return The index in the list of lobbies on the server that corresponds to the lobby with the specified lobbyNumber.
+   *  If no such lobby exists -1.
+   */
   public int lobbyIndex(int lobbyNumber) {
     for (int i = 0; i < lobbies.size(); i++) {
       if (lobbies.get(i).lobbyNumber == lobbyNumber) {
@@ -125,9 +131,21 @@ public class Server {
     return -1;
   }
 
+  /**
+   * Join the lobby with the specified lobbyIndex.
+   * @param lobbyIndex The index corresponding to the lobby to which the player wants to join.
+   * @param client The player to be added to the lobby.
+   * @return {@code true} if and only if the lobby wasn't full and the player was able to join, else {@code false}
+   */
   public boolean joinLobby(int lobbyIndex, ClientThread client) {
     return lobbies.get(lobbyIndex).addPlayer(client);
   }
+
+  /**
+   * Creates a new lobby and returns the index of the lobby.
+   * @param lobbyNumber The number of the lobby.
+   * @return index at which the lobby is created.
+   */
   public int createLobby(int lobbyNumber) {
     lobbies.add(new Lobby(lobbyNumber));
     return lobbies.size() - 1;

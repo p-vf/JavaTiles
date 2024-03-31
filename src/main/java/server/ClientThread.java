@@ -214,7 +214,6 @@ public class ClientThread implements Runnable {
    * Ends the connection to the client.
    * This method should be called when a connection interruption is detected or when the client wants to log out.
    */
-
   public void logout() {
     try {
       server.removeClient(this);

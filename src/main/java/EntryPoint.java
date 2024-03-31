@@ -1,5 +1,10 @@
 import client.Client;
 
+/**
+ * This class is used to start either the client or the server, depending on the arguments given to the main method.
+ * The arguments have to be in one of the following forms: either {@code {"client", "<ipaddress>:<port>"}} or {@code {"server", "<port>"}}.
+ * Depending on the arguments, a server or a client is started.
+ */
 public class EntryPoint {
   public static void main(String[] args) {
     if (args.length < 2) {

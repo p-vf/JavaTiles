@@ -20,6 +20,12 @@ public class Lobby {
     lobbyState = LobbyState.OPEN;
   }
 
+  /**
+   * Starts the game.
+   *
+   * @param startPlayerIdx The index of the player that starts the game.
+   * @return {@code true} if and only if the game was started successfully.
+   */
   public boolean startGame(int startPlayerIdx) {
     if (players.size() != 4) {
       return false;
@@ -29,6 +35,12 @@ public class Lobby {
     return true;
   }
 
+  /**
+   * Adds a player to the lobby, if the lobby isn't full.
+   *
+   * @param client The client that should be added to the lobby.
+   * @return {@code true} if and only if the player was successfully added to the lobby.
+   */
   public boolean addPlayer(ClientThread client) {
     if (players.size() < 4) {
       players.add(client);
@@ -38,6 +50,12 @@ public class Lobby {
   }
 
 
+  /**
+   * Sends a String to all clients in a lobby except for the sender.
+   *
+   * @param cmd A String that conforms to the network-protocol, should be a CATS-Command.
+   * @param sender The client that sent the message (to which the message should not be sent).
+   */
   public void sendToLobby(String cmd, ClientThread sender) {
     for (var p : players) {
       if (p == sender) {

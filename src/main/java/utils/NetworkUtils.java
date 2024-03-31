@@ -115,9 +115,8 @@ public class NetworkUtils {
   }
 
   /**
-   * This Method encodes lobbies in a way such that it can be sent as an argument to the client.
-   * On the client side getBeautifullyFormattedDecodedLobbiesWithPlayerList() should then be used to
-   * decode and format the received String beautifully.
+   * This Method encodes lobbies with the respective playernames in a way such that it can be sent as an argument to the client.
+   * On the client side {@code getBeautifullyFormattedDecodedLobbiesWithPlayerList()} should then be used to decode and format the received String beautifully.
    *
    * @param lobbies List of Lobbies currently on the server.
    * @return Encoded String that can be sent as argument to the client.

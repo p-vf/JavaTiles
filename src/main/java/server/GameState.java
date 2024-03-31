@@ -14,6 +14,12 @@ public class GameState {
   ArrayList<HashSet<Tile>> playerDecks;
   int currentPlayerIdx;
 
+  /**
+   * Constructor of the {@code GameState} class.
+   * Initializes {@code Gamestate} with a shuffled set of Tiles that get distributed to the playerdecks.
+   * @param startPlayerIdx the index of the players that gets 15 instead of 14 tiles and is the first player that gets to make a move.
+   */
+
   public GameState(int startPlayerIdx) {
     currentPlayerIdx = startPlayerIdx;
 
@@ -60,7 +66,10 @@ public class GameState {
     GameState g = new GameState(2);
   }
 
-  // Fisher-Yates shuffle
+  /**
+   * Fisher-Yates shuffle for the shuffling of the tiles.
+   * @param tiles Array of tiles to be shuffled
+   */
   private static void shuffleTiles(Tile[] tiles) {
     Random rnd = new Random();
     for (int i = 0; i < tiles.length; i++) {
