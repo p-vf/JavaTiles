@@ -265,10 +265,16 @@ public class Client {
         case LGAM:
           // TODO lobbies aren't given as multiple arguments, they are all in one argument (the second) so this implementation is wrong.
           //  If there are no lobbies with the requested status, an empty string is sent from the server, which causes an error here.
+
+          if(arguments.get(1).isEmpty()){
+            System.out.println("no lobbies with this status");
+            break;
+          }
+
+
           if (arguments.get(0).equals("o")) {
 
-            //arguments.remove(0);
-            //String argList = String.join(" ", arguments);
+
             String argList = arguments.get(1);
             String[] status = argList.split(" ");
             String infos = String.join(":", status);
@@ -306,8 +312,8 @@ public class Client {
 
           if (arguments.get(0).equals("r")) {
 
-            arguments.remove(0);
-            String argList = String.join(" ", arguments);
+
+            String argList = arguments.get(1);
             String[] status = argList.split(",");
             String infos = String.join(":", status);
             String[] splitString = infos.split(":");
@@ -342,8 +348,8 @@ public class Client {
           }
 
           if (arguments.get(0).equals("f")) {
-            arguments.remove(0);
-            String argList = String.join(" ", arguments);
+
+            String argList = arguments.get(1);
             String[] status = argList.split(",");
             String infos = String.join(":", status);
             String[] splitString = infos.split(":");
