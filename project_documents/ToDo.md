@@ -23,3 +23,6 @@
 - Wann muss der Ping austausch starten?
 - Wie kann man von mehreren Threads auf einen OutputStream schreiben / von einem InputStream lesen?
 - (follow up auf vorherige Frage) oder muss das problem anders gelöst werden?
+
+# Fragen Tutorat 8.4.:
+- Müssen wir accounts machen für das Scoreboard? 

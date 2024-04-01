@@ -3,24 +3,32 @@
 Aus dieser Gegebenheit können viele Informationen von den Commands ausgelassen werden (z. B. wer der Absender ist), da sie sich jeweils aus dem Kontext ergeben. 
 - Jede Request in unserem Netzwerkprotokoll sieht wie folgt aus:  
 ```<commandname> <arg_1> <arg_2> ... [<optionalarg_1> ...] [<debugmessage>]```  
-wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te argument ist. 
+wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Argument und `<optionalarg_N>` das N-te optionale Argument ist. 
+- Jedes Argument ist entweder eine Zeichenfolge ohne Leerschlag (` `) und ohne Anführungszeichen (`"`) oder eine Zeichenfolge,  
+welche mit Anführungszeichen beginnt und endet und jedes Anführungszeichen in der Zeichenfolge mit einem vorhergehenden 
+Backslash (`\`) gekennzeichnet wird.
+- TODO verschachtelte Darstellung von Argumenten erklären.
 - Jede Response hat den gleichen Aufbau wie eine Request, jedoch wird ein ``+`` am Anfang angehängt:  
 ``+<commandname> ...``
 - Jedes Argument kann im Prinzip Leerschläge beinhalten (siehe Beschreibung des Parameters `<msg>`).
 Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nur dort explizit erwähnt.
 
 
-| Parameter                                                          | Beschreibung                                                                                                                                                                                                          |
-|--------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<joinsuccessful>`, `<nametaken>`, `<valid>`, `<won>`, `<whisper>` | entweder `t` oder `f`, stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                    |  
-| `<nickname>`, `<whisperrecipient>`, `<sender>`                     | Spielername ohne Leerschlag, mit maximaler Länge 15. (stellt Spielername dar)                                                                                                                                         |
-| `<msg>`                                                            | <a name="msg"></a>Mit Anführungszeichen begrenzte Zeichenfolge, welche Anführungszeichen mit \" darstellt. (Stellt Nachricht dar)                                                                                     |
-| `<n>`                                                              | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                            |
-| `<drawstack>`                                                      | Entweder `"m"` oder `"p"` (stellt entweder Hauptstapel oder Nachbarsstapel dar)                                                                                                                                       |
-| `<tile>`                                                           | Eine Repräsentation eines Spielsteins<br>(Vorschlag: `<zahl><farbe>`, wobei `<zahl>` eine Zahl zwischen `01` und `13` (immer zwei Ziffern lang) und `<farbe>` der erste Buchstabe der Farbe, die der Stein hat, ist.) |
-| `<deck>`                                                           | Eine Repräsentation des Spielerdecks<br>(Vorschlag: `<tile_1><tile_2>...<tile_20>` wobei `<tile_N>` die gleiche darstellung wie `<tile>` hat)                                                                         |
-| `<gamestate>`                                                      | Eine Repräsentation des Spielzustandes                                                                                                                                                                                |
-| `<games>`                                                          | Eine Repräsentation von Lobbys<br>(`<n_1>:<s_1>,<n_2>:<s_2>,...` wobei `n_M` die Lobbynummer und `s_M` die Anz. Spieler von Lobby `M` ist.)                                                                           |
+| Parameter                                                      | Beschreibung                                                                                                                                                                                                                       |
+|----------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<joinsuccessful>`, `<valid>`, `<won>`                         | entweder `t` oder `f`, stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                 |  
+| `<nickname>`, `<whisperrecipient>`, `<sender>`, `<actualname>` | Spielername ohne Leerschlag, mit maximaler Länge 30. (stellt Spielername dar)                                                                                                                                                      |
+| `<msg>`                                                        | Zeichenfolge, die eine Nachricht darstellt.                                                                                                                                                                                        |
+| `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                         |
+| `<drawstack>`                                                  | Entweder `m` oder `e` (stellt entweder Hauptstapel oder Austauschstapel dar)                                                                                                                                                       |
+| `<tile>`                                                       | Repräsentation eines Spielsteins;<br/>`<zahl>:<farbe>`, wobei `<zahl>` eine Zahl zwischen `1` und `13` und `<farbe>` entweder `RED`, `BLUE`, `YELLOW` oder `BLACK` ist.                                                            |
+| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks;<br/>`<tile_1> <tile_2> ... <tile_20>` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an Stelle N, so wird sie mit `\"\"` ersetzt.                                      |
+| `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`"<tile_0> <tile_1> <tile_2> <tile_3>"` wobei `<tile_N>` der Austauschstapel des Spielers mit Index N ist.                                                         |
+| `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`"<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ..."` wobei `<n_M>` die Lobbynummer und `<s_M>` die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command) |
+| `<playerlist>`                                                 | Stellt Liste von Spielern dar; <br/>`"<name_1> <name_2> ..."`                                                                                                                                                                      |
+| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<lobby_1> <lobby_2> ...` wobei `<lobby_M>` die M-te Lobby wie folgt darstellt: `"Lobby <lobbynum_M>" "<playerlist_M>"`                                             |
+| `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/>`b`,`l`,`w` für jeweils broadcast, lobby, und whisper                                                                                                                                    |
+
 
 
 🔴***TODO*** festlegen der Darstellung von `<tile>`, `<deck>`, `<playerlist>` und `<games>`  
@@ -31,9 +39,9 @@ Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nu
 
 # Login und Lobby Stuff 
 ## Login
-| Command             | Response                        | Sender     |
-|---------------------|---------------------------------|------------|
-| `LOGI <nickname>`   | `+LOGI <actualname>`            | Client     |
+| Command           | Response             | Sender     |
+|-------------------|----------------------|------------|
+| `LOGI <nickname>` | `+LOGI <actualname>` | Client     |
 ### Beschreibung
 Login auf Server mit Spielername `<nickname>`.  
 Als Antwort kommt ein Spielername `<actualname>`, welcher der Name ist, welcher der Spieler effektiv erhält.
@@ -70,11 +78,11 @@ Listet die Spieler auf, die mit dem Server verbunden sind.
 ---
 
 ## Spieler in Lobby auflisten
-| Command | Response             | Sender |
-|---------|----------------------|--------|
-| `LLPL`  | `+LLPL <playerlist>` | Client |
+| Command | Response                        | Sender |
+|---------|---------------------------------|--------|
+| `LLPL`  | `+LLPL <lobbieswithplayerlist>` | Client |
 ### Beschreibung
-Listet die Spieler auf, die in der Lobby sind.
+Listet in `<lobbieswithplayerlist>` die Spieler auf, die in den lobbies sind.
 🔴***TODO*** aktualisieren, sobald klar ist, ob nur spieler von der eigenen Lobby aufgelistet werden sollen.
 
 ---
@@ -101,9 +109,6 @@ Server: ``+LGAM r "51 23"``
 Client: ```LGAM f```  
 Server: ``+LGAM f "22:robin 1:nick 4:"``
 
-
-(Hier hat der Server drei Lobbys, jeweils mit Lobbynummer `23`, `12` und `3` und einer Anzahl von Spielern von jeweils `4`, `2` und `1`.)
-
 ---
 
 ## Lobbyauswahl
@@ -128,13 +133,37 @@ Logout vom Server.
 
 ---
 
-# Die Spiellogik betreffende Commands
-## Gamestate anfragen
-| Command | Response            | Sender |
-|---------|---------------------|--------|
-| `STAT`  | `+STAT <gamestate>` | Client |
+# Die Spiellogik / den Spielablauf betreffende Commands
+
+## Bereitschaft erklären
+| Command | Response | Sender |
+|---------|----------|--------|
+| `REDY`  | `+REDY`  | Client |
 ### Beschreibung
-Der Client fragt den Zustand des Spiels an und erhält ihn in `<gamestate>` in der Antwort vom Server. 
+Wird vom Client geschickt, wenn er parat zum Spielen ist.
+
+---
+
+## Spiel beginnen
+| Command                        | Response | Sender |
+|--------------------------------|----------|--------|
+| `STRT <startdeck> <playeridx>` | `+STRT`  | Server |
+### Beschreibung
+Wird vom Server geschickt, wenn alle Spieler in einer Lobby den `REDY`-Command an den Server geschickt haben,  
+und 4 Spieler in der Lobby sind. In `<startdeck>` ist das Startdeck des Spielers enthalten.  
+Sind in diesem Deck 15 Steine, ist der empfangende Client der Startspieler.  
+In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clients darstellt, welcher für die Identifikation des Spielers wichtig ist. 
+
+
+---
+
+## Gamestate anfragen
+| Command                                    | Response | Sender |
+|--------------------------------------------|----------|--------|
+| `STAT <exchangestacks> <currentplayeridx>` | `+STAT`  | Server |
+### Beschreibung
+Der Server schickt den obersten Stein der Austauschstapel in `<exchangestacks>`   
+und der Index des Spielers, der an der Reihe ist in `<currentplayeridx>`. 
 
 ### Beispiel
 🔴***TODO***
@@ -146,7 +175,8 @@ Der Client fragt den Zustand des Spiels an und erhält ihn in `<gamestate>` in d
 |--------------------|----------------|--------|
 | `DRAW <drawstack>` | `+DRAW <tile>` | Client |
 ### Beschreibung
-Der Client will eine Karte vom Stack aufheben, der Server gibt die Tile zurück.
+Der Client gibt einen Stapel in `<drawstack>` an, von welchem er einen Stein haben will,  
+der Server gibt den Stein in `<tile>` zurück.
 
 ### Beispiel
 🔴***TODO***
@@ -166,8 +196,8 @@ das Spiel mit einem ``PWIN``-Command von der Serverseite beendet.
 Zudem wird vom Server mit der Flag `<valid>` mitgeteilt, ob die Konfiguration und der Spielzug gültig ist.
 
 ### Beispiel
-🔴***TODO***
-
+Client: `PUTT 13:RED "13:BLUE 13:BLACK 13:YELLOW \"\" 3:YELLOW 4:YELLOW 5:YELLOW 6:YELLOW 7:YELLOW \"\" 11:BLUE 12:BLUE 13:BLUE \"\" \"\"  1:YELLOW 1:BLUE 1:RED \"\" \"\" \"\" \"\" \"\" \"\""`  
+Server: `+PUTT t t`
 
 ---
 
@@ -209,7 +239,7 @@ Der Parameter `<msg>` ist der Inhalt der Nachricht.
 Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
 Server: `+CATC`
 
-(Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
+(Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler mit nickname `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
 
 ---
 
