@@ -229,6 +229,15 @@ public class ClientThread implements Runnable {
           send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
         }
         case LPLA -> {
+          ArrayList<ClientThread> clientNames = server.getClientList();
+          StringBuilder namesServer = new StringBuilder();
+          for(int i = 0; i < clientNames.size(); i++){
+            namesServer.append(clientNames.get(i).nickname + " ");
+          }
+          if(!namesServer.isEmpty()) {
+            namesServer.deleteCharAt(namesServer.length() - 1);
+          }
+          send(encodeProtocolMessage("+LPLA", namesServer.toString()));
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
