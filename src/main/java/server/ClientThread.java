@@ -275,10 +275,17 @@ public class ClientThread implements Runnable {
         server.sendToNickname(cmd, arguments.get(2));
       }
       default -> {
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Should be one of \"b\", \"l\" or \"w\", was \"" + messageType + "\"");
       }
     }
   }
+
+  /**
+   * Joins the lobby specified with lobbyNumber. If such a lobby doesn't exist it creates one.
+   * It then sends a message depending on if it created a new one, joined successfully or wasn't able to join because the lobby was already full.
+   * @param lobbyNumber The number of the lobby that the client wants to join or create.
+   * @throws IOException Whenever send() throws an IOException.
+   */
   private void joinOrCreateLobby(int lobbyNumber) throws IOException {
     if (lobby != null) {
       send(encodeProtocolMessage("+JLOB", "f", "Already in Lobby " + lobby.lobbyNumber));
