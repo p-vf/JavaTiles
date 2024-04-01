@@ -158,5 +158,9 @@ public class Server {
     lobbies.add(l);
     return l;
   }
+  public ArrayList<ClientThread> getClientList(){
+    return this.clientList;
+  }
+
 }
 
