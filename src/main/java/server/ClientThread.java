@@ -182,25 +182,7 @@ public class ClientThread implements Runnable {
         case LPLA -> {
         }
         case JLOB -> {
-          if (lobby != null) {
-            send(encodeProtocolMessage("+JLOB", "f", "Already in Lobby " + lobby.lobbyNumber));
-            break;
-          }
-          int lobbyNumber = Integer.parseInt(arguments.get(0));
-          boolean createdNewLobby = false;
-          synchronized (server.lobbies) {
-            int lobbyIndex = server.lobbyIndex(lobbyNumber);
-            if (lobbyIndex == -1) {
-              lobbyIndex = server.createLobby(lobbyNumber);
-              createdNewLobby = true;
-            }
-            if (server.joinLobby(lobbyIndex, this)) {
-              lobby = server.lobbies.get(lobbyIndex);
-              send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobby.lobbyNumber));
-            } else {
-              send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobby.lobbyNumber + " full already, couldn't join"));
-            }
-          }
+          joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
         }
       }
     }
@@ -294,6 +276,25 @@ public class ClientThread implements Runnable {
       }
       default -> {
         throw new IllegalArgumentException();
+      }
+    }
+  }
+  private void joinOrCreateLobby(int lobbyNumber) throws IOException {
+    if (lobby != null) {
+      send(encodeProtocolMessage("+JLOB", "f", "Already in Lobby " + lobby.lobbyNumber));
+      return;
+    }
+    boolean createdNewLobby = false;
+    synchronized (server.lobbies) {
+      Lobby lobby = server.getLobby(lobbyNumber);
+      if (lobby == null) {
+        lobby = server.createLobby(lobbyNumber);
+        createdNewLobby = true;
+      }
+      if (server.joinLobby(lobby, this)) {
+        send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobbyNumber));
+      } else {
+        send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
       }
     }
   }

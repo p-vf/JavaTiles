@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * The EchoServer class represents a simple server that listens for client connections
@@ -116,39 +118,45 @@ public class Server {
   }
 
   /**
-   * Gets the index in the list lobbies on the server of the lobby with the specified lobbyNumber.
-   * If no lobby with the specified lobbyNumber exists, -1 is returned.
-   * @param lobbyNumber The number of the lobby.
-   * @return The index in the list of lobbies on the server that corresponds to the lobby with the specified lobbyNumber.
-   *  If no such lobby exists -1.
+   * Gets the lobby in the list lobbies on the server with the specified lobbyNumber.
+   * If no lobby with the specified lobbyNumber exists, null is returned.
+   * @param lobbyNumber The lobbyNumber of the lobby.
+   * @return Lobby with the specified lobbyNumber if it exists, else null.
    */
-  public int lobbyIndex(int lobbyNumber) {
+  public Lobby getLobby(int lobbyNumber) {
     for (int i = 0; i < lobbies.size(); i++) {
-      if (lobbies.get(i).lobbyNumber == lobbyNumber) {
-        return i;
+      Lobby l = lobbies.get(i);
+      if (l.lobbyNumber == lobbyNumber) {
+        return l;
       }
     }
-    return -1;
+    return null;
   }
 
   /**
-   * Join the lobby with the specified lobbyIndex.
-   * @param lobbyIndex The index corresponding to the lobby to which the player wants to join.
+   * Let the client join a lobby.
+   * @param lobby The lobby to which the player wants to join.
    * @param client The player to be added to the lobby.
    * @return {@code true} if and only if the lobby wasn't full and the player was able to join, else {@code false}
    */
-  public boolean joinLobby(int lobbyIndex, ClientThread client) {
-    return lobbies.get(lobbyIndex).addPlayer(client);
+  public boolean joinLobby(Lobby lobby, ClientThread client) {
+    return lobby.addPlayer(client);
   }
 
   /**
-   * Creates a new lobby and returns the index of the lobby.
+   * Creates a new lobby and returns the created lobby.
+   * Should only be called if the lobby with the specified lobbyNumber doesn't exist yet.
    * @param lobbyNumber The number of the lobby.
-   * @return index at which the lobby is created.
+   * @return The lobby that was created.
    */
-  public int createLobby(int lobbyNumber) {
-    lobbies.add(new Lobby(lobbyNumber));
-    return lobbies.size() - 1;
+  public Lobby createLobby(int lobbyNumber) {
+    // TODO this is only for debugging and should be removed before final build, as it is resource intensive.
+    if (getLobby(lobbyNumber) != null) {
+      LOGGER.error("Lobby with already existing lobbyNumber created");
+    }
+    Lobby l = new Lobby(lobbyNumber);
+    lobbies.add(l);
+    return l;
   }
 }
 
