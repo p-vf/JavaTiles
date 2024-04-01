@@ -267,9 +267,10 @@ public class Client {
           //  If there are no lobbies with the requested status, an empty string is sent from the server, which causes an error here.
           if (arguments.get(0).equals("o")) {
 
-            arguments.remove(0);
-            String argList = String.join(" ", arguments);
-            String[] status = argList.split(",");
+            //arguments.remove(0);
+            //String argList = String.join(" ", arguments);
+            String argList = arguments.get(1);
+            String[] status = argList.split(" ");
             String infos = String.join(":", status);
             String[] splitString = infos.split(":");
             int[] intArray = new int[splitString.length];
