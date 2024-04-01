@@ -12,6 +12,7 @@ public class Lobby {
   public ArrayList<ClientThread> players;
   public LobbyState lobbyState;
   public GameState gameState;
+  public ClientThread winner;
 
 
   public Lobby(int lobbyNumber) {

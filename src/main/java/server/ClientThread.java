@@ -175,7 +175,56 @@ public class ClientThread implements Runnable {
           changeName(arguments.get(0));
           send(encodeProtocolMessage("+NAME", nickname));
         }
-        case LGAM -> {}
+        case LGAM -> {
+          StringBuilder sb = new StringBuilder();
+          String gameStatus = arguments.get(0);
+          ArrayList<Lobby> l;
+          switch (gameStatus) {
+            case "o" -> {
+              l = listLobbiesWithStatus(LobbyState.OPEN);
+              for (var lobby : l) {
+                sb.append(lobby.lobbyNumber);
+                sb.append(":");
+                sb.append(lobby.players.size());
+                sb.append(" ");
+              }
+              // delete unnecessary space
+              if (!sb.isEmpty()) {
+                sb.deleteCharAt(sb.length() - 1);
+              }
+            }
+            case "r" -> {
+              l = listLobbiesWithStatus(LobbyState.RUNNING);
+              for (var lobby : l) {
+                sb.append(lobby.lobbyNumber);
+                sb.append(" ");
+              }
+              // delete unnecessary space
+              if (!sb.isEmpty()) {
+                sb.deleteCharAt(sb.length() - 1);
+              }
+            }
+            case "f" -> {
+              l = listLobbiesWithStatus(LobbyState.FINISHED);
+              for (var lobby : l) {
+                sb.append(lobby.lobbyNumber);
+                sb.append(":");
+                if (lobby.winner != null) {
+                  sb.append(lobby.winner.nickname);
+                }
+                sb.append(" ");
+              }
+              // delete unnecessary space
+              if (!sb.isEmpty()) {
+                sb.deleteCharAt(sb.length() - 1);
+              }
+            }
+            default -> {
+              throw new IllegalArgumentException();
+            }
+          }
+          send(encodeProtocolMessage("+LGAM", gameStatus, sb.toString()));
+        }
         case LLPL -> {
           send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
         }
@@ -304,5 +353,15 @@ public class ClientThread implements Runnable {
         send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
       }
     }
+  }
+
+  private ArrayList<Lobby> listLobbiesWithStatus(LobbyState status) {
+    ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
+    for (var lobby : server.lobbies) {
+      if (lobby.lobbyState == status) {
+        lobbiesWithStatus.add(lobby);
+      }
+    }
+    return lobbiesWithStatus;
   }
 }

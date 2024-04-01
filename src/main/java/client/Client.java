@@ -263,6 +263,8 @@ public class Client {
           break;
 
         case LGAM:
+          // TODO lobbies aren't given as multiple arguments, they are all in one argument (the second) so this implementation is wrong.
+          //  If there are no lobbies with the requested status, an empty string is sent from the server, which causes an error here.
           if (arguments.get(0).equals("o")) {
 
             arguments.remove(0);
