@@ -99,3 +99,41 @@ send hinzugefügt.
       - /all Command für broadcast
       - Spiellogik implementation 
       - Chat GUI
+
+ ## 29.3.2024 Meeting und Programmieren (Robin, Pascal, Boran, Istref)     
+- Wir haben beschlossen, wie die lobbies auf dem server gehandhabt werden sollen und dies grösstenteils implementiert. 
+- Der Lobbychat wurde implementiert.
+- Chat commands in der netzwerkprotokolldatei wurden aktualisiert.
+- List commands wurden auf der Serverseite noch nicht implementiert, das ist unser nächstes TODO.
+- Arbeitsteilung für weiteres Vorgehen: Robin, soll nachdem die Lobbies richtig implementiert wurden, sich an die Spiellogik machen.
+- Boran kümmert sich um das ChatGUI
+- Istref und Pascal arbeiten an der Spiellogik auf der Serverseite.
+
+## 1.4.2024 Besprechung in der GGG über die Umsetzung der Spiellogik (Robin, Pascal, Boran, Istref)
+- REDY als neuen Command im Netzwerkprotokoll:
+  - Client schickt REDY an den Server. Sobald alle Spieler "ready" sind wird das Spiel gestartet.
+- neuer Command STRT:
+  - Die Decks werden jeweils als Hash-set?(noch nicht einig) an den Client geschickt.
+  - Auf dem Client wird das Deck jeweils als zweidimensionales Array gespeichert.
+  - Dieses Deck wird somit auf der Client-Seite und auf der Server-Seite gespeichert.
+  - Ein Spieler bekommt 15 Tiles, die anderen 14. 
+- PUTT von der Client-Seite
+  - 24 Plätze auf dem Deck
+  - Der Server überprüft ob das Deck gewinnend ist und valid, falls valid wird Serverdeck und exchange stack geupdated. 
+  - Die Änderung wird mit einem STAT command an die Clients geschickt.
+    - Wer ist an der Reihe.
+    - Exchange-Stacks. 
+    - Jeder Spieler hat einen Index. Der jeweils oberste Tile der vier exchange stacks werden an die Spieler gesendet. Es wird ein Index, vom Server geschickt, der bestimm, welcher Spieler an der Reihe ist. 
+    - Server überprüft ob main Stack leer ist.
+    - DRAW:
+    - Spieler wählt vom Exchange oder Main-stack:
+      - Der User entscheided je nach command draw m(main stack) oder draw e(exchange stack) geht als Anfrage an den Server
+      - Je nach Fall nimmt der Serve Stein aus jeweiligen stack und überleifert diesen Stein an den Client
+    - Der Spieler sortiert nach Bedarf sein Deck und legt wieder einen Stein ab: Somit kommt fängt alles wieder von vorne an.
+
+- Im Fall von PWIN:
+ - Server gibt Info zurück das wer gewonnen hat, das Spiel wird beendet. Lobby wird zu finished games hinzugefügt. 
+
+- Im Fall von EMPT:
+ - den Spielern wird mitgeteilt, dass es zu einem Unentschieden 
+
