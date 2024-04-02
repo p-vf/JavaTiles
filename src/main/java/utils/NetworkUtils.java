@@ -196,13 +196,16 @@ public class NetworkUtils {
       LPLA,
       // join lobby:
       JLOB,
-
+      // ready for game:
+      REDY,
     }
 
     /**
      * This enum describes either the type of request from the server or the type of response from the client.
      */
     public enum ServerRequest {
+      // start game:
+      STRT,
       // when the game ends due to a player win:
       PWIN,
       // when the game ends due to a draw:
