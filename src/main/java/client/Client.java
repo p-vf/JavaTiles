@@ -187,6 +187,9 @@ public class Client {
       case "/logout":
         return encodeProtocolMessage("LOGO");
 
+      case "/ready":
+        return encodeProtocolMessage("REDY");
+
       default:
         return input; //just for debug
     }
@@ -389,9 +392,20 @@ public class Client {
           break;
 
         case DRAW:
+
           break;
 
         case PUTT:
+          if(arguments.get(1).equals("t")){
+            System.out.println("Valid input");
+
+            if(arguments.get(2).equals("t")){
+              System.out.println("You won!");
+            }
+          }
+          else{
+            System.out.println("Stop cheating!!");
+          }
           break;
 
         default:
