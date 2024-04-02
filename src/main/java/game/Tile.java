@@ -12,8 +12,8 @@ public class Tile {
   int id;
   // the number of the tile, from 0 to and including 13;
   // if 0, it represents the joker, else it is a normal tile.
-  int number;
-  Color color;
+  public int number;
+  public Color color;
   public Tile(int id, int number, Color color) {
     this.id = id;
     this.number = number;
