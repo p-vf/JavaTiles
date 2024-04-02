@@ -4,13 +4,16 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
 
+import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import utils.NetworkUtils;
-import static utils.NetworkUtils.Protocol;
-import static utils.NetworkUtils.encodeProtocolMessage;
+
+import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
 import static utils.NetworkUtils.Protocol.ServerRequest;
 
@@ -31,6 +34,7 @@ public class ClientThread implements Runnable {
   private BufferedReader bReader;
   private static final int PING_TIMEOUT = 15000;
   private final ServerPingThread pingThread;
+  public boolean isReady = false;
 
   /**
    * Constructor of the EchoClientThread class.
@@ -59,7 +63,7 @@ public class ClientThread implements Runnable {
   // for testing purposes
   public static void main(String[] args) {
     String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
-    System.out.println("Result: " + NetworkUtils.decodeProtocolMessage(request).toString());
+    System.out.println("Result: " + decodeProtocolMessage(request).toString());
   }
 
   @Override
@@ -102,7 +106,7 @@ public class ClientThread implements Runnable {
    * @param response Represents a response to a previously sent request, must start with a "+".
    */
   private void handleResponse(String response) {
-    ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(response);
+    ArrayList<String> arguments = decodeProtocolMessage(response);
     String cmdStr = arguments.remove(0);
     cmdStr = cmdStr.substring(1);
     // TODO add log, if cmdStr is not of size 4
@@ -148,7 +152,7 @@ public class ClientThread implements Runnable {
    */
 
   private void handleRequest(String request) throws IOException {
-    ArrayList<String> arguments = NetworkUtils.decodeProtocolMessage(request);
+    ArrayList<String> arguments = decodeProtocolMessage(request);
     String cmdStr = arguments.remove(0);
     // TODO use encodeProtocolMessage()
     try{
@@ -165,7 +169,15 @@ public class ClientThread implements Runnable {
         }
         case STAT -> {}
         case DRAW -> {}
-        case PUTT -> {}
+        case PUTT -> {
+          /*
+          String tileString = arguments.get(0);
+          Tile tile = Tile.fromString(tileString);
+          ArrayList<String> tileStringArray = decodeProtocolMessage(arguments.get(1));
+          ArrayList<Tile> tileArray = Tile.stringArrayToTileArray(tileStringArray);
+          lobby.checkIfWon(tileArray);
+           */
+        }
         case CATC -> {
           handleChat(arguments);
           send("+CATC");
@@ -231,7 +243,7 @@ public class ClientThread implements Runnable {
         case LPLA -> {
           ArrayList<ClientThread> clientNames = server.getClientList();
           StringBuilder namesServer = new StringBuilder();
-          for(int i = 0; i < clientNames.size(); i++){
+          for (int i = 0; i < clientNames.size(); i++){
             namesServer.append(clientNames.get(i).nickname + " ");
           }
           if(!namesServer.isEmpty()) {
@@ -241,6 +253,34 @@ public class ClientThread implements Runnable {
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
+        }
+        case REDY -> {
+          /*
+          isReady = true;
+          send(encodeProtocolMessage("+REDY"));
+          if (lobby.players.size() != 4) {
+            break;
+          }
+          boolean allPlayersReady = true;
+          for (var p : lobby.players) {
+            if (!p.isReady) {
+              allPlayersReady = false;
+              break;
+            }
+          }
+          if (!allPlayersReady) {
+            break;
+          }
+          Random rnd = new Random();
+          int startPlayerIdx = rnd.nextInt(4);
+          lobby.startGame(startPlayerIdx);
+          for (int i = 0; i < lobby.players.size(); i++) {
+            HashSet<Tile> deck = lobby.gameState.playerDecks.get(i);
+            ArrayList<Tile> deckArray = new ArrayList<>(deck.stream().toList());
+            ArrayList<String> stringTiles = Tile.tileArrayToStringArray(deckArray);
+            String deckString = encodeProtocolMessage(stringTiles);
+            lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
+          }*/
         }
       }
     }
