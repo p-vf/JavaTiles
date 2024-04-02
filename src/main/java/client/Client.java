@@ -190,6 +190,20 @@ public class Client {
       case "/ready":
         return encodeProtocolMessage("REDY");
 
+      case "/joinlobby":
+        if (arguments.size() > 0) {
+          String number = arguments.get(0);
+          try {
+            int num = Integer.parseInt(number);
+            return encodeProtocolMessage("JLOB", String.valueOf(num));
+          } catch (NumberFormatException e) {
+            return "Invalid input for lobbynumber";
+          }
+        } else {
+          return "You must provide a number to enter a lobby";
+        }
+
+
       default:
         return input; //just for debug
     }
@@ -270,7 +284,7 @@ public class Client {
           //  If there are no lobbies with the requested status, an empty string is sent from the server, which causes an error here.
 
           if(arguments.get(1).isEmpty()){
-            System.out.println("no lobbies with this status");
+            System.out.println("No lobbies with this status");
             break;
           }
 
@@ -305,8 +319,8 @@ public class Client {
               }
             }
 
-            System.out.println("Offene Lobbies");
-            System.out.println("Lobbynummer: \tAnzahl Spieler:");
+            System.out.println("Open Lobbies");
+            System.out.println("Lobbynumber: \tNumber of players:");
             for (int i = 0; i < lobbies.length; i++) {
               System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
             }
@@ -343,8 +357,8 @@ public class Client {
               }
             }
 
-            System.out.println("Laufende Spiele");
-            System.out.println("Lobbynummer: \tAnzahl Spieler:");
+            System.out.println("Ongoing games");
+            System.out.println("Lobbynumber: \tNumber of players:");
             for (int i = 0; i < lobbies.length; i++) {
               System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
             }
@@ -356,28 +370,33 @@ public class Client {
             String[] status = argList.split(",");
             String infos = String.join(":", status);
             String[] splitString = infos.split(":");
-            int[] intArray = new int[splitString.length];
+            String[] StringArray = new String[splitString.length];
 
             for (int i = 0; i < splitString.length; i++) {
-              intArray[i] = Integer.parseInt(splitString[i]);
+              StringArray[i] = splitString[i];
 
             }
 
-            int[] lobbies = new int[intArray.length / 2];
+            String[] lobbies = new String[StringArray.length / 2];
+            String[] winners = new String[StringArray.length / 2];
 
             int indexLobby = 0;
+            int indexPlayer = 0;
 
-            for (int i = 0; i < intArray.length; i++) {
+            for (int i = 0; i < StringArray.length; i++) {
               if (i % 2 == 0) {
-                lobbies[indexLobby] = intArray[i];
+                lobbies[indexLobby] = StringArray[i];
                 indexLobby++;
+              } else {
+                winners[indexPlayer] = StringArray[i];
+                indexPlayer++;
               }
             }
 
-            System.out.println("Beendete Spiele");
-            System.out.println("Lobbynummer: \tGewinner:");
+            System.out.println("Finished games");
+            System.out.println("Lobbynumber: \tWinners:");
             for (int i = 0; i < lobbies.length; i++) {
-              System.out.println(lobbies[i] + "\t\t\t\t");
+              System.out.println(lobbies[i] + "\t\t\t\t" + winners[i]);
             }
           }
           break;
