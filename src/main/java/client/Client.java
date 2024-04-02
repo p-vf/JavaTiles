@@ -402,6 +402,13 @@ public class Client {
           break;
 
         case JLOB:
+          String confirmation = arguments.get(0);
+          if(confirmation.equals("t")){
+            System.out.println("Joined lobby successfully");
+          }
+          else{
+            System.out.println("Unsuccessful lobby connection");
+          }
           break;
 
         case CATC:
