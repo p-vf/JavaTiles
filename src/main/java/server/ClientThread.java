@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -29,6 +30,7 @@ public class ClientThread implements Runnable {
   public String nickname;
   private final Server server;
   private Lobby lobby;
+  private int playerIndex;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
@@ -170,13 +172,34 @@ public class ClientThread implements Runnable {
         case STAT -> {}
         case DRAW -> {}
         case PUTT -> {
-          /*
+          // this checks if it's the players turn rn
+          if (lobby.gameState.currentPlayerIdx != playerIndex) {
+            // should never be reached
+            send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
+            break;
+          }
           String tileString = arguments.get(0);
-          Tile tile = Tile.fromString(tileString);
-          ArrayList<String> tileStringArray = decodeProtocolMessage(arguments.get(1));
-          ArrayList<Tile> tileArray = Tile.stringArrayToTileArray(tileStringArray);
-          lobby.checkIfWon(tileArray);
-           */
+          Tile tile = Tile.parseTile(tileString);
+          Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
+          boolean isValid = lobby.validateMove(tile, tileArray, playerIndex);
+          boolean isWon = false;
+          if (!isValid) {
+            LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
+            send(encodeProtocolMessage("+PUTT", "f", "f"));
+            break;
+          }
+          if (Lobby.isWinning(tileArray)){
+            isWon = true;
+            server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
+          }
+          send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
+          // remove tile that the player chose from the playerDeck
+          lobby.gameState.playerDecks.get(playerIndex).remove(tile);
+          // add the tile to the exchangeStack of the next player.
+          lobby.gameState.exchangeStacks.get((playerIndex + 1) % 4).push(tile);
+          // update the current player index
+          lobby.gameState.currentPlayerIdx += 1;
+          lobby.gameState.currentPlayerIdx %= 4;
         }
         case CATC -> {
           handleChat(arguments);
@@ -255,7 +278,6 @@ public class ClientThread implements Runnable {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
         }
         case REDY -> {
-          /*
           isReady = true;
           send(encodeProtocolMessage("+REDY"));
           if (lobby.players.size() != 4) {
@@ -271,16 +293,16 @@ public class ClientThread implements Runnable {
           if (!allPlayersReady) {
             break;
           }
+          LOGGER.debug("All players ready!");
           Random rnd = new Random();
           int startPlayerIdx = rnd.nextInt(4);
           lobby.startGame(startPlayerIdx);
           for (int i = 0; i < lobby.players.size(); i++) {
-            HashSet<Tile> deck = lobby.gameState.playerDecks.get(i);
-            ArrayList<Tile> deckArray = new ArrayList<>(deck.stream().toList());
-            ArrayList<String> stringTiles = Tile.tileArrayToStringArray(deckArray);
+            UnorderedDeck deck = lobby.gameState.playerDecks.get(i);
+            ArrayList<String> stringTiles = deck.toStringArray();
             String deckString = encodeProtocolMessage(stringTiles);
             lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
-          }*/
+          }
         }
       }
     }
@@ -402,6 +424,7 @@ public class ClientThread implements Runnable {
         send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
       }
     }
+    playerIndex = lobby.getPlayerIndex(this);
   }
 
   private ArrayList<Lobby> listLobbiesWithStatus(LobbyState status) {
