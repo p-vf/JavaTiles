@@ -32,11 +32,11 @@ public class GameState {
     // initialize array with unique tiles.
     Tile[] tiles = new Tile[106];
     for (int i = 0; i < 104; i++) {
-      tiles[i] = new Tile(i, i % 13 + 1, Color.values()[i*4/104]);
+      tiles[i] = new Tile(i % 13 + 1, Color.values()[i*4/104]);
     }
     // add two jokers
-    tiles[104] = new Tile(104, 0, BLUE);
-    tiles[105] = new Tile(105, 0, RED);
+    tiles[104] = new Tile(0, BLUE);
+    tiles[105] = new Tile(0, RED);
     shuffleTiles(tiles);
 
     // give 14 tiles to each player except for the player that starts, he gets 15
