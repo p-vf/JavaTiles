@@ -34,6 +34,9 @@ public class UnorderedDeck {
       this.add(tile);
     }
   }
+  public UnorderedDeck() {
+
+  }
 
   /**
    * Adds a tile to the deck.

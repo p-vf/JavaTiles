@@ -11,7 +11,7 @@ public class GameState {
   // elements() and toArray(Tile[] t);
   Stack<Tile> mainStack;
   ArrayList<Stack<Tile>> exchangeStacks;
-  ArrayList<HashSet<Tile>> playerDecks;
+  ArrayList<UnorderedDeck> playerDecks;
   int currentPlayerIdx;
 
   /**
@@ -42,7 +42,7 @@ public class GameState {
     playerDecks = new ArrayList<>();
     int counter = 0;
     for (int p = 0; p < 4; p++) {
-      HashSet<Tile> temp = new HashSet<>();
+      UnorderedDeck temp = new UnorderedDeck();
       for (int i = 0; i < 14; i++) {
         temp.add(tiles[counter++]);
       }
