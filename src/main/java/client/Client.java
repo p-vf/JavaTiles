@@ -42,9 +42,13 @@ public class Client {
 
   public static int playerID;
 
+  public static int CurrentPlayerID;
+
   public static final Logger LOGGER = LogManager.getLogger();
 
   public static ClientDeck yourDeck;
+
+  public static Tile[] exchangestacks;
 
 
 
@@ -282,12 +286,20 @@ public class Client {
         //noch Offene Fragen zu STAT: Ich glaub im falschen Enum plus wie genau soll ds funktionieren exchange stacks
 
         case PWIN:
-
+          System.out.println(arguments.get(0)+" hat das Spiel gewonnen");
+          client.send(encodeProtocolMessage("+PWIN"));
           break;
 
         case EMPT:
+          System.out.println("Das Spiel endet mit einem Unentschieden");
+          client.send("+EMPT");
           break;
 
+        case STAT:
+          ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
+          exchangestacks = stringsToTileArray(tileList);
+          CurrentPlayerID = Integer.parseInt(arguments.get(1));
+          break;
 
 
 
@@ -464,9 +476,6 @@ public class Client {
         case CATC:
           break;
 
-        case STAT:
-          break;
-
 
         case DRAW:
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
@@ -484,6 +493,22 @@ public class Client {
             System.out.println("Stop cheating!!");
           }
           break;
+
+        case REDY:
+          System.out.println("bereit zum Spielen");
+          break;
+
+        case LPLA:
+          ArrayList<String> playerList = decodeProtocolMessage(arguments.get(0));
+          for(int i = 0; i<playerList.size(); i++){
+            System.out.println(playerList.get(i));
+          }
+          break;
+
+        case LLPL:
+          System.out.println(getBeautifullyFormattedDecodedLobbiesWithPlayerList(arguments.get(0)));
+          break;
+
 
         default:
           break;

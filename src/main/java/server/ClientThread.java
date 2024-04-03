@@ -167,7 +167,7 @@ public class ClientThread implements Runnable {
           send("+LOGO");
           logout();
         }
-        case STAT -> {}
+        //case STAT -> {}
         case DRAW -> {}
         case PUTT -> {
           /*
