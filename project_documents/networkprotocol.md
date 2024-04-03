@@ -154,6 +154,7 @@ und 4 Spieler in der Lobby sind. In `<startdeck>` ist das Startdeck des Spielers
 Sind in diesem Deck 15 Steine, ist der empfangende Client der Startspieler.  
 In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clients darstellt, welcher für die Identifikation des Spielers wichtig ist. 
 
+//hätte gerne playeridx vor dem startdeck -Boran wird somit leserlicher beim handeln
 
 ---
 
