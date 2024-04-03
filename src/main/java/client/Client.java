@@ -5,12 +5,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 import utils.NetworkUtils;
 
+import static game.Tile.parseTile;
+import static game.Tile.stringsToTileArray;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
 import static utils.NetworkUtils.Protocol.ServerRequest;
@@ -38,7 +41,13 @@ public class Client {
 
   private static String nickname; // Nickname of the player
 
+  public static int playerID;
+
   public static final Logger LOGGER = LogManager.getLogger();
+
+  public static ClientDeck yourDeck;
+
+
 
 
   /**
@@ -204,6 +213,20 @@ public class Client {
         }
 
 
+      case "/draw":
+        if(arguments.get(0).equals("m")){
+          return encodeProtocolMessage("DRAW","m");
+        }
+        if(arguments.get(0).equals("e")){
+          return encodeProtocolMessage("DRAW","e");
+        }
+        return "";
+
+      case "/putt":
+        return input;
+
+
+
       default:
         return input; //just for debug
     }
@@ -235,11 +258,25 @@ public class Client {
           //System.out.println("+PING");
           break;
 
+        case STRT:
+          playerID = Integer.parseInt(arguments.get(0));
+          ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(1));
+          Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
+          yourDeck.createDeckwithTileArray(tilesArrayStrt);
+          client.send(encodeProtocolMessage("+STRT"));
+          break;
+
+        //noch Offene Fragen zu STAT: Ich glaub im falschen Enum plus wie genau soll ds funktionieren exchange stacks
+
         case PWIN:
+
           break;
 
         case EMPT:
           break;
+
+
+
 
         default:
           break;
@@ -417,8 +454,9 @@ public class Client {
         case STAT:
           break;
 
-        case DRAW:
 
+        case DRAW:
+          yourDeck.addTheseTiles(parseTile(arguments.get(0)));
           break;
 
         case PUTT:
