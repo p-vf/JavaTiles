@@ -114,25 +114,16 @@ public class Lobby {
     }
   }
 
-  // TODO this method
-  public static boolean validateMove(Tile tile, ArrayList<Tile> tileArray, int playerIdx) {
-    if (true) {
-      throw new Error("method validateMove() is not implemented yet");
-    }
-    HashSet<Tile> deck = new HashSet<>();
-    for (var t : tileArray) {
-      if (t != null) {
-        deck.add(t);
-      }
-    }
-    if (deck.size() != 14) {
-      // this should never be reached
-      LOGGER.error("Deck wasn't of size 14");
-    }
-    // TODO finish this method
+  public boolean validateMove(Tile tile, ArrayList<Tile> tileArray, int playerIdx) {
+    // should work but didn't test yet
+    ArrayList<Tile> temp = new ArrayList<>(tileArray);
+    temp.add(tile);
+    UnorderedDeck clientDeck = new UnorderedDeck(temp);
 
-    return false;
+    UnorderedDeck serverDeck = gameState.playerDecks.get(playerIdx);
+    return clientDeck.equals(serverDeck);
   }
+
 
 
   /**
@@ -155,6 +146,7 @@ public class Lobby {
    * @return true if and only if the deck is of a winning configuration.
    */
   public static boolean isWinning(Tile[] tileArray) {
+    // should work
     int formationLength = 0;
     boolean returnValue = true;
     for (int i = 0; i < tileArray.length; i++) {
