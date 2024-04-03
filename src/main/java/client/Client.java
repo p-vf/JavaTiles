@@ -12,8 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import utils.NetworkUtils;
 
-import static game.Tile.parseTile;
-import static game.Tile.stringsToTileArray;
+import static game.Tile.*;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
 import static utils.NetworkUtils.Protocol.ServerRequest;
@@ -220,10 +219,24 @@ public class Client {
         if(arguments.get(0).equals("e")){
           return encodeProtocolMessage("DRAW","e");
         }
-        return "";
+        return input;
 
       case "/putt":
-        return input;
+        if(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") ){
+          //checks if the String is a number
+          //if both arguments are a Number PUTT with the Tile will be sent
+          //otherwise the input will be sent for debugging
+          int row = Integer.parseInt(arguments.get(0));
+          int column = Integer.parseInt(arguments.get(1));
+          Tile tileToPut = yourDeck.getTile(row,column);
+          yourDeck.removeTile(row,column); //removes the Tile from the deck;
+          String tileString = tileToPut.toString();
+          Tile[] tileArray = yourDeck.DeckToTileArray();
+          String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
+          return encodeProtocolMessage("PUTT",tileString,DeckToBeSent);
+        }
+        else{
+        return input;}
 
 
 
