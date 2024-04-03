@@ -3,6 +3,8 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+
 import utils.NetworkUtils;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
@@ -14,11 +16,18 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  */
 public class Tile {
 
-  public int number;
-  public Color color;
+  private final int number;
+  private final Color color;
   public Tile(int number, Color color) {
     this.number = number;
     this.color = color;
+  }
+
+  public int getNumber() {
+    return number;
+  }
+  public Color getColor() {
+    return color;
   }
 
   /**
@@ -66,6 +75,21 @@ public class Tile {
 
 
   /**
+   * Fisher-Yates shuffle for the shuffling of the tile array.
+   * @param tiles Array of tiles to be shuffled
+   */
+  public static void shuffleTiles(Tile[] tiles) {
+    Random rnd = new Random();
+    for (int i = 0; i < tiles.length; i++) {
+      int j = rnd.nextInt(i, tiles.length);
+      Tile t = tiles[i];
+      tiles[i] = tiles[j];
+      tiles[j] = t;
+    }
+  }
+
+
+  /**
    * Shows if the tile is a joker.
    * @return true iff the tile is a joker.
    */
@@ -76,4 +100,5 @@ public class Tile {
   @Override
   public String toString() {
     return  number + ":"+ color.toString();
-  }}
+  }
+}

@@ -203,17 +203,17 @@ public class Lobby {
       return false;
     }
     int mask = 0;
-    int number = tileArray[from].number;
+    int number = tileArray[from].getNumber();
     for (int i = from; i < to; i++) {
       Tile currentTile = tileArray[i];
       if (currentTile == null) {
         LOGGER.error("this should not be null");
         return false;
       }
-      if (currentTile.number != number) {
+      if (currentTile.getNumber() != number) {
         return false;
       }
-      switch (currentTile.color) {
+      switch (currentTile.getColor()) {
         case RED -> {
           if (mask / 1 % 2 == 1) {
             return false;
@@ -244,8 +244,8 @@ public class Lobby {
   }
   private static boolean isValidRun(Tile[] tileArray, int from, int to) {
     Tile firstTile = tileArray[from];
-    Color color = firstTile.color;
-    int startNum = firstTile.number;
+    Color color = firstTile.getColor();
+    int startNum = firstTile.getNumber();
     for (int i = from; i < to; i++) {
       Tile currentTile = tileArray[i];
       if (currentTile == null) {
@@ -253,10 +253,10 @@ public class Lobby {
         LOGGER.error("Range in tileArray contains null..");
         return false;
       }
-      if (currentTile.color != color) {
+      if (currentTile.getColor() != color) {
         return false;
       }
-      if (currentTile.number != i - from + startNum) {
+      if (currentTile.getNumber() != i - from + startNum) {
         return false;
       }
     }

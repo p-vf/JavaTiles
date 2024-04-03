@@ -19,7 +19,6 @@ public class GameState {
    * Initializes {@code Gamestate} with a shuffled set of Tiles that get distributed to the playerdecks.
    * @param startPlayerIdx the index of the players that gets 15 instead of 14 tiles and is the first player that gets to make a move.
    */
-
   public GameState(int startPlayerIdx) {
     currentPlayerIdx = startPlayerIdx;
 
@@ -37,7 +36,7 @@ public class GameState {
     // add two jokers
     tiles[104] = new Tile(0, BLUE);
     tiles[105] = new Tile(0, RED);
-    shuffleTiles(tiles);
+    Tile.shuffleTiles(tiles);
 
     // give 14 tiles to each player except for the player that starts, he gets 15
     playerDecks = new ArrayList<>();
@@ -64,19 +63,5 @@ public class GameState {
   // for testing purposes:
   public static void main(String[] args) {
     GameState g = new GameState(2);
-  }
-
-  /**
-   * Fisher-Yates shuffle for the shuffling of the tiles.
-   * @param tiles Array of tiles to be shuffled
-   */
-  private static void shuffleTiles(Tile[] tiles) {
-    Random rnd = new Random();
-    for (int i = 0; i < tiles.length; i++) {
-      int j = rnd.nextInt(i, tiles.length);
-      Tile t = tiles[i];
-      tiles[i] = tiles[j];
-      tiles[j] = t;
-    }
   }
 }
