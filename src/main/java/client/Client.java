@@ -5,12 +5,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 import utils.NetworkUtils;
 
+import static game.Tile.*;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
 import static utils.NetworkUtils.Protocol.ServerRequest;
@@ -38,7 +40,17 @@ public class Client {
 
   private static String nickname; // Nickname of the player
 
+  public static int playerID;
+
+  public static int CurrentPlayerID;
+
   public static final Logger LOGGER = LogManager.getLogger();
+
+  public static ClientDeck yourDeck;
+
+  public static Tile[] exchangestacks;
+
+
 
 
   /**
@@ -204,6 +216,34 @@ public class Client {
         }
 
 
+      case "/draw":
+        if(arguments.get(0).equals("m")){
+          return encodeProtocolMessage("DRAW","m");
+        }
+        if(arguments.get(0).equals("e")){
+          return encodeProtocolMessage("DRAW","e");
+        }
+        return input;
+
+      case "/putt":
+        if(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") ){
+          //checks if the String is a number
+          //if both arguments are a Number PUTT with the Tile will be sent
+          //otherwise the input will be sent for debugging
+          int row = Integer.parseInt(arguments.get(0));
+          int column = Integer.parseInt(arguments.get(1));
+          Tile tileToPut = yourDeck.getTile(row,column);
+          yourDeck.removeTile(row,column); //removes the Tile from the deck;
+          String tileString = tileToPut.toString();
+          Tile[] tileArray = yourDeck.DeckToTileArray();
+          String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
+          return encodeProtocolMessage("PUTT",tileString,DeckToBeSent);
+        }
+        else{
+        return input;}
+
+
+
       default:
         return input; //just for debug
     }
@@ -235,11 +275,33 @@ public class Client {
           //System.out.println("+PING");
           break;
 
+        case STRT:
+          playerID = Integer.parseInt(arguments.get(0));
+          ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(1));
+          Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
+          yourDeck.createDeckwithTileArray(tilesArrayStrt);
+          client.send(encodeProtocolMessage("+STRT"));
+          break;
+
+        //noch Offene Fragen zu STAT: Ich glaub im falschen Enum plus wie genau soll ds funktionieren exchange stacks
+
         case PWIN:
+          System.out.println(arguments.get(0)+" hat das Spiel gewonnen");
+          client.send(encodeProtocolMessage("+PWIN"));
           break;
 
         case EMPT:
+          System.out.println("Das Spiel endet mit einem Unentschieden");
+          client.send("+EMPT");
           break;
+
+        case STAT:
+          ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
+          exchangestacks = stringsToTileArray(tileList);
+          CurrentPlayerID = Integer.parseInt(arguments.get(1));
+          break;
+
+
 
         default:
           break;
@@ -414,11 +476,9 @@ public class Client {
         case CATC:
           break;
 
-        case STAT:
-          break;
 
         case DRAW:
-
+          yourDeck.addTheseTiles(parseTile(arguments.get(0)));
           break;
 
         case PUTT:
@@ -433,6 +493,22 @@ public class Client {
             System.out.println("Stop cheating!!");
           }
           break;
+
+        case REDY:
+          System.out.println("bereit zum Spielen");
+          break;
+
+        case LPLA:
+          ArrayList<String> playerList = decodeProtocolMessage(arguments.get(0));
+          for(int i = 0; i<playerList.size(); i++){
+            System.out.println(playerList.get(i));
+          }
+          break;
+
+        case LLPL:
+          System.out.println(getBeautifullyFormattedDecodedLobbiesWithPlayerList(arguments.get(0)));
+          break;
+
 
         default:
           break;

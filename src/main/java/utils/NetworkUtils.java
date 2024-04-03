@@ -177,7 +177,7 @@ public class NetworkUtils {
       // log out:
       LOGO,
       // fetch gamestate:
-      STAT,
+
       // draw tile:
       DRAW,
       // put tile on stack:
@@ -214,6 +214,8 @@ public class NetworkUtils {
       CATS,
       // check if connection is still working:
       PING,
+
+      STAT,
     }
   }
 }

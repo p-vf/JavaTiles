@@ -169,7 +169,7 @@ public class ClientThread implements Runnable {
           send("+LOGO");
           logout();
         }
-        case STAT -> {}
+        //case STAT -> {}
         case DRAW -> {}
         case PUTT -> {
           // this checks if it's the players turn rn
