@@ -14,65 +14,54 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  */
 public class Tile {
 
-  int number;
-  Color color;
+  public int number;
+  public Color color;
   public Tile(int number, Color color) {
     this.number = number;
     this.color = color;
   }
 
-  public static String[] parseTile(String tileString){
-    StringBuilder tileNumber = new StringBuilder();
-    StringBuilder tileColor = new StringBuilder();
-    int j;
-    int k;
-
-    for(j = 0; tileString.charAt(j)!=':'; j++){
-      tileNumber.append(tileString.charAt(j));
+  /**
+   * Parses the tile that tileString represents.
+   * @param tileString The string representing a tile. must be of the following format: {@code "<number>:<color>"}
+   * @return the tile that tileString represents. If tileString is empty, null.
+   * @throws IllegalArgumentException if the tileString is of incorrect format
+   */
+  public static Tile parseTile(String tileString) throws IllegalArgumentException {
+    if (tileString.isEmpty()) {
+      return null;
     }
-    for(k = j+1; k<tileString.length(); k++){
-      tileColor.append(tileString.charAt(k));
-
+    String[] fields = tileString.split(":");
+    if (fields.length != 2) {
+      throw new IllegalArgumentException("Incorrect amount of fields for Tile (must be 2, is " + fields.length + ").");
     }
+    int tileNumber = Integer.parseInt(fields[0]);
+    if (tileNumber > 13 || tileNumber < 0) {
+      throw new IllegalArgumentException("Number " + tileNumber + " is no valid value for a tile (must be between 0 and 13, inclusive)");
+    }
+    Color tileColor = Color.valueOf(fields[1]);
 
-    return new String[]{tileNumber.toString(),tileColor.toString()};
-
+    return new Tile(tileNumber, tileColor);
   }
 
-  public static Tile[] stringsToTileArray(ArrayList<String> stringList){
+  public static Tile[] stringsToTileArray(ArrayList<String> stringList) throws IllegalArgumentException {
     Tile[] tileArray = new Tile[stringList.size()];
     String tileString;
-    for(int i = 0; i<stringList.size(); i++){
+    for (int i = 0; i < stringList.size(); i++){
       tileString = stringList.get(i);
-      String[] tileFieldsArray = parseTile(tileString);
-      int tileNumber = Integer.parseInt(tileFieldsArray[0]);
-      Color tileColor = Color.valueOf(tileFieldsArray[1]);
-      Tile tile = new Tile(tileNumber,tileColor);
+      Tile tile = parseTile(tileString);
       tileArray[i] = tile;
-
     }
     return tileArray;
-
-  }
-
-  public static Tile stringToTile(String tileString){
-    String[] tileFieldsArray = parseTile(tileString);
-    int tileNumber = Integer.parseInt(tileFieldsArray[0]);
-    Color tileColor = Color.valueOf(tileFieldsArray[1]);
-    Tile tile = new Tile(tileNumber,tileColor);
-
-    return tile;
   }
 
 
-  public static String tileArraytoString(Tile[] tileArray){
+  public static String tileArrayToProtocolArgument(Tile[] tileArray){
     ArrayList<String> tileStringList= new ArrayList<>();
-    for(int i = 0; i<tileArray.length; i++){
-      tileStringList.add(tileArray[i].toString());
+    for (Tile tile : tileArray) {
+      tileStringList.add(tile.toString());
     }
-    String tilesAsString = encodeProtocolMessage(tileStringList);
-
-    return tilesAsString;
+    return encodeProtocolMessage(tileStringList);
   }
 
 
