@@ -3,10 +3,7 @@ package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
@@ -170,7 +167,30 @@ public class ClientThread implements Runnable {
           logout();
         }
         //case STAT -> {}
-        case DRAW -> {}
+        case DRAW -> {
+          String stack = arguments.get(0);
+          switch (stack) {
+            case "e" -> {
+              ArrayList<Stack<Tile>> e = lobby.gameState.exchangeStacks;
+
+              Stack<Tile> exchange = e.get(playerIndex);
+              Tile tile = exchange.pop();
+              String tileString = tile.toString();
+              //TODO Vom Stack<Tile> ein String machen.
+              send(encodeProtocolMessage("+DRAW", tileString));
+            }
+            case "m" -> {
+              Stack<Tile> m = lobby.gameState.mainStack;
+              Tile tile = m.pop();
+              String tileString = tile.toString();
+              //TODO von der Tile einen String machen
+              send(encodeProtocolMessage("+DRAW", tileString));
+
+
+            }
+          }
+        }
+
         case PUTT -> {
           // this checks if it's the players turn rn
           if (lobby.gameState.currentPlayerIdx != playerIndex) {
