@@ -1,5 +1,12 @@
 package server;
 
+/*
+test
+/joinlobby 1
+/ready
+
+ */
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -179,6 +186,7 @@ public class ClientThread implements Runnable {
             }
           }
           Tile tile = stack.pop();
+          lobby.gameState.playerDecks.get(playerIndex).add(tile);
           String tileString = tile.toString();
           send(encodeProtocolMessage("+DRAW", tileString));
 
