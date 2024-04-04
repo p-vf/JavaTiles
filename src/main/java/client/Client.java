@@ -101,7 +101,6 @@ public class Client {
           break;
         }
 
-        LOGGER.debug("received: " + line);
         String messageToSend = client.handleInput(line);
         if (messageToSend == null || messageToSend.isEmpty()) {
           continue;

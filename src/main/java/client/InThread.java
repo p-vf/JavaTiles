@@ -1,5 +1,8 @@
 package client;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +21,8 @@ import static client.Client.handleResponse;
  * @author Pascal von Fellenberg
  */
 public class InThread implements Runnable {
+
+  public static final Logger LOGGER = LogManager.getLogger();
 
   public Client client; // The associated client object
   InputStream in; // The input stream to read messages from
@@ -44,6 +49,7 @@ public class InThread implements Runnable {
       BufferedReader bufferRead = new BufferedReader(new InputStreamReader(in));
       try {
         message = bufferRead.readLine();
+        LOGGER.debug("received: " + message);
 
         if (message.charAt(0) != '+') {
           handleRequest(message, client);
