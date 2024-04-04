@@ -62,7 +62,12 @@ public class GameState {
   public Tile[] getVisibleTiles() {
     Tile[] tiles = new Tile[4];
     for (int i = 0; i < 4; i++) {
-      tiles[i] = exchangeStacks.get(i).peek();
+      Stack<Tile> stack = exchangeStacks.get(i);
+      if (stack.isEmpty()) {
+        tiles[i] = null;
+        continue;
+      }
+      tiles[i] = stack.peek();
     }
     return tiles;
   }
