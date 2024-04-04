@@ -9,6 +9,7 @@ test
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 
@@ -41,6 +42,7 @@ public class ClientThread implements Runnable {
   private static final int PING_TIMEOUT = 15000;
   private final ServerPingThread pingThread;
   public boolean isReady = false;
+  public volatile boolean isRunning = true;
 
   /**
    * Constructor of the EchoClientThread class.
@@ -80,7 +82,7 @@ public class ClientThread implements Runnable {
     try {
       //send(msg);
 
-      while (true) {
+      while (isRunning) {
         String request;
         request = bReader.readLine();
 
@@ -96,11 +98,15 @@ public class ClientThread implements Runnable {
         }
       }
     } catch (IOException | NullPointerException e) {
-      e.printStackTrace(System.err);
+      if (e instanceof SocketException) {
+        LOGGER.info("Verbindung wurde unerwartet unterbrochen");
+      } else {
+        e.printStackTrace(System.err);
+      }
     } finally {
       logout();
     }
-    LOGGER.info("Server: Verbindung " + id + " beendet");
+    LOGGER.info("Verbindung " + id + " beendet");
   }
 
   /**
@@ -172,6 +178,7 @@ public class ClientThread implements Runnable {
           logout();
         }
         case DRAW -> {
+          // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           String pullStackName = arguments.get(0);
           Stack<Tile> stack;
           switch (pullStackName) {
@@ -194,6 +201,7 @@ public class ClientThread implements Runnable {
         }
 
         case PUTT -> {
+          // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           // this checks if it's the players turn rn
           if (lobby.gameState.currentPlayerIdx != playerIndex) {
             // should never be reached
@@ -341,6 +349,7 @@ public class ClientThread implements Runnable {
    * This method should be called when a connection interruption is detected or when the client wants to log out.
    */
   public void logout() {
+    isRunning = false;
     try {
       server.removeClient(this);
       socket.close();
