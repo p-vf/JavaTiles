@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import utils.NetworkUtils;
 
+import javax.swing.*;
+
 import static game.Tile.*;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
@@ -46,9 +48,13 @@ public class Client {
 
   public static final Logger LOGGER = LogManager.getLogger();
 
-  public static ClientDeck yourDeck;
+  public static ClientDeck yourDeck = new ClientDeck();
 
   public static Tile[] exchangestacks;
+
+  private static GUIThread guiThread;
+
+  private static boolean lobby = false;
 
 
 
@@ -81,7 +87,6 @@ public class Client {
       InThread th = new InThread(client.in, client);
       Thread iT = new Thread(th);
       iT.start();
-
       ping(client);
 
       LoginClient login = new LoginClient();
@@ -136,7 +141,8 @@ public class Client {
    * @throws IOException if an I/O error occurs while sending the encoded message
    */
   public synchronized void send(String str) throws IOException {
-    out.write((str + "\r\n").getBytes());
+    if(str != null){
+    out.write((str + "\r\n").getBytes());}
   }
 
   /**
@@ -152,49 +158,78 @@ public class Client {
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
     String inputCommand = arguments.remove(0);
     String[] todebug = arguments.toArray(new String[0]);
-    //LOGGER.debug(Arrays.toString(todebug));
+    LOGGER.debug(Arrays.toString(todebug));
     switch (inputCommand) {
       case "/nickname":
         String changedName = arguments.get(0);
         nickname = changedName;
-
+       //ohne Leerschlag und ohne Anführungszeichen
         return encodeProtocolMessage("NAME", changedName);
 
-      case "/all":
-        String allMessage = arguments.get(0);
+      case "/chat":
+        if(arguments.get(0).equals("/all")){
+          String allMessage = arguments.get(1);
 
-        for (int i = 1; i < arguments.size(); i++) {
-          allMessage = allMessage + " " + arguments.get(i);
+          for (int i = 2; i < arguments.size(); i++) {
+            allMessage = allMessage + " " + arguments.get(i);
+          }
+
+          //LOGGER.debug(allMessage);
+          String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
+          LOGGER.debug(allMessageForServer);
+          return allMessageForServer;}
+
+        if(arguments.get(0).equals("/lobby")) {
+          if (lobby == true) {
+
+            String message = arguments.get(1);
+
+            for (int i = 2; i < arguments.size(); i++) {
+              message = message + " " + arguments.get(i);
+            }
+
+            //LOGGER.debug(message);
+            String messageForServer = encodeProtocolMessage("CATC", "l", message);
+            LOGGER.debug(messageForServer);
+            return messageForServer;
+
+          } else {
+            System.out.println("Sie sind noch nicht in einer Lobby");
+            return null;
+          }
         }
 
-        //LOGGER.debug(allMessage);
-        String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
-        LOGGER.debug(allMessageForServer);
-        return allMessageForServer;
+          if (arguments.get(0).equals("/whisper")) {
+            String whisperMessage = "(whispered) " + arguments.get(1);
+            for (int i = 2; i < arguments.size(); i++) {
+              whisperMessage = whisperMessage + " " + arguments.get(i);
+            }
 
-      case "/lobby":
-        String message = arguments.get(0);
+            //LOGGER.debug(whisperMessage);
+            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
+            LOGGER.debug(whisperMessageForServer);
+            return whisperMessageForServer;
 
-        for (int i = 1; i < arguments.size(); i++) {
-          message = message + " " + arguments.get(i);
+          } else {
+            return null;
+          }
+
+      case "/swap":
+        if(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")){
+          int row = Integer.parseInt(arguments.get(0));
+          int col = Integer.parseInt(arguments.get(1));
+          int row2 = Integer.parseInt(arguments.get(2));
+          int col2 = Integer.parseInt(arguments.get(3));
+
+          yourDeck.swap(row,col,row2,col2);
+          System.out.println(yourDeck);
+
+          return null;
         }
 
-        //LOGGER.debug(message);
-        String messageForServer = encodeProtocolMessage("CATC", "l", message);
-        LOGGER.debug(messageForServer);
-        return messageForServer;
 
 
-      case "/whisper":
-        String whisperMessage = "(whispered) " + arguments.get(1);
-        for (int i = 2; i < arguments.size(); i++) {
-          whisperMessage = whisperMessage + " " + arguments.get(i);
-        }
 
-        //LOGGER.debug(whisperMessage);
-        String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
-        LOGGER.debug(whisperMessageForServer);
-        return whisperMessageForServer;
 
       case "/logout":
         return encodeProtocolMessage("LOGO");
@@ -223,7 +258,8 @@ public class Client {
         if(arguments.get(0).equals("e")){
           return encodeProtocolMessage("DRAW","e");
         }
-        return input;
+        else{
+        return null;}
 
       case "/putt":
         if(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") ){
@@ -237,18 +273,22 @@ public class Client {
           String tileString = tileToPut.toString();
           Tile[] tileArray = yourDeck.DeckToTileArray();
           String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
+          System.out.println(yourDeck);
           return encodeProtocolMessage("PUTT",tileString,DeckToBeSent);
         }
+
         else{
-        return input;}
+        return null;}
 
 
 
       default:
-        return input; //just for debug
+        return null; //just for debug
     }
 
   }
+
+
 
   /**
    * Handles incoming requests from the server and performs corresponding actions.
@@ -267,7 +307,10 @@ public class Client {
 
         case CATS:
           String name = arguments.get(2);
-          System.out.println(name + ": " + arguments.get(1));
+          //client.guiThread.updateGUI(name + ": " + arguments.get(1));
+          //hier handeln ob whisper broadcast etc mit case distinction
+
+
           //
           break;
 
@@ -277,10 +320,14 @@ public class Client {
           break;
 
         case STRT:
-          playerID = Integer.parseInt(arguments.get(0));
-          ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(1));
+          playerID = Integer.parseInt(arguments.get(1));
+          ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
+          if (tilesStrt.size() == 15) {
+            System.out.println("du bist dran");
+          }
           Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
           yourDeck.createDeckwithTileArray(tilesArrayStrt);
+          System.out.println(yourDeck);
           client.send(encodeProtocolMessage("+STRT"));
           break;
 
@@ -468,10 +515,12 @@ public class Client {
           String confirmation = arguments.get(0);
           if(confirmation.equals("t")){
             System.out.println("Joined lobby successfully");
+            lobby = true;
           }
           else{
             System.out.println("Unsuccessful lobby connection");
           }
+
           break;
 
         case CATC:
@@ -483,10 +532,10 @@ public class Client {
           break;
 
         case PUTT:
-          if(arguments.get(1).equals("t")){
+          if(arguments.get(0).equals("t")){
             System.out.println("Valid input");
 
-            if(arguments.get(2).equals("t")){
+            if(arguments.get(1).equals("t")){
               System.out.println("You won!");
             }
           }
