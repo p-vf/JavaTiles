@@ -27,7 +27,7 @@ public class ClientThread implements Runnable {
   public String nickname;
   private final Server server;
   private Lobby lobby;
-  private int playerIndex;
+  private int playerIndex = -1;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
@@ -75,9 +75,8 @@ public class ClientThread implements Runnable {
 
       while (true) {
         String request;
-        try {
-          request = bReader.readLine();
-        } catch (IOException e) { break; }
+        request = bReader.readLine();
+
 
         if(!request.equals("PING") && !request.equals("+PING") || Server.ENABLE_PING_LOGGING) {
           LOGGER.debug("received: " + request);
@@ -90,13 +89,11 @@ public class ClientThread implements Runnable {
         }
       }
     } catch (IOException | NullPointerException e) {
-      //System.out.println("EchoClientThread with id:" + id);
-      if (e instanceof SocketTimeoutException) {
-        logout();
-      }
       e.printStackTrace(System.err);
+    } finally {
+      logout();
     }
-    LOGGER.info("Server: Verbindung " + id + " abgebrochen");
+    LOGGER.info("Server: Verbindung " + id + " beendet");
   }
 
   /**
@@ -114,6 +111,7 @@ public class ClientThread implements Runnable {
       case PWIN -> {}
       case EMPT -> {}
       case CATS -> {}
+      case STAT -> {}
       case PING -> {
         synchronized (pingThread) {
           pingThread.receivedResponse = true;
@@ -166,29 +164,25 @@ public class ClientThread implements Runnable {
           send("+LOGO");
           logout();
         }
-        //case STAT -> {}
         case DRAW -> {
-          String stack = arguments.get(0);
-          switch (stack) {
+          String pullStackName = arguments.get(0);
+          Stack<Tile> stack;
+          switch (pullStackName) {
             case "e" -> {
-              ArrayList<Stack<Tile>> e = lobby.gameState.exchangeStacks;
-
-              Stack<Tile> exchange = e.get(playerIndex);
-              Tile tile = exchange.pop();
-              String tileString = tile.toString();
-              //TODO Vom Stack<Tile> ein String machen.
-              send(encodeProtocolMessage("+DRAW", tileString));
+              stack = lobby.gameState.exchangeStacks.get(playerIndex);
             }
             case "m" -> {
-              Stack<Tile> m = lobby.gameState.mainStack;
-              Tile tile = m.pop();
-              String tileString = tile.toString();
-              //TODO von der Tile einen String machen
-              send(encodeProtocolMessage("+DRAW", tileString));
-
-
+              stack = lobby.gameState.mainStack;
+            }
+            default -> {
+              throw new IllegalArgumentException("No Stack with name: " + pullStackName);
             }
           }
+          Tile tile = stack.pop();
+          String tileString = tile.toString();
+          send(encodeProtocolMessage("+DRAW", tileString));
+
+          sendState();
         }
 
         case PUTT -> {
@@ -220,6 +214,8 @@ public class ClientThread implements Runnable {
           // update the current player index
           lobby.gameState.currentPlayerIdx += 1;
           lobby.gameState.currentPlayerIdx %= 4;
+
+          sendState();
         }
         case CATC -> {
           handleChat(arguments);
@@ -409,6 +405,10 @@ public class ClientThread implements Runnable {
         server.sendToAll(cmd, this);
       }
       case "l" -> {
+        if (this.lobby == null) {
+          LOGGER.error("Client should not send to lobby without being in one");
+          return;
+        }
         lobby.sendToLobby(cmd, this);
       }
       case "w" -> {
@@ -433,18 +433,19 @@ public class ClientThread implements Runnable {
     }
     boolean createdNewLobby = false;
     synchronized (server.lobbies) {
-      Lobby lobby = server.getLobby(lobbyNumber);
-      if (lobby == null) {
-        lobby = server.createLobby(lobbyNumber);
+      Lobby potentialLobby = server.getLobby(lobbyNumber);
+      if (potentialLobby == null) {
+        potentialLobby = server.createLobby(lobbyNumber);
         createdNewLobby = true;
       }
-      if (server.joinLobby(lobby, this)) {
+      if (server.joinLobby(potentialLobby, this)) {
         send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobbyNumber));
+        lobby = potentialLobby;
+        playerIndex = lobby.getPlayerIndex(this);
       } else {
         send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
       }
     }
-    playerIndex = lobby.getPlayerIndex(this);
   }
 
   private ArrayList<Lobby> listLobbiesWithStatus(LobbyState status) {
@@ -455,5 +456,11 @@ public class ClientThread implements Runnable {
       }
     }
     return lobbiesWithStatus;
+  }
+
+  private void sendState() {
+    String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
+    String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);
+    server.sendToAll(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
   }
 }
