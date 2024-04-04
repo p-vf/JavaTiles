@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
@@ -87,9 +88,8 @@ public class Client {
       iT.start();
       ping(client);
 
-      LoginClient login = new LoginClient();
-      nickname = login.setUsername();
-      String logindata = "LOGI " + nickname;
+
+      String logindata = "LOGI " + login();
 
       client.send(logindata);
 
@@ -115,12 +115,27 @@ public class Client {
       client.out.close();
       client.socket.close();
     } catch (IOException e) {
-
+      e.printStackTrace(System.err);
       System.out.println("Your connection to the server has been lost");
 
     }
 
 
+  }
+
+  public static String login() throws IOException {
+    System.out.println("Enter username:");
+    String username = bReader.readLine();
+    while (username.length() > 15) {
+      System.out.println("Name zu lang:");
+      username = bReader.readLine();
+    }
+    if (username.isEmpty()) {
+      username = System.getProperty("user.name"); //whoami
+
+
+    }
+    return username;
   }
 
   /**
@@ -213,12 +228,12 @@ public class Client {
 
       case "/swap":
         if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")) {
-          int row = Integer.parseInt(arguments.get(0));
+
           int col = Integer.parseInt(arguments.get(1));
           int row2 = Integer.parseInt(arguments.get(2));
           int col2 = Integer.parseInt(arguments.get(3));
 
-          yourDeck.swap(row, col, row2, col2);
+          yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
           System.out.println(yourDeck);
 
           return null;
@@ -337,7 +352,11 @@ public class Client {
         case STAT:
           ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
           exchangestacks = stringsToTileArray(tileList);
-          CurrentPlayerID = Integer.parseInt(arguments.get(1));
+          System.out.println(Arrays.toString(exchangestacks) + " " + "dein Stack liegt bei Index "+playerID);
+          if(Integer.parseInt(arguments.get(1))==playerID){
+            System.out.println("Du bist an der Reihe");
+        }
+          System.out.println(arguments.get(1) + " ist an der Reihe");
           break;
 
 
@@ -518,6 +537,7 @@ public class Client {
 
         case DRAW:
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
+          System.out.println(yourDeck);
           break;
 
         case PUTT:
