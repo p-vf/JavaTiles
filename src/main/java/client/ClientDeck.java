@@ -25,11 +25,16 @@ public class ClientDeck {
     public void createDeckwithTileArray(Tile[] tileArray){
         Tile[][] newDeck = new Tile[deck.length][deck[0].length];
         int count = 0;
-        for(int i = 0; i<deck.length; i++){
-            for(int j = 0; j<deck[i].length; j++){
-                newDeck[i][j] = tileArray[j+count];
+        loop:
+        {
+            for (int i = 0; i < deck.length; i++) {
+                for (int j = 0; j < deck[i].length; j++) {
+                    if (count >= tileArray.length) {
+                        break loop;
+                    }
+                    newDeck[i][j] = tileArray[count++];
+                }
             }
-            count = deck[0].length;
         }
         this.deck = newDeck;
     }
@@ -82,13 +87,13 @@ public class ClientDeck {
 
 
 
-    public void swap(int row, int column) {
+    public void swap(int row, int column, int row1, int column1) {
 
-      Tile tileToSwap = deck[row][column];
+      Tile tileToSwap = deck[row1][column1];
       Tile tileToSwap2 = deck[row][column];
 
         deck[row][column] = tileToSwap;
-        deck[row][column] = tileToSwap2;
+        deck[row1][column1] = tileToSwap2;
 
     }
 
