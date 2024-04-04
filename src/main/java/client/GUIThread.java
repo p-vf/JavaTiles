@@ -1,10 +1,16 @@
 package client;
 
+import utils.NetworkUtils;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static client.Client.handleInput;
 
 public class GUIThread extends JFrame implements Runnable{
 
@@ -17,12 +23,13 @@ public class GUIThread extends JFrame implements Runnable{
             private Client client;
 
 
-    @Override
-    public void run() {
-        new GUIThread();
-    }
+ public GUIThread(Client client){
+     this.client = client;
+ }
 
-    public GUIThread(){
+    public void run() {
+
+
                 frame = new JFrame("Chat");
                 chat = new JTextArea(20,50);
                 textField = new JTextField();
@@ -45,10 +52,18 @@ public class GUIThread extends JFrame implements Runnable{
                 chat.append("Chats: \n");
                 textField.setText("");
 
+
                 textField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
                         String gtext = textField.getText();
+                        System.out.println(gtext);
+                        String message = "/chat"+" "+gtext;
+                        try {
+                            client.send(handleInput(message,client));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         textField.setText("");
                         if(gtext.equals("QUIT")) {
                             sleep(500);
