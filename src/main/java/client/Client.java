@@ -57,8 +57,6 @@ public class Client {
   private static boolean lobby = false;
 
 
-
-
   /**
    * Constructs a new EchoClient with the given socket.
    *
@@ -103,8 +101,13 @@ public class Client {
           break;
         }
 
-
-        client.send(handleInput(line, client));
+        LOGGER.debug("received: " + line);
+        String messageToSend = handleInput(line);
+        if (messageToSend == null || messageToSend.isEmpty()) {
+          continue;
+        }
+        LOGGER.debug("sent: " + messageToSend);
+        client.send(messageToSend);
 
       }
 
@@ -141,33 +144,30 @@ public class Client {
    * @throws IOException if an I/O error occurs while sending the encoded message
    */
   public synchronized void send(String str) throws IOException {
-    if(str != null){
-    out.write((str + "\r\n").getBytes());}
+    out.write((str + "\r\n").getBytes());
   }
 
   /**
    * Parses the user input and performs corresponding actions.
    *
-   * @param input  the input string provided by the user
-   * @param client the client object
+   * @param input the input string provided by the user
    * @return a string representing the message to be sent to the server
    */
-  public static String handleInput(String input, Client client) {
+  public static String handleInput(String input) {
     String[] argumentsarray = input.split(" ");
     //LOGGER.debug(Arrays.toString(argumentsarray));
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
     String inputCommand = arguments.remove(0);
     String[] todebug = arguments.toArray(new String[0]);
-    LOGGER.debug(Arrays.toString(todebug));
     switch (inputCommand) {
       case "/nickname":
         String changedName = arguments.get(0);
         nickname = changedName;
-       //ohne Leerschlag und ohne Anführungszeichen
+        //ohne Leerschlag und ohne Anführungszeichen
         return encodeProtocolMessage("NAME", changedName);
 
       case "/chat":
-        if(arguments.get(0).equals("/all")){
+        if (arguments.get(0).equals("/all")) {
           String allMessage = arguments.get(1);
 
           for (int i = 2; i < arguments.size(); i++) {
@@ -176,10 +176,10 @@ public class Client {
 
           //LOGGER.debug(allMessage);
           String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
-          LOGGER.debug(allMessageForServer);
-          return allMessageForServer;}
+          return allMessageForServer;
+        }
 
-        if(arguments.get(0).equals("/lobby")) {
+        if (arguments.get(0).equals("/lobby")) {
           if (lobby == true) {
 
             String message = arguments.get(1);
@@ -190,7 +190,6 @@ public class Client {
 
             //LOGGER.debug(message);
             String messageForServer = encodeProtocolMessage("CATC", "l", message);
-            LOGGER.debug(messageForServer);
             return messageForServer;
 
           } else {
@@ -199,36 +198,32 @@ public class Client {
           }
         }
 
-          if (arguments.get(0).equals("/whisper")) {
-            String whisperMessage = "(whispered) " + arguments.get(1);
-            for (int i = 2; i < arguments.size(); i++) {
-              whisperMessage = whisperMessage + " " + arguments.get(i);
-            }
-
-            //LOGGER.debug(whisperMessage);
-            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
-            LOGGER.debug(whisperMessageForServer);
-            return whisperMessageForServer;
-
-          } else {
-            return null;
+        if (arguments.get(0).equals("/whisper")) {
+          String whisperMessage = "(whispered) " + arguments.get(1);
+          for (int i = 2; i < arguments.size(); i++) {
+            whisperMessage = whisperMessage + " " + arguments.get(i);
           }
 
+          //LOGGER.debug(whisperMessage);
+          String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
+          return whisperMessageForServer;
+
+        } else {
+          return null;
+        }
+
       case "/swap":
-        if(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")){
+        if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")) {
           int row = Integer.parseInt(arguments.get(0));
           int col = Integer.parseInt(arguments.get(1));
           int row2 = Integer.parseInt(arguments.get(2));
           int col2 = Integer.parseInt(arguments.get(3));
 
-          yourDeck.swap(row,col,row2,col2);
+          yourDeck.swap(row, col, row2, col2);
           System.out.println(yourDeck);
 
           return null;
         }
-
-
-
 
 
       case "/logout":
@@ -252,34 +247,32 @@ public class Client {
 
 
       case "/draw":
-        if(arguments.get(0).equals("m")){
-          return encodeProtocolMessage("DRAW","m");
+        if (arguments.get(0).equals("m")) {
+          return encodeProtocolMessage("DRAW", "m");
         }
-        if(arguments.get(0).equals("e")){
-          return encodeProtocolMessage("DRAW","e");
+        if (arguments.get(0).equals("e")) {
+          return encodeProtocolMessage("DRAW", "e");
+        } else {
+          return null;
         }
-        else{
-        return null;}
 
       case "/putt":
-        if(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") ){
+        if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+")) {
           //checks if the String is a number
           //if both arguments are a Number PUTT with the Tile will be sent
           //otherwise the input will be sent for debugging
           int row = Integer.parseInt(arguments.get(0));
           int column = Integer.parseInt(arguments.get(1));
-          Tile tileToPut = yourDeck.getTile(row,column);
-          yourDeck.removeTile(row,column); //removes the Tile from the deck;
+          Tile tileToPut = yourDeck.getTile(row, column);
+          yourDeck.removeTile(row, column); //removes the Tile from the deck;
           String tileString = tileToPut.toString();
           Tile[] tileArray = yourDeck.DeckToTileArray();
           String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
           System.out.println(yourDeck);
-          return encodeProtocolMessage("PUTT",tileString,DeckToBeSent);
+          return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
+        } else {
+          return null;
         }
-
-        else{
-        return null;}
-
 
 
       default:
@@ -287,7 +280,6 @@ public class Client {
     }
 
   }
-
 
 
   /**
@@ -334,7 +326,7 @@ public class Client {
         //noch Offene Fragen zu STAT: Ich glaub im falschen Enum plus wie genau soll ds funktionieren exchange stacks
 
         case PWIN:
-          System.out.println(arguments.get(0)+" hat das Spiel gewonnen");
+          System.out.println(arguments.get(0) + " hat das Spiel gewonnen");
           client.send(encodeProtocolMessage("+PWIN"));
           break;
 
@@ -348,7 +340,6 @@ public class Client {
           exchangestacks = stringsToTileArray(tileList);
           CurrentPlayerID = Integer.parseInt(arguments.get(1));
           break;
-
 
 
         default:
@@ -393,7 +384,7 @@ public class Client {
           // TODO lobbies aren't given as multiple arguments, they are all in one argument (the second) so this implementation is wrong.
           //  If there are no lobbies with the requested status, an empty string is sent from the server, which causes an error here.
 
-          if(arguments.get(1).isEmpty()){
+          if (arguments.get(1).isEmpty()) {
             System.out.println("No lobbies with this status");
             break;
           }
@@ -513,11 +504,10 @@ public class Client {
 
         case JLOB:
           String confirmation = arguments.get(0);
-          if(confirmation.equals("t")){
+          if (confirmation.equals("t")) {
             System.out.println("Joined lobby successfully");
             lobby = true;
-          }
-          else{
+          } else {
             System.out.println("Unsuccessful lobby connection");
           }
 
@@ -532,14 +522,13 @@ public class Client {
           break;
 
         case PUTT:
-          if(arguments.get(0).equals("t")){
+          if (arguments.get(0).equals("t")) {
             System.out.println("Valid input");
 
-            if(arguments.get(1).equals("t")){
+            if (arguments.get(1).equals("t")) {
               System.out.println("You won!");
             }
-          }
-          else{
+          } else {
             System.out.println("Stop cheating!!");
           }
           break;
@@ -550,7 +539,7 @@ public class Client {
 
         case LPLA:
           ArrayList<String> playerList = decodeProtocolMessage(arguments.get(0));
-          for(int i = 0; i<playerList.size(); i++){
+          for (int i = 0; i < playerList.size(); i++) {
             System.out.println(playerList.get(i));
           }
           break;
