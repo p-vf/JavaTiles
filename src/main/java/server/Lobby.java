@@ -124,8 +124,8 @@ public class Lobby {
   }
 
   public boolean validateMove(Tile tile, Tile[] tileArray, int playerIdx) {
-    // should work but didn't test yet
     if (tile == null) {
+      LOGGER.debug("move not valid: the moved tile can't be null");
       return false;
     }
     ArrayList<Tile> temp = new ArrayList<>(Arrays.asList(tileArray));
@@ -133,7 +133,12 @@ public class Lobby {
     UnorderedDeck clientDeck = new UnorderedDeck(temp);
 
     UnorderedDeck serverDeck = gameState.playerDecks.get(playerIdx);
-    return clientDeck.equals(serverDeck);
+    boolean equal = clientDeck.equals(serverDeck);
+    // CLEANUP remove this debugging statement once everything works
+    if (!equal) {
+      System.out.print(UnorderedDeck.showDiffDebug(serverDeck, clientDeck, "serverDeck", "clientDeck"));
+    }
+    return equal;
   }
 
 
