@@ -94,6 +94,15 @@ public class Lobby {
     return false;
   }
 
+  public int getPlayerIndex(ClientThread client) {
+    for (int i = 0; i < players.size(); i++) {
+      if (players.get(i) == client) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
 
   /**
    * Sends a String to all clients in a lobby except for the sender.
@@ -114,9 +123,12 @@ public class Lobby {
     }
   }
 
-  public boolean validateMove(Tile tile, ArrayList<Tile> tileArray, int playerIdx) {
+  public boolean validateMove(Tile tile, Tile[] tileArray, int playerIdx) {
     // should work but didn't test yet
-    ArrayList<Tile> temp = new ArrayList<>(tileArray);
+    if (tile == null) {
+      return false;
+    }
+    ArrayList<Tile> temp = new ArrayList<>(Arrays.asList(tileArray));
     temp.add(tile);
     UnorderedDeck clientDeck = new UnorderedDeck(temp);
 

@@ -3,9 +3,7 @@ package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +27,7 @@ public class ClientThread implements Runnable {
   public String nickname;
   private final Server server;
   private Lobby lobby;
+  private int playerIndex = -1;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
@@ -76,9 +75,8 @@ public class ClientThread implements Runnable {
 
       while (true) {
         String request;
-        try {
-          request = bReader.readLine();
-        } catch (IOException e) { break; }
+        request = bReader.readLine();
+
 
         if(!request.equals("PING") && !request.equals("+PING") || Server.ENABLE_PING_LOGGING) {
           LOGGER.debug("received: " + request);
@@ -91,13 +89,11 @@ public class ClientThread implements Runnable {
         }
       }
     } catch (IOException | NullPointerException e) {
-      //System.out.println("EchoClientThread with id:" + id);
-      if (e instanceof SocketTimeoutException) {
-        logout();
-      }
       e.printStackTrace(System.err);
+    } finally {
+      logout();
     }
-    LOGGER.info("Server: Verbindung " + id + " abgebrochen");
+    LOGGER.info("Server: Verbindung " + id + " beendet");
   }
 
   /**
@@ -115,6 +111,7 @@ public class ClientThread implements Runnable {
       case PWIN -> {}
       case EMPT -> {}
       case CATS -> {}
+      case STAT -> {}
       case PING -> {
         synchronized (pingThread) {
           pingThread.receivedResponse = true;
@@ -167,16 +164,58 @@ public class ClientThread implements Runnable {
           send("+LOGO");
           logout();
         }
-        //case STAT -> {}
-        case DRAW -> {}
+        case DRAW -> {
+          String pullStackName = arguments.get(0);
+          Stack<Tile> stack;
+          switch (pullStackName) {
+            case "e" -> {
+              stack = lobby.gameState.exchangeStacks.get(playerIndex);
+            }
+            case "m" -> {
+              stack = lobby.gameState.mainStack;
+            }
+            default -> {
+              throw new IllegalArgumentException("No Stack with name: " + pullStackName);
+            }
+          }
+          Tile tile = stack.pop();
+          String tileString = tile.toString();
+          send(encodeProtocolMessage("+DRAW", tileString));
+
+          sendState();
+        }
+
         case PUTT -> {
-          /*
+          // this checks if it's the players turn rn
+          if (lobby.gameState.currentPlayerIdx != playerIndex) {
+            // should never be reached
+            send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
+            break;
+          }
           String tileString = arguments.get(0);
-          Tile tile = Tile.fromString(tileString);
-          ArrayList<String> tileStringArray = decodeProtocolMessage(arguments.get(1));
-          ArrayList<Tile> tileArray = Tile.stringArrayToTileArray(tileStringArray);
-          lobby.checkIfWon(tileArray);
-           */
+          Tile tile = Tile.parseTile(tileString);
+          Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
+          boolean isValid = lobby.validateMove(tile, tileArray, playerIndex);
+          boolean isWon = false;
+          if (!isValid) {
+            LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
+            send(encodeProtocolMessage("+PUTT", "f", "f"));
+            break;
+          }
+          if (Lobby.isWinning(tileArray)){
+            isWon = true;
+            server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
+          }
+          send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
+          // remove tile that the player chose from the playerDeck
+          lobby.gameState.playerDecks.get(playerIndex).remove(tile);
+          // add the tile to the exchangeStack of the next player.
+          lobby.gameState.exchangeStacks.get((playerIndex + 1) % 4).push(tile);
+          // update the current player index
+          lobby.gameState.currentPlayerIdx += 1;
+          lobby.gameState.currentPlayerIdx %= 4;
+
+          sendState();
         }
         case CATC -> {
           handleChat(arguments);
@@ -255,7 +294,6 @@ public class ClientThread implements Runnable {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
         }
         case REDY -> {
-          /*
           isReady = true;
           send(encodeProtocolMessage("+REDY"));
           if (lobby.players.size() != 4) {
@@ -271,16 +309,16 @@ public class ClientThread implements Runnable {
           if (!allPlayersReady) {
             break;
           }
+          LOGGER.debug("All players ready!");
           Random rnd = new Random();
           int startPlayerIdx = rnd.nextInt(4);
           lobby.startGame(startPlayerIdx);
           for (int i = 0; i < lobby.players.size(); i++) {
-            HashSet<Tile> deck = lobby.gameState.playerDecks.get(i);
-            ArrayList<Tile> deckArray = new ArrayList<>(deck.stream().toList());
-            ArrayList<String> stringTiles = Tile.tileArrayToStringArray(deckArray);
+            UnorderedDeck deck = lobby.gameState.playerDecks.get(i);
+            ArrayList<String> stringTiles = deck.toStringArray();
             String deckString = encodeProtocolMessage(stringTiles);
             lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
-          }*/
+          }
         }
       }
     }
@@ -367,6 +405,10 @@ public class ClientThread implements Runnable {
         server.sendToAll(cmd, this);
       }
       case "l" -> {
+        if (this.lobby == null) {
+          LOGGER.error("Client should not send to lobby without being in one");
+          return;
+        }
         lobby.sendToLobby(cmd, this);
       }
       case "w" -> {
@@ -391,13 +433,15 @@ public class ClientThread implements Runnable {
     }
     boolean createdNewLobby = false;
     synchronized (server.lobbies) {
-      Lobby lobby = server.getLobby(lobbyNumber);
-      if (lobby == null) {
-        lobby = server.createLobby(lobbyNumber);
+      Lobby potentialLobby = server.getLobby(lobbyNumber);
+      if (potentialLobby == null) {
+        potentialLobby = server.createLobby(lobbyNumber);
         createdNewLobby = true;
       }
-      if (server.joinLobby(lobby, this)) {
+      if (server.joinLobby(potentialLobby, this)) {
         send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobbyNumber));
+        lobby = potentialLobby;
+        playerIndex = lobby.getPlayerIndex(this);
       } else {
         send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
       }
@@ -412,5 +456,11 @@ public class ClientThread implements Runnable {
       }
     }
     return lobbiesWithStatus;
+  }
+
+  private void sendState() {
+    String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
+    String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);
+    server.sendToAll(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
   }
 }

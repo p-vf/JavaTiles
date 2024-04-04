@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static game.Color.*;
+
 /**
  * Represents a deck that contains different tiles. Is only relevant for server-side calculations (validation).
  */
@@ -17,7 +19,36 @@ public class UnorderedDeck {
   // array filled with counts (either 0, 1, or 2) for each tile
   // there are 53 distinct tiles in the game, two of each, so 106 in total
   int[] state = new int[53];
-  private int tileToIndex(Tile tile) {
+
+  // for testing purposes
+  public static void main(String[] args) {
+    try {
+      for (int i = 0; i < 53; i++) {
+        System.out.println(i + ": " + tileToIndex(indexToTile(i)));
+      }
+      Tile[] tiles = new Tile[]{
+          new Tile(1, BLUE),
+          new Tile(5, BLUE),
+          new Tile(8, BLUE),
+          new Tile(11, BLUE),
+          new Tile(12, BLUE),
+          new Tile(3, BLACK),
+          new Tile(1, BLUE),
+          new Tile(1, BLUE),
+      };
+      UnorderedDeck deck = new UnorderedDeck(new ArrayList<>(Arrays.asList(tiles)));
+      System.out.println(deck.toStringArray());
+    } catch (RuntimeException e) {
+      e.printStackTrace(System.err);
+    }
+  }
+
+  /**
+   * This is a bijection from tile to number. It's inverse (indexToTile()) is also a bijection.
+   * @param tile
+   * @return
+   */
+  private static int tileToIndex(Tile tile) {
     // TODO implement this
     Color color = tile.getColor();
     int number = tile.getNumber();
@@ -27,6 +58,21 @@ public class UnorderedDeck {
     }
     int colorNumber = Arrays.stream(Color.values()).toList().indexOf(color);
     return colorNumber * 13 + number;
+  }
+
+  /**
+   * This is a bijection from tile to number. It's inverse (tileToIndex()) is also a bijection.
+   * @param index
+   * @return
+   */
+  private static Tile indexToTile(int index) {
+    if (index == 0) {
+      return new Tile(0, BLACK);
+    }
+    index--;
+    int number = index % 13 + 1;
+    Color color = Color.values()[index/13];
+    return new Tile(number, color);
   }
 
   public UnorderedDeck(ArrayList<Tile> deck) {
@@ -68,6 +114,18 @@ public class UnorderedDeck {
       LOGGER.debug("(should-be-unreachable) removed too many tiles from deck");
     }
   }
+
+  public ArrayList<String> toStringArray() {
+    ArrayList<String> res = new ArrayList<>();
+    for (int idx = 0; idx < state.length; idx++) {
+      for (int i = 0; i < state[idx]; i++) {
+        res.add(indexToTile(idx).toString());
+        System.out.println("bruh");
+      }
+    }
+    return res;
+  }
+
   @Override
   public boolean equals(Object other) {
     if (other == null) {

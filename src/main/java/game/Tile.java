@@ -19,6 +19,9 @@ public class Tile {
   private final int number;
   private final Color color;
   public Tile(int number, Color color) {
+    if (number > 13 || number < 0) {
+      throw new IllegalArgumentException("Tile has number outside the required range.");
+    }
     this.number = number;
     this.color = color;
   }
