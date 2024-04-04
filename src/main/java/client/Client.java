@@ -268,6 +268,7 @@ public class Client {
         case CATS:
           String name = arguments.get(2);
           System.out.println(name + ": " + arguments.get(1));
+          //
           break;
 
         case PING:
