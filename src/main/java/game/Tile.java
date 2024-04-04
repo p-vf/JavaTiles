@@ -71,7 +71,11 @@ public class Tile {
   public static String tileArrayToProtocolArgument(Tile[] tileArray){
     ArrayList<String> tileStringList= new ArrayList<>();
     for (Tile tile : tileArray) {
-      tileStringList.add(tile.toString());
+      if (tile == null) {
+        tileStringList.add("");
+      } else {
+        tileStringList.add(tile.toString());
+      }
     }
     return encodeProtocolMessage(tileStringList);
   }
