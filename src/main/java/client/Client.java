@@ -102,7 +102,7 @@ public class Client {
         }
 
         LOGGER.debug("received: " + line);
-        String messageToSend = handleInput(line);
+        String messageToSend = client.handleInput(line);
         if (messageToSend == null || messageToSend.isEmpty()) {
           continue;
         }
@@ -153,7 +153,7 @@ public class Client {
    * @param input the input string provided by the user
    * @return a string representing the message to be sent to the server
    */
-  public static String handleInput(String input) {
+  public String handleInput(String input) {
     String[] argumentsarray = input.split(" ");
     //LOGGER.debug(Arrays.toString(argumentsarray));
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));

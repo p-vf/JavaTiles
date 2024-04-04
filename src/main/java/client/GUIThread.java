@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static client.Client.handleInput;
 
 public class GUIThread extends JFrame implements Runnable{
 
@@ -60,7 +59,7 @@ public class GUIThread extends JFrame implements Runnable{
                         System.out.println(gtext);
                         String message = "/chat"+" "+gtext;
                         try {
-                            client.send(handleInput(message,client));
+                            client.send(client.handleInput(message));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
