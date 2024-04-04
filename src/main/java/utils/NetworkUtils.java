@@ -1,6 +1,8 @@
 package utils;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import server.Lobby;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NetworkUtils {
+  public static final Logger LOGGER = LogManager.getLogger();
 
   // for testing purposes
   public static void main(String[] args) {
@@ -19,7 +22,7 @@ public class NetworkUtils {
     System.out.println(decodeProtocolMessage(req));
 
 
-    ArrayList<String> msg = new ArrayList<>(Arrays.asList("CATC", "sldkfj", "sldkfj ", "\" helloliaonjasölmükoihjw3efpopodsufijewölk'sdfök32141\"\" \" "));
+    ArrayList<String> msg = new ArrayList<>(Arrays.asList("CATC", "sldkfj", "sldkfj ", "\"\" hdlf\\\\\\\\\\\"\" hallo"));
     System.out.println(msg);
     System.out.println(decodeProtocolMessage(encodeProtocolMessage(msg)));
 
@@ -37,37 +40,48 @@ public class NetworkUtils {
    * @return An ArrayList having as first element the command name and the rest being arguments to the command.
    */
   public static ArrayList<String> decodeProtocolMessage(String request) {
-    char[] chars = request.toCharArray();
+    char[] chars = (request + " ").toCharArray();
     ArrayList<String> command = new ArrayList<>();
     boolean isInsideString = false;
+    boolean wasInsideString = false;
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < chars.length; i++) {
       switch (chars[i]) {
-        case ' ':
+        case ' ' -> {
           if (isInsideString) {
             sb.append(' ');
           } else {
+            int lastIndex = sb.length() - 1;
+            if (lastIndex < 0) {
+              break;
+            }
+            if (sb.charAt(lastIndex) != ' ' && wasInsideString) {
+              LOGGER.debug("Message was sent incorrectly.. (there is no space at the end where there should be) message: \"" + request + "\"");
+            } else if (wasInsideString){
+              sb.deleteCharAt(lastIndex);
+            }
+            wasInsideString = false;
             command.add(sb.toString());
             sb = new StringBuilder();
           }
-          break;
-
-        case '\\':
+        }
+        case '\\' -> {
           if (i < chars.length - 1 && chars[i + 1] == '"' && isInsideString) {
             sb.append('"');
             i++;
           } else {
             sb.append('\\');
           }
-          break;
-        case '"':
+        }
+        case '"' -> {
+          if (isInsideString) {
+            wasInsideString = true;
+          }
           isInsideString = !isInsideString;
-          break;
-        default:
-          sb.append(chars[i]);
+        }
+        default -> sb.append(chars[i]);
       }
     }
-    command.add(sb.toString());
     return command;
   }
 
@@ -75,12 +89,20 @@ public class NetworkUtils {
    * Takes Strings in an ArrayList and combines them into a String that can be sent via Socket, conforming to the protocols rules.
    *
    * @param command ArrayList of Strings with the first element being the command name and the rest being arguments to said command.
+   *                All the Strings must NOT contain carriage-return ({@code '\r'}) and newline ({@code '\n'}).
    * @return String encoded in a way that conforms to the network protocol.
    */
   public static String encodeProtocolMessage(ArrayList<String> command) {
+    // TODO fix bug when an argument has a Backslash at the end
     StringBuilder sb = new StringBuilder();
     for (String s : command) {
-      if (s.contains(" ") || s.contains("\"")) {
+      // if carriage return or newline is in string, the string can't be sent via the network protocol as it marks the end of a command.
+      if (s.contains("\r") || s.contains("\n")) {
+        throw new IllegalArgumentException("Message contains newline or carriage return.");
+      }
+
+      // do special handling if argument meets certain conditions.
+      if (s.contains(" ") || s.contains("\"") || s.isEmpty()) {
         sb.append("\"");
         for (char c : s.toCharArray()) {
           if (c == '\"') {
@@ -89,13 +111,14 @@ public class NetworkUtils {
             sb.append(c);
           }
         }
-        sb.append("\"");
+        sb.append(" \""); // add space before ending double quotes to cover edge case (a backslash as last character of the argument)
       } else {
         sb.append(s);
       }
       sb.append(" ");
     }
     if (!sb.isEmpty()) {
+      // remove unnecessary space
       sb.deleteCharAt(sb.length() - 1);
     }
     return sb.toString();
@@ -105,7 +128,8 @@ public class NetworkUtils {
    * Takes Strings and combines them into a String that can be sent via Socket, conforming to the protocols rules.
    *
    * @param command Name of the command that is to be encoded
-   * @param args Arguments of the command that are to be encoded
+   * @param args Arguments of the command that are to be encoded.
+   *             All the Strings must NOT contain carriage-return ({@code '\r'}) and newline ({@code '\n'}).
    * @return Encoded String
    */
   public static String encodeProtocolMessage(String command, String... args) {
