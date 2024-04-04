@@ -49,8 +49,10 @@ public class InThread implements Runnable {
       BufferedReader bufferRead = new BufferedReader(new InputStreamReader(in));
       try {
         message = bufferRead.readLine();
-        LOGGER.debug("received: " + message);
-
+        // for debugging purposes: if you want to see pings, comment the if statement out
+        if (!(message.equals("PING") || message.equals("+PING"))) {
+          LOGGER.debug("received: " + message);
+        }
         if (message.charAt(0) != '+') {
           handleRequest(message, client);
 
