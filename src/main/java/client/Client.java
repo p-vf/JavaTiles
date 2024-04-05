@@ -300,6 +300,9 @@ public class Client {
       case "/listplayers":
         return encodeProtocolMessage("LPLA");
 
+      case "/listlobbies":
+        return encodeProtocolMessage("LLPL");
+
 
       default:
         return null; //just for debug
