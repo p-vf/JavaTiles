@@ -297,6 +297,9 @@ public class Client {
           return null;
         }
 
+      case "/listplayers":
+        return encodeProtocolMessage("LPLA");
+
 
       default:
         return null; //just for debug
