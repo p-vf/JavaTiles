@@ -123,20 +123,29 @@ public class Client {
 
   }
 
-  public static String login() throws IOException {
-    System.out.println("Enter username:");
+
+   public static String login() throws IOException {
+  System.out.println("Enter username:");
+  while (true) {
     String username = bReader.readLine();
-    while (username.length() > 15) {
-      System.out.println("Name zu lang:");
-      username = bReader.readLine();
+    if (username.length() == 0) {
+      System.out.println("Invalid username");
+      continue;
     }
-    if (username.isEmpty()) {
-      username = System.getProperty("user.name"); //whoami
-
-
+    if (!username.equalsIgnoreCase("") &&!username.contains(" ")) {
+      if (!username.contains("\"")) {
+        return username;
+      } else {
+        System.out.println("No double qoutes and spaces allowed");
+        continue;
+      }
+    } else if (!username.equalsIgnoreCase("")) {
+      System.out.println("No double qoutes and spaces allowed");
+    } else {
+      System.out.println("Invalid username");
     }
-    return username;
   }
+}
 
   /**
    * Initiates a new PingThread for the specified EchoClient.
@@ -287,6 +296,9 @@ public class Client {
         } else {
           return null;
         }
+
+      case "/listplayers":
+        return encodeProtocolMessage("LPLA");
 
 
       default:
