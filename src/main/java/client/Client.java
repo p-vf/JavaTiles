@@ -179,7 +179,7 @@ public class Client {
    * @param input the input string provided by the user
    * @return a string representing the message to be sent to the server
    */
-  public String handleInput(String input, GUIThread guiThread) {
+  public String handleInput(String input, GUIThread guiThread) throws IOException {
     String[] argumentsarray = input.split(" ");
     //LOGGER.debug(Arrays.toString(argumentsarray));
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
@@ -188,17 +188,9 @@ public class Client {
 
     switch (inputCommand) {
       case "/nickname":
-        if(arguments.size() > 1){
-          System.out.println("No double quotes and spaces allowed");
-          return null;
-        }
-    String changedName = arguments.get(0);
-    if (changedName.contains(" ") || changedName.contains("\"")) {
-        System.out.println("No double quotes and spaces allowed");
-      } else {
-        nickname = changedName;
+        String changedName = login();
         return encodeProtocolMessage("NAME", changedName);
-      }
+
 
       case "/chat":
         if (arguments.get(0).equals("/all")) {
@@ -420,6 +412,7 @@ public class Client {
           break;
 
         case LOGI:
+          nickname = arguments.get(0);
           System.out.println("You have been logged in as: " + arguments.get(0));
           break;
 
