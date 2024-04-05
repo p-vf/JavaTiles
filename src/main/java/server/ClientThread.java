@@ -1,7 +1,15 @@
 package server;
 
+/*
+test
+/joinlobby 1
+/ready
+
+ */
+
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 
@@ -34,6 +42,7 @@ public class ClientThread implements Runnable {
   private static final int PING_TIMEOUT = 15000;
   private final ServerPingThread pingThread;
   public boolean isReady = false;
+  public volatile boolean isRunning = true;
 
   /**
    * Constructor of the EchoClientThread class.
@@ -73,7 +82,7 @@ public class ClientThread implements Runnable {
     try {
       //send(msg);
 
-      while (true) {
+      while (isRunning) {
         String request;
         request = bReader.readLine();
 
@@ -89,11 +98,15 @@ public class ClientThread implements Runnable {
         }
       }
     } catch (IOException | NullPointerException e) {
-      e.printStackTrace(System.err);
+      if (e instanceof SocketException) {
+        LOGGER.info("Verbindung wurde unerwartet unterbrochen");
+      } else {
+        e.printStackTrace(System.err);
+      }
     } finally {
       logout();
     }
-    LOGGER.info("Server: Verbindung " + id + " beendet");
+    LOGGER.info("Verbindung " + id + " beendet");
   }
 
   /**
@@ -165,20 +178,29 @@ public class ClientThread implements Runnable {
           logout();
         }
         case DRAW -> {
+          if (!lobby.gameState.isPlayersTurn(playerIndex)) {
+            send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
+            break;
+          }
+          if (!lobby.gameState.canDraw(playerIndex)) {
+            send(encodeProtocolMessage("+DRAW", "", "You shall not draw!"));
+            break;
+          }
+          // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           String pullStackName = arguments.get(0);
-          Stack<Tile> stack;
+          boolean isMainStack;
           switch (pullStackName) {
             case "e" -> {
-              stack = lobby.gameState.exchangeStacks.get(playerIndex);
+              isMainStack = false;
             }
             case "m" -> {
-              stack = lobby.gameState.mainStack;
+              isMainStack = true;
             }
             default -> {
               throw new IllegalArgumentException("No Stack with name: " + pullStackName);
             }
           }
-          Tile tile = stack.pop();
+          Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
           String tileString = tile.toString();
           send(encodeProtocolMessage("+DRAW", tileString));
 
@@ -186,9 +208,9 @@ public class ClientThread implements Runnable {
         }
 
         case PUTT -> {
+          // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           // this checks if it's the players turn rn
-          if (lobby.gameState.currentPlayerIdx != playerIndex) {
-            // should never be reached
+          if (lobby.gameState.isPlayersTurn(playerIndex)) {
             send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
             break;
           }
@@ -333,6 +355,7 @@ public class ClientThread implements Runnable {
    * This method should be called when a connection interruption is detected or when the client wants to log out.
    */
   public void logout() {
+    isRunning = false;
     try {
       server.removeClient(this);
       socket.close();
