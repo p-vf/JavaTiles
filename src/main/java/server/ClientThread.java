@@ -210,8 +210,12 @@ public class ClientThread implements Runnable {
         case PUTT -> {
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           // this checks if it's the players turn rn
-          if (lobby.gameState.isPlayersTurn(playerIndex)) {
+          if (!lobby.gameState.isPlayersTurn(playerIndex)) {
             send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
+            break;
+          }
+          if(!lobby.gameState.canPutTile(playerIndex)) {
+            send(encodeProtocolMessage("+PUTT", "f", "f", "You shall not put a tile!"));
             break;
           }
           String tileString = arguments.get(0);
@@ -229,13 +233,8 @@ public class ClientThread implements Runnable {
             server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
           }
           send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
-          // remove tile that the player chose from the playerDeck
-          lobby.gameState.playerDecks.get(playerIndex).remove(tile);
-          // add the tile to the exchangeStack of the next player.
-          lobby.gameState.exchangeStacks.get((playerIndex + 1) % 4).push(tile);
-          // update the current player index
-          lobby.gameState.currentPlayerIdx += 1;
-          lobby.gameState.currentPlayerIdx %= 4;
+
+          lobby.gameState.putTile(tile, playerIndex);
 
           sendState();
         }
