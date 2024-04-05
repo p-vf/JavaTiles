@@ -83,9 +83,15 @@ public class Client {
       // TODO man muss beim Start dieser Funktion den Nicknamen als optionalen Parameter angeben können (in args[2])
       Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
       Client client = new Client(sock);
-      InThread th = new InThread(client.in, client);
+      guiThread = new GUIThread(client);
+      Thread gThread = new Thread(guiThread);
+      gThread.start();
+      InThread th = new InThread(client.in, client, guiThread);
       Thread iT = new Thread(th);
       iT.start();
+
+
+
       ping(client);
 
 
@@ -302,7 +308,7 @@ public class Client {
    * @param request the request received from the server
    * @param client  the client object
    */
-  public static void handleRequest(String request, Client client) throws IOException {
+  public static void handleRequest(String request, Client client, GUIThread guiThread) throws IOException {
     String requestCommand;
     ArrayList<String> arguments = decodeProtocolMessage(request);
     requestCommand = arguments.remove(0);
@@ -313,7 +319,7 @@ public class Client {
 
         case CATS:
           String name = arguments.get(2);
-          //client.guiThread.updateGUI(name + ": " + arguments.get(1));
+          guiThread.updateChat(name + ": " + arguments.get(1));
           //hier handeln ob whisper broadcast etc mit case distinction
 
 
@@ -369,7 +375,7 @@ public class Client {
   }
 
 
-  public static void handleResponse(String request, Client client) throws IOException {
+  public static void handleResponse(String request, Client client, GUIThread guiThread) throws IOException {
     try {
       ArrayList<String> arguments = decodeProtocolMessage(request);
       String responsecommand = arguments.remove(0);

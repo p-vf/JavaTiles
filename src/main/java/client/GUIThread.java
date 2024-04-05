@@ -26,6 +26,10 @@ public class GUIThread extends JFrame implements Runnable{
      this.client = client;
  }
 
+    public void updateChat(String message) {
+        chat.append(message + "\n");
+    }
+
     public void run() {
 
 
