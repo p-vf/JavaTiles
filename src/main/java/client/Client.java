@@ -614,10 +614,12 @@ public class Client {
       socket.close();
       bReader.close();
       out.close();
+      Runtime.getRuntime().exit(0);
       System.out.println("You have been logged out.");
+
     } catch (IOException e) {
       System.out.println("You have been logged out.");
-      System.exit(0);
+      Runtime.getRuntime().exit(0);;
     }
   }
 
