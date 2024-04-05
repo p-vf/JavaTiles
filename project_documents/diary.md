@@ -137,3 +137,32 @@ send hinzugefügt.
 - Im Fall von EMPT:
  - den Spielern wird mitgeteilt, dass es zu einem Unentschieden 
 
+## 2.4.2024 Besprechung im Lernoullianum (Robin, Pascal, Boran, Istref)
+- Wir haben uns an diesem Tag getroffen, um die Spiellogik weiter zu implementieren.
+- Auf der Clientseite wurde die Bekanntgabe des Gewinners implementiert.
+- Auf der Serverseite wurden die fehlenden Enums hinzugefügt.
+- Das Netwerkprotokoll wurde aktualisiert.
+- Mehrere kleine Methoden, die wichtig für die Spiellogik sind wurden angefangen oder implementiert.
+- Am Schluss des Meetings haben wir die Aufgaben aufgeteilt, sodass wir morgen selbstständig weiter arbeiten können.
+
+## 3.4.2024 Einzelarbeit
+- Bei der Tile-Klasse wurden die Methoden um von einer Tile zu einer String zu konvertieren und anders herum implementiert.
+- Eine Deck-Klasse wurde auf der Clientseite implementiert.
+- VaildateMove Methode auf der Serverseite implementiert.
+- STRT DRAW und PUTT funktionalität auf der Clientseite implementiert
+- Unordered Deck Klasse mit Methoden indexToTile und toStringArray ausgebaut.
+- PUTT und REDY funktionalität auf Serverseite implementiert.
+- Wir haben über unsere Whatsapp Gruppe beschlossen, morgen uns um 16:30 im Lernoullianum zu treffen und 
+- letzte Implementierungen der Spiellogik zu implementieren und diese anschliessend zu testen.
+
+## 4.4.2024 Besprechung im Lernoullianum (Robin, Pascal, Boran, Istref)
+- DRAW command wurde auf der Serverseite implementiert
+- getVisibleTiles Methode im GameState implementiert um die Exchangestacks anzeigen zu können.
+- erste Version des GUI
+- Edgecases auf Protokollebene werden jetzt korrekt abgehandelt
+- Durch das Testen sind einige kleine Bugs uns aufgefallen, von welchen wir welche beheben konnten,
+wie zum Beispiel dass beim schicken des PUTT commands der Client die übergebenen Parameter vertauscht hat.
+- Bei der Spiellogik bleibt uns noch zu tun: Spieler von illegalen Spielzügen abhalten, wie zum Beispiel zweimal eine Karte ziehen.
+- Wir haben abgemacht, morgen um 13:00 Uhr weiter an der Spiellogik und am GUI zu arbeiten. 
+
+
