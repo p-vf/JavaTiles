@@ -107,7 +107,7 @@ public class Client {
           break;
         }
 
-        String messageToSend = client.handleInput(line);
+        String messageToSend = client.handleInput(line, guiThread);
         if (messageToSend == null || messageToSend.isEmpty()) {
           continue;
         }
@@ -131,27 +131,24 @@ public class Client {
 
 
    public static String login() throws IOException {
-  System.out.println("Enter username:");
-  while (true) {
-    String username = bReader.readLine();
-    if (username.length() == 0) {
-      System.out.println("Invalid username");
-      continue;
-    }
-    if (!username.equalsIgnoreCase("") &&!username.contains(" ")) {
-      if (!username.contains("\"")) {
-        return username;
-      } else {
-        System.out.println("No double qoutes and spaces allowed");
-        continue;
-      }
-    } else if (!username.equalsIgnoreCase("")) {
-      System.out.println("No double qoutes and spaces allowed");
-    } else {
-      System.out.println("Invalid username");
-    }
-  }
-}
+     while (true) {
+       System.out.println("Enter username:");
+       String username = bReader.readLine();
+       if (username.isEmpty()) {
+         username = System.getProperty("user.name");
+         return username;
+       }
+       if (username.contains(" ") || username.contains("\"")) {
+         System.out.println("Your nickname mustn't contain blank spaces or quotation marks");
+
+       } else {
+         return username;
+       }
+     }
+   }
+
+
+
 
   /**
    * Initiates a new PingThread for the specified EchoClient.
@@ -182,7 +179,7 @@ public class Client {
    * @param input the input string provided by the user
    * @return a string representing the message to be sent to the server
    */
-  public String handleInput(String input) {
+  public String handleInput(String input, GUIThread guiThread) {
     String[] argumentsarray = input.split(" ");
     //LOGGER.debug(Arrays.toString(argumentsarray));
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
@@ -228,7 +225,7 @@ public class Client {
         }
 
         if (arguments.get(0).equals("/whisper")) {
-          String whisperMessage = "(whispered) " + arguments.get(1);
+          String whisperMessage = arguments.get(1);
           for (int i = 2; i < arguments.size(); i++) {
             whisperMessage = whisperMessage + " " + arguments.get(i);
           }
@@ -331,6 +328,15 @@ public class Client {
 
         case CATS:
           String name = arguments.get(2);
+          if(arguments.get(0).equals("b")){
+
+            guiThread.updateChat(name +" (sent to all): " + arguments.get(1));
+
+          }
+          if(arguments.get(0).equals("w")){
+            guiThread.updateChat(name +" (whispered): " + arguments.get(1));
+          }
+
           guiThread.updateChat(name + ": " + arguments.get(1));
           //hier handeln ob whisper broadcast etc mit case distinction
 
