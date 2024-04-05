@@ -13,6 +13,7 @@ public class GameState {
   ArrayList<Stack<Tile>> exchangeStacks;
   ArrayList<UnorderedDeck> playerDecks;
   int currentPlayerIdx;
+  boolean currentPlayerHasAlreadyDrawn = true;
 
   /**
    * Constructor of the {@code GameState} class.
@@ -70,6 +71,31 @@ public class GameState {
       tiles[i] = stack.peek();
     }
     return tiles;
+  }
+
+  public Tile drawTile(boolean isMainStack, int playerIndex) {
+    Stack<Tile> stack;
+    if (isMainStack) {
+      stack = mainStack;
+    } else {
+      stack = exchangeStacks.get(playerIndex);
+    }
+
+    Tile tile = stack.pop();
+    playerDecks.get(playerIndex).add(tile);
+    return tile;
+  }
+
+  public boolean canDraw(int playerIndex) {
+    return playerDecks.get(playerIndex).size() == 14;
+  }
+
+  public boolean isPlayersTurn(int playerIndex) {
+    return currentPlayerIdx == playerIndex;
+  }
+
+  public void putTile(Tile tile, int playerIdx) {
+    // TODO
   }
 
   // for testing purposes:
