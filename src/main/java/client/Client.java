@@ -188,12 +188,20 @@ public class Client {
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
     String inputCommand = arguments.remove(0);
     String[] todebug = arguments.toArray(new String[0]);
+
     switch (inputCommand) {
       case "/nickname":
-        String changedName = arguments.get(0);
+        if(arguments.size() > 1){
+          System.out.println("No double quotes and spaces allowed");
+          return null;
+        }
+    String changedName = arguments.get(0);
+    if (changedName.contains(" ") || changedName.contains("\"")) {
+        System.out.println("No double quotes and spaces allowed");
+      } else {
         nickname = changedName;
-        //ohne Leerschlag und ohne Anführungszeichen
         return encodeProtocolMessage("NAME", changedName);
+      }
 
       case "/chat":
         if (arguments.get(0).equals("/all")) {
