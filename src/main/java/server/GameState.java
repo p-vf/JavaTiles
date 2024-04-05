@@ -94,8 +94,19 @@ public class GameState {
     return currentPlayerIdx == playerIndex;
   }
 
-  public void putTile(Tile tile, int playerIdx) {
-    // TODO
+  public void putTile(Tile tile, int playerIndex) {
+
+    // remove tile that the player chose from the playerDeck
+    playerDecks.get(playerIndex).remove(tile);
+    // add the tile to the exchangeStack of the next player.
+    exchangeStacks.get((playerIndex + 1) % 4).push(tile);
+    // update the current player index
+    currentPlayerIdx += 1;
+    currentPlayerIdx %= 4;
+  }
+
+  public boolean canPutTile(int playerIndex) {
+    return playerDecks.get(playerIndex).size() == 15;
   }
 
   // for testing purposes:
