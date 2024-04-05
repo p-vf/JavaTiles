@@ -18,7 +18,7 @@ public class UnorderedDeck {
 
   // array filled with counts (either 0, 1, or 2) for each tile
   // there are 53 distinct tiles in the game, two of each, so 106 in total
-  int[] state = new int[53];
+  int[] tileCounts = new int[53];
 
   // for testing purposes
   public static void main(String[] args) {
@@ -92,11 +92,19 @@ public class UnorderedDeck {
     if (tile == null) {
       return;
     }
-    int num = ++state[tileToIndex(tile)];
+    int num = ++tileCounts[tileToIndex(tile)];
     if (num > 2) {
       // sanity check, only for debugging
       LOGGER.debug("added too many tiles to deck");
     }
+  }
+
+  public int size() {
+    int sum = 0;
+    for (int count : tileCounts) {
+      sum += count;
+    }
+    return sum;
   }
 
   /**
@@ -108,7 +116,7 @@ public class UnorderedDeck {
       LOGGER.debug("Tried to remove null from UnorderedDeck instance. ");
       return;
     }
-    int num = --state[tileToIndex(tile)];
+    int num = --tileCounts[tileToIndex(tile)];
     if (num < 0) {
       // sanity check, only for debugging
       LOGGER.debug("(should-be-unreachable) negative number of tiles in deck");
@@ -117,8 +125,8 @@ public class UnorderedDeck {
 
   public ArrayList<String> toStringArray() {
     ArrayList<String> res = new ArrayList<>();
-    for (int idx = 0; idx < state.length; idx++) {
-      for (int i = 0; i < state[idx]; i++) {
+    for (int idx = 0; idx < tileCounts.length; idx++) {
+      for (int i = 0; i < tileCounts[idx]; i++) {
         res.add(indexToTile(idx).toString());
       }
     }
@@ -131,8 +139,8 @@ public class UnorderedDeck {
       return nameA + " is equal to " + nameB + "\n";
     }
     StringBuilder res = new StringBuilder();
-    for (int i = 0; i < a.state.length; i++) {
-      int diff = a.state[i] - b.state[i];
+    for (int i = 0; i < a.tileCounts.length; i++) {
+      int diff = a.tileCounts[i] - b.tileCounts[i];
       if (diff > 0) {
         res.append(nameA + " has " + diff + " more of tile: " + indexToTile(i) + " than " + nameB + "\n");
       } else if (diff < 0) {
@@ -150,6 +158,6 @@ public class UnorderedDeck {
     if (!(other instanceof UnorderedDeck otherDeck)) {
       return false;
     }
-    return Arrays.equals(otherDeck.state, state);
+    return Arrays.equals(otherDeck.tileCounts, tileCounts);
   }
 }
