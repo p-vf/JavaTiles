@@ -64,8 +64,8 @@ public class InThread implements Runnable {
         }
 
       } catch (IOException e) {
-        System.err.println(e.toString());
-        System.exit(1); // Terminate the program on I/O error
+        System.out.println("Sie wurden ausgeloggt.");
+        System.exit(0); // Terminate the program on I/O error
       }
     }
   }
