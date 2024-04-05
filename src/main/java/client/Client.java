@@ -170,7 +170,8 @@ public class Client {
    * @throws IOException if an I/O error occurs while sending the encoded message
    */
   public synchronized void send(String str) throws IOException {
-    out.write((str + "\r\n").getBytes());
+    if(str != null){
+    out.write((str + "\r\n").getBytes());}
   }
 
   /**
