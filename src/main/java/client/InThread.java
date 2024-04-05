@@ -25,6 +25,8 @@ public class InThread implements Runnable {
   public static final Logger LOGGER = LogManager.getLogger();
 
   public Client client; // The associated client object
+
+  public GUIThread guiThread;
   InputStream in; // The input stream to read messages from
 
 
@@ -34,9 +36,10 @@ public class InThread implements Runnable {
    * @param in     the input stream to read messages from
    * @param client the associated client object
    */
-  public InThread(InputStream in, Client client) {
+  public InThread(InputStream in, Client client, GUIThread guiThread) {
     this.in = in;
     this.client = client;
+    this.guiThread = guiThread;
   }
 
   /**
@@ -54,10 +57,10 @@ public class InThread implements Runnable {
           //LOGGER.debug("received: " + message);
         }
         if (message.charAt(0) != '+') {
-          handleRequest(message, client);
+          handleRequest(message, client, guiThread);
 
         } else {
-          handleResponse(message, client);
+          handleResponse(message, client, guiThread);
         }
 
       } catch (IOException e) {

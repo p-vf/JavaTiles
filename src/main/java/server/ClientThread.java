@@ -178,22 +178,29 @@ public class ClientThread implements Runnable {
           logout();
         }
         case DRAW -> {
+          if (!lobby.gameState.isPlayersTurn(playerIndex)) {
+            send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
+            break;
+          }
+          if (!lobby.gameState.canDraw(playerIndex)) {
+            send(encodeProtocolMessage("+DRAW", "", "You shall not draw!"));
+            break;
+          }
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           String pullStackName = arguments.get(0);
-          Stack<Tile> stack;
+          boolean isMainStack;
           switch (pullStackName) {
             case "e" -> {
-              stack = lobby.gameState.exchangeStacks.get(playerIndex);
+              isMainStack = false;
             }
             case "m" -> {
-              stack = lobby.gameState.mainStack;
+              isMainStack = true;
             }
             default -> {
               throw new IllegalArgumentException("No Stack with name: " + pullStackName);
             }
           }
-          Tile tile = stack.pop();
-          lobby.gameState.playerDecks.get(playerIndex).add(tile);
+          Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
           String tileString = tile.toString();
           send(encodeProtocolMessage("+DRAW", tileString));
 
@@ -203,8 +210,7 @@ public class ClientThread implements Runnable {
         case PUTT -> {
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           // this checks if it's the players turn rn
-          if (lobby.gameState.currentPlayerIdx != playerIndex) {
-            // should never be reached
+          if (lobby.gameState.isPlayersTurn(playerIndex)) {
             send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
             break;
           }
