@@ -63,9 +63,9 @@ public class GUIThread extends JFrame implements Runnable{
                         System.out.println(gtext);
                         String message = "/chat"+" "+gtext;
                         try {
-                            client.send(client.handleInput(message, GUIThread.this));
+                            client.send(client.handleInput(message));
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            chat.append("invalid input");
                         }
                         textField.setText("");
                         if(gtext.equals("QUIT")) {
