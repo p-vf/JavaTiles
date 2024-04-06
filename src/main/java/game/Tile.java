@@ -7,9 +7,6 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
-
-import static game.Color.*;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -261,6 +258,19 @@ public class Tile {
       }
     }
     return true;
+  }
+
+  public String toStringPretty() {
+
+    if (this.isJoker()) {
+      return "JT";
+    }
+    return
+        // set color
+        color.toAnsiColor() +
+        // pad with spaces
+        String.format("%2d", number) +
+        Color.ansiReset();
   }
 
   @Override

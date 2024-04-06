@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import game.Color;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -249,7 +250,7 @@ public class Client {
           int col2 = Integer.parseInt(arguments.get(3));
 
           yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
-          System.out.println(yourDeck);
+          showDeck();
 
           return null;
         }
@@ -297,7 +298,7 @@ public class Client {
           String tileString = tileToPut.toString();
           Tile[] tileArray = yourDeck.DeckToTileArray();
           String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
-          System.out.println(yourDeck);
+          showDeck();
           return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
         } else {
           return null;
@@ -363,7 +364,7 @@ public class Client {
           }
           Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
           yourDeck.createDeckwithTileArray(tilesArrayStrt);
-          System.out.println(yourDeck);
+          showDeck();
           client.send(encodeProtocolMessage("+STRT"));
           break;
 
@@ -382,11 +383,12 @@ public class Client {
         case STAT:
           ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
           exchangestacks = stringsToTileArray(tileList);
-          System.out.println(Arrays.toString(exchangestacks) + " " + "dein Stack liegt bei Index "+playerID);
+          showExchangeStacks();
           if(Integer.parseInt(arguments.get(1))==playerID){
             System.out.println("Du bist an der Reihe");
-        }
-          System.out.println(arguments.get(1) + " ist an der Reihe");
+          } else {
+            System.out.println("Spieler " + arguments.get(1) + " ist an der Reihe");
+          }
           break;
 
 
@@ -568,7 +570,7 @@ public class Client {
 
         case DRAW:
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
-          System.out.println(yourDeck);
+          showDeck();
           break;
 
         case PUTT:
@@ -605,6 +607,42 @@ public class Client {
     } catch (IllegalArgumentException e) {
       LOGGER.error("Response vom Server: \"" + request + "\" verursachte folgende Exception: " + e.toString());
     }
+  }
+
+  private static void showDeck() {
+    System.out.println("your Deck:");
+    System.out.println(yourDeck.toStringPretty());
+  }
+
+  private static void showExchangeStacks() {
+    StringBuilder res = new StringBuilder();
+    res.append("Exchange stacks:\n");
+    for (int i = 0; i < 4; i++) {
+      if (i == playerID) {
+        res.append("vvvv");
+      } else {
+        res.append("   ");
+      }
+    }
+    res.append("\n");
+    res.append("|");
+    for (int i = 0; i < 4; i++) {
+      if (exchangestacks[i] == null) {
+        res.append("  ");
+      } else {
+        res.append(exchangestacks[i].toStringPretty());
+      }
+      res.append("|");
+    }
+    res.append("\n");
+    for (int i = 0; i < 4; i++) {
+      if (i == playerID) {
+        res.append("^^^^");
+      } else {
+        res.append("   ");
+      }
+    }
+    System.out.println(res.toString());
   }
 
 
