@@ -200,10 +200,19 @@ public class ClientThread implements Runnable {
             }
           }
           Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
-          String tileString = tile.toString();
-          send(encodeProtocolMessage("+DRAW", tileString));
+          String tileString;
+          if (tile == null) {
+            tileString = "";
+            send(encodeProtocolMessage("+DRAW", tileString));
+            send("EMPT");
+            lobby.finishGame("");
+          } else {
+            tileString = tile.toString();
+            send(encodeProtocolMessage("+DRAW", tileString));
+            sendState();
+          }
 
-          sendState();
+
         }
 
         case PUTT -> {
@@ -229,6 +238,7 @@ public class ClientThread implements Runnable {
           }
           if (Tile.isWinningDeck(tileArray)){
             isWon = true;
+            lobby.finishGame(nickname);
             server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
           }
           send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
@@ -284,8 +294,8 @@ public class ClientThread implements Runnable {
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(":");
-                if (lobby.winner != null) {
-                  sb.append(lobby.winner.nickname);
+                if (lobby.winnerName != null) {
+                  sb.append(lobby.winnerName);
                 }
                 sb.append(" ");
               }

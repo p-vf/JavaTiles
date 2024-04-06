@@ -15,7 +15,7 @@ public class Lobby {
   public ArrayList<ClientThread> players;
   public LobbyState lobbyState;
   public GameState gameState;
-  public ClientThread winner;
+  public String winnerName;
 
 
   public Lobby(int lobbyNumber) {
@@ -126,6 +126,11 @@ public class Lobby {
         //players.get(i).send(NetworkUtils.encodeProtocolMessage("LEFT", Integer.toString(i)));
       }
     }
+  }
+
+  public void finishGame(String winnerName) {
+    this.winnerName = winnerName;
+    lobbyState = LobbyState.FINISHED;
   }
 
   /**
