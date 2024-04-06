@@ -165,4 +165,14 @@ wie zum Beispiel dass beim schicken des PUTT commands der Client die übergebene
 - Bei der Spiellogik bleibt uns noch zu tun: Spieler von illegalen Spielzügen abhalten, wie zum Beispiel zweimal eine Karte ziehen.
 - Wir haben abgemacht, morgen um 13:00 Uhr weiter an der Spiellogik und am GUI zu arbeiten. 
 
+## 5.4.2024 Besprechung im Pharmazentrum(Robin, Pascal, Boran, Istref)
+- Wir haben weiter an der Spiellogik gearbeitet und uns sind weitere kleine Fehler aufgefallen.
+Wir haben bemerkt, dass beim Client beim PUTT command nicht berücksichtigt wird, ob man an der Reihe ist oder nicht.
+Ausserdem ist beim GUI-Chat etwas noch nicht ganz in Ordnung, denn das Versenden von Nachrichten funktioniert nicht.
+- /listplayers und /listlobbies command im client implementiert
+- edgecases im Username input behandelt vom Client 
+- size Methode in UnorderedDeck Klasse hinzugefügt, um zu überprüfen, dass keine illegalen Spielzüge durchgeführt werden können.
+- size Methode vom UnorderedDeck im Case DRAW und PUTT auf Serverseite hinzugefügt.
+- Wir haben beschlossen, am Sonntag, 07.04.2024 um 13:00 Uhr gemeinsam weiter zu arbeiten.
+
 

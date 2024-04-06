@@ -228,7 +228,7 @@ public class ClientThread implements Runnable {
             send(encodeProtocolMessage("+PUTT", "f", "f"));
             break;
           }
-          if (Lobby.isWinning(tileArray)){
+          if (Tile.isWinningDeck(tileArray)){
             isWon = true;
             server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
           }
