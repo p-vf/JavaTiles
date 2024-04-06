@@ -112,7 +112,7 @@ public class Client {
           break;
         }
 
-        String messageToSend = client.handleInput(line, guiThread);
+        String messageToSend = client.handleInput(line);
         if (messageToSend == null || messageToSend.isEmpty()) {
           continue;
         }
@@ -224,19 +224,19 @@ public class Client {
               return messageForServer;
 
             } else {
-              System.out.println("You are not in a lobby right now. Please join a lobby first.");
+              guiThread.updateChat("You are not in a lobby right now. Please join a lobby first.");
               return null;
             }
           }
 
           if (arguments.get(0).equals("/whisper")) {
-            String whisperMessage = arguments.get(1);
-            for (int i = 2; i < arguments.size(); i++) {
+            String whisperMessage = arguments.get(2);
+            for (int i = 3; i < arguments.size(); i++) {
               whisperMessage = whisperMessage + " " + arguments.get(i);
             }
 
             //LOGGER.debug(whisperMessage);
-            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
+            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(1));
             return whisperMessageForServer;
 
           } else {
