@@ -64,7 +64,8 @@ public class ClientPingThread extends Thread {
         }
       }
     } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
+      System.out.println("Your connection to the server has been lost");
+      System.exit(0);
     }
   }
 }

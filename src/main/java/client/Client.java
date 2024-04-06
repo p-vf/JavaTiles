@@ -120,9 +120,11 @@ public class Client {
       client.in.close();
       client.out.close();
       client.socket.close();
+      System.exit(0);
     } catch (IOException e) {
-      e.printStackTrace(System.err);
       System.out.println("Your connection to the server has been lost");
+      System.exit(0);
+
 
     }
 
@@ -612,15 +614,16 @@ public class Client {
    */
   public void logout() {
     try {
+      System.exit(0);
       socket.close();
       bReader.close();
       out.close();
-      Runtime.getRuntime().exit(0);
+      System.exit(0);
       System.out.println("You have been logged out.");
 
     } catch (IOException e) {
-      System.out.println("You have been logged out.");
-      Runtime.getRuntime().exit(0);;
+      System.out.println("You have been logged out.lol");
+      System.exit(0);
     }
   }
 
