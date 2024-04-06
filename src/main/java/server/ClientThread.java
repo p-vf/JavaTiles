@@ -240,7 +240,11 @@ public class ClientThread implements Runnable {
         }
         case CATC -> {
           handleChat(arguments);
-          send("+CATC");
+          if (arguments.get(0).equals("w")) {
+            send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1), arguments.get(2)));
+          } else {
+            send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1)));
+          }
         }
         case PING -> send("+PING");
         case NAME -> {
