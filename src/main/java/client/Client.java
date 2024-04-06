@@ -43,9 +43,9 @@ public class Client {
 
   private static String nickname; // Nickname of the player
 
-  public static int playerID;
+  public static int playerID=4;
 
-  public static int CurrentPlayerID;
+  public static int CurrentPlayerID=5;
 
   public static final Logger LOGGER = LogManager.getLogger();
 
@@ -56,6 +56,9 @@ public class Client {
   private static GUIThread guiThread;
 
   private static boolean lobby = false;
+  private static boolean drawTurn = false;
+
+  private static boolean puttTurn = false;
 
 
   /**
@@ -117,9 +120,6 @@ public class Client {
       }
 
       System.out.println("terminating...");
-      client.in.close();
-      client.out.close();
-      client.socket.close();
       System.exit(0);
     } catch (IOException e) {
       System.out.println("Your connection to the server has been lost");
@@ -222,7 +222,7 @@ public class Client {
             return messageForServer;
 
           } else {
-            System.out.println("Sie sind noch nicht in einer Lobby");
+            System.out.println("You are not in a lobby right now. Please join a lobby first.");
             return null;
           }
         }
@@ -242,16 +242,25 @@ public class Client {
         }
 
       case "/swap":
+        try{
         if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")) {
-
+          int row = Integer.parseInt(arguments.get(0));
           int col = Integer.parseInt(arguments.get(1));
           int row2 = Integer.parseInt(arguments.get(2));
           int col2 = Integer.parseInt(arguments.get(3));
 
+          if((row>1)||(row2>1)||(col>11)||(col2>11)){
+            System.out.println("The max indices are: row:1 and column:11");
+            return null;
+          }
+          else{
           yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
           System.out.println(yourDeck);
 
           return null;
+        }}}
+        catch(IndexOutOfBoundsException e){
+          System.out.println("You have to choose 4 indices: 2 for each Tile to swap.");
         }
 
 
@@ -276,22 +285,52 @@ public class Client {
 
 
       case "/draw":
+        if(CurrentPlayerID!=playerID){
+          System.out.println("You can only draw on your turn");
+          return null;
+        }
+        if(!drawTurn){
+          System.out.println("You cannot draw right now.");
+          return null;
+        }
         if (arguments.get(0).equals("m")) {
+          drawTurn = false;
           return encodeProtocolMessage("DRAW", "m");
+
         }
         if (arguments.get(0).equals("e")) {
+          drawTurn = false;
           return encodeProtocolMessage("DRAW", "e");
         } else {
+          System.out.println("Your draw command should look like /draw m or /draw e");
           return null;
         }
 
       case "/putt":
-        if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+")) {
-          //checks if the String is a number
-          //if both arguments are a Number PUTT with the Tile will be sent
-          //otherwise the input will be sent for debugging
-          int row = Integer.parseInt(arguments.get(0));
-          int column = Integer.parseInt(arguments.get(1));
+
+        if((playerID != CurrentPlayerID)||(playerID == 4)||(CurrentPlayerID == 5)||(!puttTurn)){
+          System.out.println("It's currently not your turn.");
+          return null;
+
+        }
+        if (!(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+"))) {
+            System.out.println("The indices should be numbers.");
+            return null;
+
+        }
+        int row = Integer.parseInt(arguments.get(0));
+        int column = Integer.parseInt(arguments.get(1));
+
+        if((row>1)||(column>11)){
+            System.out.println("The max indices are: row:1 and column:11");
+            return null;
+          }
+
+        if(yourDeck.getTile(row,column)==null){
+            System.out.println("Please choose an existing Tile.");
+            return null;
+          }
+          puttTurn = false;
           Tile tileToPut = yourDeck.getTile(row, column);
           yourDeck.removeTile(row, column); //removes the Tile from the deck;
           String tileString = tileToPut.toString();
@@ -299,9 +338,7 @@ public class Client {
           String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
           System.out.println(yourDeck);
           return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
-        } else {
-          return null;
-        }
+
 
       case "/listplayers":
         return encodeProtocolMessage("LPLA");
@@ -309,9 +346,15 @@ public class Client {
       case "/listlobbies":
         return encodeProtocolMessage("LLPL");
 
+      case "/deck":
+        if(yourDeck != null){
+          System.out.println(yourDeck);
+        }
+          return null;
 
-      default:
-        return null; //just for debug
+
+        default:
+        return null;
     }
 
   }
@@ -360,6 +403,8 @@ public class Client {
           ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
           if (tilesStrt.size() == 15) {
             System.out.println("du bist dran");
+            CurrentPlayerID = playerID;
+            puttTurn = true;
           }
           Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
           yourDeck.createDeckwithTileArray(tilesArrayStrt);
@@ -367,7 +412,7 @@ public class Client {
           client.send(encodeProtocolMessage("+STRT"));
           break;
 
-        //noch Offene Fragen zu STAT: Ich glaub im falschen Enum plus wie genau soll ds funktionieren exchange stacks
+
 
         case PWIN:
           System.out.println(arguments.get(0) + " hat das Spiel gewonnen");
@@ -383,8 +428,11 @@ public class Client {
           ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
           exchangestacks = stringsToTileArray(tileList);
           System.out.println(Arrays.toString(exchangestacks) + " " + "dein Stack liegt bei Index "+playerID);
+          CurrentPlayerID = Integer.parseInt(arguments.get(1));
           if(Integer.parseInt(arguments.get(1))==playerID){
             System.out.println("Du bist an der Reihe");
+            puttTurn = true;
+            drawTurn = true;
         }
           System.out.println(arguments.get(1) + " ist an der Reihe");
           break;
@@ -590,7 +638,9 @@ public class Client {
         case LPLA:
           ArrayList<String> playerList = decodeProtocolMessage(arguments.get(0));
           for (int i = 0; i < playerList.size(); i++) {
-            System.out.println(playerList.get(i));
+            if (!(arguments.get(0).equals("null"))) {
+              System.out.println(playerList.get(i));
+            }
           }
           break;
 
@@ -622,7 +672,7 @@ public class Client {
       System.out.println("You have been logged out.");
 
     } catch (IOException e) {
-      System.out.println("You have been logged out.lol");
+      System.out.println("You have been logged out.");
       System.exit(0);
     }
   }
