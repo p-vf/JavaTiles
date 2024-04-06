@@ -271,7 +271,11 @@ public class Client {
           return encodeProtocolMessage("LOGO");
 
         case "/ready":
-          return encodeProtocolMessage("REDY");
+          if(lobby == true) {
+            return encodeProtocolMessage("REDY");
+          }else{
+            System.out.println("You are not in a lobby right now. Please join a lobby first");
+          }
 
         case "/joinlobby":
           if (arguments.size() > 0) {
