@@ -442,7 +442,6 @@ public class Client {
             System.out.println("It's your turn.");
             CurrentPlayerID = playerID;
             drawTurn = true;
-            puttTurn = true;
           } else {
             System.out.println("It's " + arguments.get(1) + "'s turn.");
           }
@@ -627,6 +626,7 @@ public class Client {
 
 
         case DRAW:
+          puttTurn = true;
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
           showDeck();
           break;
