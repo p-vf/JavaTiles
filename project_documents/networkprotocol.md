@@ -225,21 +225,21 @@ Spiel mit einem Unentschieden beendet werden muss.
 
 # Die Kommunikation betreffend
 ## Chat-Nachricht senden (Client)
-| Command                                         | Response | Sender |
-|-------------------------------------------------|----------|--------|
-| `CATC <messagetype> <msg> [<whisperrecipient>]` | ` +CATC` | Client |
+| Command                                         | Response                                         | Sender |
+|-------------------------------------------------|--------------------------------------------------|--------|
+| `CATC <messagetype> <msg> [<whisperrecipient>]` | `+CATC <messagetype> <msg> [<whisperrecipient>]` | Client |
 
 ### Beschreibung
 Der CATC-Command wird vom Client an den Server geschickt, wenn der User eine Nachricht in den Chat schicken will.  
 Sie enthält ein Argument `<messagetype>`, welches die Reichweite der Nachricht spezifiziert (`b`,`l`,`w` für jeweils broadcast, lobby, und whisper).  
 Falls dieses den Wert `w` hat, muss der optionale Parameter `<whisperrecipient>` definiert werden.  
-Hat `<messagetype>` den Wert `b`, wird ein `CATS`-Command an alle Clients auf dem Server weitergeleitet, 
-falls `l` nur an die in der selben Lobby und falls `w` nur an den Spieler, welchen den Nickname `<whisperrecipient>` hat.  
+Hat `<messagetype>` den Wert `b` (für Broadcast), wird ein `CATS`-Command an alle Clients auf dem Server weitergeleitet, 
+falls `l` (für Lobby) nur an die in derselben Lobby und falls `w` (für Whisper) nur an den Spieler, welchen den Nickname `<whisperrecipient>` hat.  
 Der Parameter `<msg>` ist der Inhalt der Nachricht.
 
 ### Beispiel
 Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
-Server: `+CATC`
+Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`
 
 (Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler mit nickname `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
 
