@@ -256,7 +256,7 @@ public class ClientThread implements Runnable {
           ArrayList<Lobby> l;
           switch (gameStatus) {
             case "o" -> {
-              l = listLobbiesWithStatus(LobbyState.OPEN);
+              l = listLobbiesWithStatus(Lobby.LobbyState.OPEN);
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(":");
@@ -269,7 +269,7 @@ public class ClientThread implements Runnable {
               }
             }
             case "r" -> {
-              l = listLobbiesWithStatus(LobbyState.RUNNING);
+              l = listLobbiesWithStatus(Lobby.LobbyState.RUNNING);
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(" ");
@@ -280,7 +280,7 @@ public class ClientThread implements Runnable {
               }
             }
             case "f" -> {
-              l = listLobbiesWithStatus(LobbyState.FINISHED);
+              l = listLobbiesWithStatus(Lobby.LobbyState.FINISHED);
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(":");
@@ -479,7 +479,7 @@ public class ClientThread implements Runnable {
     }
   }
 
-  private ArrayList<Lobby> listLobbiesWithStatus(LobbyState status) {
+  private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
     for (var lobby : server.lobbies) {
       if (lobby.lobbyState == status) {
