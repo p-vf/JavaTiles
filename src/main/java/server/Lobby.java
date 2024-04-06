@@ -112,7 +112,7 @@ public class Lobby {
     boolean equal = clientDeck.equals(serverDeck);
     // CLEANUP remove this debugging statement once everything works
     if (!equal) {
-      System.out.print(UnorderedDeck.showDiffDebug(serverDeck, clientDeck, "serverDeck", "clientDeck"));
+      LOGGER.debug(UnorderedDeck.showDiffDebug(serverDeck, clientDeck, "serverDeck", "clientDeck"));
     }
     return equal;
   }

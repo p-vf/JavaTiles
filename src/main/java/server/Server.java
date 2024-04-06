@@ -39,7 +39,7 @@ public class Server {
   private Server(int port) {
     int cnt = 0;
     try {
-      System.out.println("Warte auf Verbindung auf Port " + port + "..");
+      System.out.println("Waiting for connection on port: " + port + "..");
       serverSocket = new ServerSocket(port);
       clientList = new ArrayList<>();
       while (true) {

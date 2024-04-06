@@ -77,7 +77,7 @@ public class ClientThread implements Runnable {
   public void run() {
     // TODO handle SocketTimeoutException, SocketException
 
-    LOGGER.info("Server: Verbindung " + id + " hergestellt");
+    LOGGER.info("Server: Connection " + id + " established");
     try {
       //send(msg);
 
@@ -98,14 +98,14 @@ public class ClientThread implements Runnable {
       }
     } catch (IOException | NullPointerException e) {
       if (e instanceof SocketException) {
-        LOGGER.info("Verbindung wurde unerwartet unterbrochen");
+        LOGGER.info("Connection was interrupted unexpectedly");
       } else {
         e.printStackTrace(System.err);
       }
     } finally {
       logout();
     }
-    LOGGER.info("Verbindung " + id + " beendet");
+    LOGGER.info("Connection " + id + " ended");
   }
 
   /**

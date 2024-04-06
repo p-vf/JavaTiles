@@ -44,7 +44,7 @@ public class ServerPingThread extends Thread {
           }
           parent.send("PING");
         } catch (SocketException e) { // passiert wahrscheinlich, wenn das Socket geschlossen worden ist..
-          LOGGER.info("Socket wurde geschlossen");
+          LOGGER.info("Socket has been closed");
           break; // TODO Handle this exception
         }
 
@@ -54,7 +54,7 @@ public class ServerPingThread extends Thread {
           continue;
         }
         if (timeLastResponse - currentTimeMillis() >= maxResponseTimeMillis) {
-          LOGGER.info("Client Nr. " + parent.id + " mit Nickname \"" + parent.nickname + "\" wird ausgeloggt, da das Timeout von "+ (double)maxResponseTimeMillis/1000.0 + " Sekunden überschritten wurde. ");
+          LOGGER.info("Client # " + parent.id + " with nickname \"" + parent.nickname + "\" is being logged out because the timeout of "+ (double)maxResponseTimeMillis/1000.0 + " seconds has been exceeded.");
           parent.logout();
         }
       }
