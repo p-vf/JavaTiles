@@ -2,6 +2,7 @@ package client;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -184,6 +185,7 @@ public class Client {
    * @return a string representing the message to be sent to the server
    */
   public String handleInput(String input, GUIThread guiThread) throws IOException {
+    try{
     String[] argumentsarray = input.split(" ");
     //LOGGER.debug(Arrays.toString(argumentsarray));
     ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
@@ -243,25 +245,22 @@ public class Client {
         }
 
       case "/swap":
-        try{
+
         if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")) {
           int row = Integer.parseInt(arguments.get(0));
           int col = Integer.parseInt(arguments.get(1));
           int row2 = Integer.parseInt(arguments.get(2));
           int col2 = Integer.parseInt(arguments.get(3));
 
-          if((row>1)||(row2>1)||(col>11)||(col2>11)){
+          if ((row > 1) || (row2 > 1) || (col > 11) || (col2 > 11)) {
             System.out.println("The max indices are: row:1 and column:11");
             return null;
-          }
-          else{
-          yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
-          showDeck();
+          } else {
+            yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
+            showDeck();
 
-          return null;
-        }}}
-        catch(IndexOutOfBoundsException e){
-          System.out.println("You have to choose 4 indices: 2 for each Tile to swap.");
+            return null;
+          }
         }
 
 
@@ -355,7 +354,11 @@ public class Client {
 
 
         default:
+          System.out.println("invalid command");
         return null;
+    }}catch(IndexOutOfBoundsException e){
+      System.out.println("invalid command");
+      return null;
     }
 
   }
@@ -403,7 +406,7 @@ public class Client {
           playerID = Integer.parseInt(arguments.get(1));
           ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
           if (tilesStrt.size() == 15) {
-            System.out.println("du bist dran");
+            System.out.println("It's your turn.");
             CurrentPlayerID = playerID;
             puttTurn = true;
           }
@@ -416,12 +419,12 @@ public class Client {
 
 
         case PWIN:
-          System.out.println(arguments.get(0) + " hat das Spiel gewonnen");
+          System.out.println(arguments.get(0) + " won.");
           client.send(encodeProtocolMessage("+PWIN"));
           break;
 
         case EMPT:
-          System.out.println("Das Spiel endet mit einem Unentschieden");
+          System.out.println("The game ended with a draw:");
           client.send("+EMPT");
           break;
 
@@ -431,9 +434,9 @@ public class Client {
 
           showExchangeStacks();
           if(Integer.parseInt(arguments.get(1))==playerID){
-            System.out.println("Du bist an der Reihe");
+            System.out.println("It's your turn.");
           } else {
-            System.out.println("Spieler " + arguments.get(1) + " ist an der Reihe");
+            System.out.println("It's " + arguments.get(1) + "'s turn.");
           }
 
           break;
@@ -443,7 +446,7 @@ public class Client {
           break;
       }
     } catch (IllegalArgumentException e) {
-      LOGGER.error("Request vom Server: \"" + request + "\" verursachte folgende Exception: " + e.toString());
+      LOGGER.error("request from server: \"" + request + "\" caused following Exception: " + e.toString());
     }
   }
 
@@ -633,7 +636,7 @@ public class Client {
           break;
 
         case REDY:
-          System.out.println("bereit zum Spielen");
+          System.out.println("ready to play!");
           break;
 
         case LPLA:
@@ -654,7 +657,7 @@ public class Client {
           break;
       }
     } catch (IllegalArgumentException e) {
-      LOGGER.error("Response vom Server: \"" + request + "\" verursachte folgende Exception: " + e.toString());
+      LOGGER.error("response from server: \"" + request + "\" caused the following Exception: " + e.toString());
     }
   }
 
