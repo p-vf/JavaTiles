@@ -13,7 +13,6 @@ public class GameState {
   ArrayList<Stack<Tile>> exchangeStacks;
   ArrayList<UnorderedDeck> playerDecks;
   int currentPlayerIdx;
-  boolean currentPlayerHasAlreadyDrawn = true;
 
   /**
    * Constructor of the {@code GameState} class.
