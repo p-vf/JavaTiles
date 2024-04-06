@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import game.Color;
@@ -45,9 +46,9 @@ public class Client {
 
   private static String nickname; // Nickname of the player
 
-  public static int playerID=4;
+  public static int playerID = 4;
 
-  public static int CurrentPlayerID=5;
+  public static int CurrentPlayerID = 5;
 
   public static final Logger LOGGER = LogManager.getLogger();
 
@@ -96,7 +97,6 @@ public class Client {
       iT.start();
 
 
-
       ping(client);
 
 
@@ -134,24 +134,22 @@ public class Client {
   }
 
 
-   public static String login() throws IOException {
-     while (true) {
-       System.out.println("Enter username:");
-       String username = bReader.readLine();
-       if (username.isEmpty()) {
-         username = System.getProperty("user.name");
-         return username;
-       }
-       if (username.contains(" ") || username.contains("\"")) {
-         System.out.println("Your nickname mustn't contain blank spaces or quotation marks");
+  public static String login() throws IOException {
+    while (true) {
+      System.out.println("Enter username:");
+      String username = bReader.readLine();
+      if (username.isEmpty()) {
+        username = System.getProperty("user.name");
+        return username;
+      }
+      if (username.contains(" ") || username.contains("\"")) {
+        System.out.println("Your nickname mustn't contain blank spaces or quotation marks");
 
-       } else {
-         return username;
-       }
-     }
-   }
-
-
+      } else {
+        return username;
+      }
+    }
+  }
 
 
   /**
@@ -174,8 +172,9 @@ public class Client {
    * @throws IOException if an I/O error occurs while sending the encoded message
    */
   public synchronized void send(String str) throws IOException {
-    if(str != null){
-    out.write((str + "\r\n").getBytes());}
+    if (str != null) {
+      out.write((str + "\r\n").getBytes());
+    }
   }
 
   /**
@@ -184,149 +183,153 @@ public class Client {
    * @param input the input string provided by the user
    * @return a string representing the message to be sent to the server
    */
-  public String handleInput(String input, GUIThread guiThread) throws IOException {
-    try{
-    String[] argumentsarray = input.split(" ");
-    //LOGGER.debug(Arrays.toString(argumentsarray));
-    ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
-    String inputCommand = arguments.remove(0);
-    String[] todebug = arguments.toArray(new String[0]);
+  public String handleInput(String input) throws IOException {
+    try {
+      String[] argumentsarray = input.split(" ");
+      //LOGGER.debug(Arrays.toString(argumentsarray));
+      ArrayList<String> arguments = new ArrayList<>(Arrays.asList(argumentsarray));
+      String inputCommand = arguments.remove(0);
+      String[] todebug = arguments.toArray(new String[0]);
 
-    switch (inputCommand) {
-      case "/nickname":
-        String changedName = login();
-        return encodeProtocolMessage("NAME", changedName);
+      switch (inputCommand) {
+        case "/nickname":
+          String changedName = login();
+          return encodeProtocolMessage("NAME", changedName);
 
 
-      case "/chat":
-        if (arguments.get(0).equals("/all")) {
-          String allMessage = arguments.get(1);
-
-          for (int i = 2; i < arguments.size(); i++) {
-            allMessage = allMessage + " " + arguments.get(i);
-          }
-
-          //LOGGER.debug(allMessage);
-          String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
-          return allMessageForServer;
-        }
-
-        if (arguments.get(0).equals("/lobby")) {
-          if (lobby == true) {
-
-            String message = arguments.get(1);
+        case "/chat":
+          if (arguments.get(0).equals("/all")) {
+            String allMessage = arguments.get(1);
 
             for (int i = 2; i < arguments.size(); i++) {
-              message = message + " " + arguments.get(i);
+              allMessage = allMessage + " " + arguments.get(i);
             }
 
-            //LOGGER.debug(message);
-            String messageForServer = encodeProtocolMessage("CATC", "l", message);
-            return messageForServer;
+            //LOGGER.debug(allMessage);
+            String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
+            return allMessageForServer;
+          }
+
+          if (arguments.get(0).equals("/lobby")) {
+            if (lobby == true) {
+
+              String message = arguments.get(1);
+
+              for (int i = 2; i < arguments.size(); i++) {
+                message = message + " " + arguments.get(i);
+              }
+
+              //LOGGER.debug(message);
+              String messageForServer = encodeProtocolMessage("CATC", "l", message);
+              return messageForServer;
+
+            } else {
+              System.out.println("You are not in a lobby right now. Please join a lobby first.");
+              return null;
+            }
+          }
+
+          if (arguments.get(0).equals("/whisper")) {
+            String whisperMessage = arguments.get(1);
+            for (int i = 2; i < arguments.size(); i++) {
+              whisperMessage = whisperMessage + " " + arguments.get(i);
+            }
+
+            //LOGGER.debug(whisperMessage);
+            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
+            return whisperMessageForServer;
 
           } else {
-            System.out.println("You are not in a lobby right now. Please join a lobby first.");
             return null;
           }
-        }
 
-        if (arguments.get(0).equals("/whisper")) {
-          String whisperMessage = arguments.get(1);
-          for (int i = 2; i < arguments.size(); i++) {
-            whisperMessage = whisperMessage + " " + arguments.get(i);
+        case "/swap":
+
+          if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")) {
+            int row = Integer.parseInt(arguments.get(0));
+            int col = Integer.parseInt(arguments.get(1));
+            int row2 = Integer.parseInt(arguments.get(2));
+            int col2 = Integer.parseInt(arguments.get(3));
+
+            if ((row > 1) || (row2 > 1) || (col > 11) || (col2 > 11)) {
+              System.out.println("The max indices are: row:1 and column:11");
+              return null;
+            } else {
+              yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
+              showDeck();
+
+              return null;
+            }
+          }
+          else{
+            System.out.println("invalid command");
+            return null;
           }
 
-          //LOGGER.debug(whisperMessage);
-          String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(0));
-          return whisperMessageForServer;
 
-        } else {
-          return null;
-        }
+        case "/logout":
+          return encodeProtocolMessage("LOGO");
 
-      case "/swap":
+        case "/ready":
+          return encodeProtocolMessage("REDY");
 
-        if (arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+") && arguments.get(2).matches("\\d+") && arguments.get(3).matches("\\d+")) {
-          int row = Integer.parseInt(arguments.get(0));
-          int col = Integer.parseInt(arguments.get(1));
-          int row2 = Integer.parseInt(arguments.get(2));
-          int col2 = Integer.parseInt(arguments.get(3));
-
-          if ((row > 1) || (row2 > 1) || (col > 11) || (col2 > 11)) {
-            System.out.println("The max indices are: row:1 and column:11");
-            return null;
+        case "/joinlobby":
+          if (arguments.size() > 0) {
+            String number = arguments.get(0);
+            try {
+              int num = Integer.parseInt(number);
+              return encodeProtocolMessage("JLOB", String.valueOf(num));
+            } catch (NumberFormatException e) {
+              return "Invalid input for lobbynumber";
+            }
           } else {
-            yourDeck.swap(Integer.parseInt(arguments.get(0)), col, row2, col2);
-            showDeck();
+            return "You must provide a number to enter a lobby";
+          }
 
+
+        case "/draw":
+          if (CurrentPlayerID != playerID) {
+            System.out.println("You can only draw on your turn");
             return null;
           }
-        }
-
-
-      case "/logout":
-        return encodeProtocolMessage("LOGO");
-
-      case "/ready":
-        return encodeProtocolMessage("REDY");
-
-      case "/joinlobby":
-        if (arguments.size() > 0) {
-          String number = arguments.get(0);
-          try {
-            int num = Integer.parseInt(number);
-            return encodeProtocolMessage("JLOB", String.valueOf(num));
-          } catch (NumberFormatException e) {
-            return "Invalid input for lobbynumber";
+          if (!drawTurn) {
+            System.out.println("You cannot draw right now.");
+            return null;
           }
-        } else {
-          return "You must provide a number to enter a lobby";
-        }
+          if (arguments.get(0).equals("m")) {
+            drawTurn = false;
+            return encodeProtocolMessage("DRAW", "m");
 
+          }
+          if (arguments.get(0).equals("e")) {
+            drawTurn = false;
+            return encodeProtocolMessage("DRAW", "e");
+          } else {
+            System.out.println("Your draw command should look like /draw m or /draw e");
+            return null;
+          }
 
-      case "/draw":
-        if(CurrentPlayerID!=playerID){
-          System.out.println("You can only draw on your turn");
-          return null;
-        }
-        if(!drawTurn){
-          System.out.println("You cannot draw right now.");
-          return null;
-        }
-        if (arguments.get(0).equals("m")) {
-          drawTurn = false;
-          return encodeProtocolMessage("DRAW", "m");
+        case "/putt":
 
-        }
-        if (arguments.get(0).equals("e")) {
-          drawTurn = false;
-          return encodeProtocolMessage("DRAW", "e");
-        } else {
-          System.out.println("Your draw command should look like /draw m or /draw e");
-          return null;
-        }
+          if ((playerID != CurrentPlayerID) || (playerID == 4) || (CurrentPlayerID == 5) || (!puttTurn)) {
+            System.out.println("It's currently not your turn.");
+            return null;
 
-      case "/putt":
-
-        if((playerID != CurrentPlayerID)||(playerID == 4)||(CurrentPlayerID == 5)||(!puttTurn)){
-          System.out.println("It's currently not your turn.");
-          return null;
-
-        }
-        if (!(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+"))) {
+          }
+          if (!(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+"))) {
             System.out.println("The indices should be numbers.");
             return null;
 
-        }
-        int row = Integer.parseInt(arguments.get(0));
-        int column = Integer.parseInt(arguments.get(1));
+          }
+          int row = Integer.parseInt(arguments.get(0));
+          int column = Integer.parseInt(arguments.get(1));
 
-        if((row>1)||(column>11)){
+          if ((row > 1) || (column > 11)) {
             System.out.println("The max indices are: row:1 and column:11");
             return null;
           }
 
-        if(yourDeck.getTile(row,column)==null){
+          if (yourDeck.getTile(row, column) == null) {
             System.out.println("Please choose an existing Tile.");
             return null;
           }
@@ -340,28 +343,30 @@ public class Client {
           return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
 
 
-      case "/listplayers":
-        return encodeProtocolMessage("LPLA");
+        case "/listplayers":
+          return encodeProtocolMessage("LPLA");
 
-      case "/listlobbies":
-        return encodeProtocolMessage("LLPL");
+        case "/listlobbies":
+          return encodeProtocolMessage("LLPL");
 
-      case "/deck":
-        if(yourDeck != null){
-          System.out.println(yourDeck);
-        }
+        case "/deck":
+          if (yourDeck != null) {
+            showDeck();
+          }
           return null;
 
 
         default:
           System.out.println("invalid command");
-        return null;
-    }}catch(IndexOutOfBoundsException e){
+          return null;
+      }
+    } catch (IndexOutOfBoundsException e) {
       System.out.println("invalid command");
       return null;
     }
-
   }
+
+
 
 
   /**
@@ -389,8 +394,8 @@ public class Client {
           if(arguments.get(0).equals("w")){
             guiThread.updateChat(name +" (whispered): " + arguments.get(1));
           }
-
-          guiThread.updateChat(name + ": " + arguments.get(1));
+          if(arguments.get(0).equals("l")){
+          guiThread.updateChat(name + ": " + arguments.get(1));}
           //hier handeln ob whisper broadcast etc mit case distinction
 
 
