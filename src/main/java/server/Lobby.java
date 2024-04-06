@@ -1,16 +1,13 @@
 package server;
 
-import game.Color;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.NetworkUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-
-import game.Color;
 
 public class Lobby {
   public final static Logger LOGGER = LogManager.getLogger();
@@ -19,47 +16,6 @@ public class Lobby {
   public LobbyState lobbyState;
   public GameState gameState;
   public ClientThread winner;
-
-  // for testing purposes
-  public static void main(String[] args) {
-    /*
-    try {
-      Tile[] tiles = new Tile[]{
-          new Tile(1, 2, Color.BLUE),
-          new Tile(2, 2, Color.RED),
-          new Tile(3, 2, Color.BLACK),
-          null,
-          new Tile(4, 4, Color.BLUE),
-          new Tile(5, 5, Color.BLUE),
-          new Tile(6, 6, Color.BLUE),
-          new Tile(7, 7, Color.BLUE),
-          null,
-          new Tile(9, 4, Color.BLUE),
-          new Tile(10, 5, Color.BLUE),
-          new Tile(11, 6, Color.BLUE),
-          null,
-          null,
-          new Tile(12, 7, Color.BLUE),
-          new Tile(13, 8, Color.BLUE),
-          new Tile(14, 9, Color.BLUE),
-          null,
-          new Tile(15, 10, Color.BLUE),
-          new Tile(16, 11, Color.BLUE),
-          new Tile(17, 12, Color.BLUE),
-          null,
-          new Tile(18, 2, Color.BLUE),
-          new Tile(19, 2, Color.RED),
-          new Tile(20, 2, Color.BLACK),
-          null,
-          null,
-          null,
-      };
-      System.out.println(checkIfWon(tiles));
-    } catch (RuntimeException e) {
-      e.printStackTrace(System.err);
-    }
-    */
-  }
 
 
   public Lobby(int lobbyNumber) {
@@ -75,6 +31,9 @@ public class Lobby {
    * @return {@code true} if and only if the game was started successfully.
    */
   public boolean startGame(int startPlayerIdx) {
+    if (players.size() != 4 || players.contains(null)) {
+      return false;
+    }
     gameState = new GameState(startPlayerIdx);
     lobbyState = LobbyState.RUNNING;
     return true;
@@ -87,7 +46,24 @@ public class Lobby {
    * @return {@code true} if and only if the player was successfully added to the lobby.
    */
   public boolean addPlayer(ClientThread client) {
-    if (players.size() < 4) {
+    int playerCount = 0;
+    for (int i = 0; i < players.size(); i++) {
+      if (players.get(i) != null) {
+        playerCount++;
+      } else {
+        players.set(i, client);
+        if (gameState != null) {
+          try {
+            client.send(NetworkUtils.encodeProtocolMessage("STRT", gameState.playerDecks.get(i).toString(), Integer.toString(i)));
+          } catch (IOException e) {
+            LOGGER.error("Lobby.addPlayer: IOException thrown" + e.getMessage());
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+    if (playerCount < 4) {
       players.add(client);
       return true;
     }
@@ -141,9 +117,16 @@ public class Lobby {
     return equal;
   }
 
-
-
-
+  public void removePlayer(int playerIndex) throws IOException {
+    // TODO send message to all other clients that a player has been removed.
+    lobbyState = LobbyState.OPEN;
+    players.set(playerIndex, null);
+    for (int i = 0; i < players.size(); i++) {
+      if (players.get(i) != null) {
+        //players.get(i).send(NetworkUtils.encodeProtocolMessage("LEFT", Integer.toString(i)));
+      }
+    }
+  }
 }
 
 

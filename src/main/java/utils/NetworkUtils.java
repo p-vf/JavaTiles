@@ -151,7 +151,11 @@ public class NetworkUtils {
       ArrayList<String> playerNames = new ArrayList<>();
       msg.add(encodeProtocolMessage("Lobby " + lobby.lobbyNumber));
       for (var player : lobby.players) {
-        playerNames.add(player.nickname);
+        if (player != null) {
+          playerNames.add(player.nickname);
+        } else {
+          playerNames.add("");
+        }
       }
       msg.add(encodeProtocolMessage(playerNames));
     }
@@ -174,6 +178,9 @@ public class NetworkUtils {
           sb.append(" ");
         }
         sb.append(s);
+        if (s.isEmpty()) {
+          sb.append("[empty slot]");
+        }
         if (i % 2 == 0) {
           sb.append(":");
         }

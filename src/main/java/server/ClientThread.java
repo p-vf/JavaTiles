@@ -10,7 +10,6 @@ test
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.*;
 
 import game.Tile;
@@ -337,7 +336,9 @@ public class ClientThread implements Runnable {
           LOGGER.debug("All players ready!");
           Random rnd = new Random();
           int startPlayerIdx = rnd.nextInt(4);
-          lobby.startGame(startPlayerIdx);
+          if (!lobby.startGame(startPlayerIdx)) {
+            LOGGER.debug("lobby wasn't able to start.");
+          }
           for (int i = 0; i < lobby.players.size(); i++) {
             UnorderedDeck deck = lobby.gameState.playerDecks.get(i);
             ArrayList<String> stringTiles = deck.toStringArray();
@@ -350,22 +351,6 @@ public class ClientThread implements Runnable {
     catch(IndexOutOfBoundsException | IllegalArgumentException e){
       // in an ideal world, this line should never be reached:
       LOGGER.error("Nachricht vom Client: \"" + request + "\" verursachte folgende Exception: " + e.toString());
-    }
-  }
-
-  /**
-   * Ends the connection to the client.
-   * This method should be called when a connection interruption is detected or when the client wants to log out.
-   */
-  public void logout() {
-    isRunning = false;
-    try {
-      server.removeClient(this);
-      socket.close();
-      bReader.close();
-      out.close();
-    } catch (IOException e) {
-      e.printStackTrace(System.err);
     }
   }
 
@@ -393,6 +378,26 @@ public class ClientThread implements Runnable {
     // TODO maybe don't send "+LOGI ..." here but inside the switch statement?
     changeName(newNickname);
     send(encodeProtocolMessage("+LOGI", this.nickname));
+  }
+
+  /**
+   * Ends the connection to the client.
+   * This method should be called when a connection interruption is detected or when the client wants to log out.
+   */
+  public void logout() {
+    isRunning = false;
+    try {
+      if (lobby != null) {
+        lobby.removePlayer(playerIndex);
+        playerIndex = -1;
+      }
+      server.removeClient(this);
+      socket.close();
+      bReader.close();
+      out.close();
+    } catch (IOException e) {
+      e.printStackTrace(System.err);
+    }
   }
 
 
