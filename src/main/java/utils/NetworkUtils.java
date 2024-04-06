@@ -245,7 +245,7 @@ public class NetworkUtils {
       CATS,
       // check if connection is still working:
       PING,
-
+      // send game state relevant to client:
       STAT,
     }
   }
