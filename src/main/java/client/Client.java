@@ -435,6 +435,7 @@ public class Client {
           showExchangeStacks();
           if(Integer.parseInt(arguments.get(1))==playerID){
             System.out.println("It's your turn.");
+            CurrentPlayerID = playerID;
           } else {
             System.out.println("It's " + arguments.get(1) + "'s turn.");
           }
