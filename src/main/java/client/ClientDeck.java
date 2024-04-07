@@ -39,6 +39,7 @@ public class ClientDeck {
     this.deck = newDeck;
   }
 
+
   public Tile[] DeckToTileArray() {
     Tile[] tileArray = new Tile[24];
     int count = 0;

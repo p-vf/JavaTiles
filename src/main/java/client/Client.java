@@ -199,6 +199,11 @@ public class Client {
 
         case "/chat":
           if (arguments.get(0).equals("/all")) {
+
+            if(nickname==null){
+              guiThread.updateChat("You need to login first.");
+              return null;
+            }
             String allMessage = arguments.get(1);
 
             for (int i = 2; i < arguments.size(); i++) {
@@ -209,13 +214,24 @@ public class Client {
             String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
             return allMessageForServer;
           }
+          if (arguments.get(0).equals("/whisper")) {
+            String whisperMessage = arguments.get(2);
+            for (int i = 3; i < arguments.size(); i++) {
+              whisperMessage = whisperMessage + " " + arguments.get(i);
+            }
 
-          if (arguments.get(0).equals("/lobby")) {
+            //LOGGER.debug(whisperMessage);
+            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(1));
+            return whisperMessageForServer;
+
+          }
+
+          else {
             if (lobby == true) {
 
-              String message = arguments.get(1);
+              String message = arguments.get(0);
 
-              for (int i = 2; i < arguments.size(); i++) {
+              for (int i = 1; i < arguments.size(); i++) {
                 message = message + " " + arguments.get(i);
               }
 
@@ -229,19 +245,7 @@ public class Client {
             }
           }
 
-          if (arguments.get(0).equals("/whisper")) {
-            String whisperMessage = arguments.get(2);
-            for (int i = 3; i < arguments.size(); i++) {
-              whisperMessage = whisperMessage + " " + arguments.get(i);
-            }
 
-            //LOGGER.debug(whisperMessage);
-            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(1));
-            return whisperMessageForServer;
-
-          } else {
-            return null;
-          }
 
         case "/swap":
 
@@ -388,11 +392,11 @@ public class Client {
           String name = arguments.get(2);
           if(arguments.get(0).equals("b")){
 
-            guiThread.updateChat(name +" (sent to all): " + arguments.get(1));
+            guiThread.updateChat(name +" sent to all: " + arguments.get(1));
 
           }
           if(arguments.get(0).equals("w")){
-            guiThread.updateChat(name +" (whispered): " + arguments.get(1));
+            guiThread.updateChat(name +" whispered: " + arguments.get(1));
           }
           if(arguments.get(0).equals("l")){
           guiThread.updateChat(name + ": " + arguments.get(1));}
@@ -622,6 +626,15 @@ public class Client {
           break;
 
         case CATC:
+          if(arguments.get(0).equals("l")){
+            guiThread.updateChat("You:"+arguments.get(1));
+          }
+          if(arguments.get(0).equals("w")){
+            guiThread.updateChat("You whispered to "+arguments.get(2)+": "+arguments.get(1));
+          }
+          if(arguments.get(0).equals("b")){
+            guiThread.updateChat("You sent to all: "+arguments.get(1));
+          }
           break;
 
 

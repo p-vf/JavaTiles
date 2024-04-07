@@ -33,14 +33,12 @@ public class GUIThread extends JFrame implements Runnable{
     public void run() {
 
 
-                frame = new JFrame("Chat");
+                frame = new JFrame("GameChat");
                 chat = new JTextArea(20,50);
                 textField = new JTextField();
                 scroll = new JScrollPane(chat, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                border = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.DARK_GRAY, 2), // Outer border
-                BorderFactory.createEmptyBorder(5, 5, 5, 5) );// Inner paddin
-
+                border = BorderFactory.createLineBorder(Color.BLACK,1,true);
+                chat.setEditable(false);
                 chat.setSize(540, 400);
                 chat.setLocation(30,5);
                 textField.setSize(540, 30);
