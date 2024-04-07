@@ -175,4 +175,11 @@ Ausserdem ist beim GUI-Chat etwas noch nicht ganz in Ordnung, denn das Versenden
 - size Methode vom UnorderedDeck im Case DRAW und PUTT auf Serverseite hinzugefügt.
 - Wir haben beschlossen, am Sonntag, 07.04.2024 um 13:00 Uhr gemeinsam weiter zu arbeiten.
 
+## 6.4.2024 Einzelarbeitstag
+- Ein paar Korrekturen in der Spiellogik auf der Clientseite, wie z.B. die Putt- und Draw-Funktion, wurden aufeinander abgestimmt. Zudem wurde das Chat-GUI größtenteils fertiggestellt.
+- Kleine Optimierungen auf der Serverseite
+- Die Darstellung der Tiles wurde verbessert.
+- Wir haben mit dem Manual begonnen.
+- Optimierungen für die User Eingaben wie beispielsweise Games auflisten, sowie einige edge cases für andere Eingaben behandelt.
+
 

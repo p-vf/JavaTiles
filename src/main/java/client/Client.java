@@ -50,7 +50,7 @@ public class Client {
 
   public static int CurrentPlayerID = 5;
 
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(Client.class);
 
   public static ClientDeck yourDeck = new ClientDeck();
 
@@ -275,7 +275,11 @@ public class Client {
           return encodeProtocolMessage("LOGO");
 
         case "/ready":
-          return encodeProtocolMessage("REDY");
+          if(lobby == true) {
+            return encodeProtocolMessage("REDY");
+          }else{
+            System.out.println("You are not in a lobby right now. Please join a lobby first");
+          }
 
         case "/joinlobby":
           if (arguments.size() > 0) {
@@ -358,6 +362,19 @@ public class Client {
             showDeck();
           }
           return null;
+
+        case "/listgames":
+
+          if(arguments.get(0).equals("o")){
+          return encodeProtocolMessage("LGAM", "o");}
+
+          if(arguments.get(0).equals("r")){
+            return encodeProtocolMessage("LGAM", "r");}
+
+          if(arguments.get(0).equals("f")){
+            return encodeProtocolMessage("LGAM", "f");}
+
+
 
 
         default:
@@ -554,26 +571,11 @@ public class Client {
 
             }
 
-            int[] lobbies = new int[intArray.length / 2];
-            int[] players = new int[intArray.length / 2];
-
-            int indexLobby = 0;
-            int indexPlayer = 0;
-
-            for (int i = 0; i < intArray.length; i++) {
-              if (i % 2 == 0) {
-                lobbies[indexLobby] = intArray[i];
-                indexLobby++;
-              } else {
-                players[indexPlayer] = intArray[i];
-                indexPlayer++;
-              }
-            }
 
             System.out.println("Ongoing games");
-            System.out.println("Lobbynumber: \tNumber of players:");
-            for (int i = 0; i < lobbies.length; i++) {
-              System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
+            System.out.println("Lobbynumber:");
+            for (int i = 0; i < intArray.length; i++) {
+              System.out.println(intArray[i]);
             }
           }
 

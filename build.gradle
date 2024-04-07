@@ -11,8 +11,9 @@ javafx {
 
 group ''
 version '0.0.1-ALPHA'
-mainClassName = 'EntryPoint'
-
+application {
+    mainClass.set('EntryPoint')
+}
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -34,13 +35,13 @@ dependencies {
     Read the documentation at https://docs.gradle.org/current/userguide/declaring_dependencies.html to learn more
      */
     // TODO make these dependencies work
-    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+    //implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
     implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
 
     /*
     This is another example - it imports the javafx-controls dependency
      */
-    implementation 'org.openjfx:javafx-controls:19.0.2.1'
+    //implementation 'org.openjfx:javafx-controls:19.0.2.1'
 
     // JUNIT
     /*
@@ -48,6 +49,10 @@ dependencies {
     Since it is a `testCompile` dependency, it will not be part of the final product, only during testing.
      */
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+}
+
+tasks.register("build-cs108") {
+    dependsOn jar, javadoc
 }
 
 test {
@@ -60,10 +65,10 @@ The following block adds both compile and runtime dependencies to the jar
 jar {
     manifest {
         attributes(
-                'Main-Class': mainClassName
+                'Main-Class': application.getMainClass().get()
         )
     }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE // two hours for this stupid line..
+    duplicatesStrategy = DuplicatesStrategy.WARN // two hours for this stupid line..
     from {
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

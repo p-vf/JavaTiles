@@ -22,7 +22,7 @@ import static client.Client.handleResponse;
  */
 public class InThread implements Runnable {
 
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(InThread.class);
 
   public Client client; // The associated client object
 

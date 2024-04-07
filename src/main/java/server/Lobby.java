@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Lobby {
-  public final static Logger LOGGER = LogManager.getLogger();
+  public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
+  // TODO convert to ClientThread[]
   public ArrayList<ClientThread> players;
   public LobbyState lobbyState;
   public GameState gameState;
-  public ClientThread winner;
+  public String winnerName;
 
 
   public Lobby(int lobbyNumber) {
@@ -126,6 +127,25 @@ public class Lobby {
         //players.get(i).send(NetworkUtils.encodeProtocolMessage("LEFT", Integer.toString(i)));
       }
     }
+  }
+
+  public void finishGame(String winnerName) {
+    this.winnerName = winnerName;
+    lobbyState = LobbyState.FINISHED;
+  }
+
+  /**
+   * Represents the rough state of the lobby.
+   */
+  public enum LobbyState {
+    // TODO maybe add more states (when someone leaved etc.)
+
+    // when the game hasn't started yet
+    OPEN,
+    // when the game is running
+    RUNNING,
+    // when the game is finished
+    FINISHED,
   }
 }
 

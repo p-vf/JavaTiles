@@ -16,7 +16,7 @@ import static java.lang.System.currentTimeMillis;
  * @author Istref Uka
  */
 public class ServerPingThread extends Thread {
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(ServerPingThread.class);
   private final ClientThread parent;
   private final long maxResponseTimeMillis;
   private static final long PING_INTERVALL = 1000;

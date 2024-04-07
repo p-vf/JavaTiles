@@ -79,8 +79,12 @@ public class GameState {
     } else {
       stack = exchangeStacks.get(playerIndex);
     }
-
-    Tile tile = stack.pop();
+    Tile tile;
+    try {
+      tile = stack.pop();
+    } catch (EmptyStackException e) {
+      tile = null;
+    }
     playerDecks.get(playerIndex).add(tile);
     return tile;
   }

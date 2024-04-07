@@ -29,7 +29,7 @@ import static utils.NetworkUtils.Protocol.ServerRequest;
  * @author Istref Uka
  */
 public class ClientThread implements Runnable {
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
   public int id;
   public String nickname;
   private final Server server;
@@ -200,10 +200,19 @@ public class ClientThread implements Runnable {
             }
           }
           Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
-          String tileString = tile.toString();
-          send(encodeProtocolMessage("+DRAW", tileString));
+          String tileString;
+          if (tile == null) {
+            tileString = "";
+            send(encodeProtocolMessage("+DRAW", tileString));
+            send("EMPT");
+            lobby.finishGame("");
+          } else {
+            tileString = tile.toString();
+            send(encodeProtocolMessage("+DRAW", tileString));
+            sendState();
+          }
 
-          sendState();
+
         }
 
         case PUTT -> {
@@ -229,6 +238,7 @@ public class ClientThread implements Runnable {
           }
           if (Tile.isWinningDeck(tileArray)){
             isWon = true;
+            lobby.finishGame(nickname);
             server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
           }
           send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
@@ -256,7 +266,7 @@ public class ClientThread implements Runnable {
           ArrayList<Lobby> l;
           switch (gameStatus) {
             case "o" -> {
-              l = listLobbiesWithStatus(LobbyState.OPEN);
+              l = listLobbiesWithStatus(Lobby.LobbyState.OPEN);
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(":");
@@ -269,7 +279,7 @@ public class ClientThread implements Runnable {
               }
             }
             case "r" -> {
-              l = listLobbiesWithStatus(LobbyState.RUNNING);
+              l = listLobbiesWithStatus(Lobby.LobbyState.RUNNING);
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(" ");
@@ -280,12 +290,12 @@ public class ClientThread implements Runnable {
               }
             }
             case "f" -> {
-              l = listLobbiesWithStatus(LobbyState.FINISHED);
+              l = listLobbiesWithStatus(Lobby.LobbyState.FINISHED);
               for (var lobby : l) {
                 sb.append(lobby.lobbyNumber);
                 sb.append(":");
-                if (lobby.winner != null) {
-                  sb.append(lobby.winner.nickname);
+                if (lobby.winnerName != null) {
+                  sb.append(lobby.winnerName);
                 }
                 sb.append(" ");
               }
@@ -479,7 +489,7 @@ public class ClientThread implements Runnable {
     }
   }
 
-  private ArrayList<Lobby> listLobbiesWithStatus(LobbyState status) {
+  private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
     for (var lobby : server.lobbies) {
       if (lobby.lobbyState == status) {
