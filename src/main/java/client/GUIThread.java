@@ -43,14 +43,14 @@ public class GUIThread extends JFrame implements Runnable{
                 chat.setLocation(30,5);
                 textField.setSize(540, 30);
                 textField.setLocation(18, 500);
-                textField.setBorder(border);
                 frame.setResizable(false);
                 frame.setSize(600, 600);
                 frame.add(textField);
+                textField.setBorder(border);
                 frame.add(scroll);
                 frame.setVisible(true);
                 frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                chat.append("Chats: \n");
+                chat.append("Chats: \n  \n");
                 textField.setText("");
 
 

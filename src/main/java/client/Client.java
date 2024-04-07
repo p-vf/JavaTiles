@@ -59,9 +59,9 @@ public class Client {
   private static GUIThread guiThread;
 
   private static boolean lobby = false;
-  private static boolean drawTurn = false;
 
-  private static boolean puttTurn = false;
+
+
 
 
   /**
@@ -300,17 +300,17 @@ public class Client {
             System.out.println("You can only draw on your turn");
             return null;
           }
-          if (!drawTurn) {
-            System.out.println("You cannot draw right now.");
+          if (yourDeck.countTiles()>=15) {
+            System.out.println("You've already drawn a tile");
             return null;
           }
           if (arguments.get(0).equals("m")) {
-            drawTurn = false;
+
             return encodeProtocolMessage("DRAW", "m");
 
           }
           if (arguments.get(0).equals("e")) {
-            drawTurn = false;
+
             return encodeProtocolMessage("DRAW", "e");
           } else {
             System.out.println("Your draw command should look like /draw m or /draw e");
@@ -319,10 +319,14 @@ public class Client {
 
         case "/putt":
 
-          if ((playerID != CurrentPlayerID) || (playerID == 4) || (CurrentPlayerID == 5) || (!puttTurn)) {
+          if (playerID != CurrentPlayerID) {
             System.out.println("It's currently not your turn.");
             return null;
 
+          }
+          if(yourDeck.countTiles()<15){
+            System.out.println("You need to draw first.");
+            return null;
           }
           if (!(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+"))) {
             System.out.println("The indices should be numbers.");
@@ -341,7 +345,7 @@ public class Client {
             System.out.println("Please choose an existing Tile.");
             return null;
           }
-          puttTurn = false;
+
           Tile tileToPut = yourDeck.getTile(row, column);
           yourDeck.removeTile(row, column); //removes the Tile from the deck;
           String tileString = tileToPut.toString();
@@ -434,7 +438,7 @@ public class Client {
           if (tilesStrt.size() == 15) {
             System.out.println("It's your turn.");
             CurrentPlayerID = playerID;
-            puttTurn = true;
+
           }
           Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
           yourDeck.createDeckwithTileArray(tilesArrayStrt);
@@ -462,7 +466,7 @@ public class Client {
           if(Integer.parseInt(arguments.get(1))==playerID){
             System.out.println("It's your turn.");
             CurrentPlayerID = playerID;
-            drawTurn = true;
+
           } else {
             System.out.println("It's " + arguments.get(1) + "'s turn.");
           }
@@ -641,7 +645,6 @@ public class Client {
 
 
         case DRAW:
-          puttTurn = true;
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
           showDeck();
           break;
