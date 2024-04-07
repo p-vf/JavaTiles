@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Lobby {
-  public final static Logger LOGGER = LogManager.getLogger();
+  public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
   // TODO convert to ClientThread[]
   public ArrayList<ClientThread> players;

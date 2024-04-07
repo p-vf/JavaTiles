@@ -50,7 +50,7 @@ public class Server {
         eCT.start();
       }
     } catch (IOException e) {
-      System.err.println(e.toString());
+      e.printStackTrace(System.err);
       System.exit(1);
     }
   }
