@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NetworkUtils {
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(NetworkUtils.class);
 
   // for testing purposes
   public static void main(String[] args) {

@@ -29,7 +29,7 @@ import static utils.NetworkUtils.Protocol.ServerRequest;
  * @author Istref Uka
  */
 public class ClientThread implements Runnable {
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
   public int id;
   public String nickname;
   private final Server server;

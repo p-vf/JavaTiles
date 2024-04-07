@@ -50,7 +50,7 @@ public class Client {
 
   public static int CurrentPlayerID = 5;
 
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(Client.class);
 
   public static ClientDeck yourDeck = new ClientDeck();
 

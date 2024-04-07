@@ -15,7 +15,7 @@ import java.util.HashSet;
  * on a specified port and handles communication with multiple clients concurrently.
  */
 public class Server {
-  public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger(Server.class);
   public static boolean ENABLE_PING_LOGGING = false;
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;

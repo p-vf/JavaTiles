@@ -12,6 +12,7 @@ import java.util.Arrays;
 public class Lobby {
   public final static Logger LOGGER = LogManager.getLogger();
   public final int lobbyNumber;
+  // TODO convert to ClientThread[]
   public ArrayList<ClientThread> players;
   public LobbyState lobbyState;
   public GameState gameState;
