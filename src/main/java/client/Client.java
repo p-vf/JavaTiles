@@ -59,9 +59,9 @@ public class Client {
   private static GUIThread guiThread;
 
   private static boolean lobby = false;
-  private static boolean drawTurn = false;
 
-  private static boolean puttTurn = false;
+
+
 
 
   /**
@@ -199,6 +199,11 @@ public class Client {
 
         case "/chat":
           if (arguments.get(0).equals("/all")) {
+
+            if(nickname==null){
+              guiThread.updateChat("You need to login first.");
+              return null;
+            }
             String allMessage = arguments.get(1);
 
             for (int i = 2; i < arguments.size(); i++) {
@@ -209,13 +214,24 @@ public class Client {
             String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
             return allMessageForServer;
           }
+          if (arguments.get(0).equals("/whisper")) {
+            String whisperMessage = arguments.get(2);
+            for (int i = 3; i < arguments.size(); i++) {
+              whisperMessage = whisperMessage + " " + arguments.get(i);
+            }
 
-          if (arguments.get(0).equals("/lobby")) {
+            //LOGGER.debug(whisperMessage);
+            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(1));
+            return whisperMessageForServer;
+
+          }
+
+          else {
             if (lobby == true) {
 
-              String message = arguments.get(1);
+              String message = arguments.get(0);
 
-              for (int i = 2; i < arguments.size(); i++) {
+              for (int i = 1; i < arguments.size(); i++) {
                 message = message + " " + arguments.get(i);
               }
 
@@ -229,19 +245,7 @@ public class Client {
             }
           }
 
-          if (arguments.get(0).equals("/whisper")) {
-            String whisperMessage = arguments.get(2);
-            for (int i = 3; i < arguments.size(); i++) {
-              whisperMessage = whisperMessage + " " + arguments.get(i);
-            }
 
-            //LOGGER.debug(whisperMessage);
-            String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(1));
-            return whisperMessageForServer;
-
-          } else {
-            return null;
-          }
 
         case "/swap":
 
@@ -296,17 +300,17 @@ public class Client {
             System.out.println("You can only draw on your turn");
             return null;
           }
-          if (!drawTurn) {
-            System.out.println("You cannot draw right now.");
+          if (yourDeck.countTiles()>=15) {
+            System.out.println("You've already drawn a tile");
             return null;
           }
           if (arguments.get(0).equals("m")) {
-            drawTurn = false;
+
             return encodeProtocolMessage("DRAW", "m");
 
           }
           if (arguments.get(0).equals("e")) {
-            drawTurn = false;
+
             return encodeProtocolMessage("DRAW", "e");
           } else {
             System.out.println("Your draw command should look like /draw m or /draw e");
@@ -315,10 +319,14 @@ public class Client {
 
         case "/putt":
 
-          if ((playerID != CurrentPlayerID) || (playerID == 4) || (CurrentPlayerID == 5) || (!puttTurn)) {
+          if (playerID != CurrentPlayerID) {
             System.out.println("It's currently not your turn.");
             return null;
 
+          }
+          if(yourDeck.countTiles()<15){
+            System.out.println("You need to draw first.");
+            return null;
           }
           if (!(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+"))) {
             System.out.println("The indices should be numbers.");
@@ -337,7 +345,7 @@ public class Client {
             System.out.println("Please choose an existing Tile.");
             return null;
           }
-          puttTurn = false;
+
           Tile tileToPut = yourDeck.getTile(row, column);
           yourDeck.removeTile(row, column); //removes the Tile from the deck;
           String tileString = tileToPut.toString();
@@ -405,11 +413,11 @@ public class Client {
           String name = arguments.get(2);
           if(arguments.get(0).equals("b")){
 
-            guiThread.updateChat(name +" (sent to all): " + arguments.get(1));
+            guiThread.updateChat(name +" sent to all: " + arguments.get(1));
 
           }
           if(arguments.get(0).equals("w")){
-            guiThread.updateChat(name +" (whispered): " + arguments.get(1));
+            guiThread.updateChat(name +" whispered: " + arguments.get(1));
           }
           if(arguments.get(0).equals("l")){
           guiThread.updateChat(name + ": " + arguments.get(1));}
@@ -430,7 +438,7 @@ public class Client {
           if (tilesStrt.size() == 15) {
             System.out.println("It's your turn.");
             CurrentPlayerID = playerID;
-            puttTurn = true;
+
           }
           Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
           yourDeck.createDeckwithTileArray(tilesArrayStrt);
@@ -458,7 +466,7 @@ public class Client {
           if(Integer.parseInt(arguments.get(1))==playerID){
             System.out.println("It's your turn.");
             CurrentPlayerID = playerID;
-            drawTurn = true;
+
           } else {
             System.out.println("It's " + arguments.get(1) + "'s turn.");
           }
@@ -624,11 +632,19 @@ public class Client {
           break;
 
         case CATC:
+          if(arguments.get(0).equals("l")){
+            guiThread.updateChat("You:"+arguments.get(1));
+          }
+          if(arguments.get(0).equals("w")){
+            guiThread.updateChat("You whispered to "+arguments.get(2)+": "+arguments.get(1));
+          }
+          if(arguments.get(0).equals("b")){
+            guiThread.updateChat("You sent to all: "+arguments.get(1));
+          }
           break;
 
 
         case DRAW:
-          puttTurn = true;
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
           showDeck();
           break;

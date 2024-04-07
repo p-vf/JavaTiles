@@ -39,6 +39,7 @@ public class ClientDeck {
     this.deck = newDeck;
   }
 
+
   public Tile[] DeckToTileArray() {
     Tile[] tileArray = new Tile[24];
     int count = 0;
@@ -66,7 +67,18 @@ public class ClientDeck {
     }
   }
 
+ public int countTiles() {
+    int count = 0;
+    for (int i = 0; i < deck.length; i++) {
+      for (int j = 0; j < deck[i].length; j++) {
+        if (deck[i][j]!= null) {
+          count++;
+        }
+      }
+    }
+    return count;
 
+ }
   public void removeTile(int row, int column) {
     Tile[][] newDeck = new Tile[deck.length][deck[0].length];
     for (int i = 0; i < deck.length; i++) {
