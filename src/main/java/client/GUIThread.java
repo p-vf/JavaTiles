@@ -70,14 +70,9 @@ public class GUIThread extends JFrame implements Runnable{
                             sleep(500);
                             System.exit(0);
                         }
-                        String category = "";
-                        try {
 
-                            System.out.println(category);
-                        }
-                        catch (Exception e) {
-                            System.out.println("Exception thrown.");
-                        }
+
+
                     }
                 });
 

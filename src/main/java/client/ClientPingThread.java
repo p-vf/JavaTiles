@@ -50,7 +50,7 @@ public class ClientPingThread extends Thread {
           }
           parent.send("PING");
         } catch (SocketException e) { // passiert wahrscheinlich, wenn das Socket geschlossen worden ist..
-          System.out.println("Socket wurde geschlossen");
+          System.out.println("the socket has been closed");
           break;//TODO Handle this exception
         }
         Thread.sleep(PING_INTERVALL);
@@ -59,7 +59,7 @@ public class ClientPingThread extends Thread {
           continue;
         }
         if (timeLastResponse - currentTimeMillis() >= maxResponseTimeMillis) {
-          System.out.println("Timeout von " + (double) maxResponseTimeMillis / 1000.0 + " Sekunden wurde überschritten. ");
+          System.out.println("timeout of " + (double) maxResponseTimeMillis / 1000.0 + " seconds has been exceeded. ");
           parent.logout();
         }
       }
