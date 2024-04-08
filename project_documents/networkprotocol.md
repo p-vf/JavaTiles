@@ -16,7 +16,7 @@ Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nu
 
 | Parameter                                                      | Beschreibung                                                                                                                                                                                                                                                                                          |
 |----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<joinsuccessful>`, `<valid>`, `<won>`                         | entweder `t` oder `f`, stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                                                                                    |  
+| `<joinsuccessful>`, `<valid>`, `<won>`, `<nicknameexists>`     | entweder `t` oder `f`, stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                                                                                    |  
 | `<nickname>`, `<whisperrecipient>`, `<sender>`, `<actualname>` | Spielername ohne Leerschlag, mit maximaler Länge 30. (stellt Spielername dar)                                                                                                                                                                                                                         |
 | `<msg>`                                                        | Zeichenfolge, die eine Nachricht darstellt.                                                                                                                                                                                                                                                           |
 | `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                                                                                            |
@@ -29,10 +29,6 @@ Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nu
 | `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<lobby_1> <lobby_2> ...` wobei `<lobby_M>` die M-te Lobby wie folgt darstellt: `"Lobby <lobbynum_M>" "<playerlist_M>"`                                                                                                                |
 | `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/>`b`,`l`,`w` für jeweils broadcast, lobby, und whisper                                                                                                                                                                                                       |
 
-
-
-🔴***TODO*** festlegen der Darstellung von `<tile>`, `<deck>`, `<playerlist>` und `<games>`  
-🔴***TODO*** festlegen, was alles in `<gamestate>` gespeichert werden muss
 
 ---
 
@@ -83,7 +79,6 @@ Listet die Spieler auf, die mit dem Server verbunden sind.
 | `LLPL`  | `+LLPL <lobbieswithplayerlist>` | Client |
 ### Beschreibung
 Listet in `<lobbieswithplayerlist>` die Spieler auf, die in den lobbies sind.
-🔴***TODO*** aktualisieren, sobald klar ist, ob nur spieler von der eigenen Lobby aufgelistet werden sollen.
 
 ---
 
@@ -158,7 +153,7 @@ In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clien
 
 ---
 
-## Gamestate anfragen
+## Spielzustand senden
 | Command                                    | Response | Sender |
 |--------------------------------------------|----------|--------|
 | `STAT <exchangestacks> <currentplayeridx>` | `+STAT`  | Server |
@@ -167,7 +162,9 @@ Der Server schickt den obersten Stein der Austauschstapel in `<exchangestacks>`
 und der Index des Spielers, der an der Reihe ist in `<currentplayeridx>`. 
 
 ### Beispiel
-🔴***TODO***
+Server: `STAT "\" \" 4:BLACK 5:RED 3:YELLOW " 1`  
+Client: `+STAT`  
+(Spieler mit playerindex 1 ist am Zug und der Erste exchangeStack ist leer, die anderen haben jeweils eine schwarze 4, eine rote 5 und eine gelbe 3)
 
 ---
 
@@ -180,7 +177,9 @@ Der Client gibt einen Stapel in `<drawstack>` an, von welchem er einen Stein hab
 der Server gibt den Stein in `<tile>` zurück. Ist der spieler nicht an der Reihe, oder probiert er ein zweites Mal, zu ziehen, so wird eine leere String als `<tile>` geschickt. 
 
 ### Beispiel
-🔴***TODO***
+Client: `DRAW m`  
+Server: `+DRAW 0:BLACK`  
+(der Client zieht einen Stein vom Hauptstapel und erhält einen Joker)
 
 
 ---
@@ -225,9 +224,9 @@ Spiel mit einem Unentschieden beendet werden muss.
 
 # Die Kommunikation betreffend
 ## Chat-Nachricht senden (Client)
-| Command                                         | Response                                         | Sender |
-|-------------------------------------------------|--------------------------------------------------|--------|
-| `CATC <messagetype> <msg> [<whisperrecipient>]` | `+CATC <messagetype> <msg> [<whisperrecipient>]` | Client |
+| Command                                         | Response                                                          | Sender |
+|-------------------------------------------------|-------------------------------------------------------------------|--------|
+| `CATC <messagetype> <msg> [<whisperrecipient>]` | `+CATC <messagetype> <msg> [<whisperrecipient> <nicknameexists>]` | Client |
 
 ### Beschreibung
 Der CATC-Command wird vom Client an den Server geschickt, wenn der User eine Nachricht in den Chat schicken will.  
@@ -236,10 +235,12 @@ Falls dieses den Wert `w` hat, muss der optionale Parameter `<whisperrecipient>`
 Hat `<messagetype>` den Wert `b` (für Broadcast), wird ein `CATS`-Command an alle Clients auf dem Server weitergeleitet, 
 falls `l` (für Lobby) nur an die in derselben Lobby und falls `w` (für Whisper) nur an den Spieler, welchen den Nickname `<whisperrecipient>` hat.  
 Der Parameter `<msg>` ist der Inhalt der Nachricht.
+Die response vom Server beinhaltet die gleichen Argumente, die er auch erhalten hat, ausser `<messagetype>` ist `w`, 
+dann bekommt sie zusätzlich noch eine flag `<nicknameexists>` (entweder `t` oder `f`), welche angibt, ob der spezifizierte Nickname existiert.
 
 ### Beispiel
 Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
-Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`
+Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin t`
 
 (Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler mit nickname `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
 
@@ -272,4 +273,15 @@ Client: `+CATS`
 Die Ping-Nachricht wird konstant gesendet (mit einem Delay von ca. 1 Sekunde (exakte Dauer nicht sehr wichtig)), um Verbindungsunterbrüche aufzuspüren. 
 Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird die Verbindung beendet.
 
-___
+---
+
+## Cheating
+| Command | Response       | Sender |
+|---------|----------------|--------|
+| `WINC`  | `+WINC <deck>` | Client |
+### Beschreibung
+Wenn ein Client den `WINC`-Command schickt, dann bekommt er ein Deck, welches alle Steine hat, um eine Gewinnkonfiguration zu erreichen.
+Dabei wird sein Deck auf dem Server angepasst, sodass alle zukünftigen Spielzüge legal sind. 
+
+
+---

@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * The EchoServer class represents a simple server that listens for client connections
+ * The Server class represents a simple server that listens for client connections
  * on a specified port and handles communication with multiple clients concurrently.
+ *
+ * @author Pascal von Fellenberg
+ * @author Istref Uka
  */
 public class Server {
   public static final Logger LOGGER = LogManager.getLogger(Server.class);
@@ -33,8 +36,12 @@ public class Server {
   }
 
   /**
-   * Constructs a new EchoServer instance.
-   * Creates a ServerSocket and listens for incoming client connections.
+   * Constructs a server that listens for incoming connections on the specified port.
+   * For each connection, a new {@code ClientThread} is initiated and stored in a list.
+   * The server runs indefinitely, accepting new client connections.
+   *
+   * @param port The port number on which the server will listen.
+   * @throws IOException If an I/O error occurs when waiting for a connection or if the server socket cannot be opened.
    */
   private Server(int port) {
     int cnt = 0;
@@ -79,17 +86,20 @@ public class Server {
    * @param str The message to be sent to the client.
    * @param nickname The nickname of the client to whom the message is to be sent.
    */
-  public void sendToNickname(String str, String nickname) {
+  public boolean sendToNickname(String str, String nickname) {
+    boolean sent = false;
     for (ClientThread client : clientList) {
       if (client.nickname.equals(nickname)) {
         try {
           client.send(str);
+          sent = true;
         } catch (IOException e) {
           // TODO bessere Fehlerabhandlung
           e.printStackTrace(System.err);
         }
       }
     }
+    return sent;
   }
 
   /**
@@ -134,7 +144,7 @@ public class Server {
   }
 
   /**
-   * Let the client join a lobby.
+   * Lets the client join a lobby.
    * @param lobby The lobby to which the player wants to join.
    * @param client The player to be added to the lobby.
    * @return {@code true} if and only if the lobby wasn't full and the player was able to join, else {@code false}
@@ -158,6 +168,12 @@ public class Server {
     lobbies.add(l);
     return l;
   }
+
+  /**
+   * Retrieves the list of active client threads connected to the server.
+   *
+   * @return an ArrayList of {@code ClientThread} objects representing the connected clients.
+   */
   public ArrayList<ClientThread> getClientList(){
     return this.clientList;
   }

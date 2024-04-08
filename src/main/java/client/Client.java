@@ -99,10 +99,20 @@ public class Client {
 
       ping(client);
 
+      String loginData;
 
-      String logindata = "LOGI " + login();
-
-      client.send(logindata);
+      if (args.length == 3) {
+        boolean isValid = !(args[2].contains(" ") || args[2].contains("\""));
+        if (isValid) {
+          loginData = "LOGI " + args[2];
+        } else {
+          System.out.println("Invalid argument for username: must not contain any spaces or double quotes");
+          loginData = "LOGI " + login();
+        }
+      } else {
+        loginData = "LOGI " + login();
+      }
+      client.send(loginData);
 
 
       String line = " ";
@@ -133,7 +143,14 @@ public class Client {
 
   }
 
-
+  /**
+   * Prompts the user to enter a username and validates it.
+   * If the entered username is empty, it defaults to the system username.
+   * Ensures that the username does not contain blank spaces or quotation marks.
+   *
+   * @return The validated username entered by the user.
+   * @throws IOException If an I/O error occurs while reading input.
+   */
   public static String login() throws IOException {
     while (true) {
       System.out.println("Enter username:");
@@ -482,7 +499,16 @@ public class Client {
     }
   }
 
-
+  /**
+   * Handles incoming responses from the server based on the specified protocol.
+   * Decodes the received protocol message and performs corresponding actions
+   * based on the type of response received.
+   *
+   * @param request    The incoming protocol message received from the server.
+   * @param client     The client object associated with the connection.
+   * @param guiThread  The GUI thread used for updating the graphical user interface.
+   * @throws IOException If an I/O error occurs during message processing.
+   */
   public static void handleResponse(String request, Client client, GUIThread guiThread) throws IOException {
     try {
       ArrayList<String> arguments = decodeProtocolMessage(request);
@@ -687,11 +713,33 @@ public class Client {
     }
   }
 
+  /**
+   * Displays the contents of the player's deck in a formatted manner.
+   * This method prints out the player's deck to the console in a visually
+   * readable format using the `toStringPretty` method of the `yourDeck` object.
+   * The deck contents are printed as a list of cards or items contained within
+   * the deck.
+   */
   private static void showDeck() {
     System.out.println("your Deck:");
     System.out.println(yourDeck.toStringPretty());
   }
 
+  /**
+   * Displays the current state of the exchange stacks in a formatted manner.
+   * This method constructs and prints a visual representation of the exchange stacks,
+   * which are used in a game scenario involving multiple players.
+   *
+   * The method generates a textual representation consisting of rows and columns:
+   * - The top row indicates the active player's position with "vvvv" underneath their stack.
+   * - Each exchange stack is displayed within vertical bars ('|') in the middle row.
+   *   If a stack is empty (null), it's represented as empty spaces ('  ').
+   *   Non-empty stacks display their contents using the `toStringPretty` method.
+   * - The bottom row again highlights the active player's position with "^^^^" above their stack.
+   *
+   * This representation helps visualize the state of exchange stacks during gameplay,
+   * providing information about the contents of each stack and indicating the current player's turn.
+   */
   private static void showExchangeStacks() {
     StringBuilder res = new StringBuilder();
     res.append("Exchange stacks:\n");

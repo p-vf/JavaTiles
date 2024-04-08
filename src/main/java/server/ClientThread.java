@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
 
+import game.Color;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -249,11 +250,7 @@ public class ClientThread implements Runnable {
         }
         case CATC -> {
           handleChat(arguments);
-          if (arguments.get(0).equals("w")) {
-            send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1), arguments.get(2)));
-          } else {
-            send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1)));
-          }
+
         }
         case PING -> send("+PING");
         case NAME -> {
@@ -356,6 +353,32 @@ public class ClientThread implements Runnable {
             lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
           }
         }
+        case WINC -> {
+          ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
+              new Tile(0, Color.BLACK),
+              new Tile(1, Color.BLUE),
+              new Tile(2, Color.BLUE),
+              new Tile(3, Color.BLUE),
+              new Tile(4, Color.BLUE),
+              new Tile(1, Color.RED),
+              new Tile(2, Color.RED),
+              new Tile(3, Color.RED),
+              new Tile(4, Color.RED),
+              new Tile(1, Color.YELLOW),
+              new Tile(2, Color.YELLOW),
+              new Tile(3, Color.YELLOW),
+              new Tile(4, Color.YELLOW),
+              new Tile(5, Color.YELLOW),
+          }));
+          if (lobby.gameState.playerDecks.get(playerIndex).size() == 15) {
+            winnerConf.add(new Tile(0, Color.YELLOW));
+          }
+          UnorderedDeck winnerDeck = new UnorderedDeck(winnerConf);
+          lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
+          ArrayList<String> stringTiles = winnerDeck.toStringArray();
+          String deckString = encodeProtocolMessage(stringTiles);
+          encodeProtocolMessage("+WINC", deckString);
+        }
       }
     }
     catch(IndexOutOfBoundsException | IllegalArgumentException e){
@@ -436,7 +459,7 @@ public class ClientThread implements Runnable {
    *
    * @param arguments The arguments of the chat request.
    */
-  private void handleChat(ArrayList<String> arguments) {
+  private void handleChat(ArrayList<String> arguments) throws IOException {
     String messageType = arguments.get(0);
     String msg = arguments.get(1);
     String sender = nickname;
@@ -453,12 +476,18 @@ public class ClientThread implements Runnable {
         lobby.sendToLobby(cmd, this);
       }
       case "w" -> {
-        server.sendToNickname(cmd, arguments.get(2));
+        if (server.sendToNickname(cmd, arguments.get(2))) {
+          send(encodeProtocolMessage("+CATC", "w", arguments.get(1), arguments.get(2), "t"));
+        } else {
+          send(encodeProtocolMessage("+CATC", "w", "", arguments.get(2), "f"));
+        }
+        return;
       }
       default -> {
         throw new IllegalArgumentException("Should be one of \"b\", \"l\" or \"w\", was \"" + messageType + "\"");
       }
     }
+    send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1)));
   }
 
   /**
@@ -489,6 +518,12 @@ public class ClientThread implements Runnable {
     }
   }
 
+  /**
+   * Returns a list of all lobbies with the given status.
+   *
+   * @param status The status of the lobbies to be returned.
+   * @return A list of all lobbies with the given status.
+   */
   private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
     for (var lobby : server.lobbies) {
@@ -499,6 +534,11 @@ public class ClientThread implements Runnable {
     return lobbiesWithStatus;
   }
 
+  /**
+   * Sends the current state of the game to all clients.
+   *
+   * @throws IOException If send() throws an IOException.
+   */
   private void sendState() {
     String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
     String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);

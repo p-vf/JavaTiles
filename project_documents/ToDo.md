@@ -25,4 +25,4 @@
 - (follow up auf vorherige Frage) oder muss das problem anders gelöst werden?
 
 # Fragen Tutorat 8.4.:
-- Müssen wir accounts machen für das Scoreboard? 
+- Müssen wir accounts machen für das Scoreboard?

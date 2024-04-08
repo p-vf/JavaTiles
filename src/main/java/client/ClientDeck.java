@@ -5,23 +5,51 @@ import game.Tile;
 
 import java.util.Arrays;
 
+/**
+ * Represents a deck of tiles used by a client in a game scenario.
+ * This class manages operations related to the deck, such as creating,
+ * modifying, and querying the deck's contents.
+ */
+
 public class ClientDeck {
 
   private Tile[][] deck;
 
+  /**
+   * Constructs a new ClientDeck object with a default size of 2 rows and 12 columns.
+   * The deck is initialized as a 2D array of Tile objects.
+   */
   public ClientDeck() {
     this.deck = new Tile[2][12];
   }
 
+  /**
+   * Retrieves the 2D array representing the deck of tiles.
+   *
+   * @return The deck of tiles as a 2D array of Tile objects.
+   */
   public Tile[][] getDeck() {
     return deck;
   }
 
+  /**
+   * Retrieves a specific tile from the deck based on its column and row indices.
+   *
+   * @param column The column index of the desired tile.
+   * @param row    The row index of the desired tile.
+   * @return The tile located at the specified column and row in the deck.
+   */
   public Tile getTile(int column, int row) {
     return deck[column][row];
   }
 
 
+  /**
+   * Creates a new deck by populating it with tiles from a given array.
+   * The tiles are distributed into rows and columns of the deck.
+   *
+   * @param tileArray The array of tiles to populate the deck with.
+   */
   public void createDeckwithTileArray(Tile[] tileArray) {
     Tile[][] newDeck = new Tile[deck.length][deck[0].length];
     int count = 0;
@@ -39,7 +67,11 @@ public class ClientDeck {
     this.deck = newDeck;
   }
 
-
+  /**
+   * Converts the entire deck into a flat array of tiles.
+   *
+   * @return An array containing all tiles from the deck in a linear sequence.
+   */
   public Tile[] DeckToTileArray() {
     Tile[] tileArray = new Tile[24];
     int count = 0;
@@ -53,6 +85,11 @@ public class ClientDeck {
   }
 
 
+  /**
+   * Adds a sequence of tiles to the deck, filling empty slots in a row-major order.
+   *
+   * @param tileArray The tiles to add to the deck.
+   */
   public void addTheseTiles(Tile... tileArray) {
     int count = 0;
     if (tileArray.length > 0) {
@@ -67,6 +104,11 @@ public class ClientDeck {
     }
   }
 
+  /**
+   * Counts the total number of tiles currently present in the deck.
+   *
+   * @return The count of tiles in the deck.
+   */
  public int countTiles() {
     int count = 0;
     for (int i = 0; i < deck.length; i++) {
@@ -79,6 +121,13 @@ public class ClientDeck {
     return count;
 
  }
+
+  /**
+   * Removes a tile from the specified location in the deck by setting it to null.
+   *
+   * @param row    The row index of the tile to remove.
+   * @param column The column index of the tile to remove.
+   */
   public void removeTile(int row, int column) {
     Tile[][] newDeck = new Tile[deck.length][deck[0].length];
     for (int i = 0; i < deck.length; i++) {
@@ -96,7 +145,14 @@ public class ClientDeck {
     }
   }
 
-
+  /**
+   * Swaps the positions of two tiles within the deck.
+   *
+   * @param row    The row index of the first tile.
+   * @param column The column index of the first tile.
+   * @param row1   The row index of the second tile.
+   * @param column1 The column index of the second tile.
+   */
   public void swap(int row, int column, int row1, int column1) {
 
     Tile tileToSwap = deck[row1][column1];
@@ -108,12 +164,22 @@ public class ClientDeck {
   }
 
 
-
+  /**
+   * Returns a string representation of the deck in a deep format.
+   *
+   * @return A string representation of the deck, including all tiles.
+   */
   @Override
   public String toString() {
     return Arrays.deepToString(deck);
   }
 
+  /**
+   * Returns a pretty formatted string representation of the deck.
+   * The deck is displayed in a structured grid format with row and column labels.
+   *
+   * @return A visually formatted string representing the deck with tiles.
+   */
   public String toStringPretty() {
     StringBuilder res = new StringBuilder();
     res.append("__|_0|_1|_2|_3|_4|_5|_6|_7|_8|_9|10|11|\n");
@@ -135,6 +201,11 @@ public class ClientDeck {
     return res.toString();
   }
 
+  /**
+   * Main method for testing the functionalities of the ClientDeck class.
+   *
+   * @param args The command-line arguments (not used).
+   */
   public static void main(String[] args) {
     Tile[] tileArray = new Tile[24];
 

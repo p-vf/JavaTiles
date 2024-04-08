@@ -6,6 +6,15 @@ import static game.Color.*;
 
 import java.util.*;
 
+/**
+ * The GameState class handles the game state for our tile-based board game. It manages tile distribution
+ * among players, tracks the main and exchange stacks, and maintains each player's personal deck. Key functionalities
+ * include initializing the game with shuffled tiles, enabling players to draw or exchange tiles, and managing turn
+ * order. It provides methods to check game conditions like visibility of tiles, drawing eligibility, and turn validation.
+ *
+ * @author Pascal von Fellenberg
+ * @author Istref Uka
+ */
 public class GameState {
   // check out the following methods to get the elements in the stack:
   // elements() and toArray(Tile[] t);
@@ -59,6 +68,12 @@ public class GameState {
     }
   }
 
+  /**
+   * Returns an array of the top visible tiles from each exchange stack.
+   *
+   * @return an array containing the top tile from each of the four exchange stacks.
+   *         If an exchange stack is empty, its corresponding array element is null.
+   */
   public Tile[] getVisibleTiles() {
     Tile[] tiles = new Tile[4];
     for (int i = 0; i < 4; i++) {
@@ -72,6 +87,13 @@ public class GameState {
     return tiles;
   }
 
+  /**
+   * Draws a tile for the specified player from either the main stack or their exchange stack.
+   *
+   * @param isMainStack true to draw from the main stack, false to draw from the player's exchange stack.
+   * @param playerIndex the index of the player who is drawing the tile.
+   * @return the drawn tile, or null if the chosen stack is empty.
+   */
   public Tile drawTile(boolean isMainStack, int playerIndex) {
     Stack<Tile> stack;
     if (isMainStack) {
@@ -89,14 +111,32 @@ public class GameState {
     return tile;
   }
 
+  /**
+   * Checks if a player can draw a tile, which is true when the player's deck contains 14 tiles.
+   *
+   * @param playerIndex the index of the player to check.
+   * @return true if the player can draw a tile, false otherwise.
+   */
   public boolean canDraw(int playerIndex) {
     return playerDecks.get(playerIndex).size() == 14;
   }
 
+  /**
+   * Determines if it is the specified player's turn.
+   *
+   * @param playerIndex the index of the player to check.
+   * @return true if it is the player's turn, false otherwise.
+   */
   public boolean isPlayersTurn(int playerIndex) {
     return currentPlayerIdx == playerIndex;
   }
 
+  /**
+   * Puts a specified tile into the exchange stack of the next player and updates the game state.
+   *
+   * @param tile the tile to be placed into the next player's exchange stack.
+   * @param playerIndex the index of the player who is putting the tile.
+   */
   public void putTile(Tile tile, int playerIndex) {
 
     // remove tile that the player chose from the playerDeck
@@ -108,11 +148,18 @@ public class GameState {
     currentPlayerIdx %= 4;
   }
 
+  /**
+   * Checks if a player can put a tile into the exchange stack, which is true when the player's deck contains 15 tiles.
+   *
+   * @param playerIndex the index of the player to check.
+   * @return true if the player can put a tile, false otherwise.
+   */
   public boolean canPutTile(int playerIndex) {
     return playerDecks.get(playerIndex).size() == 15;
   }
 
   // for testing purposes:
+  // doesn't get called during normal gameplay
   public static void main(String[] args) {
     GameState g = new GameState(2);
   }
