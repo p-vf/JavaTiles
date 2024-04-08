@@ -55,7 +55,7 @@ public class NetworkUtils {
             if (lastIndex < 0) {
               break;
             }
-            if (sb.charAt(lastIndex) != ' ' && wasInsideString) {
+            if (sb.charAt(lastIndex) != '%' && wasInsideString) {
               LOGGER.debug("Message was sent incorrectly.. (there is no space at the end where there should be) message: \"" + request + "\"");
             } else if (wasInsideString){
               sb.deleteCharAt(lastIndex);
@@ -111,7 +111,7 @@ public class NetworkUtils {
             sb.append(c);
           }
         }
-        sb.append(" \""); // add space before ending double quotes to cover edge case (a backslash as last character of the argument)
+        sb.append("%\""); // add percent before ending double quotes to cover edge case (a backslash as last character of the argument)
       } else {
         sb.append(s);
       }
@@ -149,7 +149,7 @@ public class NetworkUtils {
     ArrayList<String> msg = new ArrayList<>();
     for (var lobby : lobbies) {
       ArrayList<String> playerNames = new ArrayList<>();
-      msg.add(encodeProtocolMessage("Lobby " + lobby.lobbyNumber));
+      playerNames.add("" + lobby.lobbyNumber);
       for (var player : lobby.players) {
         if (player != null) {
           playerNames.add(player.nickname);
@@ -170,22 +170,27 @@ public class NetworkUtils {
    * @return A formatted String of the lobbies and the players in them.
    */
   public static String getBeautifullyFormattedDecodedLobbiesWithPlayerList(String receivedLobbiesList) {
-    ArrayList<String> l = decodeProtocolMessage(receivedLobbiesList);
+    ArrayList<String> lobbies = decodeProtocolMessage(receivedLobbiesList);
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < l.size(); i++) {
-      for (var s : decodeProtocolMessage(l.get(i))) {
-        if (i % 2 == 1) {
-          sb.append(" ");
-        }
-        sb.append(s);
-        if (s.isEmpty()) {
-          sb.append("[empty slot]");
-        }
-        if (i % 2 == 0) {
+    for (int i = 0; i < lobbies.size(); i++) {
+      ArrayList<String> lobbyPlayers = decodeProtocolMessage(lobbies.get(i));
+      for (int j = 0; j < lobbyPlayers.size(); j++) {
+        if (j == 0) {
+          sb.append("Lobby ");
+          sb.append(lobbyPlayers.get(j));
           sb.append(":");
+        } else {
+          String playerName = lobbyPlayers.get(j);
+          sb.append("  ");
+          if (playerName.isEmpty()) {
+            sb.append("[empty slot]");
+          } else {
+            sb.append(playerName);
+          }
         }
         sb.append("\n");
       }
+      sb.append("\n");
     }
     return sb.toString();
   }
