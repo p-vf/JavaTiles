@@ -46,19 +46,19 @@ public class Client {
 
   private static String nickname; // Nickname of the player
 
-  public static int playerID = 4;
+  public static int playerID = 4; //playerID in a particular game
 
-  public static int CurrentPlayerID = 5;
+  public static int CurrentPlayerID = 5; //playerID of the player who's turn it is
 
-  public static final Logger LOGGER = LogManager.getLogger(Client.class);
+  public static final Logger LOGGER = LogManager.getLogger(Client.class); //LOGGER for debugging
 
-  public static ClientDeck yourDeck = new ClientDeck();
+  public static ClientDeck yourDeck = new ClientDeck(); //Deck of the player
 
-  public static Tile[] exchangestacks;
+  public static Tile[] exchangestacks; //Exchange stacks of the player for this particular round
 
-  private static GUIThread guiThread;
+  private static GUIThread guiThread; //Thread responsible for displaying the GUI
 
-  private static boolean lobby = false;
+  private static boolean lobby = false; //Whether the client is in a lobby or not
 
 
 

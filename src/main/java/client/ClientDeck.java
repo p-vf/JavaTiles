@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 public class ClientDeck {
 
-  private Tile[][] deck;
+  private Tile[][] deck; // The 2D array representing the deck of tiles.
 
   /**
    * Constructs a new ClientDeck object with a default size of 2 rows and 12 columns.
@@ -32,6 +32,11 @@ public class ClientDeck {
     return deck;
   }
 
+  /**
+   * Sets the this.deck to the given deck.
+   *
+   * @param deck The 2D array representing the deck.
+   */
   public void setDeck(Tile[][] deck) {
     for (int i = 0; i < deck.length; i++) {
       for (int j = 0; j < deck[i].length; j++) {

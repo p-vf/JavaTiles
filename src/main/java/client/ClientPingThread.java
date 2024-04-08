@@ -15,11 +15,11 @@ import static java.lang.System.currentTimeMillis;
  */
 
 public class ClientPingThread extends Thread {
-  private final Client parent;
-  private final long maxResponseTimeMillis;
-  private static final long PING_INTERVALL = 1000;
-  public long timeLastResponse;
-  public volatile boolean receivedResponse;
+  private final Client parent; // the Client associated with this PingThread
+  private final long maxResponseTimeMillis; // the maximum response time allowed for a PING message, in milliseconds
+  private static final long PING_INTERVALL = 1000; // the time between PING messages, in milliseconds
+  public long timeLastResponse; // the time of the last PING message, in milliseconds
+  public volatile boolean receivedResponse; // indicates whether a response has been received
 
   /**
    * Constructs a new PingThread instance.

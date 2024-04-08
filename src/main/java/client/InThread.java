@@ -22,11 +22,11 @@ import static client.Client.handleResponse;
  */
 public class InThread implements Runnable {
 
-  public static final Logger LOGGER = LogManager.getLogger(InThread.class);
+  public static final Logger LOGGER = LogManager.getLogger(InThread.class); //LOGGER for debugging purposes
 
   public Client client; // The associated client object
 
-  public GUIThread guiThread;
+  public GUIThread guiThread; // The associated GUI thread object
   InputStream in; // The input stream to read messages from
 
 
