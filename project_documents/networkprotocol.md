@@ -79,7 +79,6 @@ Listet die Spieler auf, die mit dem Server verbunden sind.
 | `LLPL`  | `+LLPL <lobbieswithplayerlist>` | Client |
 ### Beschreibung
 Listet in `<lobbieswithplayerlist>` die Spieler auf, die in den lobbies sind.
-🔴***TODO*** aktualisieren, sobald klar ist, ob nur spieler von der eigenen Lobby aufgelistet werden sollen.
 
 ---
 
@@ -154,7 +153,7 @@ In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clien
 
 ---
 
-## Gamestate anfragen
+## Spielzustand senden
 | Command                                    | Response | Sender |
 |--------------------------------------------|----------|--------|
 | `STAT <exchangestacks> <currentplayeridx>` | `+STAT`  | Server |
@@ -163,7 +162,9 @@ Der Server schickt den obersten Stein der Austauschstapel in `<exchangestacks>`
 und der Index des Spielers, der an der Reihe ist in `<currentplayeridx>`. 
 
 ### Beispiel
-🔴***TODO***
+Server: `STAT "\" \" 4:BLACK 5:RED 3:YELLOW " 1`  
+Client: `+STAT`  
+(Spieler mit playerindex 1 ist am Zug und der Erste exchangeStack ist leer, die anderen haben jeweils eine schwarze 4, eine rote 5 und eine gelbe 3)
 
 ---
 
@@ -176,7 +177,9 @@ Der Client gibt einen Stapel in `<drawstack>` an, von welchem er einen Stein hab
 der Server gibt den Stein in `<tile>` zurück. Ist der spieler nicht an der Reihe, oder probiert er ein zweites Mal, zu ziehen, so wird eine leere String als `<tile>` geschickt. 
 
 ### Beispiel
-🔴***TODO***
+Client: `DRAW m`  
+Server: `+DRAW 0:BLACK`  
+(der Client zieht einen Stein vom Hauptstapel und erhält einen Joker)
 
 
 ---
@@ -273,9 +276,9 @@ Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird 
 ---
 
 ## Cheating
-| Command | Response       | Sender          |
-|---------|----------------|-----------------|
-| `WINC`  | `+WINC <deck>` | Server / Client |
+| Command | Response       | Sender |
+|---------|----------------|--------|
+| `WINC`  | `+WINC <deck>` | Client |
 ### Beschreibung
 Wenn ein Client den `WINC`-Command schickt, dann bekommt er ein Deck, welches alle Steine hat, um eine Gewinnkonfiguration zu erreichen.
 Dabei wird sein Deck auf dem Server angepasst, sodass alle zukünftigen Spielzüge legal sind. 
