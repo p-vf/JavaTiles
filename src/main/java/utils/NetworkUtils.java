@@ -207,7 +207,6 @@ public class NetworkUtils {
       LOGI,
       // log out:
       LOGO,
-      // fetch gamestate:
 
       // draw tile:
       DRAW,
@@ -229,6 +228,8 @@ public class NetworkUtils {
       JLOB,
       // ready for game:
       REDY,
+      // get winning configuration:
+      WINC,
     }
 
     /**

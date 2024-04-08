@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
 
+import game.Color;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -355,6 +356,32 @@ public class ClientThread implements Runnable {
             String deckString = encodeProtocolMessage(stringTiles);
             lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
           }
+        }
+        case WINC -> {
+          ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
+              new Tile(0, Color.BLACK),
+              new Tile(1, Color.BLUE),
+              new Tile(2, Color.BLUE),
+              new Tile(3, Color.BLUE),
+              new Tile(4, Color.BLUE),
+              new Tile(1, Color.RED),
+              new Tile(2, Color.RED),
+              new Tile(3, Color.RED),
+              new Tile(4, Color.RED),
+              new Tile(1, Color.YELLOW),
+              new Tile(2, Color.YELLOW),
+              new Tile(3, Color.YELLOW),
+              new Tile(4, Color.YELLOW),
+              new Tile(5, Color.YELLOW),
+          }));
+          if (lobby.gameState.playerDecks.get(playerIndex).size() == 15) {
+            winnerConf.add(new Tile(0, Color.YELLOW));
+          }
+          UnorderedDeck winnerDeck = new UnorderedDeck(winnerConf);
+          lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
+          ArrayList<String> stringTiles = winnerDeck.toStringArray();
+          String deckString = encodeProtocolMessage(stringTiles);
+          encodeProtocolMessage("+WINC", deckString);
         }
       }
     }

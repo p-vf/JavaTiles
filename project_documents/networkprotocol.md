@@ -272,4 +272,15 @@ Client: `+CATS`
 Die Ping-Nachricht wird konstant gesendet (mit einem Delay von ca. 1 Sekunde (exakte Dauer nicht sehr wichtig)), um Verbindungsunterbrüche aufzuspüren. 
 Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird die Verbindung beendet.
 
-___
+---
+
+## Cheating
+| Command | Response       | Sender          |
+|---------|----------------|-----------------|
+| `WINC`  | `+WINC <deck>` | Server / Client |
+### Beschreibung
+Wenn ein Client den `WINC`-Command schickt, dann bekommt er ein Deck, welches alle Steine hat, um eine Gewinnkonfiguration zu erreichen.
+Dabei wird sein Deck auf dem Server angepasst, sodass alle zukünftigen Spielzüge legal sind. 
+
+
+---
