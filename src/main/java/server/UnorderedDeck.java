@@ -75,11 +75,21 @@ public class UnorderedDeck {
     return new Tile(number, color);
   }
 
+  /**
+   * Constructs an UnorderedDeck instance from a list of {@link Tile} objects. This constructor initializes
+   * the deck with the given tiles, accounting for each tile's frequency.
+   *
+   * @param deck the list of {@link Tile} objects to initialize the deck with.
+   */
   public UnorderedDeck(ArrayList<Tile> deck) {
     for (var tile : deck) {
       this.add(tile);
     }
   }
+
+  /**
+   * Default constructor for UnorderedDeck. Initializes an empty deck.
+   */
   public UnorderedDeck() {
 
   }
@@ -99,6 +109,11 @@ public class UnorderedDeck {
     }
   }
 
+  /**
+   * Calculates the total number of tiles in the deck.
+   *
+   * @return the total count of tiles in the deck.
+   */
   public int size() {
     int sum = 0;
     for (int count : tileCounts) {
@@ -123,6 +138,11 @@ public class UnorderedDeck {
     }
   }
 
+  /**
+   * Converts the deck into an {@link ArrayList} of {@link String} objects representing the tiles in the deck.
+   *
+   * @return an {@link ArrayList} of {@link String}, each representing a tile in the deck.
+   */
   public ArrayList<String> toStringArray() {
     ArrayList<String> res = new ArrayList<>();
     for (int idx = 0; idx < tileCounts.length; idx++) {
@@ -150,6 +170,13 @@ public class UnorderedDeck {
     return res.toString();
   }
 
+  /**
+   * Compares this UnorderedDeck instance with another object for equality. Two decks are considered equal
+   * if they contain the same number of each tile type.
+   *
+   * @param other the object to be compared for equality with this deck.
+   * @return true if the specified object is equal to this deck; false otherwise.
+   */
   @Override
   public boolean equals(Object other) {
     if (other == null) {

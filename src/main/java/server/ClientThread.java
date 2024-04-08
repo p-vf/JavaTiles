@@ -518,6 +518,12 @@ public class ClientThread implements Runnable {
     }
   }
 
+  /**
+   * Returns a list of all lobbies with the given status.
+   *
+   * @param status The status of the lobbies to be returned.
+   * @return A list of all lobbies with the given status.
+   */
   private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
     for (var lobby : server.lobbies) {
@@ -528,6 +534,11 @@ public class ClientThread implements Runnable {
     return lobbiesWithStatus;
   }
 
+  /**
+   * Sends the current state of the game to all clients.
+   *
+   * @throws IOException If send() throws an IOException.
+   */
   private void sendState() {
     String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
     String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);

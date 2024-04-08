@@ -9,7 +9,7 @@ import java.net.SocketException;
 import static java.lang.System.currentTimeMillis;
 
 /**
- * The PingThread class represents a thread responsible for sending periodic PING messages
+ * The ServerPingThread class represents a thread responsible for sending periodic PING messages
  * to a client to check for responsiveness.
  * 
  * @author Pascal von Fellenberg
@@ -24,9 +24,14 @@ public class ServerPingThread extends Thread {
   public volatile boolean receivedResponse;
 
   /**
-   * Constructs a new PingThread instance.
-   * @param parent The parent EchoClientThread associated with this PingThread.
-   * @param maxResponseTimeMillis The maximum response time allowed for a PING message, in milliseconds.
+   * Constructs a new ServerPingThread instance that periodically sends PING messages to the associated client.
+   * This thread helps in determining if the client connection is still alive based on the response time.
+   * If the PING response from the client exceeds the specified maximum response time, appropriate action
+   * is taken by the parent EchoClientThread.
+   *
+   * @param parent The parent ClientThread that manages the connection to the client.
+   * @param maxResponseTimeMillis The maximum time in milliseconds to wait for a response to a PING message.
+   *                              If this time is exceeded, the corresponding client is logged out.
    */
   public ServerPingThread(ClientThread parent, int maxResponseTimeMillis) {
     this.parent = parent;

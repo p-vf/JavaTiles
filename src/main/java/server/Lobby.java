@@ -11,6 +11,19 @@ import java.util.Arrays;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
+/**
+ * The Lobby class represents a game lobby in a server, handling player connections, game state management,
+ * and communication between clients in our tile-based game. It supports adding players to the lobby, starting the game,
+ * validating moves, and managing the game lifecycle including the game's start, ongoing state, and conclusion.
+ *
+ * This class uses {@link ClientThread} to manage individual client connections, {@link GameState} to track the
+ * current state of the game, and defines {@link LobbyState} to represent the lobby's status. It facilitates
+ * network communication through utility methods, ensuring all players are synchronized with the game's progress.
+ *
+ * @author Pascal von Fellenberg
+ * @author Istref Uka
+ */
+
 public class Lobby {
   public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
@@ -20,7 +33,13 @@ public class Lobby {
   public GameState gameState;
   public String winnerName;
 
-
+  /**
+   * Constructs a new Lobby instance with a specified lobby number. Upon creation, the lobby is initialized
+   * as open, ready to accept players. This constructor sets the initial state of the lobby and prepares an
+   * empty list to hold players who join.
+   *
+   * @param lobbyNumber the unique identifier for this lobby.
+   */
   public Lobby(int lobbyNumber) {
     this.lobbyNumber = lobbyNumber;
     players = new ArrayList<>();
@@ -73,6 +92,12 @@ public class Lobby {
     return false;
   }
 
+  /**
+   * Retrieves the index of a given client in the list of players.
+   *
+   * @param client The ClientThread instance for which the index is to be found.
+   * @return the index of the specified client in the player list; returns -1 if the client is not found.
+   */
   public int getPlayerIndex(ClientThread client) {
     for (int i = 0; i < players.size(); i++) {
       if (players.get(i) == client) {
@@ -102,6 +127,16 @@ public class Lobby {
     }
   }
 
+  /**
+   * Validates a player's move by ensuring that the tile they wish to move is not null and that the resulting
+   * tile configuration matches the server's current state of the game.
+   *
+   * @param tile The tile that the player wants to move.
+   * @param tileArray The array of tiles representing the current state before the move.
+   * @param playerIdx The index of the player making the move.
+   * @return true if the move is valid and the resulting tile configuration matches the server's deck for the player;
+   *         false otherwise, including when the tile to move is null.
+   */
   public boolean validateMove(Tile tile, Tile[] tileArray, int playerIdx) {
     if (tile == null) {
       LOGGER.debug("move not valid: the moved tile can't be null");
@@ -120,6 +155,13 @@ public class Lobby {
     return equal;
   }
 
+  /**
+   * Removes a player from the game at the specified index.
+   *
+   * @param playerIndex The index of the player to be removed.
+   * @throws IOException If an I/O error occurs while sending the removal notification to other clients.
+   *                     This might happen due to network issues or problems with the client connections.
+   */
   public void removePlayer(int playerIndex) throws IOException {
     // TODO send message to all other clients that a player has been removed.
     lobbyState = LobbyState.OPEN;
@@ -131,6 +173,11 @@ public class Lobby {
     }
   }
 
+  /**
+   * Marks the game as finished and records the winner's name.
+   *
+   * @param winnerName The name of the player who won the game.
+   */
   public void finishGame(String winnerName) {
     this.winnerName = winnerName;
     lobbyState = LobbyState.FINISHED;
