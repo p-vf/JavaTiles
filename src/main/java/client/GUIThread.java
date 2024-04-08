@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+/**
+ * A graphical user interface (GUI) thread that extends JFrame and implements Runnable.
+ * This class manages the GUI components for a chat interface within a JavaTiles application.
+ * It provides methods to update the chat display and handle user input events.
+ */
 public class GUIThread extends JFrame implements Runnable{
 
             private JFrame frame;
@@ -22,14 +27,29 @@ public class GUIThread extends JFrame implements Runnable{
             private Client client;
 
 
+    /**
+     * Constructs a GUIThread object associated with a specific client instance.
+     *
+     * @param client The Client object used for sending messages and handling input.
+     */
  public GUIThread(Client client){
      this.client = client;
  }
 
+
+    /**
+     * Appends a message to the chat display area.
+     *
+     * @param message The message to append to the chat.
+     */
     public void updateChat(String message) {
         chat.append(message + "\n");
     }
 
+    /**
+     * Sets up and displays the graphical user interface (GUI) components for the chat.
+     * This method is invoked when the GUI thread is started.
+     */
     public void run() {
 
 
@@ -84,7 +104,11 @@ public class GUIThread extends JFrame implements Runnable{
 
             }
 
-
+    /**
+     * Pauses the current thread for a specified duration.
+     *
+     * @param x The duration to sleep in milliseconds.
+     */
             private void sleep(int x) {
                 try {
                     Thread.sleep(x);
