@@ -263,7 +263,7 @@ public class Tile {
   public String toStringPretty() {
 
     if (this.isJoker()) {
-      return "JT";
+      return "\u001B[5mJT\u001B[25m";
     }
     return
         // set color

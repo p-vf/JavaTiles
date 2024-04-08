@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static utils.NetworkUtils.encodeProtocolMessage;
+
 public class Lobby {
   public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
@@ -55,7 +57,7 @@ public class Lobby {
         players.set(i, client);
         if (gameState != null) {
           try {
-            client.send(NetworkUtils.encodeProtocolMessage("STRT", gameState.playerDecks.get(i).toString(), Integer.toString(i)));
+            client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.playerDecks.get(i).toStringArray()), Integer.toString(i)));
           } catch (IOException e) {
             LOGGER.error("Lobby.addPlayer: IOException thrown" + e.getMessage());
             return false;
