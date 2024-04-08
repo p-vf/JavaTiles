@@ -99,10 +99,20 @@ public class Client {
 
       ping(client);
 
+      String loginData;
 
-      String logindata = "LOGI " + login();
-
-      client.send(logindata);
+      if (args.length == 3) {
+        boolean isValid = !(args[2].contains(" ") || args[2].contains("\""));
+        if (isValid) {
+          loginData = "LOGI " + args[2];
+        } else {
+          System.out.println("Invalid argument for username: must not contain any spaces or double quotes");
+          loginData = "LOGI " + login();
+        }
+      } else {
+        loginData = "LOGI " + login();
+      }
+      client.send(loginData);
 
 
       String line = " ";
