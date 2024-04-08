@@ -33,7 +33,7 @@ public class GUIThread extends JFrame implements Runnable{
     public void run() {
 
 
-                frame = new JFrame("GameChat");
+                frame = new JFrame("JavaTiles");
                 chat = new JTextArea(20,50);
                 textField = new JTextField();
                 scroll = new JScrollPane(chat, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
