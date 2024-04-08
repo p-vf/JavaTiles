@@ -477,9 +477,9 @@ public class ClientThread implements Runnable {
       }
       case "w" -> {
         if (server.sendToNickname(cmd, arguments.get(2))) {
-          send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1), arguments.get(2)));
+          send(encodeProtocolMessage("+CATC", "w", arguments.get(1), arguments.get(2), "t"));
         } else {
-          send(encodeProtocolMessage("+CATC", "w", "", arguments.get(2)));
+          send(encodeProtocolMessage("+CATC", "w", "", arguments.get(2), "f"));
         }
         return;
       }
