@@ -377,7 +377,7 @@ public class ClientThread implements Runnable {
           lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
           ArrayList<String> stringTiles = winnerDeck.toStringArray();
           String deckString = encodeProtocolMessage(stringTiles);
-          encodeProtocolMessage("+WINC", deckString);
+          send(encodeProtocolMessage("+WINC", deckString));
         }
       }
     }
