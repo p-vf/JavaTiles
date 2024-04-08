@@ -60,6 +60,9 @@ In der Antwort ist das Argument `<actualname>` enthalten, welches den
 effektiven Spielernamen enthält, welchen der Spieler erhalten hat.
 Dieser Command funktioniert gleich wie der ``LOGI``-Command.
 
+Client: ```NAME Istref```  
+Server: ```+NAME Istref_1```
+
 🔴***TODO*** vielleicht ist dieser Command redundant (weil kein bedeutender Unterschied zu LOGI)
 
 ---
@@ -71,6 +74,10 @@ Dieser Command funktioniert gleich wie der ``LOGI``-Command.
 ### Beschreibung
 Listet die Spieler auf, die mit dem Server verbunden sind. 
 
+### Beispiel
+Client: `LPLA`  
+Server: `+LPLA "istref robin boran pascal "`
+
 ---
 
 ## Spieler in Lobby auflisten
@@ -79,6 +86,12 @@ Listet die Spieler auf, die mit dem Server verbunden sind.
 | `LLPL`  | `+LLPL <lobbieswithplayerlist>` | Client |
 ### Beschreibung
 Listet in `<lobbieswithplayerlist>` die Spieler auf, die in den lobbies sind.
+
+### Beispiel
+Client: `LLPL`  
+Server: `+LLPL "\"\\"Lobby 1 \\" \" \"pvonf pvonf_1 pvonf_2 \\" \\" \" "`
+🔴***TODO*** Dieser Command sollte nicht so unnötig kompliziert dargestellt werden.
+
 
 ---
 
@@ -98,11 +111,11 @@ Hat `<gamestatus>` den Wert `f`, so hat `<games>` folgende Form: `<lobbynumber_1
 
 ### Beispiel
 Client: ```LGAM o```  
-Server: ``+LGAM o "23:4 12:2 3:3"``  
+Server: ``+LGAM o "23:4 12:2 3:3 "``  
 Client: ```LGAM r```  
-Server: ``+LGAM r "51 23"``  
+Server: ``+LGAM r "51 23 "``  
 Client: ```LGAM f```  
-Server: ``+LGAM f "22:robin 1:nick 4:"``
+Server: ``+LGAM f "22:robin 1:nick 4: "``
 
 ---
 
@@ -116,6 +129,10 @@ Gibt es keine Lobby mit der Lobbynummer ``<n>``, so wird eine neue erstellt.
 Ist die Lobby mit Lobbynummer `<n>` voll, Bzw. hat das Spiel in dieser Lobby schon angefangen, 
 so wird `<joinsuccessful>` den Wert `f` haben und der Client konnte der Lobby nicht beitreten. 
 
+### Beispiel
+Client: `JLOB 42`  
+Server: `+LOGO t`
+
 ---
 
 ## Logout
@@ -123,8 +140,11 @@ so wird `<joinsuccessful>` den Wert `f` haben und der Client konnte der Lobby ni
 |---------|----------|--------|
 | `LOGO`  | `+LOGO`  | Client |
 ### Beschreibung
-
 Logout vom Server.
+
+### Beispiel
+Client: `LOGO`  
+Server: `+LOGO`
 
 ---
 
@@ -136,6 +156,10 @@ Logout vom Server.
 | `REDY`  | `+REDY`  | Client |
 ### Beschreibung
 Wird vom Client geschickt, wenn er parat zum Spielen ist.
+
+### Beispiel
+Client: `REDY`  
+Server: `+REDY`
 
 ---
 
@@ -150,6 +174,10 @@ Sind in diesem Deck 15 Steine, ist der empfangende Client der Startspieler.
 In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clients darstellt, welcher für die Identifikation des Spielers wichtig ist. 
 
 //hätte gerne playeridx vor dem startdeck -Boran wird somit leserlicher beim handeln
+
+### Beispiel
+Server: `STRT "8:RED 12:RED 6:BLUE 2:YELLOW 5:YELLOW 6:YELLOW 7:YELLOW 10:YELLOW 12:YELLOW 3:BLACK 4:BLACK 6:BLACK 7:BLACK 8:BLACK " 3`  
+Client: `+STRT`
 
 ---
 
@@ -197,7 +225,7 @@ Zudem wird vom Server mit der Flag `<valid>` mitgeteilt, ob die Konfiguration un
 Zuletzt wird auch noch vom Server das Exchangestack aktualisiert, auf welches man die tile drauflegt.
 
 ### Beispiel
-Client: `PUTT 13:RED "13:BLUE 13:BLACK 13:YELLOW \"\" 3:YELLOW 4:YELLOW 5:YELLOW 6:YELLOW 7:YELLOW \"\" 11:BLUE 12:BLUE 13:BLUE \"\" \"\"  1:YELLOW 1:BLUE 1:RED \"\" \"\" \"\" \"\" \"\" \"\""`  
+Client: `PUTT 4:RED "\" \" 3:RED 11:RED 12:RED 13:RED 2:BLUE 3:BLACK \" \" \" \" 11:BLUE 12:BLUE \" \" 2:YELLOW 7:YELLOW \" \" 1:YELLOW 1:RED \" \" \" \" \" \" 9:BLACK 9:RED \" \" \" \" "`  
 Server: `+PUTT t t`
 
 ---
@@ -209,6 +237,11 @@ Server: `+PUTT t t`
 ### Beschreibung
 Command wird gesendet, wenn das Spiel vom Spieler mit Name `<nickname>` gewonnen wird.
 
+### Beispiel
+Server: `PWIN istref`  
+Client: `+PWIN`
+
+
 ---
 
 ## Spiel beenden (durch Unentschieden)
@@ -219,6 +252,10 @@ Command wird gesendet, wenn das Spiel vom Spieler mit Name `<nickname>` gewonnen
 ### Beschreibung
 Command wird vom Server gesendet, wenn der Hauptstapel leer ist, und somit das
 Spiel mit einem Unentschieden beendet werden muss. 
+
+### Beispiel
+Server: `EMPT`  
+Client: `+EMPT`
 
 ---
 
@@ -239,8 +276,8 @@ Die response vom Server beinhaltet die gleichen Argumente, die er auch erhalten 
 dann bekommt sie zusätzlich noch eine flag `<nicknameexists>` (entweder `t` oder `f`), welche angibt, ob der spezifizierte Nickname existiert.
 
 ### Beispiel
-Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin`  
-Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" robin t`
+Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\" " robin`  
+Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\" " robin t`
 
 (Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler mit nickname `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
 
@@ -258,7 +295,7 @@ Dieser Command ist immer die Folge eines `CATC`-Commands. `<messagetype>` hat da
 
 
 ### Beispiel
-Server: `CATS w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"" boran`
+Server: `CATS w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\" " boran`
 Client: `+CATS`
 
 (Dies ist der `CATS`-Command, der an `robin` geschickt wird im obigen Beispiel vom `CATC`-Command)
@@ -273,6 +310,13 @@ Client: `+CATS`
 Die Ping-Nachricht wird konstant gesendet (mit einem Delay von ca. 1 Sekunde (exakte Dauer nicht sehr wichtig)), um Verbindungsunterbrüche aufzuspüren. 
 Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird die Verbindung beendet.
 
+### Beispiel
+Server: `PING`  
+Client: `+PING`
+
+Client: `PING`  
+Server: `+PING`
+
 ---
 
 ## Cheating
@@ -283,5 +327,8 @@ Falls 15 Sekunden lang keine Nachricht über das Socket ausgetauscht wird, wird 
 Wenn ein Client den `WINC`-Command schickt, dann bekommt er ein Deck, welches alle Steine hat, um eine Gewinnkonfiguration zu erreichen.
 Dabei wird sein Deck auf dem Server angepasst, sodass alle zukünftigen Spielzüge legal sind. 
 
+
+Server: `WINC`  
+Client: `+WINC "0:BLACK 1:RED 2:RED 3:RED 4:RED 1:BLUE 2:BLUE 3:BLUE 4:BLUE 1:YELLOW 2:YELLOW 3:YELLOW 4:YELLOW 5:YELLOW "`
 
 ---
