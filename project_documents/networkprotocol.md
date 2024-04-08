@@ -1,33 +1,75 @@
-# Einige Eigenheiten unseres Protokolls
+# Protokollbeschrieb
+## Aufbau eines Commands auf Zeichenebene
+Alle Tokens können beliebige(*) Zeichenfolgen sein.  
+Ist *t* nun ein solches Token. Dann gilt:  
+
+`<t>` = `"` + F(*t*) + `%"`  
+
+
+
+Wobei F(*t*) alle Anführungszeichen in *t* mit `\"` ersetzt und die resultierende Zeichenfolge zurückgibt.  
+
+Wir können nun mehrere beliebige(*) Zeichenfolgen *t_0*, *t_1*, *t_2*, ... wie folgt beliebig aneinanderreihen:
+
+`<t_0>` + ` ` + `<t_1>` + ` ` + `<t_2>` + ` ` + `<t_3>` + ...
+
+oder kurz:  
+*z* = `<t_0> <t_1> <t_2> <t_3> ...`
+
+was wieder eine Zeichenfolge ist.
+
+Was es hierbei zu bemerken gibt: Es existiert eine Rückwärtsumwandlung, die aus dieser Zeichenfolge die einzelnen Tokens extrahieren kann, 
+nennen wir sie R(*z*, *i*), wobei *i* der Index des Tokens angeben soll (beginnend bei 0). 
+
+Die Definition dieser Rückwärtsfunktion ist eine Übung für den Lesenden ;).
+
+Damit unser Protokoll einigermassen lesbar ist (und wegen Rückwärtskompatibilität), kann die Umwandlung `<t>` ausgelassen werden, solange *t* keine Anführungszeichen (`"`) und keine Leerschläge (` `) enthält und nicht leer ist. 
+
+### Beispiele
+Die oben beschriebene Transformation erlaubt es uns auch, Tokens darzustellen, die in sich verschachtelt mehrere Tokens darstellen, da F() für beliebige(*) Zahlenfolgen funktioniert.
+
+Beispiel (1):  
+*L* = `<<t_0> <t_1> <t_2>> <<t_3> <t_4> <t_5>>`
+In diesem Beispiel gilt unter anderem:  
+R(*L*, 0) = `<t_0> <t_1> <t_2>`,  
+R(R(*L*, 0), 0) = *t_0*,  
+R(R(*L*, 2), 1) = *t_5*
+
+Wenn also nun *t_0* = "2", *t_1* = "robin der fuchs", *t_2* = "player1", *t_3* = "5", *t_4* = "istref", *t_5* = ""
+
+Dann ist *L* = `<2 "robin der fuchs%" player1> <5 istref "%">`
+  = `"2 \"robin der fuchs%\" player1%" "5 istref \"%\"%"`
+
+*L* ist die Response des Servers zum `LLPL`-Command, wenn Lobby 2 die Spieler mit Nickname "robin der fuchs" und "player1" enthält und Lobby 5 den Spieler mit Nickname "istref" und einen Leeren Slot enthält.
+
+("robin der fuchs" ist kein Valider Nickname, aber für Demonstrationszwecke existiert er hier im Beispiel)
+
+
+## Sonstige Eigenschaften unseres Protokolls
 - Unser Protokoll ist Verbindungsbasiert, das heisst jeder Client hat eine feste Socket-Verbindung mit dem Server.  
 Aus dieser Gegebenheit können viele Informationen von den Commands ausgelassen werden (z. B. wer der Absender ist), da sie sich jeweils aus dem Kontext ergeben. 
 - Jede Request in unserem Netzwerkprotokoll sieht wie folgt aus:  
 ```<commandname> <arg_1> <arg_2> ... [<optionalarg_1> ...] [<debugmessage>]```  
-wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Argument und `<optionalarg_N>` das N-te optionale Argument ist. 
-- Jedes Argument ist entweder eine Zeichenfolge ohne Leerschlag (` `) und ohne Anführungszeichen (`"`) oder eine Zeichenfolge,  
-welche mit Anführungszeichen beginnt und endet und jedes Anführungszeichen in der Zeichenfolge mit einem vorhergehenden 
-Backslash (`\`) gekennzeichnet wird. Zum Beispiel wird die Zeichenfolge `Hallo "Leute", wie gehts?` wie folgt dargestellt: `"Hallo \"Leute\", wie gehts?"`
-- TODO verschachtelte Darstellung von Argumenten erklären.
-- Jede Response hat den gleichen Aufbau wie eine Request, jedoch wird ein ``+`` am Anfang angehängt:  
-``+<commandname> ...``
-- Jedes Argument kann im Prinzip Leerschläge beinhalten (siehe Beschreibung des Parameters `<msg>`).
-Da dies aber nur im Falle der Chat-Nachricht von Notwendigkeit ist, wird dies nur dort explizit erwähnt.
+wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Argument und `<optionalarg_N>` das N-te optionale Argument ist.
+- Jede Response hat den gleichen Aufbau wie eine Request, jedoch wird ein ``+`` am Anfang angehängt.
+
+(*) Die Zeichenfolge darf keinen newline Buchstaben und auch kein Carriage Return beinhalten, aber ansonst kann sie jede Zeichenfolge sein.
 
 
-| Parameter                                                      | Beschreibung                                                                                                                                                                                                                                                                                          |
-|----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<joinsuccessful>`, `<valid>`, `<won>`, `<nicknameexists>`     | entweder `t` oder `f`, stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                                                                                    |  
-| `<nickname>`, `<whisperrecipient>`, `<sender>`, `<actualname>` | Spielername ohne Leerschlag, mit maximaler Länge 30. (stellt Spielername dar)                                                                                                                                                                                                                         |
-| `<msg>`                                                        | Zeichenfolge, die eine Nachricht darstellt.                                                                                                                                                                                                                                                           |
-| `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                                                                                            |
-| `<drawstack>`                                                  | Entweder `m` oder `e` (stellt entweder Hauptstapel oder Austauschstapel dar)                                                                                                                                                                                                                          |
-| `<tile>`                                                       | Repräsentation eines Spielsteins;<br/>`<zahl>:<farbe>`, wobei `<zahl>` eine Zahl zwischen `0` und `13` und `<farbe>` entweder `RED`, `BLUE`, `YELLOW` oder `BLACK` ist. Speziell: bei der Zahl 0 handelt es sich um den Joker, egal in welcher Farbkombination.<br/> Kann auch eine leerer Wert sein. |
-| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks;<br/>`<tile_1> <tile_2> ... <tile_20>` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an Stelle N, so wird sie mit `\"\"` ersetzt.                                                                                                         |
-| `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`"<tile_0> <tile_1> <tile_2> <tile_3>"` wobei `<tile_N>` der Austauschstapel des Spielers mit Index N ist.                                                                                                                            |
-| `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ...` wobei `<n_M>` die Lobbynummer und `<s_M>` die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command)                                                                      |
-| `<playerlist>`                                                 | Stellt Liste von Spielern dar; <br/>`<name_1> <name_2> ...`                                                                                                                                                                                                                                           |
-| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<lobby_1> <lobby_2> ...` wobei `<lobby_M>` die M-te Lobby wie folgt darstellt: `"Lobby <lobbynum_M>" "<playerlist_M>"`                                                                                                                |
-| `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/>`b`,`l`,`w` für jeweils broadcast, lobby, und whisper                                                                                                                                                                                                       |
+| Parameter                                                      | Beschreibung                                                                                                                                                                                                                                                                   |
+|----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<joinsuccessful>`, `<valid>`, `<won>`, `<nicknameexists>`     | entweder "`t`" oder "`f`", stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                                                         |  
+| `<nickname>`, `<whisperrecipient>`, `<sender>`, `<actualname>` | Spielername ohne Leerschlag, mit maximaler Länge 30. (stellt Spielername dar)                                                                                                                                                                                                  |
+| `<msg>`                                                        | Zeichenfolge, die eine Nachricht darstellt.                                                                                                                                                                                                                                    |
+| `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                                                                     |
+| `<drawstack>`                                                  | Entweder "`m`" oder "`e`" (stellt entweder Hauptstapel oder Austauschstapel dar)                                                                                                                                                                                               |
+| `<tile>`                                                       | Repräsentation eines Spielsteins;<br/>*zahl* + `:` + *farbe* <br/> wobei *zahl* eine Zahl zwischen `0` und `13` und *farbe* entweder "`RED`", "`BLUE`", "`YELLOW`" oder "`BLACK`" ist. Speziell: bei der Zahl 0 handelt es sich um den Joker, egal in welcher Farbkombination. |
+| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks;<br/>`<<tile_1> <tile_2> ... >` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an einer gewissen Stelle, so wird dort ein leerer Wert dargestellt.                                                                  |
+| `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`<<tile_0> <tile_1> <tile_2> <tile_3>>` wobei *tile_N* den obersten Stein des Austauschstapels des Spielers mit Index N darstellt.                                                                             |
+| `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`<<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ...>` wobei *n_M* die Lobbynummer und *s_M* die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command)                                                 |
+| `<playerlist>`                                                 | Stellt Liste von Spielern dar; <br/>`<<name_1> <name_2> ...>`                                                                                                                                                                                                                  |
+| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<<lobby_1_names> <lobby_2_names> ...>` wobei *lobby_M_names* die M-te Lobby wie folgt darstellt: `<lobby_M_number> <lobby_M_names_1> <lobby_M_names_2> <lobby_M_names_4> ...`                                  |
+| `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/> "`b`", "`l`", "`w`" für jeweils broadcast, lobby, und whisper                                                                                                                                                                       |
 
 
 ---
@@ -89,9 +131,17 @@ Listet in `<lobbieswithplayerlist>` die Spieler auf, die in den lobbies sind.
 
 ### Beispiel
 Client: `LLPL`  
-Server: `+LLPL "\"\\"Lobby 1 \\" \" \"pvonf pvonf_1 pvonf_2 \\" \\" \" "`
-🔴***TODO*** Dieser Command sollte nicht so unnötig kompliziert dargestellt werden.
+Server: `+LLPL "\"2 istref boran%\" \"6 \\"%\\" robin%\"%"`
 
+*lobbieswithplayerlist* = "`"2 istref boran%" "6 \"%\" robin%"`"  
+*lobby_1_number* = "`2`"  
+*lobby_1_player_1* = "`istref`"  
+*lobby_1_player_2* = "`boran`"  
+*lobby_2_number* = "`6`"  
+*lobby_2_player_1* = ""  
+*lobby_2_player_2* = "`robin`"
+
+(In Lobby 2 sind Spieler istref und boran, in Lobby 6 hat es einen leeren Slot und den Spieler robin)
 
 ---
 
@@ -104,18 +154,18 @@ Wird geschickt, wenn der Client bestimmte Lobbies (games) auflisten will.
 ``<gamestatus>`` ist entweder `o`, `r` oder `f`, was jeweils 
 offen (**o**pen), laufend (**r**unning) oder beendet (**f**inished) bedeuten soll. 
 Dieses Argument bestimmt, welche Spiele angezeigt werden.  
-Hat `<gamestatus>` den Wert `o`, so hat `<games>` folgende Form: `<lobbynumber_1>:<playercount_1> <lobbynumber_2>:<playercount_2> ...`.  
-Hat `<gamestatus>` den Wert `r`, so hat `<games>` folgende Form: `<lobbynumber_1> <lobbynumber_2> ...`.  
-Hat `<gamestatus>` den Wert `f`, so hat `<games>` folgende Form: `<lobbynumber_1>:[<winner_1>] <lobbynumber_2>:[<winner_2>] ...`. 
+Hat `<gamestatus>` den Wert `o`, so hat `<games>` folgende Form: `<<lobbynumber_1>:<playercount_1> <lobbynumber_2>:<playercount_2> ...>`.  
+Hat `<gamestatus>` den Wert `r`, so hat `<games>` folgende Form: `<<lobbynumber_1> <lobbynumber_2> ...>`.  
+Hat `<gamestatus>` den Wert `f`, so hat `<games>` folgende Form: `<<lobbynumber_1>:[<winner_1>] <lobbynumber_2>:[<winner_2>] ...>`. 
 (zu beachten: nicht bei jedem Spiel gibt es einen Gewinner, in diesem Fall darf kein `<winner_N>` angegeben werden)
 
 ### Beispiel
 Client: ```LGAM o```  
-Server: ``+LGAM o "23:4 12:2 3:3 "``  
+Server: ``+LGAM o "23:4 12:2 3:3%"``  
 Client: ```LGAM r```  
-Server: ``+LGAM r "51 23 "``  
+Server: ``+LGAM r "51 23%"``  
 Client: ```LGAM f```  
-Server: ``+LGAM f "22:robin 1:nick 4: "``
+Server: ``+LGAM f "22:robin 1:nick 4:%"``
 
 ---
 
@@ -176,7 +226,7 @@ In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clien
 //hätte gerne playeridx vor dem startdeck -Boran wird somit leserlicher beim handeln
 
 ### Beispiel
-Server: `STRT "8:RED 12:RED 6:BLUE 2:YELLOW 5:YELLOW 6:YELLOW 7:YELLOW 10:YELLOW 12:YELLOW 3:BLACK 4:BLACK 6:BLACK 7:BLACK 8:BLACK " 3`  
+Server: `STRT "8:RED 12:RED 6:BLUE 2:YELLOW 5:YELLOW 6:YELLOW 7:YELLOW 10:YELLOW 12:YELLOW 3:BLACK 4:BLACK 6:BLACK 7:BLACK 8:BLACK%" 3`  
 Client: `+STRT`
 
 ---
@@ -190,7 +240,7 @@ Der Server schickt den obersten Stein der Austauschstapel in `<exchangestacks>`
 und der Index des Spielers, der an der Reihe ist in `<currentplayeridx>`. 
 
 ### Beispiel
-Server: `STAT "\" \" 4:BLACK 5:RED 3:YELLOW " 1`  
+Server: `STAT "\"%\" 4:BLACK 5:RED 3:YELLOW%" 1`  
 Client: `+STAT`  
 (Spieler mit playerindex 1 ist am Zug und der Erste exchangeStack ist leer, die anderen haben jeweils eine schwarze 4, eine rote 5 und eine gelbe 3)
 
@@ -225,7 +275,7 @@ Zudem wird vom Server mit der Flag `<valid>` mitgeteilt, ob die Konfiguration un
 Zuletzt wird auch noch vom Server das Exchangestack aktualisiert, auf welches man die tile drauflegt.
 
 ### Beispiel
-Client: `PUTT 4:RED "\" \" 3:RED 11:RED 12:RED 13:RED 2:BLUE 3:BLACK \" \" \" \" 11:BLUE 12:BLUE \" \" 2:YELLOW 7:YELLOW \" \" 1:YELLOW 1:RED \" \" \" \" \" \" 9:BLACK 9:RED \" \" \" \" "`  
+Client: `PUTT 4:RED "\"%\" 3:RED 11:RED 12:RED 13:RED 2:BLUE 3:BLACK \"%\" \"%\" 11:BLUE 12:BLUE \"%\" 2:YELLOW 7:YELLOW \"%\" 1:YELLOW 1:RED \"%\" \"%\" \"%\" 9:BLACK 9:RED \"%\" \"%\"%"`  
 Server: `+PUTT t t`
 
 ---
@@ -276,8 +326,8 @@ Die response vom Server beinhaltet die gleichen Argumente, die er auch erhalten 
 dann bekommt sie zusätzlich noch eine flag `<nicknameexists>` (entweder `t` oder `f`), welche angibt, ob der spezifizierte Nickname existiert.
 
 ### Beispiel
-Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\" " robin`  
-Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\" " robin t`
+Client: `CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"%" robin`  
+Server: `+CATC w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"%" robin t`
 
 (Der Server muss dann die Nachricht mit einem `CATS` nur an den Spieler mit nickname `robin` weiterleiten, da die flag `<messagetype>` den Wert `w` hat)
 
@@ -295,7 +345,7 @@ Dieser Command ist immer die Folge eines `CATC`-Commands. `<messagetype>` hat da
 
 
 ### Beispiel
-Server: `CATS w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\" " boran`
+Server: `CATS w "Tom hat mir folgendes gesagt: \"Nick ist mühsam\"%" boran`
 Client: `+CATS`
 
 (Dies ist der `CATS`-Command, der an `robin` geschickt wird im obigen Beispiel vom `CATC`-Command)
@@ -329,6 +379,6 @@ Dabei wird sein Deck auf dem Server angepasst, sodass alle zukünftigen Spielzü
 
 
 Server: `WINC`  
-Client: `+WINC "0:BLACK 1:RED 2:RED 3:RED 4:RED 1:BLUE 2:BLUE 3:BLUE 4:BLUE 1:YELLOW 2:YELLOW 3:YELLOW 4:YELLOW 5:YELLOW "`
+Client: `+WINC "0:BLACK 1:RED 2:RED 3:RED 4:RED 1:BLUE 2:BLUE 3:BLUE 4:BLUE 1:YELLOW 2:YELLOW 3:YELLOW 4:YELLOW 5:YELLOW%"`
 
 ---
