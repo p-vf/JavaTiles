@@ -250,11 +250,7 @@ public class ClientThread implements Runnable {
         }
         case CATC -> {
           handleChat(arguments);
-          if (arguments.get(0).equals("w")) {
-            send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1), arguments.get(2)));
-          } else {
-            send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1)));
-          }
+
         }
         case PING -> send("+PING");
         case NAME -> {
@@ -463,7 +459,7 @@ public class ClientThread implements Runnable {
    *
    * @param arguments The arguments of the chat request.
    */
-  private void handleChat(ArrayList<String> arguments) {
+  private void handleChat(ArrayList<String> arguments) throws IOException {
     String messageType = arguments.get(0);
     String msg = arguments.get(1);
     String sender = nickname;
@@ -480,12 +476,18 @@ public class ClientThread implements Runnable {
         lobby.sendToLobby(cmd, this);
       }
       case "w" -> {
-        server.sendToNickname(cmd, arguments.get(2));
+        if (server.sendToNickname(cmd, arguments.get(2))) {
+          send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1), arguments.get(2)));
+        } else {
+          send(encodeProtocolMessage("+CATC", "w", "", arguments.get(2)));
+        }
+        return;
       }
       default -> {
         throw new IllegalArgumentException("Should be one of \"b\", \"l\" or \"w\", was \"" + messageType + "\"");
       }
     }
+    send(encodeProtocolMessage("+CATC", arguments.get(0), arguments.get(1)));
   }
 
   /**

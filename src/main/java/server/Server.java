@@ -79,17 +79,20 @@ public class Server {
    * @param str The message to be sent to the client.
    * @param nickname The nickname of the client to whom the message is to be sent.
    */
-  public void sendToNickname(String str, String nickname) {
+  public boolean sendToNickname(String str, String nickname) {
+    boolean sent = false;
     for (ClientThread client : clientList) {
       if (client.nickname.equals(nickname)) {
         try {
           client.send(str);
+          sent = true;
         } catch (IOException e) {
           // TODO bessere Fehlerabhandlung
           e.printStackTrace(System.err);
         }
       }
     }
+    return sent;
   }
 
   /**
