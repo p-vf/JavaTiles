@@ -66,6 +66,9 @@ public class InThread implements Runnable {
       } catch (IOException e) {
         System.out.println("You have been logged out.");
         System.exit(0); // Terminate the program on I/O error
+      }catch (NullPointerException e) {
+        System.out.println("Received a null message from the server.");
+        System.exit(0);
       }
     }
   }

@@ -32,6 +32,15 @@ public class ClientDeck {
     return deck;
   }
 
+  public void setDeck(Tile[][] deck) {
+    for (int i = 0; i < deck.length; i++) {
+      for (int j = 0; j < deck[i].length; j++) {
+        this.deck[i][j] = deck[i][j];
+
+      }
+    }
+  }
+
   /**
    * Retrieves a specific tile from the deck based on its column and row indices.
    *
@@ -50,7 +59,7 @@ public class ClientDeck {
    *
    * @param tileArray The array of tiles to populate the deck with.
    */
-  public void createDeckwithTileArray(Tile[] tileArray) {
+  public Tile[][] createDeckwithTileArray(Tile[] tileArray) {
     Tile[][] newDeck = new Tile[deck.length][deck[0].length];
     int count = 0;
     loop:
@@ -64,7 +73,7 @@ public class ClientDeck {
         }
       }
     }
-    this.deck = newDeck;
+    return newDeck;
   }
 
   /**

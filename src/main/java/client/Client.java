@@ -86,7 +86,7 @@ public class Client {
    */
   public static void main(String[] args) {
     try {
-      // TODO man muss beim Start dieser Funktion den Nicknamen als optionalen Parameter angeben können (in args[2])
+
       Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
       Client client = new Client(sock);
       guiThread = new GUIThread(client);
@@ -126,7 +126,7 @@ public class Client {
         if (messageToSend == null || messageToSend.isEmpty()) {
           continue;
         }
-        LOGGER.debug("sent: " + messageToSend);
+       // LOGGER.debug("sent: " + messageToSend);
         client.send(messageToSend);
 
       }
@@ -296,6 +296,7 @@ public class Client {
             return encodeProtocolMessage("REDY");
           }else{
             System.out.println("You are not in a lobby right now. Please join a lobby first");
+            return null;
           }
 
         case "/joinlobby":
@@ -305,10 +306,12 @@ public class Client {
               int num = Integer.parseInt(number);
               return encodeProtocolMessage("JLOB", String.valueOf(num));
             } catch (NumberFormatException e) {
-              return "Invalid input for lobbynumber";
+              System.out.println("Please enter a number");
+              return null;
             }
           } else {
-            return "You must provide a number to enter a lobby";
+            System.out.println("You must provide a number to enter a lobby");
+            return null;
           }
 
 
@@ -394,6 +397,19 @@ public class Client {
 
           if(arguments.get(0).equals("f")){
             return encodeProtocolMessage("LGAM", "f");}
+          else{
+            System.out.println("try: /listgames o, /listgames r or /listgames f");
+            return null;
+          }
+
+        case "/secretcheatcode42":
+          if(playerID== CurrentPlayerID ){
+          return encodeProtocolMessage("WINC");}
+          else{
+            System.out.println("Shh... I know you want to use a cheat code but wait for your turn first.");
+            return null;
+          }
+
 
 
 
@@ -458,7 +474,7 @@ public class Client {
 
           }
           Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
-          yourDeck.createDeckwithTileArray(tilesArrayStrt);
+          yourDeck.setDeck(yourDeck.createDeckwithTileArray(tilesArrayStrt));
           showDeck();
           client.send(encodeProtocolMessage("+STRT"));
           break;
@@ -540,8 +556,7 @@ public class Client {
           break;
 
         case LGAM:
-          // TODO lobbies aren't given as multiple arguments, they are all in one argument (the second) so this implementation is wrong.
-          //  If there are no lobbies with the requested status, an empty string is sent from the server, which causes an error here.
+
 
           if (arguments.get(1).isEmpty()) {
             System.out.println("No lobbies with this status");
@@ -672,6 +687,8 @@ public class Client {
 
         case DRAW:
           yourDeck.addTheseTiles(parseTile(arguments.get(0)));
+          Tile tile = parseTile(arguments.get(0));
+          System.out.println("You have drawn: "+ tile.toStringPretty());
           showDeck();
           break;
 
@@ -703,6 +720,15 @@ public class Client {
         case LLPL:
           System.out.println(getBeautifullyFormattedDecodedLobbiesWithPlayerList(arguments.get(0)));
           break;
+
+        case WINC:
+          ArrayList<String> cheatTiles = decodeProtocolMessage(arguments.get(0));
+          Tile[] tilesArray = stringsToTileArray(cheatTiles);
+          Tile[][] newDeck = yourDeck.createDeckwithTileArray(tilesArray);
+          yourDeck.setDeck(newDeck);
+          showDeck();
+
+
 
 
         default:
