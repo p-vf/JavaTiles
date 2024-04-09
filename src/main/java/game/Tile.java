@@ -106,6 +106,38 @@ public class Tile {
     return number == 0;
   }
 
+
+  public static void main(String[] args) {
+    Tile[] deck = new Tile[]{
+        null,
+        null,
+        new Tile(3, Color.BLUE),
+        new Tile(4, Color.BLUE),
+        new Tile(5, Color.BLUE),
+        null,
+        null,
+        new Tile(10, Color.YELLOW),
+        new Tile(10, Color.BLACK),
+        new Tile(10, Color.BLUE),
+        new Tile(0, Color.BLUE),
+        null,
+        new Tile(13, Color.YELLOW),
+        new Tile(13, Color.BLACK),
+        new Tile(13, Color.RED),
+        null,
+        null,
+        null,
+        new Tile(4, Color.RED),
+        new Tile(5, Color.RED),
+        new Tile(6, Color.RED),
+        new Tile(7, Color.RED),
+        null,
+        null,
+
+    };
+    System.out.println(isWinningDeck(deck));
+  }
+
   /**
    * Checks whether deck is a winning deck. The deck is a winning deck,
    * if it only contains "runs" and "sets" of length greater than 3.
@@ -135,19 +167,20 @@ public class Tile {
         currentTile = deck[i];
       }
       if (currentTile == null || i == 12) {
+        int from = i - formationLength;
+        int to = i;
+        String output = Arrays.toString(Arrays.copyOfRange(deck, from, to));
         if (formationLength < 3 && formationLength > 0) {
           System.out.println("Formation of length " + formationLength + " too short");
+          System.out.println("Formation: " + output);
           //returnValue = false;
           return false;
         }
         if (formationLength == 0) {
           continue;
         }
-        int from = i - formationLength;
-        int to = i;
         boolean validRun = isValidRun(deck, from, to);
         boolean validSet = isValidSet(deck, from, to);
-        String output = Arrays.toString(Arrays.copyOfRange(deck, from, to));
         if (validRun) {
           System.out.println("valid run: " + output);
         }
