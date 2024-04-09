@@ -12,6 +12,8 @@ import static java.lang.System.currentTimeMillis;
  * This class extends Thread and overrides the run method to define the thread's behavior.
  *
  * @author Pascal von Fellenberg
+ * @author Boran Gökcen
+ * @author Robin Gökcen
  */
 
 public class ClientPingThread extends Thread {

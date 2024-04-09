@@ -2,22 +2,11 @@ package client;
 
 import java.io.*;
 import java.net.Socket;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
-import game.Color;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
-import utils.NetworkUtils;
-
-import javax.swing.*;
-
 import static game.Tile.*;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
@@ -48,7 +37,7 @@ public class Client {
 
   public static int playerID = 4; //playerID in a particular game
 
-  public static int CurrentPlayerID = 5; //playerID of the player who's turn it is
+  public static int CurrentPlayerID = 5; //playerID of the player whose turn it is
 
   public static final Logger LOGGER = LogManager.getLogger(Client.class); //LOGGER for debugging
 

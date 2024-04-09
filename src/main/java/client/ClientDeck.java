@@ -9,6 +9,10 @@ import java.util.Arrays;
  * Represents a deck of tiles used by a client in a game scenario.
  * This class manages operations related to the deck, such as creating,
  * modifying, and querying the deck's contents.
+ *
+ * @author Robin Gökcen
+ * @author Boran Gökcen
+ *
  */
 
 public class ClientDeck {

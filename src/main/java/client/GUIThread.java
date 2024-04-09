@@ -1,6 +1,5 @@
 package client;
 
-import utils.NetworkUtils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,13 +7,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 
 /**
  * A graphical user interface (GUI) thread that extends JFrame and implements Runnable.
  * This class manages the GUI components for a chat interface within a JavaTiles application.
  * It provides methods to update the chat display and handle user input events.
+ *
+ * @author Boran Gökcen
+ * @author Robin Gökcen
  */
 public class GUIThread extends JFrame implements Runnable{
 
@@ -24,7 +26,7 @@ public class GUIThread extends JFrame implements Runnable{
             private JScrollPane scroll;
             private Border border;
 
-            private Client client;
+            private Client client; //The associated client object
 
 
     /**

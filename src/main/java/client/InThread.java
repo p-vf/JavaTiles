@@ -19,6 +19,7 @@ import static client.Client.handleResponse;
  *
  * @author Boran Gökcen
  * @author Pascal von Fellenberg
+ * @author Robin Gökcen
  */
 public class InThread implements Runnable {
 
