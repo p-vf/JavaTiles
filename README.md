@@ -40,14 +40,10 @@ Welcome to Java Tiles! This project aims to bring the beloved game of Okey to yo
      ```
    - Replace `<port>` with the desired port number for the server.
 
-## Known Issues
-
-1. **Disconnection on Some Commands:**
-   - Some commands may lead to disconnection from the server. This issue is being addressed and will be resolved in future updates.
 
 ## Contributing
 
-We welcome contributions from the community to improve Java Tiles. Feel free to submit bug reports, feature requests, or pull requests on our GitHub repository. Your feedback and contributions are greatly appreciated!
+We welcome contributions from the community to improve Java Tiles. Feel free to submit bug reports, feature requests etc. Your feedback and contributions are greatly appreciated!
 
 ## Contact
 
