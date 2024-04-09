@@ -165,7 +165,7 @@ wie zum Beispiel dass beim schicken des PUTT commands der Client die übergebene
 - Bei der Spiellogik bleibt uns noch zu tun: Spieler von illegalen Spielzügen abhalten, wie zum Beispiel zweimal eine Karte ziehen.
 - Wir haben abgemacht, morgen um 13:00 Uhr weiter an der Spiellogik und am GUI zu arbeiten. 
 
-## 5.4.2024 Besprechung im Pharmazentrum(Robin, Pascal, Boran, Istref)
+## 5.4.2024 Besprechung im Pharmazentrum (Robin, Pascal, Boran, Istref)
 - Wir haben weiter an der Spiellogik gearbeitet und uns sind weitere kleine Fehler aufgefallen.
 Wir haben bemerkt, dass beim Client beim PUTT command nicht berücksichtigt wird, ob man an der Reihe ist oder nicht.
 Ausserdem ist beim GUI-Chat etwas noch nicht ganz in Ordnung, denn das Versenden von Nachrichten funktioniert nicht.
@@ -181,5 +181,29 @@ Ausserdem ist beim GUI-Chat etwas noch nicht ganz in Ordnung, denn das Versenden
 - Die Darstellung der Tiles wurde verbessert.
 - Wir haben mit dem Manual begonnen.
 - Optimierungen für die User Eingaben wie beispielsweise Games auflisten, sowie einige edge cases für andere Eingaben behandelt.
+- Die .jar file funktioniert jetzt
+
+## 7.4.2024 Besprechung im Lernoullianum (Robin, Pascal, Boran, Istref)
+- Als erstes haben wir auf der Clientseite die DRAW und PUTT Methode so implementiert, dass man erst wenn man
+an der Reihe ist den Befehl wirklich ausführen kann.
+- Danach haben wir das Spiel getestet und uns kam es doch komisch vor, dass der Sender seine eigene
+Nachricht nicht sieht, was wir dann angepasst haben. Ausserdem war es etwas schwer das spiel zu spielen, da die
+Darstellung der Tiles auf dem Terminal nur aus zwei Arrays bestand, woraufhin wir entschieden, die Tiles schöner 
+zu gestalten. Deshalb haben wir sie nach der entsprechenden Farbe gefärbt.
+- Das Manual wurde überarbeitet und grundsätzlich fertiggestellt.
+- Wir haben zusammen den Projektplan besprochen und überarbeitet, sodass wir wissen was zu tun ist bis zum schluss
+vom Projekt.
+- Als nächsten Termin haben wir die morgige Übungsstunde festgelegt.
+
+## 8.4.2024 Weiterarbeiten in der Übungsstunde (Robin, Pascal, Boran, Istref)
+- Beim Spielen in der Übungsstunde hatten wir grosse Freude, da man mit der überarbeiteten Darstellung nun das 
+Spielgeschehen gut mitverfolgt werden konnte. Uns ist aufgefallen, dass die Whisper funktionalität mangelhaft ist
+und auch, dass wir gerne einen Cheatcode einfügen würden.
+- Das QA Konzept haben wir nochmals überdacht und auf diesen Meilenstein angepasst
+- Das Netwerkprotokoll wurde angepasst.
+- Später haben wir uns im Lernoullianum getroffen und:
+- Javadoc aktualisiert
+- Den Cheatcode tatsächlich implementiert.
+- Das Netwerkprotokoll angepasst.
 
 
