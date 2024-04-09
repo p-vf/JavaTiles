@@ -137,7 +137,7 @@ send hinzugefügt.
 - Im Fall von EMPT:
  - den Spielern wird mitgeteilt, dass es zu einem Unentschieden 
 
-## 2.4.2024 Besprechung im Lernoullianum (Robin, Pascal, Boran, Istref)
+## 2.4.2024 Treffen im Lernoullianum (Robin, Pascal, Boran, Istref)
 - Wir haben uns an diesem Tag getroffen, um die Spiellogik weiter zu implementieren.
 - Auf der Clientseite wurde die Bekanntgabe des Gewinners implementiert.
 - Auf der Serverseite wurden die fehlenden Enums hinzugefügt.
@@ -155,7 +155,7 @@ send hinzugefügt.
 - Wir haben über unsere Whatsapp Gruppe beschlossen, morgen uns um 16:30 im Lernoullianum zu treffen und 
 - letzte Implementierungen der Spiellogik zu implementieren und diese anschliessend zu testen.
 
-## 4.4.2024 Besprechung im Lernoullianum (Robin, Pascal, Boran, Istref)
+## 4.4.2024 Treffen im Lernoullianum (Robin, Pascal, Boran, Istref)
 - DRAW command wurde auf der Serverseite implementiert
 - getVisibleTiles Methode im GameState implementiert um die Exchangestacks anzeigen zu können.
 - erste Version des GUI
@@ -165,7 +165,7 @@ wie zum Beispiel dass beim schicken des PUTT commands der Client die übergebene
 - Bei der Spiellogik bleibt uns noch zu tun: Spieler von illegalen Spielzügen abhalten, wie zum Beispiel zweimal eine Karte ziehen.
 - Wir haben abgemacht, morgen um 13:00 Uhr weiter an der Spiellogik und am GUI zu arbeiten. 
 
-## 5.4.2024 Besprechung im Pharmazentrum (Robin, Pascal, Boran, Istref)
+## 5.4.2024 Treffen im Pharmazentrum (Robin, Pascal, Boran, Istref)
 - Wir haben weiter an der Spiellogik gearbeitet und uns sind weitere kleine Fehler aufgefallen.
 Wir haben bemerkt, dass beim Client beim PUTT command nicht berücksichtigt wird, ob man an der Reihe ist oder nicht.
 Ausserdem ist beim GUI-Chat etwas noch nicht ganz in Ordnung, denn das Versenden von Nachrichten funktioniert nicht.
@@ -183,7 +183,7 @@ Ausserdem ist beim GUI-Chat etwas noch nicht ganz in Ordnung, denn das Versenden
 - Optimierungen für die User Eingaben wie beispielsweise Games auflisten, sowie einige edge cases für andere Eingaben behandelt.
 - Die .jar file funktioniert jetzt
 
-## 7.4.2024 Besprechung im Lernoullianum (Robin, Pascal, Boran, Istref)
+## 7.4.2024 Treffen im Lernoullianum (Robin, Pascal, Boran, Istref)
 - Als erstes haben wir auf der Clientseite die DRAW und PUTT Methode so implementiert, dass man erst wenn man
 an der Reihe ist den Befehl wirklich ausführen kann.
 - Danach haben wir das Spiel getestet und uns kam es doch komisch vor, dass der Sender seine eigene
@@ -205,5 +205,6 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
 - Javadoc aktualisiert
 - Den Cheatcode tatsächlich implementiert.
 - Das Netwerkprotokoll angepasst.
+- Am ende des Tages haben wir beschlossen, uns um 13:15 im Lernoullianum zu treffen.
 
 
