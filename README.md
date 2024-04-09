@@ -1,4 +1,3 @@
-# README
 # Java Tiles: Online Multiplayer Okey Game
 
 Java Tiles is an ongoing project aimed at developing an online multiplayer version of the classic game Okey. Players can currently join the server as clients and engage in chat interactions. Developed by vonUken, this project promises to deliver an immersive gaming experience once completed.
@@ -9,34 +8,38 @@ Welcome to Java Tiles! This project aims to bring the beloved game of Okey to yo
 
 ## Installation and Usage Instructions
 
-### For End-Users:
+### Building the JAR File:
 
 1. **Java Installation:**
    - Ensure you have Java installed on your system. If not, download and install Java from the [official website](https://www.java.com).
 
-2. **Download Java Tiles Client:**
-   - Download the `Client` folder from the GitHub repository.
+2. **Building the JAR File:**
+   - Open a terminal or command prompt.
+   - Navigate to the root directory of the Java Tiles project.
+   - Run the following command to build the JAR file (for Windows):
+     ```
+     ./gradlew jar
+     ```
 
-3. **Run Java Tiles Client:**
-   - Open your IDE.
-   - Navigate to the directory where you downloaded the `Client` folder.
-   - Run the EchoClient.java file
-   - It is important to note the ip-adress and portnumber as inputarguments
-   - Follow the prompts to connect to the server and start chatting.
+### Running as a Client:
 
-### For Server Hosts:
+1. **Starting a Client:**
+   - After building the JAR file, run the following command to start a client and connect to a server:
+     ```
+     java -jar .\build\libs\JavaTiles-0.0.1-ALPHA.jar client <ipaddress>:<port> [<username>]
+     ```
+   - Replace `<ipaddress>` and `<port>` with the IP address and port number of the server.
+   - `<username>` is an optional parameter to specify your username.
 
-1. **Java Installation:**
-   - Ensure you have Java installed on your system. If not, download and install Java from the [official website](https://www.java.com).
+### Running as a Server:
 
-2. **Download Java Tiles Server:**
-   - Download the `Server` folder from the GitHub repository.
+1. **Starting a Server:**
+   - After building the JAR file, run the following command to start the server:
+     ```
+     java -jar .\build\libs\JavaTiles-0.0.1-ALPHA.jar server <port>
+     ```
+   - Replace `<port>` with the desired port number for the server.
 
-3. **Run Java Tiles Server:**
-   - Open your IDE.
-   - Navigate to the directory where you downloaded the `Server` folder.
-   - Run the EchoServer.java file to start the server
-   
 ## Known Issues
 
 1. **Disconnection on Some Commands:**
@@ -46,7 +49,10 @@ Welcome to Java Tiles! This project aims to bring the beloved game of Okey to yo
 
 We welcome contributions from the community to improve Java Tiles. Feel free to submit bug reports, feature requests, or pull requests on our GitHub repository. Your feedback and contributions are greatly appreciated!
 
-
 ## Contact
 
-For any inquiries or support, please contact us at [robin.goekcen@stud.unibas.ch, i.uka@stud.unibas.ch, pascal.vonfellenber@stud.unibas.ch, boran.goekcen@stud.unibas.ch].
+For any inquiries or support, please contact us at:
+- [robin.goekcen@stud.unibas.ch](mailto:robin.goekcen@stud.unibas.ch)
+- [i.uka@stud.unibas.ch](mailto:i.uka@stud.unibas.ch)
+- [pascal.vonfellenber@stud.unibas.ch](mailto:pascal.vonfellenber@stud.unibas.ch)
+- [boran.goekcen@stud.unibas.ch](mailto:boran.goekcen@stud.unibas.ch)
