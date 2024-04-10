@@ -207,4 +207,7 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
 - Das Netwerkprotokoll angepasst.
 - Am ende des Tages haben wir beschlossen, uns um 13:15 im Lernoullianum zu treffen.
 
+## 9.4.2024 Fertigstellung MS3 Lernoullianum (Robin, Pascal, Boran, Istref)
+- Wir haben uns getroffen und haben zusammen hauptsächlich über die Präsentation gesprochen, wer was präsentiert und wie wir uns alles Zeitlich aufteilen. 
+- Ausserdem haben wir alle Dokumente nochmals gründlich überprüft und Veränderungen vorgenommen, wo welche nötig waren. Jetzt sollte alles bereit sein für den 3.Meilenstein.
 
