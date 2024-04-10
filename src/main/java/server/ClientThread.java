@@ -332,10 +332,11 @@ public class ClientThread implements Runnable {
           }
           boolean allPlayersReady = true;
           for (var p : lobby.players) {
-            if (!p.isReady) {
+            if (p == null || !p.isReady) {
               allPlayersReady = false;
               break;
             }
+
           }
           if (!allPlayersReady) {
             break;
@@ -420,7 +421,8 @@ public class ClientThread implements Runnable {
   public void logout() {
     isRunning = false;
     try {
-      if (lobby != null) {
+      // check if the player is in a lobby; playerIndex is -1 if the game hasn't started yet
+      if (lobby != null && playerIndex >= 0) {
         lobby.removePlayer(playerIndex);
         playerIndex = -1;
       }
