@@ -178,75 +178,17 @@ public class ClientThread implements Runnable {
           logout();
         }
         case DRAW -> {
-          if (!lobby.gameState.isPlayersTurn(playerIndex)) {
-            send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
-            break;
-          }
-          if (!lobby.gameState.canDraw(playerIndex)) {
-            send(encodeProtocolMessage("+DRAW", "", "You shall not draw!"));
-            break;
-          }
+          if (notAllowedToDraw()) break;
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
-          String pullStackName = arguments.get(0);
-          boolean isMainStack;
-          switch (pullStackName) {
-            case "e" -> {
-              isMainStack = false;
-            }
-            case "m" -> {
-              isMainStack = true;
-            }
-            default -> {
-              throw new IllegalArgumentException("No Stack with name: " + pullStackName);
-            }
-          }
-          Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
-          String tileString;
-          if (tile == null) {
-            tileString = "";
-            send(encodeProtocolMessage("+DRAW", tileString));
-            send("EMPT");
-            lobby.finishGame("");
-          } else {
-            tileString = tile.toString();
-            send(encodeProtocolMessage("+DRAW", tileString));
-            sendState();
-          }
+          draw(arguments);
 
 
         }
 
         case PUTT -> {
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
-          // this checks if it's the players turn rn
-          if (!lobby.gameState.isPlayersTurn(playerIndex)) {
-            send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
-            break;
-          }
-          if(!lobby.gameState.canPutTile(playerIndex)) {
-            send(encodeProtocolMessage("+PUTT", "f", "f", "You shall not put a tile!"));
-            break;
-          }
-          String tileString = arguments.get(0);
-          Tile tile = Tile.parseTile(tileString);
-          Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
-          boolean isValid = lobby.validateMove(tile, tileArray, playerIndex);
-          boolean isWon = false;
-          if (!isValid) {
-            LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
-            send(encodeProtocolMessage("+PUTT", "f", "f"));
-            break;
-          }
-          if (Tile.isWinningDeck(tileArray)){
-            isWon = true;
-            lobby.finishGame(nickname);
-            server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
-          }
-          send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
-
-          lobby.gameState.putTile(tile, playerIndex);
-
-          sendState();
+          //checks if player can put a tile, based on the Tile itself and wether his deck is valid
+          checkIfValidOrWon(arguments);
         }
         case CATC -> {
           handleChat(arguments);
@@ -258,127 +200,23 @@ public class ClientThread implements Runnable {
           send(encodeProtocolMessage("+NAME", nickname));
         }
         case LGAM -> {
-          StringBuilder sb = new StringBuilder();
-          String gameStatus = arguments.get(0);
-          ArrayList<Lobby> l;
-          switch (gameStatus) {
-            case "o" -> {
-              l = listLobbiesWithStatus(Lobby.LobbyState.OPEN);
-              for (var lobby : l) {
-                sb.append(lobby.lobbyNumber);
-                sb.append(":");
-                sb.append(lobby.players.size());
-                sb.append(" ");
-              }
-              // delete unnecessary space
-              if (!sb.isEmpty()) {
-                sb.deleteCharAt(sb.length() - 1);
-              }
-            }
-            case "r" -> {
-              l = listLobbiesWithStatus(Lobby.LobbyState.RUNNING);
-              for (var lobby : l) {
-                sb.append(lobby.lobbyNumber);
-                sb.append(" ");
-              }
-              // delete unnecessary space
-              if (!sb.isEmpty()) {
-                sb.deleteCharAt(sb.length() - 1);
-              }
-            }
-            case "f" -> {
-              l = listLobbiesWithStatus(Lobby.LobbyState.FINISHED);
-              for (var lobby : l) {
-                sb.append(lobby.lobbyNumber);
-                sb.append(":");
-                if (lobby.winnerName != null) {
-                  sb.append(lobby.winnerName);
-                }
-                sb.append(" ");
-              }
-              // delete unnecessary space
-              if (!sb.isEmpty()) {
-                sb.deleteCharAt(sb.length() - 1);
-              }
-            }
-            default -> {
-              throw new IllegalArgumentException();
-            }
-          }
-          send(encodeProtocolMessage("+LGAM", gameStatus, sb.toString()));
+          listDemandedGamestatus(arguments);
         }
         case LLPL -> {
           send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
         }
         case LPLA -> {
-          ArrayList<ClientThread> clientNames = server.getClientList();
-          StringBuilder namesServer = new StringBuilder();
-          for (int i = 0; i < clientNames.size(); i++){
-            namesServer.append(clientNames.get(i).nickname + " ");
-          }
-          if(!namesServer.isEmpty()) {
-            namesServer.deleteCharAt(namesServer.length() - 1);
-          }
-          send(encodeProtocolMessage("+LPLA", namesServer.toString()));
+          listPlayersConnectedToLobby();
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
         }
         case REDY -> {
-          isReady = true;
-          send(encodeProtocolMessage("+REDY"));
-          if (lobby.players.size() != 4) {
-            break;
-          }
-          boolean allPlayersReady = true;
-          for (var p : lobby.players) {
-            if (p == null || !p.isReady) {
-              allPlayersReady = false;
-              break;
-            }
-
-          }
-          if (!allPlayersReady) {
-            break;
-          }
-          LOGGER.debug("All players ready!");
-          Random rnd = new Random();
-          int startPlayerIdx = rnd.nextInt(4);
-          if (!lobby.startGame(startPlayerIdx)) {
-            LOGGER.debug("lobby wasn't able to start.");
-          }
-          for (int i = 0; i < lobby.players.size(); i++) {
-            UnorderedDeck deck = lobby.gameState.playerDecks.get(i);
-            ArrayList<String> stringTiles = deck.toStringArray();
-            String deckString = encodeProtocolMessage(stringTiles);
-            lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
-          }
+          if (notAllReady()) break;
+          distributeDecks();
         }
         case WINC -> {
-          ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
-              new Tile(0, Color.BLACK),
-              new Tile(1, Color.BLUE),
-              new Tile(2, Color.BLUE),
-              new Tile(3, Color.BLUE),
-              new Tile(4, Color.BLUE),
-              new Tile(1, Color.RED),
-              new Tile(2, Color.RED),
-              new Tile(3, Color.RED),
-              new Tile(4, Color.RED),
-              new Tile(1, Color.YELLOW),
-              new Tile(2, Color.YELLOW),
-              new Tile(3, Color.YELLOW),
-              new Tile(4, Color.YELLOW),
-              new Tile(5, Color.YELLOW),
-          }));
-          if (lobby.gameState.playerDecks.get(playerIndex).size() == 15) {
-            winnerConf.add(new Tile(0, Color.YELLOW));
-          }
-          UnorderedDeck winnerDeck = new UnorderedDeck(winnerConf);
-          lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
-          ArrayList<String> stringTiles = winnerDeck.toStringArray();
-          String deckString = encodeProtocolMessage(stringTiles);
-          send(encodeProtocolMessage("+WINC", deckString));
+          activatesCheatCode();
         }
       }
     }
@@ -386,6 +224,221 @@ public class ClientThread implements Runnable {
       // in an ideal world, this line should never be reached:
       LOGGER.error("Nachricht vom Client: \"" + request + "\" verursachte folgende Exception: " + e.toString());
     }
+  }
+
+  private void draw(ArrayList<String> arguments) throws IOException {
+    boolean isMainStack = isMainStack(arguments);
+    Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
+    String tileString;
+    if (tile == null) {
+      endGameWithNoWinner();
+    } else {
+      tileString = tile.toString();
+      send(encodeProtocolMessage("+DRAW", tileString));
+      sendState();
+    }
+  }
+
+  private boolean notAllowedToDraw() throws IOException {
+    if (!lobby.gameState.isPlayersTurn(playerIndex)) {
+      send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
+      return true;
+    }
+    if (!lobby.gameState.canDraw(playerIndex)) {
+      send(encodeProtocolMessage("+DRAW", "", "You shall not draw!"));
+      return true;
+    }
+    return false;
+  }
+
+  private static boolean isMainStack(ArrayList<String> arguments) {
+    String pullStackName = arguments.get(0);
+    boolean isMainStack;
+    switch (pullStackName) {
+      case "e" -> {
+        isMainStack = false;
+      }
+      case "m" -> {
+        isMainStack = true;
+      }
+      default -> {
+        throw new IllegalArgumentException("No Stack with name: " + pullStackName);
+      }
+    }
+    return isMainStack;
+  }
+
+  private void checkIfValidOrWon(ArrayList<String> arguments) throws IOException {
+    if(cantPutTile()){
+      return;
+    }
+    String tileString = arguments.get(0);
+    Tile tile = Tile.parseTile(tileString);
+    Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
+    boolean isValid = lobby.validateMove(tile, tileArray, playerIndex);
+    boolean isWon = false;
+    if (!isValid) {
+      LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
+      send(encodeProtocolMessage("+PUTT", "f", "f"));
+      return;
+    }
+    if (Tile.isWinningDeck(tileArray)){
+      isWon = true;
+      lobby.finishGame(nickname);
+      server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
+    }
+    send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
+
+    lobby.gameState.putTile(tile, playerIndex);
+
+    sendState();
+  }
+
+  private boolean cantPutTile() throws IOException {
+    // this checks if it's the players turn rn
+    if (!lobby.gameState.isPlayersTurn(playerIndex)) {
+      send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
+      return true;
+    }
+    //checks if player can put a tile, based on the amount of tiles in the deck
+    if(!lobby.gameState.canPutTile(playerIndex)) {
+      send(encodeProtocolMessage("+PUTT", "f", "f", "You shall not put a tile!"));
+      return true;
+    }
+    return false;
+  }
+
+  private void listDemandedGamestatus(ArrayList<String> arguments) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    String gameStatus = arguments.get(0);
+    ArrayList<Lobby> l;
+    switch (gameStatus) {
+      case "o" -> {
+        l = listLobbiesWithStatus(Lobby.LobbyState.OPEN);
+        for (var lobby : l) {
+          sb.append(lobby.lobbyNumber);
+          sb.append(":");
+          sb.append(lobby.players.size());
+          sb.append(" ");
+        }
+        // delete unnecessary space
+        if (!sb.isEmpty()) {
+          sb.deleteCharAt(sb.length() - 1);
+        }
+      }
+      case "r" -> {
+        l = listLobbiesWithStatus(Lobby.LobbyState.RUNNING);
+        for (var lobby : l) {
+          sb.append(lobby.lobbyNumber);
+          sb.append(" ");
+        }
+        // delete unnecessary space
+        if (!sb.isEmpty()) {
+          sb.deleteCharAt(sb.length() - 1);
+        }
+      }
+      case "f" -> {
+        l = listLobbiesWithStatus(Lobby.LobbyState.FINISHED);
+        for (var lobby : l) {
+          sb.append(lobby.lobbyNumber);
+          sb.append(":");
+          if (lobby.winnerName != null) {
+            sb.append(lobby.winnerName);
+          }
+          sb.append(" ");
+        }
+        // delete unnecessary space
+        if (!sb.isEmpty()) {
+          sb.deleteCharAt(sb.length() - 1);
+        }
+      }
+      default -> {
+        throw new IllegalArgumentException();
+      }
+    }
+    send(encodeProtocolMessage("+LGAM", gameStatus, sb.toString()));
+  }
+
+  private void activatesCheatCode() throws IOException {
+    ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
+        new Tile(0, Color.BLACK),
+        new Tile(1, Color.BLUE),
+        new Tile(2, Color.BLUE),
+        new Tile(3, Color.BLUE),
+        new Tile(4, Color.BLUE),
+        new Tile(1, Color.RED),
+        new Tile(2, Color.RED),
+        new Tile(3, Color.RED),
+        new Tile(4, Color.RED),
+        new Tile(1, Color.YELLOW),
+        new Tile(2, Color.YELLOW),
+        new Tile(3, Color.YELLOW),
+        new Tile(4, Color.YELLOW),
+        new Tile(5, Color.YELLOW),
+    }));
+    if (lobby.gameState.playerDecks.get(playerIndex).size() == 15) {
+      winnerConf.add(new Tile(0, Color.YELLOW));
+    }
+    UnorderedDeck winnerDeck = new UnorderedDeck(winnerConf);
+    lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
+    ArrayList<String> stringTiles = winnerDeck.toStringArray();
+    String deckString = encodeProtocolMessage(stringTiles);
+    send(encodeProtocolMessage("+WINC", deckString));
+  }
+
+  private void distributeDecks() throws IOException {
+    LOGGER.debug("All players ready!");
+    Random rnd = new Random();
+    int startPlayerIdx = rnd.nextInt(4);
+    if (!lobby.startGame(startPlayerIdx)) {
+      LOGGER.debug("lobby wasn't able to start.");
+    }
+    for (int i = 0; i < lobby.players.size(); i++) {
+      UnorderedDeck deck = lobby.gameState.playerDecks.get(i);
+      ArrayList<String> stringTiles = deck.toStringArray();
+      String deckString = encodeProtocolMessage(stringTiles);
+      lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
+    }
+  }
+
+  private boolean notAllReady() throws IOException {
+    isReady = true;
+    send(encodeProtocolMessage("+REDY"));
+    if (lobby.players.size() != 4) {
+      return true;
+    }
+    boolean allPlayersReady = true;
+    for (var p : lobby.players) {
+      if (p == null || !p.isReady) {
+        allPlayersReady = false;
+        break;
+      }
+
+    }
+    if (!allPlayersReady) {
+      return true;
+    }
+    return false;
+  }
+
+  private void listPlayersConnectedToLobby() throws IOException {
+    ArrayList<ClientThread> clientNames = server.getClientList();
+    StringBuilder namesServer = new StringBuilder();
+    for (int i = 0; i < clientNames.size(); i++){
+      namesServer.append(clientNames.get(i).nickname + " ");
+    }
+    if(!namesServer.isEmpty()) {
+      namesServer.deleteCharAt(namesServer.length() - 1);
+    }
+    send(encodeProtocolMessage("+LPLA", namesServer.toString()));
+  }
+
+  private void endGameWithNoWinner() throws IOException {
+    String tileString;
+    tileString = "";
+    send(encodeProtocolMessage("+DRAW", tileString));
+    send("EMPT");
+    lobby.finishGame("");
   }
 
   /**

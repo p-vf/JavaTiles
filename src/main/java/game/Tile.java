@@ -109,33 +109,44 @@ public class Tile {
 
   public static void main(String[] args) {
     Tile[] deck = new Tile[]{
-        null,
-        null,
-        new Tile(3, Color.BLUE),
-        new Tile(4, Color.BLUE),
-        new Tile(5, Color.BLUE),
-        null,
-        null,
-        new Tile(10, Color.YELLOW),
-        new Tile(10, Color.BLACK),
-        new Tile(10, Color.BLUE),
-        new Tile(0, Color.BLUE),
-        null,
-        new Tile(13, Color.YELLOW),
-        new Tile(13, Color.BLACK),
-        new Tile(13, Color.RED),
-        null,
-        null,
-        null,
-        new Tile(4, Color.RED),
-        new Tile(5, Color.RED),
-        new Tile(6, Color.RED),
-        new Tile(7, Color.RED),
-        null,
-        null,
+        null,//0
+        null,//1
+        new Tile(0, Color.BLUE), //3
+        new Tile(9, Color.BLUE), //4
+        new Tile(10, Color.BLUE), //5
+        new Tile(11, Color.BLUE), //6
+        new Tile(0, Color.BLUE), //6
+        new Tile(12, Color.BLUE), //7
+        null,//6
+        new Tile(10, Color.YELLOW),//7
+        new Tile(10, Color.BLACK),//7
+        new Tile(10, Color.BLUE),//8
+        new Tile(0, Color.BLUE),//9
+        null,//10
+        null,//23
+        new Tile(13, Color.YELLOW),//11
+        new Tile(13, Color.BLACK),//12
+        new Tile(13, Color.RED),//13
+        null,//14
+        null,//15
+        new Tile(4, Color.RED),//16
+        new Tile(5, Color.RED),//17
+        new Tile(6, Color.RED),//18
+        null,//20
+        null,// 21
+        null,// 22
+
 
     };
+    isWinningDeck(deck);
     System.out.println(isWinningDeck(deck));
+    isValidRun(deck,2,8);
+    //isValidRun(deck, 2, 7);
+    //isValidRun(deck, 19, 22);
+    //System.out.println(isValidRun(deck, 2,5));
+    //System.out.println(isValidSet(deck,7,11));
+    //System.out.println(isValidSet(deck, 13, 16));
+    //System.out.println(isValidRun(deck, 18, 22));
   }
 
   /**
@@ -158,7 +169,6 @@ public class Tile {
    * @return true if and only if the deck is of a winning configuration.
    */
   public static boolean isWinningDeck(Tile[] deck) {
-    // should work, don't try to understand
     int formationLength = 0;
     boolean returnValue = true;
     for (int i = 0; i <= deck.length; i++) {
@@ -166,43 +176,47 @@ public class Tile {
       if (i < deck.length) {
         currentTile = deck[i];
       }
-      if (currentTile == null || i == 12) {
+      if (currentTile == null) {
         int from = i - formationLength;
         int to = i;
         String output = Arrays.toString(Arrays.copyOfRange(deck, from, to));
         if (formationLength < 3 && formationLength > 0) {
           System.out.println("Formation of length " + formationLength + " too short");
           System.out.println("Formation: " + output);
-          //returnValue = false;
+          System.out.println("Returning false: Formation length is less than 3.");
           return false;
         }
         if (formationLength == 0) {
+          System.out.println("Skipping evaluation due to zero length formation at index " + i);
           continue;
         }
         boolean validRun = isValidRun(deck, from, to);
         boolean validSet = isValidSet(deck, from, to);
         if (validRun) {
-          System.out.println("valid run: " + output);
+          System.out.println("Valid run: " + output);
         }
         if (validSet) {
-          System.out.println("valid set: " + output);
+          System.out.println("Valid set: " + output);
         }
-
         if (!validSet && !validRun) {
-          System.out.println("invalid section: " + output);
+          System.out.println("Invalid section: " + output);
+          System.out.println("Returning false: Neither a valid set nor a valid run.");
           return false;
-          //returnValue = false;
         }
         formationLength = 0;
-        if (i == 12 && currentTile != null) {
-          formationLength = 1;
-        }
+
         continue;
+      }
+      if (i == 12 && currentTile != null) {
+        System.out.println("Special case for index 12. Restarting formation length due to non-null tile at index 12.");
+        formationLength = 0;
       }
       formationLength++;
     }
+    System.out.println("Deck evaluation completed without errors. Deck is winning.");
     return returnValue;
   }
+
 
   /**
    * Checks whether a range in the deck is a valid set according to the rules of the game.
@@ -219,6 +233,9 @@ public class Tile {
     int mask = 0;
     int number = deck[from].getNumber();
     for (int i = from; i < to; i++) {
+      if (number == 0){
+        number = deck[i].getNumber();
+      }
       Tile currentTile = deck[i];
       if (currentTile == null) {
         // should never be reached
@@ -273,23 +290,39 @@ public class Tile {
     Tile firstTile = deck[from];
     Color color = firstTile.getColor();
     int startNum = firstTile.getNumber();
+    int jokerCountBeforeFirstNumber = 0;
+    System.out.println("from = " + from);
     for (int i = from; i < to; i++) {
       Tile currentTile = deck[i];
+      if(startNum == 0){
+        startNum = currentTile.getNumber();
+        //TODO Joker als erstes, was passiert dann?
+      }
+
+      if (currentTile.isJoker()) {
+        if(startNum == 0){
+          jokerCountBeforeFirstNumber++;
+        }
+        continue;
+      }
+      System.out.println("jokercount = " + jokerCountBeforeFirstNumber);
       if (currentTile == null) {
         // this line should never be reached
         LOGGER.error("Range in deck contains null..");
         return false;
       }
-      if (currentTile.isJoker()) {
-        continue;
-      }
+
       if (currentTile.getColor() != color) {
         return false;
       }
-      if (currentTile.getNumber() != i - from + startNum) {
+      int compare = i - from + startNum- jokerCountBeforeFirstNumber;
+      System.out.println("compare = " + compare);
+      if (currentTile.getNumber() != compare) { //TODO
+        System.out.println();
         return false;
       }
     }
+    jokerCountBeforeFirstNumber = 0;
     return true;
   }
 
