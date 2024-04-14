@@ -45,6 +45,7 @@ public class UnorderedDeck {
 
   /**
    * This is a bijection from tile to number. It's inverse (indexToTile()) is also a bijection.
+   *
    * @param tile
    * @return
    */
@@ -62,6 +63,7 @@ public class UnorderedDeck {
 
   /**
    * This is a bijection from tile to number. It's inverse (tileToIndex()) is also a bijection.
+   *
    * @param index
    * @return
    */
@@ -71,7 +73,7 @@ public class UnorderedDeck {
     }
     index--;
     int number = index % 13 + 1;
-    Color color = Color.values()[index/13];
+    Color color = Color.values()[index / 13];
     return new Tile(number, color);
   }
 
@@ -96,6 +98,7 @@ public class UnorderedDeck {
 
   /**
    * Adds a tile to the deck.
+   *
    * @param tile tile to be added to deck. If null, nothing is changed about the deck.
    */
   public void add(Tile tile) {
@@ -124,6 +127,7 @@ public class UnorderedDeck {
 
   /**
    * Removes tile from deck.
+   *
    * @param tile tile to be removed. Should not be null
    */
   public void remove(Tile tile) {

@@ -14,7 +14,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  * The Lobby class represents a game lobby in a server, handling player connections, game state management,
  * and communication between clients in our tile-based game. It supports adding players to the lobby, starting the game,
  * validating moves, and managing the game lifecycle including the game's start, ongoing state, and conclusion.
- *
+ * <p>
  * This class uses {@link ClientThread} to manage individual client connections, {@link GameState} to track the
  * current state of the game, and defines {@link LobbyState} to represent the lobby's status. It facilitates
  * network communication through utility methods, ensuring all players are synchronized with the game's progress.
@@ -110,7 +110,7 @@ public class Lobby {
   /**
    * Sends a String to all clients in a lobby except for the sender.
    *
-   * @param cmd A String that conforms to the network-protocol, should be a CATS-Command.
+   * @param cmd    A String that conforms to the network-protocol, should be a CATS-Command.
    * @param sender The client that sent the message (to which the message should not be sent).
    */
   public void sendToLobby(String cmd, ClientThread sender) {
@@ -130,11 +130,11 @@ public class Lobby {
    * Validates a player's move by ensuring that the tile they wish to move is not null and that the resulting
    * tile configuration matches the server's current state of the game.
    *
-   * @param tile The tile that the player wants to move.
+   * @param tile      The tile that the player wants to move.
    * @param tileArray The array of tiles representing the current state before the move.
    * @param playerIdx The index of the player making the move.
    * @return true if the move is valid and the resulting tile configuration matches the server's deck for the player;
-   *         false otherwise, including when the tile to move is null.
+   * false otherwise, including when the tile to move is null.
    */
   public boolean validateMove(Tile tile, Tile[] tileArray, int playerIdx) {
     if (tile == null) {

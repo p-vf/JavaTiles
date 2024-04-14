@@ -11,7 +11,7 @@ import static java.lang.System.currentTimeMillis;
 /**
  * The ServerPingThread class represents a thread responsible for sending periodic PING messages
  * to a client to check for responsiveness.
- * 
+ *
  * @author Pascal von Fellenberg
  * @author Istref Uka
  */
@@ -29,7 +29,7 @@ public class ServerPingThread extends Thread {
    * If the PING response from the client exceeds the specified maximum response time, appropriate action
    * is taken by the parent EchoClientThread.
    *
-   * @param parent The parent ClientThread that manages the connection to the client.
+   * @param parent                The parent ClientThread that manages the connection to the client.
    * @param maxResponseTimeMillis The maximum time in milliseconds to wait for a response to a PING message.
    *                              If this time is exceeded, the corresponding client is logged out.
    */
@@ -44,7 +44,7 @@ public class ServerPingThread extends Thread {
     try {
       while (true) {
         try {
-          synchronized(this) {
+          synchronized (this) {
             receivedResponse = false;
           }
           parent.send("PING");
@@ -59,11 +59,11 @@ public class ServerPingThread extends Thread {
           continue;
         }
         if (timeLastResponse - currentTimeMillis() >= maxResponseTimeMillis) {
-          LOGGER.info("Client # " + parent.id + " with nickname \"" + parent.nickname + "\" is being logged out because the timeout of "+ (double)maxResponseTimeMillis/1000.0 + " seconds has been exceeded.");
+          LOGGER.info("Client # " + parent.id + " with nickname \"" + parent.nickname + "\" is being logged out because the timeout of " + (double) maxResponseTimeMillis / 1000.0 + " seconds has been exceeded.");
           parent.logout();
         }
       }
-    } catch(IOException | InterruptedException e) {
+    } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
   }

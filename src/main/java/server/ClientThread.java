@@ -47,10 +47,10 @@ public class ClientThread implements Runnable {
   /**
    * Constructor of the EchoClientThread class.
    *
-   * @param id The id-number of the client which is always larger than 0.
+   * @param id     The id-number of the client which is always larger than 0.
    * @param socket The socket that is used to create the connection between client and server.
    * @param server The server which gets connected to the client.
-   *  */
+   */
   public ClientThread(int id, Socket socket, Server server) {
     this.id = id;
     this.socket = socket;
@@ -59,7 +59,7 @@ public class ClientThread implements Runnable {
       InputStream in = socket.getInputStream();
       bReader = new BufferedReader(new InputStreamReader(in));
       out = socket.getOutputStream();
-    } catch(IOException e) {
+    } catch (IOException e) {
       e.printStackTrace(System.err);
     }
 
@@ -87,7 +87,7 @@ public class ClientThread implements Runnable {
         request = bReader.readLine();
 
 
-        if(!request.equals("PING") && !request.equals("+PING") || Server.ENABLE_PING_LOGGING) {
+        if (!request.equals("PING") && !request.equals("+PING") || Server.ENABLE_PING_LOGGING) {
           LOGGER.debug("received: " + request);
         }
         if (!request.isEmpty() && request.charAt(0) == '+') { //request kann null sein, wenn es
@@ -121,10 +121,14 @@ public class ClientThread implements Runnable {
     // TODO add log, if cmdStr is not of size 4
     ServerRequest command = ServerRequest.valueOf(cmdStr);
     switch (command) {
-      case PWIN -> {}
-      case EMPT -> {}
-      case CATS -> {}
-      case STAT -> {}
+      case PWIN -> {
+      }
+      case EMPT -> {
+      }
+      case CATS -> {
+      }
+      case STAT -> {
+      }
       case PING -> {
         synchronized (pingThread) {
           pingThread.receivedResponse = true;
@@ -165,7 +169,7 @@ public class ClientThread implements Runnable {
     ArrayList<String> arguments = decodeProtocolMessage(request);
     String cmdStr = arguments.remove(0);
     // TODO use encodeProtocolMessage()
-    try{
+    try {
       // TODO change this so that incorrect input gets handled
       ClientRequest command = ClientRequest.valueOf(cmdStr);
       // TODO handle all cases
@@ -219,8 +223,7 @@ public class ClientThread implements Runnable {
           activatesCheatCode();
         }
       }
-    }
-    catch(IndexOutOfBoundsException | IllegalArgumentException e){
+    } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
       // in an ideal world, this line should never be reached:
       LOGGER.error("Nachricht vom Client: \"" + request + "\" verursachte folgende Exception: " + e.toString());
     }
@@ -269,7 +272,7 @@ public class ClientThread implements Runnable {
   }
 
   private void checkIfValidOrWon(ArrayList<String> arguments) throws IOException {
-    if(cantPutTile()){
+    if (cantPutTile()) {
       return;
     }
     String tileString = arguments.get(0);
@@ -282,7 +285,7 @@ public class ClientThread implements Runnable {
       send(encodeProtocolMessage("+PUTT", "f", "f"));
       return;
     }
-    if (Tile.isWinningDeck(tileArray)){
+    if (Tile.isWinningDeck(tileArray)) {
       isWon = true;
       lobby.finishGame(nickname);
       server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
@@ -301,7 +304,7 @@ public class ClientThread implements Runnable {
       return true;
     }
     //checks if player can put a tile, based on the amount of tiles in the deck
-    if(!lobby.gameState.canPutTile(playerIndex)) {
+    if (!lobby.gameState.canPutTile(playerIndex)) {
       send(encodeProtocolMessage("+PUTT", "f", "f", "You shall not put a tile!"));
       return true;
     }
@@ -424,10 +427,10 @@ public class ClientThread implements Runnable {
   private void listPlayersConnectedToLobby() throws IOException {
     ArrayList<ClientThread> clientNames = server.getClientList();
     StringBuilder namesServer = new StringBuilder();
-    for (int i = 0; i < clientNames.size(); i++){
+    for (int i = 0; i < clientNames.size(); i++) {
       namesServer.append(clientNames.get(i).nickname + " ");
     }
-    if(!namesServer.isEmpty()) {
+    if (!namesServer.isEmpty()) {
       namesServer.deleteCharAt(namesServer.length() - 1);
     }
     send(encodeProtocolMessage("+LPLA", namesServer.toString()));
@@ -548,6 +551,7 @@ public class ClientThread implements Runnable {
   /**
    * Joins the lobby specified with lobbyNumber. If such a lobby doesn't exist it creates one.
    * It then sends a message depending on if it created a new one, joined successfully or wasn't able to join because the lobby was already full.
+   *
    * @param lobbyNumber The number of the lobby that the client wants to join or create.
    * @throws IOException Whenever send() throws an IOException.
    */
