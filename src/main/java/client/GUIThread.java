@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 
-
 /**
  * A graphical user interface (GUI) thread that extends JFrame and implements Runnable.
  * This class manages the GUI components for a chat interface within a JavaTiles application.
@@ -18,15 +17,15 @@ import java.io.IOException;
  * @author Boran Gökcen
  * @author Robin Gökcen
  */
-public class GUIThread extends JFrame implements Runnable{
+public class GUIThread extends JFrame implements Runnable {
 
-            private JFrame frame;
-            private JTextArea chat;
-            private JTextField textField;
-            private JScrollPane scroll;
-            private Border border;
+    private JFrame frame;
+    private JTextArea chat;
+    private JTextField textField;
+    private JScrollPane scroll;
+    private Border border;
 
-            private Client client; //The associated client object
+    private Client client; //The associated client object
 
 
     /**
@@ -34,9 +33,9 @@ public class GUIThread extends JFrame implements Runnable{
      *
      * @param client The Client object used for sending messages and handling input.
      */
- public GUIThread(Client client){
-     this.client = client;
- }
+    public GUIThread(Client client) {
+        this.client = client;
+    }
 
 
     /**
@@ -55,64 +54,64 @@ public class GUIThread extends JFrame implements Runnable{
     public void run() {
 
 
-                frame = new JFrame("JavaTiles");
-                chat = new JTextArea(20,50);
-                textField = new JTextField();
-                scroll = new JScrollPane(chat, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                border = BorderFactory.createLineBorder(Color.BLACK,1,true);
-                chat.setEditable(false);
-                chat.setSize(540, 400);
-                chat.setLocation(30,5);
-                textField.setSize(540, 30);
-                textField.setLocation(18, 500);
-                frame.setResizable(false);
-                frame.setSize(600, 600);
-                frame.add(textField);
-                textField.setBorder(border);
-                frame.add(scroll);
-                frame.setVisible(true);
-                frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                chat.append("Chats: \n  \n");
+        frame = new JFrame("JavaTiles");
+        chat = new JTextArea(20, 50);
+        textField = new JTextField();
+        scroll = new JScrollPane(chat, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        border = BorderFactory.createLineBorder(Color.BLACK, 1, true);
+        chat.setEditable(false);
+        chat.setSize(540, 400);
+        chat.setLocation(30, 5);
+        textField.setSize(540, 30);
+        textField.setLocation(18, 500);
+        frame.setResizable(false);
+        frame.setSize(600, 600);
+        frame.add(textField);
+        textField.setBorder(border);
+        frame.add(scroll);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        chat.append("Chats: \n  \n");
+        textField.setText("");
+
+
+        textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                String gtext = textField.getText();
+                System.out.println(gtext);
+                String message = "/chat" + " " + gtext;
+                try {
+                    client.send(client.handleInput(message));
+                } catch (IOException e) {
+                    chat.append("invalid input");
+                }
                 textField.setText("");
-
-
-                textField.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent arg0) {
-                        String gtext = textField.getText();
-                        System.out.println(gtext);
-                        String message = "/chat"+" "+gtext;
-                        try {
-                            client.send(client.handleInput(message));
-                        } catch (IOException e) {
-                            chat.append("invalid input");
-                        }
-                        textField.setText("");
-                        if(gtext.equals("QUIT")) {
-                            sleep(500);
-                            System.exit(0);
-                        }
-
-
-
-                    }
-                });
+                if (gtext.equals("QUIT")) {
+                    sleep(500);
+                    System.exit(0);
+                }
 
 
             }
+        });
+
+
+    }
 
     /**
      * Pauses the current thread for a specified duration.
      *
      * @param x The duration to sleep in milliseconds.
      */
-            private void sleep(int x) {
-                try {
-                    Thread.sleep(x);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }}
+    private void sleep(int x) {
+        try {
+            Thread.sleep(x);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
 
 

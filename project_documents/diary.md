@@ -211,3 +211,13 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
 - Wir haben uns getroffen und haben zusammen hauptsächlich über die Präsentation gesprochen, wer was präsentiert und wie wir uns alles Zeitlich aufteilen. 
 - Ausserdem haben wir alle Dokumente nochmals gründlich überprüft und Veränderungen vorgenommen, wo welche nötig waren. Jetzt sollte alles bereit sein für den 3.Meilenstein.
 
+## 13.4.2024 Treffen im Lernoullianum (Pascal, Boran, Istref)
+- Besprechung Massnahmen vor dem 4. Meilenstein:
+  - Spezifikation wie commit-messages geschrieben werden sollen muss als nächstes in einem Dokument festgelegt.
+  - Die Tile-Konfigurationen sollen als ganze Decks rübergeschickt werden und demnach so auf dem Client gehandhabt werden.
+  - Lobby-Spielerliste: 
+    - NUMS: Wenn ein Spieler in der Lobby den Namen ändert wird das geschickt wenn er joined oder leaved.
+    - JOND: Anzeige, dass ein Spieler gejoined ist. 
+    - LEFT: Anzeige, dass ein Spieler das Spiel verlassen hat. 
+  - Highscore-Liste: Der Spieler, der am wenigsten Züge braucht steigt im Highscore.
+
