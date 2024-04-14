@@ -64,7 +64,7 @@ wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Arg
 | `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                                                                     |
 | `<drawstack>`                                                  | Entweder "`m`" oder "`e`" (stellt entweder Hauptstapel oder Austauschstapel dar)                                                                                                                                                                                               |
 | `<tile>`                                                       | Repräsentation eines Spielsteins;<br/>*zahl* + `:` + *farbe* <br/> wobei *zahl* eine Zahl zwischen `0` und `13` und *farbe* entweder "`RED`", "`BLUE`", "`YELLOW`" oder "`BLACK`" ist. Speziell: bei der Zahl 0 handelt es sich um den Joker, egal in welcher Farbkombination. |
-| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks;<br/>`<<tile_1> <tile_2> ... >` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an einer gewissen Stelle, so wird dort ein leerer Wert dargestellt.                                                                  |
+| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks (muss immer Länge 24 haben);<br/>`<<tile_1> <tile_2> ... >` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an einer gewissen Stelle, so wird dort ein leerer Wert dargestellt.                                      |
 | `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`<<tile_0> <tile_1> <tile_2> <tile_3>>` wobei *tile_N* den obersten Stein des Austauschstapels des Spielers mit Index N darstellt.                                                                             |
 | `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`<<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ...>` wobei *n_M* die Lobbynummer und *s_M* die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command)                                                 |
 | `<playerlist>`, `<nicknames>`                                  | Stellt Liste von Spielern dar; (können auch leere Werte sein im Falle von `<nicknames>`) <br/>`<<name_1> <name_2> ...>`                                                                                                                                                        |
@@ -265,14 +265,13 @@ Server: `+REDY`
 | `STRT <startdeck> <playeridx>` | `+STRT`  | Server |
 ### Beschreibung
 Wird vom Server geschickt, wenn alle Spieler in einer Lobby den `REDY`-Command an den Server geschickt haben,  
-und 4 Spieler in der Lobby sind. In `<startdeck>` ist das Startdeck des Spielers enthalten.  
+und 4 Spieler in der Lobby sind. In `<startdeck>` ist das Startdeck des Spielers enthalten (insgesamt 24 Werte, entweder leer oder eine Tile darstellend).  
 Sind in diesem Deck 15 Steine, ist der empfangende Client der Startspieler.  
 In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clients darstellt, welcher für die Identifikation des Spielers wichtig ist. 
 
-//hätte gerne playeridx vor dem startdeck -Boran wird somit leserlicher beim handeln
 
 ### Beispiel
-Server: `STRT "8:RED 12:RED 6:BLUE 2:YELLOW 5:YELLOW 6:YELLOW 7:YELLOW 10:YELLOW 12:YELLOW 3:BLACK 4:BLACK 6:BLACK 7:BLACK 8:BLACK%" 3`  
+Server: `STRT "8:RED 12:RED \"%\" 6:BLUE \"%\" 2:YELLOW \"%\" 5:YELLOW 6:YELLOW \"%\" 7:YELLOW 10:YELLOW \"%\" 12:YELLOW \"%\" 3:BLACK 4:BLACK \"%\" 6:BLACK 7:BLACK 8:BLACK \"%\" \"%\" \"%\"%" 3`  
 Client: `+STRT`
 
 ---
@@ -425,6 +424,6 @@ Dabei wird sein Deck auf dem Server angepasst, sodass alle zukünftigen Spielzü
 
 
 Server: `WINC`  
-Client: `+WINC "0:BLACK 1:RED 2:RED 3:RED 4:RED 1:BLUE 2:BLUE 3:BLUE 4:BLUE 1:YELLOW 2:YELLOW 3:YELLOW 4:YELLOW 5:YELLOW%"`
+Client: `+WINC "0:BLACK \"%\" 1:RED 2:RED 3:RED 4:RED 1:BLUE 2:BLUE 3:BLUE 4:BLUE 1:YELLOW 2:YELLOW 3:YELLOW 4:YELLOW 5:YELLOW \"%\" \"%\" \"%\" \"%\" \"%\" \"%\" \"%\" \"%\" \"%\" %"`
 
 ---
