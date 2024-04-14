@@ -62,7 +62,8 @@ public class Server {
 
   /**
    * Sends a message to all connected clients except the sender.
-   * @param str The message to be broadcasted to all clients.
+   *
+   * @param str    The message to be broadcasted to all clients.
    * @param sender The client thread sending the message.
    */
   public void sendToAll(String str, ClientThread sender) {
@@ -81,7 +82,8 @@ public class Server {
 
   /**
    * Sends a message to a client with the specified nickname.
-   * @param str The message to be sent to the client.
+   *
+   * @param str      The message to be sent to the client.
    * @param nickname The nickname of the client to whom the message is to be sent.
    */
   public boolean sendToNickname(String str, String nickname) {
@@ -102,6 +104,7 @@ public class Server {
 
   /**
    * Removes a client from the server.
+   *
    * @param client The client thread to be logged out.
    */
   public synchronized void removeClient(ClientThread client) {
@@ -128,6 +131,7 @@ public class Server {
   /**
    * Gets the lobby in the list lobbies on the server with the specified lobbyNumber.
    * If no lobby with the specified lobbyNumber exists, null is returned.
+   *
    * @param lobbyNumber The lobbyNumber of the lobby.
    * @return Lobby with the specified lobbyNumber if it exists, else null.
    */
@@ -143,7 +147,8 @@ public class Server {
 
   /**
    * Lets the client join a lobby.
-   * @param lobby The lobby to which the player wants to join.
+   *
+   * @param lobby  The lobby to which the player wants to join.
    * @param client The player to be added to the lobby.
    * @return {@code true} if and only if the lobby wasn't full and the player was able to join, else {@code false}
    */
@@ -154,6 +159,7 @@ public class Server {
   /**
    * Creates a new lobby and returns the created lobby.
    * Should only be called if the lobby with the specified lobbyNumber doesn't exist yet.
+   *
    * @param lobbyNumber The number of the lobby.
    * @return The lobby that was created.
    */
@@ -172,7 +178,7 @@ public class Server {
    *
    * @return an ArrayList of {@code ClientThread} objects representing the connected clients.
    */
-  public ArrayList<ClientThread> getClientList(){
+  public ArrayList<ClientThread> getClientList() {
     return this.clientList;
   }
 

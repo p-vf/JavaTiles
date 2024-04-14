@@ -669,6 +669,10 @@ public class Client {
                     System.out.println(getBeautifullyFormattedDecodedLobbiesWithPlayerList(arguments.get(0)));
                     break;
 
+                case JOND:
+                    System.out.println(arguments.get(0) + "joined the lobby");
+                    break;
+
                 case WINC:
                     ArrayList<String> cheatTiles = decodeProtocolMessage(arguments.get(0));
                     Tile[] tilesArray = stringsToTileArray(cheatTiles);

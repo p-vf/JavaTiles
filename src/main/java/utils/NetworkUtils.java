@@ -57,7 +57,7 @@ public class NetworkUtils {
             }
             if (sb.charAt(lastIndex) != '%' && wasInsideString) {
               LOGGER.debug("Message was sent incorrectly.. (there is no space at the end where there should be) message: \"" + request + "\"");
-            } else if (wasInsideString){
+            } else if (wasInsideString) {
               sb.deleteCharAt(lastIndex);
             }
             wasInsideString = false;
@@ -128,8 +128,8 @@ public class NetworkUtils {
    * Takes Strings and combines them into a String that can be sent via Socket, conforming to the protocols rules.
    *
    * @param command Name of the command that is to be encoded
-   * @param args Arguments of the command that are to be encoded.
-   *             All the Strings must NOT contain carriage-return ({@code '\r'}) and newline ({@code '\n'}).
+   * @param args    Arguments of the command that are to be encoded.
+   *                All the Strings must NOT contain carriage-return ({@code '\r'}) and newline ({@code '\n'}).
    * @return Encoded String
    */
   public static String encodeProtocolMessage(String command, String... args) {
@@ -235,6 +235,7 @@ public class NetworkUtils {
       REDY,
       // get winning configuration:
       WINC,
+      JOND,
     }
 
     /**

@@ -2,6 +2,7 @@ package server;
 
 import game.Color;
 import game.Tile;
+
 import static game.Color.*;
 
 import java.util.*;
@@ -26,6 +27,7 @@ public class GameState {
   /**
    * Constructor of the {@code GameState} class.
    * Initializes {@code Gamestate} with a shuffled set of Tiles that get distributed to the playerdecks.
+   *
    * @param startPlayerIdx the index of the players that gets 15 instead of 14 tiles and is the first player that gets to make a move.
    */
   public GameState(int startPlayerIdx) {
@@ -40,7 +42,7 @@ public class GameState {
     // initialize array with unique tiles.
     Tile[] tiles = new Tile[106];
     for (int i = 0; i < 104; i++) {
-      tiles[i] = new Tile(i % 13 + 1, Color.values()[i*4/104]);
+      tiles[i] = new Tile(i % 13 + 1, Color.values()[i * 4 / 104]);
     }
     // add two jokers
     tiles[104] = new Tile(0, BLUE);
@@ -72,7 +74,7 @@ public class GameState {
    * Returns an array of the top visible tiles from each exchange stack.
    *
    * @return an array containing the top tile from each of the four exchange stacks.
-   *         If an exchange stack is empty, its corresponding array element is null.
+   * If an exchange stack is empty, its corresponding array element is null.
    */
   public Tile[] getVisibleTiles() {
     Tile[] tiles = new Tile[4];
@@ -134,7 +136,7 @@ public class GameState {
   /**
    * Puts a specified tile into the exchange stack of the next player and updates the game state.
    *
-   * @param tile the tile to be placed into the next player's exchange stack.
+   * @param tile        the tile to be placed into the next player's exchange stack.
    * @param playerIndex the index of the player who is putting the tile.
    */
   public void putTile(Tile tile, int playerIndex) {
