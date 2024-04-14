@@ -53,7 +53,7 @@ Aus dieser Gegebenheit können viele Informationen von den Commands ausgelassen 
 wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Argument und `<optionalarg_N>` das N-te optionale Argument ist.
 - Jede Response hat den gleichen Aufbau wie eine Request, jedoch wird ein ``+`` am Anfang angehängt.
 
-(*) Die Zeichenfolge darf keinen newline Buchstaben und auch kein Carriage Return beinhalten, aber ansonst kann sie jede Zeichenfolge sein.
+(*) Die Zeichenfolge darf keinen newline Buchstaben und auch kein Carriage Return beinhalten, aber ansonsten kann sie jede Zeichenfolge sein.
 
 
 | Parameter                                                      | Beschreibung                                                                                                                                                                                                                                                                   |
@@ -67,15 +67,15 @@ wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Arg
 | `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks;<br/>`<<tile_1> <tile_2> ... >` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an einer gewissen Stelle, so wird dort ein leerer Wert dargestellt.                                                                  |
 | `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`<<tile_0> <tile_1> <tile_2> <tile_3>>` wobei *tile_N* den obersten Stein des Austauschstapels des Spielers mit Index N darstellt.                                                                             |
 | `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`<<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ...>` wobei *n_M* die Lobbynummer und *s_M* die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command)                                                 |
-| `<playerlist>`                                                 | Stellt Liste von Spielern dar; <br/>`<<name_1> <name_2> ...>`                                                                                                                                                                                                                  |
-| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<<lobby_1_names> <lobby_2_names> ...>` wobei *lobby_M_names* die M-te Lobby wie folgt darstellt: `<lobby_M_number> <lobby_M_names_1> <lobby_M_names_2> <lobby_M_names_4> ...`                                  |
+| `<playerlist>`, `<nicknames>`                                  | Stellt Liste von Spielern dar; (können auch leere Werte sein im Falle von `<nicknames>`) <br/>`<<name_1> <name_2> ...>`                                                                                                                                                        |
+| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<<lobby_1_names> <lobby_2_names> ...>` wobei *lobby_M_names* die M-te Lobby wie folgt darstellt: `<lobby_M_number> <lobby_M_name_1> <lobby_M_name_2> <lobby_M_name_4> ...`                                     |
 | `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/> "`b`", "`l`", "`w`" für jeweils broadcast, lobby, und whisper                                                                                                                                                                       |
 
 
 ---
 
 
-# Login und Lobby Stuff 
+# Login und Lobby
 ## Login
 | Command           | Response             | Sender     |
 |-------------------|----------------------|------------|
@@ -92,7 +92,7 @@ Server: ```+LOGI Istref_1```
 
 ---
 
-## Namensänderung
+## Namen ändern
 | Command           | Response             | Sender |
 |-------------------|----------------------|--------|
 | `NAME <nickname>` | `+NAME <actualname>` | Client |
@@ -108,6 +108,52 @@ Server: ```+NAME Istref_1```
 🔴***TODO*** vielleicht ist dieser Command redundant (weil kein bedeutender Unterschied zu LOGI)
 
 ---
+
+## Namensliste in Lobby bekannt geben
+| Command            | Response | Sender |
+|--------------------|----------|--------|
+| `NAMS <nicknames>` | `+NAMS`  | Server |
+### Beschreibung
+Dieser Command beinhaltet die Nicknames der Spieler in der Lobby oder einen leeren Wert, wenn an dieser Stelle kein Spieler ist. 
+Er wird gesendet, wenn ein Spieler aus der Lobby geht, wenn ein Spieler der Lobby beitretet 
+und wenn ein Spieler in der Lobby seinen Namen ändert.  
+`<nicknames>` hat immer 4 Werte, die entweder leer sind oder den Namen des Spielers an dieser Stelle in der Lobby beinhalten. 
+### Beispiel
+Server: ```NAMS "boran \"%\" istref robin%"```  
+Client: ```+NAMS```
+
+(Hier hat die Lobby nur 3 Spieler, der Spieler mit index 1 hat das Spiel verlassen)
+
+---
+
+## Informieren, dass ein Spieler die Lobby verlassen hat
+| Command           | Response | Sender |
+|-------------------|----------|--------|
+| `LEFT <nickname>` | `+LEFT`  | Server |
+### Beschreibung
+Dieser Command wird vom Server gesendet, wenn ein Spieler die Lobby verlassen hat. 
+In *nickname* wird der Nickname des Spielers mitgegeben, der das Spiel verlassen hat.
+### Beispiel
+Server: ```LEFT pascal```  
+Client: ```+LEFT```
+
+(Hier hat der Spieler mit Nickname ```pascal``` das Spiel verlassen)
+
+---
+
+## Informieren, dass ein Spieler der Lobby beigetreten ist
+| Command           | Response | Sender |
+|-------------------|----------|--------|
+| `JOND <nickname>` | `+JOND`  | Server |
+### Beschreibung
+Dieser Command wird vom Server gesendet, wenn ein Spieler der Lobby beigetreten ist.
+In *nickname* wird der Nickname des Spielers mitgegeben, der der Lobby beigetreten ist.
+### Beispiel
+Server: ```JOND pascal```  
+Client: ```+JOND```
+
+(Hier ist der Spieler mit Nickname ```pascal``` der Lobby beigetreten)
+
 
 ## Spieler auf Server auflisten
 | Command | Response             | Sender |
