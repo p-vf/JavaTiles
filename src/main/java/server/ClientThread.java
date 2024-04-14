@@ -1,18 +1,12 @@
 package server;
 
-/*
-test
-/joinlobby 1
-/ready
-
- */
-
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
 
 import game.Color;
+import game.OrderedDeck;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -278,7 +272,8 @@ public class ClientThread implements Runnable {
     String tileString = arguments.get(0);
     Tile tile = Tile.parseTile(tileString);
     Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
-    boolean isValid = lobby.validateMove(tile, tileArray, playerIndex);
+    OrderedDeck clientDeck = new OrderedDeck(tileArray);
+    boolean isValid = lobby.validateMove(tile, clientDeck, playerIndex);
     boolean isWon = false;
     if (!isValid) {
       LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
@@ -363,6 +358,7 @@ public class ClientThread implements Runnable {
   }
 
   private void activatesCheatCode() throws IOException {
+    // TODO update the winner-configuration to be more overpowered
     ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
         new Tile(0, Color.BLACK),
         new Tile(1, Color.BLUE),
@@ -379,12 +375,12 @@ public class ClientThread implements Runnable {
         new Tile(4, Color.YELLOW),
         new Tile(5, Color.YELLOW),
     }));
-    if (lobby.gameState.playerDecks.get(playerIndex).size() == 15) {
+    if (lobby.gameState.playerDecks.get(playerIndex).countTiles() == 15) {
       winnerConf.add(new Tile(0, Color.YELLOW));
     }
-    UnorderedDeck winnerDeck = new UnorderedDeck(winnerConf);
+    OrderedDeck winnerDeck = new OrderedDeck(winnerConf.toArray(new Tile[]{}));
     lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
-    ArrayList<String> stringTiles = winnerDeck.toStringArray();
+    ArrayList<String> stringTiles = winnerDeck.toStringArrayList();
     String deckString = encodeProtocolMessage(stringTiles);
     send(encodeProtocolMessage("+WINC", deckString));
   }
@@ -397,8 +393,8 @@ public class ClientThread implements Runnable {
       LOGGER.debug("lobby wasn't able to start.");
     }
     for (int i = 0; i < lobby.players.size(); i++) {
-      UnorderedDeck deck = lobby.gameState.playerDecks.get(i);
-      ArrayList<String> stringTiles = deck.toStringArray();
+      OrderedDeck deck = lobby.gameState.playerDecks.get(i);
+      ArrayList<String> stringTiles = deck.toStringArrayList();
       String deckString = encodeProtocolMessage(stringTiles);
       lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
     }

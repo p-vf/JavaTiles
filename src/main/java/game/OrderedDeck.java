@@ -1,5 +1,8 @@
 package game;
 
+import server.UnorderedDeck;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -89,7 +92,7 @@ public class OrderedDeck {
    *
    * @return An array containing all tiles from the deck in a linear sequence.
    */
-  public Tile[] DeckToTileArray() {
+  public Tile[] toTileArray() {
     Tile[] tileArray = new Tile[24];
     int count = 0;
     for (int i = 0; i < deck.length; i++) {
@@ -170,9 +173,18 @@ public class OrderedDeck {
 
   }
 
+  public UnorderedDeck toUnorderedDeck() {
+    UnorderedDeck res = new UnorderedDeck();
+    Tile[] tiles = toTileArray();
+    for (Tile t : tiles) {
+      res.add(t);
+    }
+    return res;
+  }
+
 
   /**
-   * Returns a string representation of the deck in a deep format.
+   * Returns a simple string representation of the deck.
    *
    * @return A string representation of the deck, including all tiles.
    */
@@ -206,6 +218,20 @@ public class OrderedDeck {
       }
     }
     return res.toString();
+  }
+
+  public ArrayList<String> toStringArrayList() {
+    Tile[] tiles = toTileArray();
+    ArrayList<String> res = new ArrayList<>(DECK_HEIGHT * DECK_WIDTH);
+    for (int i = 0; i < DECK_HEIGHT * DECK_WIDTH; i++) {
+      Tile current = tiles[i];
+      if (current == null) {
+        res.add("");
+      } else {
+        res.add(current.toString());
+      }
+    }
+    return res;
   }
 
   /**
@@ -246,10 +272,35 @@ public class OrderedDeck {
     System.out.println(newDeck.toStringPretty());
     newDeck.removeTile(1, 1); //should remove 13 YELLOW and replace with null
     System.out.println(newDeck.toStringPretty());
-    Tile[] tileArray2 = newDeck.DeckToTileArray();
+    Tile[] tileArray2 = newDeck.toTileArray();
     //System.out.println(Arrays.deepToString(tileArray));
   }
 
+  public void findAndRemove(Tile tile) throws IllegalArgumentException {
+    Tile[] tiles = toTileArray();
+    for (int i = 0; i < DECK_HEIGHT * DECK_WIDTH; i++) {
+      if (tiles[i].equals(tile)) {
+        tiles[i] = null;
+        // scuffed but should work
+        deck = new OrderedDeck(tiles).deck;
+        return;
+      }
+    }
+    throw new IllegalArgumentException("Tried to remove Tile from a deck that doesn't contain the tile");
+  }
+
+  public void fillFirstEmptySpot(Tile tile) throws IllegalArgumentException {
+    Tile[] tiles = toTileArray();
+    for (int i = 0; i < DECK_HEIGHT * DECK_WIDTH; i++) {
+      if (tiles[i] == null) {
+        tiles[i] = tile;
+        // scuffed but should work
+        deck = new OrderedDeck(tiles).deck;
+        return;
+      }
+    }
+    throw new IllegalArgumentException("Tried to remove Tile from a deck that doesn't contain the tile");
+  }
 }
 
 

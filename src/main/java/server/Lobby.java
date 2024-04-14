@@ -1,12 +1,12 @@
 package server;
 
+import game.OrderedDeck;
 import game.Tile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -75,7 +75,7 @@ public class Lobby {
         players.set(i, client);
         if (gameState != null) {
           try {
-            client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.playerDecks.get(i).toStringArray()), Integer.toString(i)));
+            client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.playerDecks.get(i).toStringArrayList()), Integer.toString(i)));
           } catch (IOException e) {
             LOGGER.error("Lobby.addPlayer: IOException thrown" + e.getMessage());
             return false;
@@ -130,26 +130,24 @@ public class Lobby {
    * Validates a player's move by ensuring that the tile they wish to move is not null and that the resulting
    * tile configuration matches the server's current state of the game.
    *
-   * @param tile      The tile that the player wants to move.
-   * @param tileArray The array of tiles representing the current state before the move.
-   * @param playerIdx The index of the player making the move.
+   * @param tile       The tile that the player wants to put.
+   * @param clientDeck The deck before the move
+   * @param playerIdx  The index of the player making the move.
    * @return true if the move is valid and the resulting tile configuration matches the server's deck for the player;
    * false otherwise, including when the tile to move is null.
    */
-  public boolean validateMove(Tile tile, Tile[] tileArray, int playerIdx) {
+  public boolean validateMove(Tile tile, OrderedDeck clientDeck, int playerIdx) {
     if (tile == null) {
       LOGGER.debug("move not valid: the moved tile can't be null");
       return false;
     }
-    ArrayList<Tile> temp = new ArrayList<>(Arrays.asList(tileArray));
-    temp.add(tile);
-    UnorderedDeck clientDeck = new UnorderedDeck(temp);
-
-    UnorderedDeck serverDeck = gameState.playerDecks.get(playerIdx);
-    boolean equal = clientDeck.equals(serverDeck);
+    UnorderedDeck clientUnorderedDeck = clientDeck.toUnorderedDeck();
+    OrderedDeck serverDeck = gameState.playerDecks.get(playerIdx);
+    UnorderedDeck serverUnorderedDeck = serverDeck.toUnorderedDeck();
+    boolean equal = clientUnorderedDeck.equals(serverUnorderedDeck);
     // CLEANUP remove this debugging statement once everything works
     if (!equal) {
-      LOGGER.debug(UnorderedDeck.showDiffDebug(serverDeck, clientDeck, "serverDeck", "clientDeck"));
+      LOGGER.debug(UnorderedDeck.showDiffDebug(serverUnorderedDeck, clientUnorderedDeck, "serverDeck", "clientDeck"));
     }
     return equal;
   }

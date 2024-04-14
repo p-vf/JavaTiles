@@ -1,6 +1,7 @@
 package server;
 
 import game.Color;
+import game.OrderedDeck;
 import game.Tile;
 
 import static game.Color.*;
@@ -21,7 +22,7 @@ public class GameState {
   // elements() and toArray(Tile[] t);
   Stack<Tile> mainStack;
   ArrayList<Stack<Tile>> exchangeStacks;
-  ArrayList<UnorderedDeck> playerDecks;
+  ArrayList<OrderedDeck> playerDecks;
   int currentPlayerIdx;
 
   /**
@@ -53,14 +54,14 @@ public class GameState {
     playerDecks = new ArrayList<>();
     int counter = 0;
     for (int p = 0; p < 4; p++) {
-      UnorderedDeck temp = new UnorderedDeck();
+      Tile[] deckTiles = new Tile[15];
       for (int i = 0; i < 14; i++) {
-        temp.add(tiles[counter++]);
+        deckTiles[i] = tiles[counter++];
       }
       if (p == startPlayerIdx) {
-        temp.add(tiles[counter++]);
+        deckTiles[14] = tiles[counter++];
       }
-      playerDecks.add(temp);
+      playerDecks.add(new OrderedDeck(deckTiles));
     }
 
     // the rest of the tiles get added to the main stack
@@ -109,7 +110,7 @@ public class GameState {
     } catch (EmptyStackException e) {
       tile = null;
     }
-    playerDecks.get(playerIndex).add(tile);
+    playerDecks.get(playerIndex).fillFirstEmptySpot(tile);
     return tile;
   }
 
@@ -120,7 +121,7 @@ public class GameState {
    * @return true if the player can draw a tile, false otherwise.
    */
   public boolean canDraw(int playerIndex) {
-    return playerDecks.get(playerIndex).size() == 14;
+    return playerDecks.get(playerIndex).countTiles() == 14;
   }
 
   /**
@@ -142,7 +143,7 @@ public class GameState {
   public void putTile(Tile tile, int playerIndex) {
 
     // remove tile that the player chose from the playerDeck
-    playerDecks.get(playerIndex).remove(tile);
+    playerDecks.get(playerIndex).findAndRemove(tile);
     // add the tile to the exchangeStack of the next player.
     exchangeStacks.get((playerIndex + 1) % 4).push(tile);
     // update the current player index
@@ -157,7 +158,7 @@ public class GameState {
    * @return true if the player can put a tile, false otherwise.
    */
   public boolean canPutTile(int playerIndex) {
-    return playerDecks.get(playerIndex).size() == 15;
+    return playerDecks.get(playerIndex).countTiles() == 15;
   }
 
   // for testing purposes:
