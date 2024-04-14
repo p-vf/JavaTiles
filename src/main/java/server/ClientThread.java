@@ -132,6 +132,8 @@ public class ClientThread implements Runnable {
       }
       case LEFT -> {
       }
+      case JOND -> {
+      }
     }
   }
 
@@ -215,6 +217,7 @@ public class ClientThread implements Runnable {
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
+          send(encodeProtocolMessage("JOND ", nickname));
           sendNicknameList();
         }
         case REDY -> {

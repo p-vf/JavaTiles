@@ -256,6 +256,7 @@ public class NetworkUtils {
       STAT,
       NAMS,
       LEFT,
+      JOND,
     }
   }
 }
