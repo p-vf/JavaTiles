@@ -255,6 +255,7 @@ public class NetworkUtils {
       // send game state relevant to client:
       STAT,
       NAMS,
+      LEFT,
     }
   }
 }

@@ -129,7 +129,8 @@ public class ClientThread implements Runnable {
         }
       }
       case NAMS ->{
-
+      }
+      case LEFT -> {
       }
     }
   }
@@ -214,6 +215,7 @@ public class ClientThread implements Runnable {
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
+          sendNicknameList();
         }
         case REDY -> {
           if (notAllReady()) break;
@@ -483,6 +485,7 @@ public class ClientThread implements Runnable {
       if (lobby != null && playerIndex >= 0) {
         lobby.removePlayer(playerIndex);
         playerIndex = -1;
+        send(encodeProtocolMessage("LEFT ", nickname));
       }
       server.removeClient(this);
       if (lobby != null && playerIndex >= 0) {
