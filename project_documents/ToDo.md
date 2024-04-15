@@ -26,3 +26,20 @@
 
 # Fragen Tutorat 8.4.:
 - Müssen wir accounts machen für das Scoreboard?
+
+# TODOs bis 19.4.:
+- networkprotocol.md aktualisieren (mit JOND)
+Server:
+    - LEFT command senden (wenn ein Spieler die Lobby verlässt)
+    - NAMS command senden (am Anfang des Spiels und jedes mal, wenn sich die Namensliste ändert)
+    - JOND command senden (wenn ein Spieler einer Lobby beitritt)
+    - LLOB command abhandeln (vom Client, wenn er die Lobby verlassen will)
+    - Das Game state sollte nicht in einem Broadcast geschickt werden, sondern nur an die Clients in einer Lobby.
+
+
+Client:
+    - Client nicht mehr nach username fragen (entweder das dritte Argument oder den Systemnamen nehmen)
+    - LEFT command abhandeln (siehe networkprotocol.md)
+    - LLOB command senden (siehe networkprotocol.md)
+    - NAMS command abhandeln (siehe networkprotocol.md)
+    - JOND command abhandeln (siehe networkprotocol.md)
