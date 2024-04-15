@@ -220,6 +220,9 @@ public class ClientThread implements Runnable {
           lobby.sendToLobby(encodeProtocolMessage("JOND", nickname), null);
           sendNicknameList();
         }
+        case LLOB -> {
+          removeFromLobby();
+        }
         case REDY -> {
           if (notAllReady()) break;
           distributeDecks();
@@ -617,4 +620,19 @@ public class ClientThread implements Runnable {
     String names = lobby.getNicknameList();
     lobby.sendToLobby(encodeProtocolMessage("NAMS", names), null);
   }
+
+  private void removeFromLobby() throws IOException {
+    if (lobby != null && playerIndex >= 0) {
+      lobby.removePlayer(playerIndex);
+      playerIndex = -1;
+      send(encodeProtocolMessage("+LLOB"));
+      lobby.sendToLobby(encodeProtocolMessage("LEFT",nickname), null);
+      sendNicknameList();
+    }
+    else{
+      send(encodeProtocolMessage("+LLOB", "f"));
+    }
+
+  }
+
 }
