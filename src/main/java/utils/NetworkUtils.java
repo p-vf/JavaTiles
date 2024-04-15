@@ -235,7 +235,6 @@ public class NetworkUtils {
       REDY,
       // get winning configuration:
       WINC,
-      JOND,
       LLOB,
     }
 

@@ -473,7 +473,11 @@ public class Client {
                     break;
 
                 case JOND:
-                    System.out.println(arguments.get(0) + "joined the lobby");
+                    System.out.println(arguments.get(0) + " joined the lobby");
+                    break;
+
+                case LEFT:
+                    System.out.println(arguments.get(0) + " left the lobby");
                     break;
 
                 case STAT:
