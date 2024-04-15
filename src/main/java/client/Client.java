@@ -450,6 +450,32 @@ public class Client {
                     send("+EMPT");
                     break;
 
+                case NAMS:
+                    String players = arguments.get(0);
+                    ArrayList<String> newPLayers = decodeProtocolMessage(players);
+                    String[] nameArray = newPLayers.toArray(new String[0]);
+                    int counter = 0;
+
+                    System.out.println("The following players are in the lobby:");
+
+                    for(int i = 0; i < nameArray.length; i++){
+                        if(nameArray[i].isEmpty()){
+                            counter++;
+                            continue;
+                        }
+                        System.out.println(nameArray[i]);
+                    }
+
+                    for(int i = 0; i < counter; i++){
+                        System.out.println("-----");
+
+                    }
+                    break;
+
+                case JOND:
+                    System.out.println(arguments.get(0) + "joined the lobby");
+                    break;
+
                 case STAT:
                     ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
                     exchangeStacks = stringsToTileArray(tileList);
@@ -678,9 +704,6 @@ public class Client {
                     System.out.println(getBeautifullyFormattedDecodedLobbiesWithPlayerList(arguments.get(0)));
                     break;
 
-                case JOND:
-                    System.out.println(arguments.get(0) + "joined the lobby");
-                    break;
 
                 case WINC:
                     ArrayList<String> cheatTiles = decodeProtocolMessage(arguments.get(0));
