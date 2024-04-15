@@ -126,6 +126,23 @@ Client: ```+NAMS```
 
 ---
 
+## Lobby verlassen
+| Command           | Response        | Sender |
+|-------------------|-----------------|--------|
+| `LLOB <nickname>` | `+LLOB <valid>` | Client |
+### Beschreibung
+Dieser Command wird vom Client gesendet, wenn er seine momentane Lobby verlassen will.
+Der Server überprüft zuerst, ob der Client überhaupt in einer Lobby ist und gibt dann als Antwort über
+die Flag valid zurück, ob der Client überhaupt in einer Lobby war.
+
+### Beispiel
+Client: ```LLOB Pascal```  
+Server: ```+LLOB t```
+
+(Hier war Pascal tatsächlich in einer Lobby, bevor er diese dann erfolgreich verlassen hat)
+
+---
+
 ## Informieren, dass ein Spieler die Lobby verlassen hat
 | Command           | Response | Sender |
 |-------------------|----------|--------|
