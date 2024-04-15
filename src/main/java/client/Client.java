@@ -419,7 +419,16 @@ public class Client {
                 case STRT:
                     playerID = Integer.parseInt(arguments.get(1));
                     ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
-                    if (tilesStrt.size() == 15) {
+                    int tileCount=0;
+                    for (String tileElement : tilesStrt) {
+                        if(tileElement.isEmpty()) {
+                        }
+                        else{
+                            tileCount++;
+                        }
+
+                    }
+                    if (tileCount == 15) {
                         System.out.println("It's your turn.");
                         currentPlayerID = playerID;
 

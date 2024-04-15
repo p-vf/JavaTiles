@@ -126,6 +126,33 @@ public class Lobby {
     }
   }
 
+  public String getNicknameList(){
+    int length = 4;
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < players.size(); i++){
+      if(players.get(i) == null){
+        sb.append("\"%\"" + " ");
+        continue;
+      }
+      if ((players.get(i).playerIndex == -1)) {
+        sb.append(" ");
+      }
+      else if (players.get(i).playerIndex != -1){
+        sb.append(players.get(i).nickname + " " );
+      }
+
+    }
+    while(players.size() < length){
+      sb.append("\"%\"" + " ");
+      length--;
+    }
+    if(!sb.isEmpty()) {
+      sb.deleteCharAt(sb.length() - 1);
+    }
+    return sb.toString();
+  }
+
+
   /**
    * Validates a player's move by ensuring that the tile they wish to move is not null and that the resulting
    * tile configuration matches the server's current state of the game.

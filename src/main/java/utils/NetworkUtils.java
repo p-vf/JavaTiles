@@ -254,6 +254,9 @@ public class NetworkUtils {
       PING,
       // send game state relevant to client:
       STAT,
+      NAMS,
+      LEFT,
+      JOND,
     }
   }
 }

@@ -29,7 +29,7 @@ public class ClientThread implements Runnable {
   public String nickname;
   private final Server server;
   private Lobby lobby;
-  private int playerIndex = -1;
+  public int playerIndex = -1;
   private final Socket socket;
   public OutputStream out;
   private BufferedReader bReader;
@@ -128,6 +128,12 @@ public class ClientThread implements Runnable {
           pingThread.receivedResponse = true;
         }
       }
+      case NAMS ->{
+      }
+      case LEFT -> {
+      }
+      case JOND -> {
+      }
     }
   }
 
@@ -196,6 +202,9 @@ public class ClientThread implements Runnable {
         case NAME -> {
           changeName(arguments.get(0));
           send(encodeProtocolMessage("+NAME", nickname));
+          if (lobby != null && playerIndex >= 0) {
+            sendNicknameList();
+          }
         }
         case LGAM -> {
           listDemandedGamestatus(arguments);
@@ -204,17 +213,19 @@ public class ClientThread implements Runnable {
           send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
         }
         case LPLA -> {
-          listPlayersConnectedToLobby();
+          listPlayersConnectedToServer();
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
+          send(encodeProtocolMessage("JOND", nickname));
+          sendNicknameList();
         }
         case REDY -> {
           if (notAllReady()) break;
           distributeDecks();
         }
         case WINC -> {
-          activatesCheatCode();
+          activateCheatCode();
         }
       }
     } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
@@ -357,7 +368,7 @@ public class ClientThread implements Runnable {
     send(encodeProtocolMessage("+LGAM", gameStatus, sb.toString()));
   }
 
-  private void activatesCheatCode() throws IOException {
+  private void activateCheatCode() throws IOException {
     // TODO update the winner-configuration to be more overpowered
     ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
         new Tile(0, Color.BLACK),
@@ -420,7 +431,7 @@ public class ClientThread implements Runnable {
     return false;
   }
 
-  private void listPlayersConnectedToLobby() throws IOException {
+  private void listPlayersConnectedToServer() throws IOException {
     ArrayList<ClientThread> clientNames = server.getClientList();
     StringBuilder namesServer = new StringBuilder();
     for (int i = 0; i < clientNames.size(); i++) {
@@ -477,6 +488,8 @@ public class ClientThread implements Runnable {
       if (lobby != null && playerIndex >= 0) {
         lobby.removePlayer(playerIndex);
         playerIndex = -1;
+        send(encodeProtocolMessage("LEFT", nickname));
+        sendNicknameList();
       }
       server.removeClient(this);
       socket.close();
@@ -598,5 +611,10 @@ public class ClientThread implements Runnable {
     String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
     String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);
     server.sendToAll(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
+  }
+
+  private void sendNicknameList() throws IOException {
+    String names = lobby.getNicknameList();
+    send(encodeProtocolMessage("NAMS", names));
   }
 }
