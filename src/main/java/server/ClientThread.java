@@ -217,7 +217,7 @@ public class ClientThread implements Runnable {
         }
         case JLOB -> {
           joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
-          send(encodeProtocolMessage("JOND", nickname));
+          lobby.sendToLobby(encodeProtocolMessage("JOND", nickname), null);
           sendNicknameList();
         }
         case REDY -> {
@@ -488,7 +488,7 @@ public class ClientThread implements Runnable {
       if (lobby != null && playerIndex >= 0) {
         lobby.removePlayer(playerIndex);
         playerIndex = -1;
-        send(encodeProtocolMessage("LEFT", nickname));
+        lobby.sendToLobby(encodeProtocolMessage("LEFT",nickname), null);
         sendNicknameList();
       }
       server.removeClient(this);
@@ -615,6 +615,6 @@ public class ClientThread implements Runnable {
 
   private void sendNicknameList() throws IOException {
     String names = lobby.getNicknameList();
-    send(encodeProtocolMessage("NAMS", names));
+    lobby.sendToLobby(encodeProtocolMessage("NAMS", names), null);
   }
 }
