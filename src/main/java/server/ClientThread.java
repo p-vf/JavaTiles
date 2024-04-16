@@ -376,19 +376,24 @@ public class ClientThread implements Runnable {
     // TODO update the winner-configuration to be more overpowered
     ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
         new Tile(0, Color.BLACK),
-        new Tile(1, Color.BLUE),
         new Tile(2, Color.BLUE),
         new Tile(3, Color.BLUE),
-        new Tile(4, Color.BLUE),
+        null,
         new Tile(1, Color.RED),
         new Tile(2, Color.RED),
         new Tile(3, Color.RED),
         new Tile(4, Color.RED),
+        null,
+        null,
+        null,
+        null,
         new Tile(1, Color.YELLOW),
         new Tile(2, Color.YELLOW),
         new Tile(3, Color.YELLOW),
         new Tile(4, Color.YELLOW),
         new Tile(5, Color.YELLOW),
+        new Tile(6, Color.YELLOW),
+        new Tile(7, Color.YELLOW),
     }));
     if (lobby.gameState.playerDecks.get(playerIndex).countTiles() == 15) {
       winnerConf.add(new Tile(0, Color.YELLOW));
