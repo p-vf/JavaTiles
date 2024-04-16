@@ -628,6 +628,7 @@ public class ClientThread implements Runnable {
       send(encodeProtocolMessage("+LLOB", "t"));
       lobby.sendToLobby(encodeProtocolMessage("LEFT",nickname), null);
       sendNicknameList();
+      lobby = null;
     }
     else{
       send(encodeProtocolMessage("+LLOB", "f"));
