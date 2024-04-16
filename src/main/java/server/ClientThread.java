@@ -625,14 +625,12 @@ public class ClientThread implements Runnable {
     if (lobby != null && playerIndex >= 0) {
       lobby.removePlayer(playerIndex);
       playerIndex = -1;
-      send(encodeProtocolMessage("+LLOB"));
+      send(encodeProtocolMessage("+LLOB", "t"));
       lobby.sendToLobby(encodeProtocolMessage("LEFT",nickname), null);
       sendNicknameList();
     }
     else{
       send(encodeProtocolMessage("+LLOB", "f"));
     }
-
   }
-
 }
