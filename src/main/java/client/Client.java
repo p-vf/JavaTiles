@@ -366,6 +366,9 @@ public class Client {
                         return null;
                     }
 
+                case "/leavelobby":
+                    return encodeProtocolMessage("LLOB");
+
 
                 default:
                     System.out.println("invalid command");
@@ -706,6 +709,15 @@ public class Client {
 
                 case LLPL:
                     System.out.println(getBeautifullyFormattedDecodedLobbiesWithPlayerList(arguments.get(0)));
+                    break;
+
+                case LLOB:
+                    if (arguments.get(0).equals("t")){
+                        System.out.println("Lobby left successfully");
+                    }
+                    if(arguments.get(0).equals("f")){
+                        System.out.println("You have to be in a lobby to leave");
+                    }
                     break;
 
 
