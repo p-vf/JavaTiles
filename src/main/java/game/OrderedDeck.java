@@ -279,10 +279,12 @@ public class OrderedDeck {
   public void findAndRemove(Tile tile) throws IllegalArgumentException {
     Tile[] tiles = toTileArray();
     for (int i = 0; i < DECK_HEIGHT * DECK_WIDTH; i++) {
+      if (tiles[i] == null) {
+        continue;
+      }
       if (tiles[i].equals(tile)) {
         tiles[i] = null;
-        // scuffed but should work
-        deck = new OrderedDeck(tiles).deck;
+        deck = deckFromTileArray(tiles);
         return;
       }
     }
@@ -294,12 +296,31 @@ public class OrderedDeck {
     for (int i = 0; i < DECK_HEIGHT * DECK_WIDTH; i++) {
       if (tiles[i] == null) {
         tiles[i] = tile;
-        // scuffed but should work
-        deck = new OrderedDeck(tiles).deck;
+        deck = deckFromTileArray(tiles);
         return;
       }
     }
     throw new IllegalArgumentException("Tried to remove Tile from a deck that doesn't contain the tile");
+  }
+
+  private static Tile[][] deckFromTileArray(Tile[] tileArray) {
+    if (tileArray.length > DECK_WIDTH * DECK_HEIGHT) {
+      throw new IllegalArgumentException("Tile[] tileArray is too big for deck");
+    }
+    Tile[][] res = new Tile[DECK_HEIGHT][DECK_WIDTH];
+    int count = 0;
+    loop:
+    {
+      for (int i = 0; i < DECK_HEIGHT; i++) {
+        for (int j = 0; j < DECK_WIDTH; j++) {
+          if (count >= tileArray.length) {
+            break loop;
+          }
+          res[i][j] = tileArray[count++];
+        }
+      }
+    }
+    return res;
   }
 }
 

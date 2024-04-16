@@ -295,6 +295,7 @@ public class ClientThread implements Runnable {
       return;
     }
     if (Tile.isWinningDeck(tileArray)) {
+      // TODO add winning state
       isWon = true;
       lobby.finishGame(nickname);
       server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
@@ -491,7 +492,7 @@ public class ClientThread implements Runnable {
       if (lobby != null && playerIndex >= 0) {
         lobby.removePlayer(playerIndex);
         playerIndex = -1;
-        lobby.sendToLobby(encodeProtocolMessage("LEFT",nickname), null);
+        lobby.sendToLobby(encodeProtocolMessage("LEFT", nickname), null);
         sendNicknameList();
       }
       server.removeClient(this);

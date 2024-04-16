@@ -390,4 +390,12 @@ public class Tile {
   public String toString() {
     return  number + ":"+ color.toString();
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof Tile t) {
+      return t.color == color && t.number == number;
+    }
+    return false;
+  }
 }

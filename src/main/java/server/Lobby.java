@@ -169,6 +169,7 @@ public class Lobby {
       return false;
     }
     UnorderedDeck clientUnorderedDeck = clientDeck.toUnorderedDeck();
+    clientUnorderedDeck.add(tile);
     OrderedDeck serverDeck = gameState.playerDecks.get(playerIdx);
     UnorderedDeck serverUnorderedDeck = serverDeck.toUnorderedDeck();
     boolean equal = clientUnorderedDeck.equals(serverUnorderedDeck);
@@ -205,6 +206,19 @@ public class Lobby {
   public void finishGame(String winnerName) {
     this.winnerName = winnerName;
     lobbyState = LobbyState.FINISHED;
+  }
+
+  public void printDebug() {
+    System.out.println("Main stack:");
+    gameState.mainStack.forEach((x) -> System.out.print(x.toStringPretty() + " "));
+    System.out.println();
+    for (int i = 0; i < 4; i++) {
+      System.out.println("Deck of Player " + players.get(i).nickname + " (index " + i + "):");
+      System.out.println(gameState.playerDecks.get(i).toStringPretty());
+      System.out.println("Exchange-stack:");
+      gameState.exchangeStacks.get(i).forEach((x) -> System.out.print(x.toStringPretty() + " "));
+      System.out.println("\n");
+    }
   }
 
   /**
