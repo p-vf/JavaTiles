@@ -193,8 +193,8 @@ public class Tile {
           }
           System.out.println("FROM == " + from);
           System.out.println("TO == " + to);
-          boolean validRun = isValidRun(deck, from, to);
-          boolean validSet = isValidSet(deck, from, to);
+          boolean validRun = isValidRun(deck2D[i], from, to);
+          boolean validSet = isValidSet(deck2D[i], from, to);
           if (validRun) {
             System.out.println("Valid run: " + output);
           }
@@ -329,7 +329,7 @@ public class Tile {
   public static boolean isValidRun(Tile[] deck, int from, int to) {
     //TODO: Darf man einen ValidRun bis zur 1 machen oder bis zur 13?
     Tile firstTile = deck[from];
-    Color color = firstTile.getColor();
+    Color color = firstTile.getColor();//nimmt color vom Joker
     int startNum = firstTile.getNumber();
     int jokerCountBeforeFirstNumber = 0;
     System.out.println("from = " + from);
@@ -337,9 +337,10 @@ public class Tile {
       Tile currentTile = deck[i];
       if(startNum == 0){
         startNum = currentTile.getNumber();
+        color = currentTile.getColor();
         //TODO Joker als erstes, was passiert dann?
       }
-
+      System.out.println("CURRENTTILE = " + currentTile.getNumber());
       if (currentTile.isJoker()) {
         if(startNum == 0){
           jokerCountBeforeFirstNumber++;
