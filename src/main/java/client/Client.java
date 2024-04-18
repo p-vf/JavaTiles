@@ -51,6 +51,7 @@ public class Client {
     private GUIThread guiThread; //Thread responsible for displaying the GUI
 
     private boolean lobby = false; //Whether the client is in a lobby or not
+    private static GUIGame guiGame; //The GUI of the game
 
 
     /**
@@ -64,6 +65,7 @@ public class Client {
         this.out = socket.getOutputStream();
         this.in = socket.getInputStream();
         guiThread = new GUIThread(this);
+        guiGame = new GUIGame(this);
     }
 
 
@@ -81,6 +83,7 @@ public class Client {
             Client client = new Client(sock);
             Thread gThread = new Thread(client.guiThread);
             gThread.start();
+            guiGame.start();
             InThread th = new InThread(client.in, client, client.guiThread);
             Thread iT = new Thread(th);
             iT.start();
