@@ -297,12 +297,14 @@ public class ClientThread implements Runnable {
       return;
     }
     if (Tile.isWinningDeck(tileArray)) {
-      // TODO add winning state
-      isWon = true;
+
       lobby.finishGame(nickname);
       server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
+
+      send(encodeProtocolMessage("+PUTT", "t", "t"));
+      return;
     }
-    send(encodeProtocolMessage("+PUTT", "t", isWon ? "t" : "f"));
+    send(encodeProtocolMessage("+PUTT", "t", "f"));
 
     lobby.gameState.putTile(tile, playerIndex);
 

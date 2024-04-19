@@ -205,6 +205,16 @@ public class Lobby {
    */
   public void finishGame(String winnerName) {
     this.winnerName = winnerName;
+    int score = gameState.currentRoundNumber();
+
+    // TODO save highscore (name, date, and numberofrounds)
+
+
+    gameState = null;
+    for (ClientThread p : players) {
+      // so that the players can start a game if they feel like it.
+      p.isReady = false;
+    }
     lobbyState = LobbyState.FINISHED;
   }
 

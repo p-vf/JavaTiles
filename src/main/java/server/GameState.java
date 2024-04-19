@@ -24,6 +24,7 @@ public class GameState {
   ArrayList<Stack<Tile>> exchangeStacks;
   ArrayList<OrderedDeck> playerDecks;
   int currentPlayerIdx;
+  int numberOfDraws = 0;
 
   /**
    * Constructor of the {@code GameState} class.
@@ -111,6 +112,7 @@ public class GameState {
       tile = null;
     }
     playerDecks.get(playerIndex).fillFirstEmptySpot(tile);
+    numberOfDraws++;
     return tile;
   }
 
@@ -159,6 +161,10 @@ public class GameState {
    */
   public boolean canPutTile(int playerIndex) {
     return playerDecks.get(playerIndex).countTiles() == 15;
+  }
+
+  public int currentRoundNumber() {
+    return numberOfDraws / 4 + 1;
   }
 
   // for testing purposes:
