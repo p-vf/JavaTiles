@@ -216,7 +216,9 @@ public class ClientThread implements Runnable {
           listPlayersConnectedToServer();
         }
         case JLOB -> {
-          joinOrCreateLobby(Integer.parseInt(arguments.get(0)));
+          if (!joinOrCreateLobby(Integer.parseInt(arguments.get(0)))) {
+            break;
+          }
           lobby.sendToLobby(encodeProtocolMessage("JOND", nickname), null);
           sendNicknameList();
         }
@@ -573,10 +575,10 @@ public class ClientThread implements Runnable {
    * @param lobbyNumber The number of the lobby that the client wants to join or create.
    * @throws IOException Whenever send() throws an IOException.
    */
-  private void joinOrCreateLobby(int lobbyNumber) throws IOException {
+  private boolean joinOrCreateLobby(int lobbyNumber) throws IOException {
     if (lobby != null) {
       send(encodeProtocolMessage("+JLOB", "f", "Already in Lobby " + lobby.lobbyNumber));
-      return;
+      return false;
     }
     boolean createdNewLobby = false;
     synchronized (server.lobbies) {
@@ -589,9 +591,10 @@ public class ClientThread implements Runnable {
         send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobbyNumber));
         lobby = potentialLobby;
         playerIndex = lobby.getPlayerIndex(this);
-      } else {
-        send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
+        return true;
       }
+      send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
+      return false;
     }
   }
 
