@@ -619,7 +619,7 @@ public class ClientThread implements Runnable {
   private void sendState() {
     String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
     String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);
-    server.sendToAll(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
+    lobby.sendToLobby(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
   }
 
   private void sendNicknameList() throws IOException {
