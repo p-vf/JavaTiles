@@ -33,11 +33,7 @@ public class GUIGame {
         frame.add(panel);
 
         button2.addActionListener(e -> {
-            try {
 
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
         button.addActionListener(e ->{System.out.println("Button clicked");});
         panel.add(button);
