@@ -466,15 +466,11 @@ public class Client {
 
                     for(int i = 0; i < nameArray.length; i++){
                         if(nameArray[i].isEmpty()){
-                            counter++;
-                            continue;
+                            System.out.println("-----");
                         }
-                        System.out.println(nameArray[i]);
-                    }
-
-                    for(int i = 0; i < counter; i++){
-                        System.out.println("-----");
-
+                        else{
+                            System.out.println(nameArray[i]);
+                        }
                     }
                     break;
 
