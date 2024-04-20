@@ -61,7 +61,7 @@ public class ClientThread implements Runnable {
     } catch (IOException e) {
       e.printStackTrace(System.err);
     }
-
+    highScores = new HighScores();
     pingThread = new ServerPingThread(this, PING_TIMEOUT);
     pingThread.setName("PingThread-" + id);
     pingThread.start();
@@ -192,6 +192,9 @@ public class ClientThread implements Runnable {
           draw(arguments);
 
 
+        }
+        case HIGH ->{
+          send(encodeProtocolMessage("+HIGH", highScores.getHighScores()));
         }
 
         case PUTT -> {

@@ -236,6 +236,7 @@ public class NetworkUtils {
       // get winning configuration:
       WINC,
       LLOB,
+      HIGH,
     }
 
     /**

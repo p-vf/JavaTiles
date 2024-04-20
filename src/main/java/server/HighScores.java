@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static utils.NetworkUtils.encodeProtocolMessage;
+
 public class HighScores {
   private final Path path = Path.of("/Users/istrefuka/Downloads/Gruppe-5/project_documents/Highscores.ssv");
 
@@ -70,19 +72,35 @@ public class HighScores {
     }
   }
 
-  // Die main Methode zum Testen
+  public String getHighScores() throws IOException {
+    List<Triple<String, String, Integer>> highScores = readHighscores();
+    ArrayList<String> encodedHighScores = new ArrayList<>();
+
+    for (Triple<String, String, Integer> scoreEntry : highScores) {
+      ArrayList<String> entry = new ArrayList<>();
+      entry.add(scoreEntry.getLeft()); // Name
+      entry.add(scoreEntry.getMiddle()); // Datum
+      entry.add(String.valueOf(scoreEntry.getRight())); // Score
+      encodedHighScores.add(encodeProtocolMessage(entry));
+    }
+
+    return encodeProtocolMessage(encodedHighScores);
+  }
+
+
+  // only for test purposes
   public static void main(String[] args) {
-//    HighScores highScores = new HighScores();
-//    try {
-//      highScores.addEntryToHighscores("Max", "2024-04-20", 200);
-//      highScores.addEntryToHighscores("Max", "2024-04-20", 100);
-//      highScores.addEntryToHighscores("Phillip", "2024-04-20", 100);
-//      List<Triple<String, String, Integer>> entries = highScores.readHighscores();
-//      for (Triple<String, String, Integer> entry : entries) {
-//        System.out.println(entry);
-//      }
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
+    HighScores highScores = new HighScores();
+    try {
+      highScores.addEntryToHighscores("Max", "2024-04-20", 200);
+      highScores.addEntryToHighscores("Max", "2024-04-20", 100);
+      highScores.addEntryToHighscores("Phillip", "2024-04-20", 100);
+      List<Triple<String, String, Integer>> entries = highScores.readHighscores();
+      for (Triple<String, String, Integer> entry : entries) {
+        System.out.println(entry);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }
