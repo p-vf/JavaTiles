@@ -16,6 +16,9 @@ import utils.NetworkUtils;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
 import static utils.NetworkUtils.Protocol.ServerRequest;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 
 /**
  * This class represents a thread for handling communication with a client by reading and responding to inputs.
@@ -37,6 +40,8 @@ public class ClientThread implements Runnable {
   private final ServerPingThread pingThread;
   public boolean isReady = false;
   public volatile boolean isRunning = true;
+  private HighScores highScores;
+  private String todaysDate;
 
   /**
    * Constructor of the EchoClientThread class.
@@ -302,6 +307,10 @@ public class ClientThread implements Runnable {
       server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
 
       send(encodeProtocolMessage("+PUTT", "t", "t"));
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+      todaysDate = LocalDate.now().format(dtf);
+      highScores.addEntryToHighscores(nickname, todaysDate, lobby.gameState.currentRoundNumber());
+
       return;
     }
     send(encodeProtocolMessage("+PUTT", "t", "f"));
