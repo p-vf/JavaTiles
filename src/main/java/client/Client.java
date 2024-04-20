@@ -472,14 +472,17 @@ public class Client {
                             System.out.println(nameArray[i]);
                         }
                     }
+                    send(encodeProtocolMessage("+NAMS"));
                     break;
 
                 case JOND:
                     System.out.println(arguments.get(0) + " joined the lobby");
+                    send(encodeProtocolMessage("+JOND"));
                     break;
 
                 case LEFT:
                     System.out.println(arguments.get(0) + " left the lobby");
+                    send(encodeProtocolMessage("+LEFT"));
                     break;
 
                 case STAT:
@@ -494,7 +497,7 @@ public class Client {
                     } else {
                         System.out.println("It's " + arguments.get(1) + "'s turn.");
                     }
-
+                    send(encodeProtocolMessage("+STAT"));
                     break;
 
 
