@@ -56,20 +56,21 @@ wobei ``<commandname>`` aus vier Grossbuchstaben besteht, `<arg_N>` das N-te Arg
 (*) Die Zeichenfolge darf keinen newline Buchstaben und auch kein Carriage Return beinhalten, aber ansonsten kann sie jede Zeichenfolge sein.
 
 
-| Parameter                                                      | Beschreibung                                                                                                                                                                                                                                                                   |
-|----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<joinsuccessful>`, `<valid>`, `<won>`, `<nicknameexists>`     | entweder "`t`" oder "`f`", stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                                                         |  
-| `<nickname>`, `<whisperrecipient>`, `<sender>`, `<actualname>` | Spielername ohne Leerschlag, mit maximaler Länge 30. (stellt Spielername dar)                                                                                                                                                                                                  |
-| `<msg>`                                                        | Zeichenfolge, die eine Nachricht darstellt.                                                                                                                                                                                                                                    |
-| `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                                                                     |
-| `<drawstack>`                                                  | Entweder "`m`" oder "`e`" (stellt entweder Hauptstapel oder Austauschstapel dar)                                                                                                                                                                                               |
-| `<tile>`                                                       | Repräsentation eines Spielsteins;<br/>*zahl* + `:` + *farbe* <br/> wobei *zahl* eine Zahl zwischen `0` und `13` und *farbe* entweder "`RED`", "`BLUE`", "`YELLOW`" oder "`BLACK`" ist. Speziell: bei der Zahl 0 handelt es sich um den Joker, egal in welcher Farbkombination. |
-| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks (muss immer Länge 24 haben);<br/>`<<tile_1> <tile_2> ... >` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an einer gewissen Stelle, so wird dort ein leerer Wert dargestellt.                                      |
-| `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`<<tile_0> <tile_1> <tile_2> <tile_3>>` wobei *tile_N* den obersten Stein des Austauschstapels des Spielers mit Index N darstellt.                                                                             |
-| `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`<<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ...>` wobei *n_M* die Lobbynummer und *s_M* die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command)                                                 |
-| `<playerlist>`, `<nicknames>`                                  | Stellt Liste von Spielern dar; (können auch leere Werte sein im Falle von `<nicknames>`) <br/>`<<name_1> <name_2> ...>`                                                                                                                                                        |
-| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<<lobby_1_names> <lobby_2_names> ...>` wobei *lobby_M_names* die M-te Lobby wie folgt darstellt: `<lobby_M_number> <lobby_M_name_1> <lobby_M_name_2> <lobby_M_name_4> ...`                                     |
-| `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/> "`b`", "`l`", "`w`" für jeweils broadcast, lobby, und whisper                                                                                                                                                                       |
+| Parameter                                                      | Beschreibung                                                                                                                                                                                                                                                                                                                    |
+|----------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<joinsuccessful>`, `<valid>`, `<won>`, `<nicknameexists>`     | entweder "`t`" oder "`f`", stellt booleschen Wert dar (`true`/`false`)                                                                                                                                                                                                                                                          |  
+| `<nickname>`, `<whisperrecipient>`, `<sender>`, `<actualname>` | Spielername ohne Leerschlag, mit maximaler Länge 30. (stellt Spielername dar)                                                                                                                                                                                                                                                   |
+| `<msg>`                                                        | Zeichenfolge, die eine Nachricht darstellt.                                                                                                                                                                                                                                                                                     |
+| `<n>`                                                          | Ganze Zahl in Dezimaldarstellung. (stellt Lobbynummer dar)                                                                                                                                                                                                                                                                      |
+| `<drawstack>`                                                  | Entweder "`m`" oder "`e`" (stellt entweder Hauptstapel oder Austauschstapel dar)                                                                                                                                                                                                                                                |
+| `<tile>`                                                       | Repräsentation eines Spielsteins;<br/>*zahl* + `:` + *farbe* <br/> wobei *zahl* eine Zahl zwischen `0` und `13` und *farbe* entweder "`RED`", "`BLUE`", "`YELLOW`" oder "`BLACK`" ist. Speziell: bei der Zahl 0 handelt es sich um den Joker, egal in welcher Farbkombination.                                                  |
+| `<deck>` `<startdeck>`                                         | Repräsentation des Spielerdecks (muss immer Länge 24 haben);<br/>`<<tile_1> <tile_2> ... >` wobei `<tile_N>` die gleiche Darstellung wie `<tile>` hat. Ist kein Stein an einer gewissen Stelle, so wird dort ein leerer Wert dargestellt.                                                                                       |
+| `<exchangestacks>`                                             | Repräsentation des obersten Steins der vier Austauschstapel;<br>`<<tile_0> <tile_1> <tile_2> <tile_3>>` wobei *tile_N* den obersten Stein des Austauschstapels des Spielers mit Index N darstellt.                                                                                                                              |
+| `<games>`                                                      | Eine Repräsentation von Lobbys; <br/>`<<n_1>[:[<s_1>]] <n_2>[:[<s_2>]] ...>` wobei *n_M* die Lobbynummer und *s_M* die Anz. Spieler oder ein Spielername von Lobby M ist. <br>(Für genauere Beschreibung siehe `LGAM`-Command)                                                                                                  |
+| `<playerlist>`, `<nicknames>`                                  | Stellt Liste von Spielern dar; (können auch leere Werte sein im Falle von `<nicknames>`) <br/>`<<name_1> <name_2> ...>`                                                                                                                                                                                                         |
+| `<lobbieswithplayerlist>`                                      | Stellt Liste von Lobbies mit den jeweiligen Spielern dar; <br/>`<<lobby_1_names> <lobby_2_names> ...>` wobei *lobby_M_names* die M-te Lobby wie folgt darstellt: `<lobby_M_number> <lobby_M_name_1> <lobby_M_name_2> <lobby_M_name_4> ...`                                                                                      |
+| `<messagetype>`                                                | Stellt Art einer Chat-Nachricht dar; <br/> "`b`", "`l`", "`w`" für jeweils broadcast, lobby, und whisper                                                                                                                                                                                                                        |
+| `<highscores>`                                                 | Stellt eine Liste von Highscore-Einträgen dar; jedes Element besteht aus drei Teilen: Spielername, Datum des Highscores und der Highscore-Wert. Diese Elemente werden in der Form `<nickname> <date> <score>` zusammengefasst, wobei `<nickname>` der Name des Spielers, `<date>` das Datum und `<score>` der Punktestand ist.  |
 
 
 ---
@@ -229,6 +230,24 @@ Client: ```LGAM r```
 Server: ``+LGAM r "51 23%"``  
 Client: ```LGAM f```  
 Server: ``+LGAM f "22:robin 1:nick 4:%"``
+
+---
+
+## Derzeitige Highscores anzeigen
+| Command | Response             | Sender |
+|---------|----------------------|--------|
+| `HIGH`  | `+HIGH <highscores>` | Client |
+### Beschreibung
+Zeigt alle Highscores an, in aufsteigender Reihenfolge. Bei identischem Highscore ist der Spieler, 
+der den Highscore früher aufgestellt hat weiter oben in der Platzierung.
+
+### Beispiel
+Client: `HIGH`  
+Server: `" +HIGH "\"Robin 2024-04-20 10%\" \"Boran 2024-04-20 10%\" \"Pascal 2024-04-20 20%\"%""`
+
+(Hier sehen wir, dass obwohl Robin und Boran  den gleichen Highscore haben, Robin vor Boran angezeigt wird, 
+weil Robin zeitlich gesehen vor Boran den Highscore erstellt hat. 
+Pascal belegt den 3.Platz, weil er den höchsten Highscore hat.)
 
 ---
 
