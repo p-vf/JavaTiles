@@ -7,7 +7,7 @@ import static javafx.application.Application.launch;
 public class GUIMain {
 
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        GameGUI gui = new GameGUI();
         Thread myThread = new Thread(gui);
         myThread.start();
 

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class GUI extends Application implements Runnable {
+public class GameGUI extends Application implements Runnable {
 
 
 

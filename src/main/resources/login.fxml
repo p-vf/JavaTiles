@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ControllerLogin">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
       <Button fx:id="buttonSend" layoutX="372.0" layoutY="187.0" mnemonicParsing="false" onAction="#handleButtonClick" text="send" />
       <TextField fx:id="myTextField" layoutX="225.0" layoutY="187.0" onAction="#handleTextfield" promptText="Username" />

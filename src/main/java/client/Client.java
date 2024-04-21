@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import game.Tile;
-import gui.ControllerLogin;
+import gui.Controller;
+import gui.GameGUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +52,11 @@ public class Client {
 
     private GUIThread guiThread; //Thread responsible for displaying the GUI
 
+    private GameGUI gui;
+
     private boolean lobby = false; //Whether the client is in a lobby or not
+
+    public Controller controller; //Controller for the GUI
 
 
     /**
@@ -65,6 +70,8 @@ public class Client {
         this.out = socket.getOutputStream();
         this.in = socket.getInputStream();
         guiThread = new GUIThread(this);
+        this.gui = new GameGUI();
+        this.controller = new Controller(this);
     }
 
 
@@ -81,6 +88,8 @@ public class Client {
             Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
             Client client = new Client(sock);
             Thread gThread = new Thread(client.guiThread);
+            Thread thisThread = new Thread(client.gui);
+            thisThread.start();
             gThread.start();
             InThread th = new InThread(client.in, client, client.guiThread);
             Thread iT = new Thread(th);
