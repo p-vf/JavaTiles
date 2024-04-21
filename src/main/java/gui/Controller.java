@@ -5,25 +5,31 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
+
+import static utils.NetworkUtils.encodeProtocolMessage;
+
 public class Controller {
 
     public Button buttonSend;
     public TextField myTextField;
     public static String input;
 
-    public Client client;
+    public static Client client;
 
     public Controller() {
        //Default constructor with no parameters
     }
 
-    public Controller(Client client) {
-        this.client = client;
+    public static void setClient(Client client) {
+        Controller.client = client;
     }
 
 
-    public void handleButtonClick() {
+
+    public void handleButtonClick() throws IOException {
         System.out.println(input);
+        client.send("LOGI " + input);
 
 
     }

@@ -71,7 +71,7 @@ public class Client {
         this.in = socket.getInputStream();
         guiThread = new GUIThread(this);
         this.gui = new GameGUI();
-        this.controller = new Controller(this);
+        Controller.setClient(this);
     }
 
 
@@ -187,7 +187,7 @@ public class Client {
      * @param str the message to send
      * @throws IOException if an I/O error occurs while sending the encoded message
      */
-    synchronized void send(String str) throws IOException {
+    public synchronized void send(String str) throws IOException {
         if (str != null) {
             out.write((str + "\r\n").getBytes());
         }
@@ -199,7 +199,7 @@ public class Client {
      * @param input the input string provided by the user
      * @return a string representing the message to be sent to the server
      */
-    String handleInput(String input) throws IOException {
+    public String handleInput(String input) throws IOException {
         try {
             String[] argumentsarray = input.split(" ");
             //LOGGER.debug(Arrays.toString(argumentsarray));
