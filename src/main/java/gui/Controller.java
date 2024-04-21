@@ -37,9 +37,15 @@ public class Controller {
 
 
     public void handleButtonClick(ActionEvent event) throws IOException {
-        System.out.println(input);
-        client.send("LOGI " + input);
-        switchToLobbyScene(event);
+        if(input == null){
+            System.out.println("Please press enter before pressing send button");
+        }
+        if(input != null){
+            System.out.println(input);
+            client.send("LOGI " + input);
+            switchToLobbyScene(event);
+        }
+
     }
 
     private void switchToLobbyScene(ActionEvent event) {
@@ -55,11 +61,8 @@ public class Controller {
         }
     }
 
-
-
     public void handleTextfield(ActionEvent event) {
         input = myTextField.getText();
-
 
     }
 
@@ -67,6 +70,8 @@ public class Controller {
 
     }
 
-    public void joinPressed(ActionEvent actionEvent) {
+    public void joinPressed(ActionEvent actionEvent) throws IOException {
+        client.send("LGAM o");
+
     }
 }
