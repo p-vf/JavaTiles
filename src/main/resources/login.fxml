@@ -8,8 +8,8 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ControllerLogin">
    <children>
-      <Button layoutX="372.0" layoutY="187.0" mnemonicParsing="false" text="send" />
-      <TextField layoutX="225.0" layoutY="187.0" promptText="Username" />
+      <Button fx:id="buttonSend" layoutX="372.0" layoutY="187.0" mnemonicParsing="false" onAction="#handleButtonClick" text="send" />
+      <TextField fx:id="myTextField" layoutX="225.0" layoutY="187.0" onAction="#handleTextfield" promptText="Username" />
       <Text layoutX="229.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
          <font>
             <Font name="System Bold" size="34.0" />
