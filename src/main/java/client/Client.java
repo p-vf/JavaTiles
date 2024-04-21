@@ -369,6 +369,11 @@ public class Client {
                 case "/leavelobby":
                     return encodeProtocolMessage("LLOB");
 
+                case "/highscore":
+                    return encodeProtocolMessage("HIGH");
+
+
+
 
                 default:
                     System.out.println("invalid command");
@@ -726,6 +731,12 @@ public class Client {
                     Tile[][] newDeck = yourDeck.createDeckwithTileArray(tilesArray);
                     yourDeck.setDeck(newDeck);
                     showDeck();
+
+                case HIGH:
+                    ArrayList<String> players = decodeProtocolMessage(arguments.get(0));
+                    for (int i = 0; i < players.size(); i++) {
+                        System.out.println(i + 1 + ". "+players.get(i));
+                    }
 
 
                 default:
