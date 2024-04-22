@@ -3,6 +3,7 @@ package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import game.Color;
@@ -247,7 +248,7 @@ public class ClientThread implements Runnable {
     }
   }
 
-  private void draw(ArrayList<String> arguments) throws IOException {
+  public void draw(ArrayList<String> arguments) throws IOException {
     boolean isMainStack = isMainStack(arguments);
     Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
     String tileString;
@@ -260,7 +261,7 @@ public class ClientThread implements Runnable {
     }
   }
 
-  private boolean notAllowedToDraw() throws IOException {
+  public boolean notAllowedToDraw() throws IOException {
     if (!lobby.gameState.isPlayersTurn(playerIndex)) {
       send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
       return true;
@@ -272,7 +273,7 @@ public class ClientThread implements Runnable {
     return false;
   }
 
-  private static boolean isMainStack(ArrayList<String> arguments) {
+  public static boolean isMainStack(ArrayList<String> arguments) {
     String pullStackName = arguments.get(0);
     boolean isMainStack;
     switch (pullStackName) {
@@ -289,7 +290,8 @@ public class ClientThread implements Runnable {
     return isMainStack;
   }
 
-  private void checkIfValidOrWon(ArrayList<String> arguments) throws IOException {
+  public void checkIfValidOrWon(ArrayList<String> arguments) throws IOException {
+    //TODO write in all methods in javadoc that they can only be used for the handleRequest method
     if (cantPutTile()) {
       return;
     }
@@ -310,8 +312,8 @@ public class ClientThread implements Runnable {
       server.sendToAll(encodeProtocolMessage("PWIN", nickname), this);
 
       send(encodeProtocolMessage("+PUTT", "t", "t"));
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd");
-      todaysDate = LocalDate.now().format(dtf);
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
+      todaysDate = LocalDateTime.now().format(dtf);
       highScores.addEntryToHighscores(nickname, todaysDate, lobby.gameState.currentRoundNumber());
 
       return;
