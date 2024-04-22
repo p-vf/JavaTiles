@@ -9,9 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -25,6 +27,7 @@ public class Controller {
 
     public static Client client;
     public TextArea loginWarning;
+    public VBox vBoxLobbies;
 
 
     private Stage stage;
@@ -96,6 +99,11 @@ public class Controller {
 
                 case "lobby":
                     sceneSwitcher(event,"/lobby.fxml");
+                    break;
+
+                case "lobbySelection":
+                    sceneSwitcher(event,"/lobbySelection.fxml");
+                    break;
             }
 
             } catch(IOException e){
@@ -108,7 +116,14 @@ public class Controller {
     }
 
     public void joinPressed(ActionEvent actionEvent) throws IOException {
-        client.send("LGAM o");
+       client.setEvent(actionEvent);
+       ArrayList<String> arg = new ArrayList<>();
+       arg.add("LGAM");
+       arg.add("o");
+       client.send(encodeProtocolMessage(arg));
 
+    }
+
+    public void refreshPressed(ActionEvent event) {
     }
 }

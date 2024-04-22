@@ -373,6 +373,7 @@ public class Client {
                 case "/listgames":
                     if (arguments.get(0).equals("o")) {
                         return encodeProtocolMessage("LGAM", "o");
+
                     }
                     if (arguments.get(0).equals("r")) {
                         return encodeProtocolMessage("LGAM", "r");
@@ -578,9 +579,9 @@ public class Client {
 
                 case LGAM:
 
-
                     if (arguments.get(1).isEmpty()) {
                         System.out.println("No lobbies with this status");
+                        changeScene("lobbySelection");
                         break;
                     }
 
@@ -620,6 +621,7 @@ public class Client {
                         for (int i = 0; i < lobbies.length; i++) {
                             System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
                         }
+                        changeScene("lobbySelection");
                     }
 
 
