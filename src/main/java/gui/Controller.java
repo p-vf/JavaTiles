@@ -7,11 +7,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -22,49 +24,84 @@ public class Controller {
     public static String input;
 
     public static Client client;
+    public TextArea loginWarning;
+
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
     public Controller() {
-       //Default constructor with no parameters
+       client.setController(this);
+
     }
+
+
+
 
     public static void setClient(Client client) {
         Controller.client = client;
     }
 
+    public void loginTextArea(ActionEvent event) throws IOException {
+        client.setEvent(event);
+        ArrayList<String> arguments = new ArrayList<>();
+        arguments.add("LOGI");
+        String nickname = myTextField.getText();
+        if(nickname.isEmpty()){
+            nickname = System.getProperty("user.name");
+            arguments.add(nickname);
 
-    public void handleButtonClick(ActionEvent event) throws IOException {
-        if(input == null){
-            System.out.println("Please press enter before pressing send button");
+            client.send(encodeProtocolMessage(arguments));
         }
-        if(input != null){
-            System.out.println(input);
-            client.send("LOGI " + input);
-            switchToLobbyScene(event);
+        if(nickname.contains(" ")||nickname.contains("\"")){
+            loginWarning.setText("Your nickname mustn't contain blank spaces or quotation marks");
         }
+        else {
+            arguments.add(nickname);
+            client.send(encodeProtocolMessage(arguments));
+        }
+    }
+
+
+    /**
+     * This method is called by switchToScene to switch to a certain scene given the certain scene.
+     * @param url the url of the scene to be switched to
+     * @throws IOException
+     */
+    private void sceneSwitcher(ActionEvent event, String url) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
 
     }
 
-    private void switchToLobbyScene(ActionEvent event) {
+
+    /**
+     * This method sends the informationto what scene to switch to the sceneSwitcher,
+     * based on the arguments given with a switch case.
+     * @param arguments the arguments
+     */
+
+    public void switchToScene(ActionEvent event, String arguments) {
+        String[] argumentsarray = arguments.split(" ");
+        ArrayList<String> argumentslist = new ArrayList<>(Arrays.asList(argumentsarray));
+        String inputCommand = argumentslist.remove(0);
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/lobby.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            switch (inputCommand) {
+
+                case "lobby":
+                    sceneSwitcher(event,"/lobby.fxml");
+            }
+
+            } catch(IOException e){
+                e.printStackTrace();
+            }
         }
-    }
-
-    public void handleTextfield(ActionEvent event) {
-        input = myTextField.getText();
-
-    }
 
     public void createPressed(ActionEvent actionEvent) {
 

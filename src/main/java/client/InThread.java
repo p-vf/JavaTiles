@@ -1,5 +1,6 @@
 package client;
 
+import gui.Controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +25,7 @@ public class InThread implements Runnable {
     public Client client; // The associated client object
 
     public GUIThread guiThread; // The associated GUI thread object
+
     InputStream in; // The input stream to read messages from
 
 
@@ -38,6 +40,7 @@ public class InThread implements Runnable {
         this.client = client;
         this.guiThread = guiThread;
     }
+
 
     /**
      * Runs the thread to continuously read messages from the input stream and handle them.

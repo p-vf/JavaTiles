@@ -5,6 +5,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+
 import game.Tile;
 import gui.Controller;
 import gui.GameGUI;
@@ -56,7 +59,9 @@ public class Client {
 
     private boolean lobby = false; //Whether the client is in a lobby or not
 
-    public Controller controller; //Controller for the GUI
+    public static Controller controller; //Controller for the GUI
+
+    private ActionEvent event;
 
 
     /**
@@ -166,6 +171,17 @@ public class Client {
             }
         }
     }
+
+
+
+    public void setEvent(ActionEvent event){
+        this.event = event;
+    }
+
+    public static void setController(Controller controller){
+        Client.controller =  controller;
+    }
+
 
 
     /**
@@ -547,6 +563,7 @@ public class Client {
                 case LOGI:
                     nickname = arguments.get(0);
                     System.out.println("You have been logged in as: " + arguments.get(0));
+                    changeScene("lobby");
                     break;
 
                 case NAME:
@@ -767,6 +784,10 @@ public class Client {
     private void showDeck() {
         System.out.println("your Deck:");
         System.out.println(yourDeck.toStringPretty());
+    }
+
+    private void changeScene(String argument){
+        Platform.runLater(()-> controller.switchToScene(event,argument));
     }
 
     /**
