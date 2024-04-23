@@ -4,6 +4,8 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.io.*;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,12 +13,10 @@ import java.util.Scanner;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
 public class HighScores {
-  private final Path path = Path.of("/Users/istrefuka/Downloads/Gruppe-5/project_documents/Highscores.ssv");
+  private static final Path path = Path.of("/Users/istrefuka/Downloads/Gruppe-5/project_documents/Highscores.ssv");
+//TODO: adjust path, so that it can be used by everyone correctly
 
-  public HighScores() {
-  }
-
-  public List<Triple<String, String, Integer>> readHighscores() throws IOException {
+  public static List<Triple<String, String, Integer>> readHighscores() throws IOException {
     List<Triple<String, String, Integer>> highScores = new ArrayList<>();
 
     // Benutze Scanner um die Datei zu lesen
@@ -41,7 +41,7 @@ public class HighScores {
     return highScores;
   }
 
-  public void addEntryToHighscores(String name, String date, int score) throws IOException {
+  public static void addEntryToHighscores(String name, String date, int score) throws IOException {
     List<Triple<String, String, Integer>> highScores = readHighscores();
     Triple<String, String, Integer> newEntry = Triple.of(name, date, score);
 
@@ -62,7 +62,7 @@ public class HighScores {
   }
 
 
-  private void saveHighscores(List<Triple<String, String, Integer>> entries) throws IOException {
+  private static void  saveHighscores(List<Triple<String, String, Integer>> entries) throws IOException {
     // Benutze BufferedWriter um in die Datei zu schreiben
     try (BufferedWriter writer = Files.newBufferedWriter(path)) {
       for (Triple<String, String, Integer> entry : entries) {
@@ -72,7 +72,7 @@ public class HighScores {
     }
   }
 
-  public String getHighScores() throws IOException {
+  public static String getHighScores() throws IOException {
     List<Triple<String, String, Integer>> highScores = readHighscores();
     ArrayList<String> encodedHighScores = new ArrayList<>();
 
@@ -92,9 +92,11 @@ public class HighScores {
   public static void main(String[] args) {
     HighScores highScores = new HighScores();
     try {
-      highScores.addEntryToHighscores("Max", "2024-04-20", 200);
-      highScores.addEntryToHighscores("Max", "2024-04-20", 100);
-      highScores.addEntryToHighscores("Phillip", "2024-04-20", 100);
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
+      String todaysDate = LocalDateTime.now().format(dtf);
+      highScores.addEntryToHighscores("Max", todaysDate, 200);
+      highScores.addEntryToHighscores("Max", todaysDate, 100);
+      highScores.addEntryToHighscores("Phillip", todaysDate, 100);
       List<Triple<String, String, Integer>> entries = highScores.readHighscores();
       for (Triple<String, String, Integer> entry : entries) {
         System.out.println(entry);
