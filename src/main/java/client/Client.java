@@ -581,6 +581,8 @@ public class Client {
 
                     if (arguments.get(1).isEmpty()) {
                         System.out.println("No lobbies with this status");
+                        String message = "No open lobbies available";
+                        controller.setInput(message);
                         changeScene("lobbySelection");
                         break;
                     }

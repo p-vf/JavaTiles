@@ -1,12 +1,15 @@
 package gui;
 
 import client.Client;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -23,11 +26,16 @@ public class Controller {
 
     public Button buttonSend;
     public TextField myTextField;
-    public static String input;
+    @FXML
+    public VBox lsVBox;
+    public TextField lobbyTextfield;
+    private String input;
 
     public static Client client;
     public TextArea loginWarning;
     public VBox vBoxLobbies;
+
+    public String clientMessage;
 
 
     private Stage stage;
@@ -121,9 +129,28 @@ public class Controller {
        arg.add("LGAM");
        arg.add("o");
        client.send(encodeProtocolMessage(arg));
+    }
+
+
+    public void setInput(String message) {
+        this.clientMessage = message;
 
     }
+
 
     public void refreshPressed(ActionEvent event) {
+
+
+    }
+
+    public void lobbyNumEntered(ActionEvent event) throws IOException {
+        client.setEvent(event);
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("JLOB");
+        String number = lobbyTextfield.getText();
+        arg.add(number);
+        client.send(encodeProtocolMessage(arg));
+
     }
 }
+

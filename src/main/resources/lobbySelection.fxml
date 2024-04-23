@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -21,7 +20,7 @@
             </Text>
             <Text layoutX="362.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open lobbies:" />
             <Button id="rBLobbySelection" layoutX="525.0" layoutY="119.0" mnemonicParsing="false" onAction="#refreshPressed" text="refresh" />
-            <TextField id="lobbyTextfield" layoutX="326.0" layoutY="481.0" />
+            <TextField fx:id="lobbyTextfield" layoutX="326.0" layoutY="481.0" onAction="#lobbyNumEntered" promptText="Lobby #" />
             <Text layoutX="299.0" layoutY="467.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the lobby number you'd like to join:">
                <font>
                   <Font size="11.0" />
@@ -29,11 +28,7 @@
             </Text>
             <VBox fx:id="vBoxLobbies" layoutX="274.0" layoutY="119.0" prefHeight="326.0" prefWidth="252.0">
                <children>
-                  <TextArea prefHeight="340.0" prefWidth="252.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextArea>
+                  <VBox fx:id="lsVBox" prefHeight="200.0" prefWidth="100.0" />
                </children></VBox>
          </children>
       </AnchorPane>
