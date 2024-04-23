@@ -6,3 +6,6 @@ build/
 *.class
 *.jar
 *.log
+
+# Highscores sollten nicht auf dem Repository gespeichert werden
+**/HighScores.ssv
