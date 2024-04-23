@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
@@ -203,13 +205,14 @@ public class Lobby {
    *
    * @param winnerName The name of the player who won the game.
    */
-  public void finishGame(String winnerName) {
+  public void finishGame(String winnerName) throws IOException {
     this.winnerName = winnerName;
-    int score = gameState.currentRoundNumber();
-
-    // TODO save highscore (name, date, and numberofrounds)
-
-
+    if(!winnerName.equals("")) {
+      int score = gameState.currentRoundNumber();
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
+      String todaysDate = LocalDateTime.now().format(dtf);
+      HighScores.addEntryToHighscores(winnerName, todaysDate, score);
+    }
     gameState = null;
     for (ClientThread p : players) {
       // so that the players can start a game if they feel like it.
