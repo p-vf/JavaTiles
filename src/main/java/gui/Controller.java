@@ -30,7 +30,7 @@ public class Controller {
     public VBox lsVBox;
     public TextField lobbyTextfield;
     public Button readyButton;
-    private String input;
+    private static String input;
 
     public static Client client;
     public TextArea loginWarning;
@@ -135,17 +135,23 @@ public class Controller {
        arg.add("LGAM");
        arg.add("o");
        client.send(encodeProtocolMessage(arg));
+       refreshLobbyBoard();
     }
 
+    public void refreshLobbyBoard(){
+        Label label = new Label(input);
+        vBoxLobbies.getChildren().add(label);
+    }
 
-    public void setInput(String message) {
-        this.clientMessage = message;
-
+    public static void setInput(String message) {
+        input = message;
     }
 
 
     public void refreshPressed(ActionEvent event) {
-
+        vBoxLobbies.getChildren().clear();
+        Label label = new Label(input);
+        vBoxLobbies.getChildren().add(label);
 
     }
 

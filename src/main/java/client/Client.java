@@ -578,12 +578,11 @@ public class Client {
                     break;
 
                 case LGAM:
-
+                    changeScene("lobbySelection");
                     if (arguments.get(1).isEmpty()) {
                         System.out.println("No lobbies with this status");
                         String message = "No open lobbies available";
                         controller.setInput(message);
-                        changeScene("lobbySelection");
                         break;
                     }
 
@@ -623,9 +622,17 @@ public class Client {
                         for (int i = 0; i < lobbies.length; i++) {
                             System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
                         }
-                        changeScene("lobbySelection");
-                    }
 
+                        StringBuilder sb = new StringBuilder();
+
+                        sb.append("Lobbynumber: \tNumber of players:\n");
+
+                        for (int i = 0; i < lobbies.length; i++) {
+                            sb.append(lobbies[i]).append("\t\t\t\t").append(players[i]).append("\n");
+                        }
+                        String message = sb.toString();
+                        controller.setInput(message);
+                    }
 
                     if (arguments.get(0).equals("r")) {
 
