@@ -346,7 +346,7 @@ public class ClientThread implements Runnable {
         for (var lobby : l) {
           sb.append(lobby.lobbyNumber);
           sb.append(":");
-          sb.append(lobby.players.size());
+          sb.append(lobby.getPlayers().size());
           sb.append(" ");
         }
         // delete unnecessary space
@@ -370,8 +370,9 @@ public class ClientThread implements Runnable {
         for (var lobby : l) {
           sb.append(lobby.lobbyNumber);
           sb.append(":");
-          if (lobby.winnerName != null) {
-            sb.append(lobby.winnerName);
+          String winnerName = lobby.getWinnerName();
+          if (winnerName != null) {
+            sb.append(winnerName);
           }
           sb.append(" ");
         }
@@ -410,11 +411,11 @@ public class ClientThread implements Runnable {
         new Tile(6, Color.YELLOW),
         new Tile(7, Color.YELLOW),
     }));
-    if (lobby.gameState.playerDecks.get(playerIndex).countTiles() == 15) {
+    if (!lobby.gameState.canDraw(playerIndex)) { // player has 15 tiles
       winnerConf.add(new Tile(0, Color.YELLOW));
     }
     OrderedDeck winnerDeck = new OrderedDeck(winnerConf.toArray(new Tile[]{}));
-    lobby.gameState.playerDecks.set(playerIndex, winnerDeck);
+    lobby.gameState.setPlayerDeck(playerIndex, winnerDeck);
     ArrayList<String> stringTiles = winnerDeck.toStringArrayList();
     String deckString = encodeProtocolMessage(stringTiles);
     send(encodeProtocolMessage("+WINC", deckString));
@@ -427,22 +428,22 @@ public class ClientThread implements Runnable {
     if (!lobby.startGame(startPlayerIdx)) {
       LOGGER.debug("lobby wasn't able to start.");
     }
-    for (int i = 0; i < lobby.players.size(); i++) {
-      OrderedDeck deck = lobby.gameState.playerDecks.get(i);
+    for (int i = 0; i < lobby.getPlayers().size(); i++) {
+      OrderedDeck deck = lobby.gameState.getPlayerDeck(i);
       ArrayList<String> stringTiles = deck.toStringArrayList();
       String deckString = encodeProtocolMessage(stringTiles);
-      lobby.players.get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
+      lobby.getPlayers().get(i).send(encodeProtocolMessage("STRT", deckString, Integer.toString(i)));
     }
   }
 
   private boolean notAllReady() throws IOException {
     isReady = true;
     send(encodeProtocolMessage("+REDY"));
-    if (lobby.players.size() != 4) {
+    if (lobby.getPlayers().size() != 4) {
       return true;
     }
     boolean allPlayersReady = true;
-    for (var p : lobby.players) {
+    for (var p : lobby.getPlayers()) {
       if (p == null || !p.isReady) {
         allPlayersReady = false;
         break;
@@ -620,7 +621,7 @@ public class ClientThread implements Runnable {
   private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
     for (var lobby : server.lobbies) {
-      if (lobby.lobbyState == status) {
+      if (lobby.getLobbyState() == status) {
         lobbiesWithStatus.add(lobby);
       }
     }
@@ -634,7 +635,7 @@ public class ClientThread implements Runnable {
    */
   private void sendState() {
     String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
-    String currentPlayerIdx = Integer.toString(lobby.gameState.currentPlayerIdx);
+    String currentPlayerIdx = Integer.toString(lobby.gameState.getCurrentPlayerIndex());
     lobby.sendToLobby(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
   }
 
