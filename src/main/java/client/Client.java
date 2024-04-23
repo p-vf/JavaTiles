@@ -687,6 +687,7 @@ public class Client {
                     break;
 
                 case JLOB:
+                    changeScene("lobbyScreen");
                     String confirmation = arguments.get(0);
                     if (confirmation.equals("t")) {
                         System.out.println("Joined lobby successfully");

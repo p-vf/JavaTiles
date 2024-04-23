@@ -112,6 +112,11 @@ public class Controller {
                 case "lobbySelection":
                     sceneSwitcher(event,"/lobbySelection.fxml");
                     break;
+
+                case "lobbyScreen":
+                    sceneSwitcher(event,"/lobbyScreen.fxml");
+                    break;
+
             }
 
             } catch(IOException e){
@@ -151,6 +156,16 @@ public class Controller {
         arg.add(number);
         client.send(encodeProtocolMessage(arg));
 
+    }
+
+    public void readyPressed(ActionEvent event) throws IOException {
+        client.setEvent(event);
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("REDY");
+        client.send(encodeProtocolMessage(arg));
+    }
+
+    public void leaveLobbyPressed(ActionEvent event) {
     }
 }
 
