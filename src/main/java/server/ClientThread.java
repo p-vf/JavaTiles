@@ -199,18 +199,15 @@ public class ClientThread implements Runnable {
         }
 
         case PUTT -> {
-          // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           //checks if player can put a tile, based on the Tile itself and wether his deck is valid
-          String tileString = arguments.get(0);
-          Tile tile = Tile.parseTile(tileString);
-          
-          if(cantPutTile()) break;
-          if(!checkIfValid(arguments)) break;
-          if(checkIfWon(arguments)) break;
+          Tile tile = Tile.parseTile(arguments.get(0));
+          Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
+          //TODO refactor so that you can give a tile and a tilearray as parameters to CheckiIfValid and CheckIfWOn
+          if(cantPutTile()) return;
+          if(!checkIfValid(tile, tileArray)) return;
+          if(checkIfWon(tile, tileArray)) return;
           send(encodeProtocolMessage("+PUTT", "t", "f"));
-
           lobby.gameState.putTile(tile, playerIndex);
-
           sendState();
         }
         case CATC -> {
@@ -300,14 +297,9 @@ public class ClientThread implements Runnable {
     return isMainStack;
   }
 
-  public boolean checkIfValid(ArrayList<String> arguments) throws IOException {
-    //TODO write in all methods in javadoc that they can only be used for the handleRequest method
-    String tileString = arguments.get(0);
-    Tile tile = Tile.parseTile(tileString);
-    Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
+  public boolean checkIfValid(Tile tile, Tile[] tileArray) throws IOException {
     OrderedDeck clientDeck = new OrderedDeck(tileArray);
     boolean isValid = lobby.validateMove(tile, clientDeck, playerIndex);
-    boolean isWon = false;
     if (!isValid) {
       LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
       send(encodeProtocolMessage("+PUTT", "f", "f"));
@@ -315,28 +307,21 @@ public class ClientThread implements Runnable {
     }
     return true;
   }
-  
-  public boolean checkIfWon(ArrayList<String> arguments)throws IOException {
-    String tileString = arguments.get(0);
-    Tile tile = Tile.parseTile(tileString);
-    Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
-    OrderedDeck clientDeck = new OrderedDeck(tileArray);
-    boolean isWon = false;
-    if (Tile.isWinningDeck(tileArray)) {
 
+
+  public boolean checkIfWon(Tile[] tileArray) throws IOException {
+    //OrderedDeck clientDeck = new OrderedDeck(tileArray);
+    if (Tile.isWinningDeck(tileArray)) {
       lobby.finishGame(nickname);
       lobby.sendToLobby(encodeProtocolMessage("PWIN", nickname), null);
-
       send(encodeProtocolMessage("+PUTT", "t", "t"));
       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
       todaysDate = LocalDateTime.now().format(dtf);
       highScores.addEntryToHighscores(nickname, todaysDate, lobby.gameState.currentRoundNumber());
-
       return true;
     }
     return false;
   }
-
   public boolean cantPutTile() throws IOException {
     // this checks if it's the players turn rn
     if (!lobby.gameState.isPlayersTurn(playerIndex)) {
