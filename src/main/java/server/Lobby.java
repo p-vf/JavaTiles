@@ -207,12 +207,13 @@ public class Lobby {
    */
   public void finishGame(String winnerName) throws IOException {
     this.winnerName = winnerName;
+    /*
     if(!winnerName.equals("")) {
       int score = gameState.currentRoundNumber();
       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
       String todaysDate = LocalDateTime.now().format(dtf);
       HighScores.addEntryToHighscores(winnerName, todaysDate, score);
-    }
+    }*/
     gameState = null;
     for (ClientThread p : players) {
       // so that the players can start a game if they feel like it.

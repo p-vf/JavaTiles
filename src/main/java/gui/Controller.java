@@ -135,14 +135,7 @@ public class Controller {
        arg.add("LGAM");
        arg.add("o");
        client.send(encodeProtocolMessage(arg));
-       refreshLobbyBoard();
     }
-
-    public void refreshLobbyBoard(){
-        Label label = new Label(input);
-        vBoxLobbies.getChildren().add(label);
-    }
-
     public static void setInput(String message) {
         input = message;
     }
