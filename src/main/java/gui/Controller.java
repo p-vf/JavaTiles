@@ -29,6 +29,7 @@ public class Controller {
     @FXML
     public VBox lsVBox;
     public TextField lobbyTextfield;
+    public Button readyButton;
     private String input;
 
     public static Client client;
@@ -163,9 +164,15 @@ public class Controller {
         ArrayList<String> arg = new ArrayList<>();
         arg.add("REDY");
         client.send(encodeProtocolMessage(arg));
+        readyButton.setText("Ready");
     }
 
-    public void leaveLobbyPressed(ActionEvent event) {
+    public void leaveLobbyPressed(ActionEvent event) throws IOException {
+        client.setEvent(event);
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("LLOB");
+        client.send(encodeProtocolMessage(arg));
+
     }
 }
 

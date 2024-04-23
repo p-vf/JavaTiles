@@ -12,7 +12,7 @@
             <Font name="System Bold" size="34.0" />
          </font>
       </Text>
-      <Button id="readyButton" layoutX="276.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Ready" />
+      <Button fx:id="readyButton" layoutX="264.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
       <Button id="leaveLobbyButton" layoutX="259.0" layoutY="227.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave Lobby" />
    </children>
 </AnchorPane>

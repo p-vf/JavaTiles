@@ -748,6 +748,7 @@ public class Client {
                     break;
 
                 case LLOB:
+                    changeScene("lobbySelection");
                     if (arguments.get(0).equals("t")){
                         System.out.println("Lobby left successfully");
                     }
