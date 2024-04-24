@@ -150,7 +150,7 @@ public class NetworkUtils {
     for (var lobby : lobbies) {
       ArrayList<String> playerNames = new ArrayList<>();
       playerNames.add("" + lobby.lobbyNumber);
-      for (var player : lobby.players) {
+      for (var player : lobby.getPlayers()) {
         if (player != null) {
           playerNames.add(player.nickname);
         } else {

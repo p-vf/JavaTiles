@@ -30,13 +30,15 @@ public class Controller {
     public VBox lsVBox;
     public TextField lobbyTextfield;
     public Button readyButton;
-    private String input;
+    private static String input;
 
     public static Client client;
     public TextArea loginWarning;
     public VBox vBoxLobbies;
 
     public String clientMessage;
+    public TextArea chatArea;
+    public TextField chatInput;
 
 
     private Stage stage;
@@ -126,6 +128,17 @@ public class Controller {
         }
 
 
+    public void chatInputPressed(ActionEvent event) throws IOException {
+        String chatMessage = "/chat" + " " + chatInput.getText();
+        String messageToSend = client.handleInput(chatMessage);
+        client.send(messageToSend);
+        chatInput.clear();
+    }
+    public void chatIncoming(String message){
+        chatArea.appendText(message + "\n");
+    }
+
+
     public void joinPressed(ActionEvent actionEvent) throws IOException {
        client.setEvent(actionEvent);
        ArrayList<String> arg = new ArrayList<>();
@@ -133,16 +146,15 @@ public class Controller {
        arg.add("o");
        client.send(encodeProtocolMessage(arg));
     }
-
-
-    public void setInput(String message) {
-        this.clientMessage = message;
-
+    public static void setInput(String message) {
+        input = message;
     }
 
 
     public void refreshPressed(ActionEvent event) {
-
+        vBoxLobbies.getChildren().clear();
+        Label label = new Label(input);
+        vBoxLobbies.getChildren().add(label);
 
     }
 
@@ -171,5 +183,7 @@ public class Controller {
         client.send(encodeProtocolMessage(arg));
 
     }
+
+
 }
 

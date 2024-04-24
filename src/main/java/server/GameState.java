@@ -20,11 +20,11 @@ import java.util.*;
 public class GameState {
   // check out the following methods to get the elements in the stack:
   // elements() and toArray(Tile[] t);
-  Stack<Tile> mainStack;
-  ArrayList<Stack<Tile>> exchangeStacks;
-  ArrayList<OrderedDeck> playerDecks;
-  int currentPlayerIdx;
-  int numberOfDraws = 0;
+  private Stack<Tile> mainStack;
+  private ArrayList<Stack<Tile>> exchangeStacks;
+  private ArrayList<OrderedDeck> playerDecks;
+  private int currentPlayerIndex;
+  private int numberOfDraws = 0;
 
   /**
    * Constructor of the {@code GameState} class.
@@ -33,7 +33,7 @@ public class GameState {
    * @param startPlayerIdx the index of the players that gets 15 instead of 14 tiles and is the first player that gets to make a move.
    */
   public GameState(int startPlayerIdx) {
-    currentPlayerIdx = startPlayerIdx;
+    currentPlayerIndex = startPlayerIdx;
 
     // initialize exchange-stacks
     exchangeStacks = new ArrayList<>();
@@ -70,6 +70,18 @@ public class GameState {
     for (; counter < tiles.length; counter++) {
       mainStack.add(tiles[counter]);
     }
+  }
+
+  public void setPlayerDeck(int playerIndex, OrderedDeck deck) {
+    playerDecks.set(playerIndex, deck);
+  }
+
+  public OrderedDeck getPlayerDeck(int playerIndex) {
+    return playerDecks.get(playerIndex);
+  }
+
+  public int getCurrentPlayerIndex() {
+    return currentPlayerIndex;
   }
 
   /**
@@ -133,7 +145,7 @@ public class GameState {
    * @return true if it is the player's turn, false otherwise.
    */
   public boolean isPlayersTurn(int playerIndex) {
-    return currentPlayerIdx == playerIndex;
+    return currentPlayerIndex == playerIndex;
   }
 
   /**
@@ -149,8 +161,8 @@ public class GameState {
     // add the tile to the exchangeStack of the next player.
     exchangeStacks.get((playerIndex + 1) % 4).push(tile);
     // update the current player index
-    currentPlayerIdx += 1;
-    currentPlayerIdx %= 4;
+    currentPlayerIndex += 1;
+    currentPlayerIndex %= 4;
   }
 
   /**
@@ -166,9 +178,9 @@ public class GameState {
   public int currentRoundNumber() {
     return numberOfDraws / 4 + 1;
   }
-
   // for testing purposes:
   // doesn't get called during normal gameplay
+
   public static void main(String[] args) {
     GameState g = new GameState(2);
   }

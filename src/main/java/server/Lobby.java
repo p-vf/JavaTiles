@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
@@ -27,10 +29,10 @@ public class Lobby {
   public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
   // TODO convert to ClientThread[]
-  public ArrayList<ClientThread> players;
-  public LobbyState lobbyState;
-  public GameState gameState;
-  public String winnerName;
+  private ArrayList<ClientThread> players;
+  private LobbyState lobbyState;
+  GameState gameState;
+  private String winnerName;
 
   /**
    * Constructs a new Lobby instance with a specified lobby number. Upon creation, the lobby is initialized
@@ -43,6 +45,18 @@ public class Lobby {
     this.lobbyNumber = lobbyNumber;
     players = new ArrayList<>();
     lobbyState = LobbyState.OPEN;
+  }
+
+  public ArrayList<ClientThread> getPlayers() {
+    return players;
+  }
+
+  public LobbyState getLobbyState() {
+    return lobbyState;
+  }
+
+  public String getWinnerName() {
+    return winnerName;
   }
 
   /**
@@ -75,7 +89,7 @@ public class Lobby {
         players.set(i, client);
         if (gameState != null) {
           try {
-            client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.playerDecks.get(i).toStringArrayList()), Integer.toString(i)));
+            client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.getPlayerDeck(i).toStringArrayList()), Integer.toString(i)));
           } catch (IOException e) {
             LOGGER.error("Lobby.addPlayer: IOException thrown" + e.getMessage());
             return false;
@@ -170,7 +184,7 @@ public class Lobby {
     }
     UnorderedDeck clientUnorderedDeck = clientDeck.toUnorderedDeck();
     clientUnorderedDeck.add(tile);
-    OrderedDeck serverDeck = gameState.playerDecks.get(playerIdx);
+    OrderedDeck serverDeck = gameState.getPlayerDeck(playerIdx);
     UnorderedDeck serverUnorderedDeck = serverDeck.toUnorderedDeck();
     boolean equal = clientUnorderedDeck.equals(serverUnorderedDeck);
     // CLEANUP remove this debugging statement once everything works
@@ -203,13 +217,15 @@ public class Lobby {
    *
    * @param winnerName The name of the player who won the game.
    */
-  public void finishGame(String winnerName) {
+  public void finishGame(String winnerName) throws IOException {
     this.winnerName = winnerName;
-    int score = gameState.currentRoundNumber();
 
-    // TODO save highscore (name, date, and numberofrounds)
-
-
+    if(!winnerName.equals("")) {
+      int score = gameState.currentRoundNumber();
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
+      String todaysDate = LocalDateTime.now().format(dtf);
+      HighScores.addEntryToHighscores(winnerName, todaysDate, score);
+    }
     gameState = null;
     for (ClientThread p : players) {
       // so that the players can start a game if they feel like it.
@@ -218,7 +234,7 @@ public class Lobby {
     lobbyState = LobbyState.FINISHED;
   }
 
-  public void printDebug() {
+  /*public void printDebug() {
     System.out.println("Main stack:");
     gameState.mainStack.forEach((x) -> System.out.print(x.toStringPretty() + " "));
     System.out.println();
@@ -229,7 +245,7 @@ public class Lobby {
       gameState.exchangeStacks.get(i).forEach((x) -> System.out.print(x.toStringPretty() + " "));
       System.out.println("\n");
     }
-  }
+  }*/
 
   /**
    * Represents the rough state of the lobby.

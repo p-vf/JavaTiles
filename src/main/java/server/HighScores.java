@@ -4,6 +4,8 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.io.*;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,16 +13,17 @@ import java.util.Scanner;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
 public class HighScores {
-  private final Path path = Path.of("/Users/istrefuka/Downloads/Gruppe-5/project_documents/Highscores.ssv");
+  private static final Path filePath = Path.of("HighScores.ssv");
 
-  public HighScores() {
-  }
-
-  public List<Triple<String, String, Integer>> readHighscores() throws IOException {
-    List<Triple<String, String, Integer>> highScores = new ArrayList<>();
+  public static ArrayList<Triple<String, String, Integer>> readHighscores() throws IOException {
+    ArrayList<Triple<String, String, Integer>> highScores = new ArrayList<>();
 
     // Benutze Scanner um die Datei zu lesen
-    try (Scanner scanner = new Scanner(path)) {
+
+    if (!Files.exists(filePath)) {
+      return new ArrayList<>();
+    }
+    try (Scanner scanner = new Scanner(filePath)) {
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         String[] values = line.split("\\s+");
@@ -41,8 +44,8 @@ public class HighScores {
     return highScores;
   }
 
-  public void addEntryToHighscores(String name, String date, int score) throws IOException {
-    List<Triple<String, String, Integer>> highScores = readHighscores();
+  public static void addEntryToHighscores(String name, String date, int score) throws IOException {
+    ArrayList<Triple<String, String, Integer>> highScores = readHighscores();
     Triple<String, String, Integer> newEntry = Triple.of(name, date, score);
 
     // Finde die Stelle, an der der neue Eintrag eingefügt werden soll
@@ -62,9 +65,12 @@ public class HighScores {
   }
 
 
-  private void saveHighscores(List<Triple<String, String, Integer>> entries) throws IOException {
-    // Benutze BufferedWriter um in die Datei zu schreiben
-    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+  private static void  saveHighscores(ArrayList<Triple<String, String, Integer>> entries) throws IOException {
+    if (!Files.exists(filePath)) {
+      Files.createFile(filePath);
+    }
+    // Benutze BufferedWriter, um in die Datei zu schreiben
+    try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
       for (Triple<String, String, Integer> entry : entries) {
         writer.write(String.format("%s %s %d", entry.getLeft(), entry.getMiddle(), entry.getRight()));
         writer.newLine();
@@ -72,7 +78,7 @@ public class HighScores {
     }
   }
 
-  public String getHighScores() throws IOException {
+  public static String getHighScores() throws IOException {
     List<Triple<String, String, Integer>> highScores = readHighscores();
     ArrayList<String> encodedHighScores = new ArrayList<>();
 
@@ -90,12 +96,13 @@ public class HighScores {
 
   // only for test purposes
   public static void main(String[] args) {
-    HighScores highScores = new HighScores();
     try {
-      highScores.addEntryToHighscores("Max", "2024-04-20", 200);
-      highScores.addEntryToHighscores("Max", "2024-04-20", 100);
-      highScores.addEntryToHighscores("Phillip", "2024-04-20", 100);
-      List<Triple<String, String, Integer>> entries = highScores.readHighscores();
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
+      String todaysDate = LocalDateTime.now().format(dtf);
+      addEntryToHighscores("Max", todaysDate, 200);
+      addEntryToHighscores("Max", todaysDate, 100);
+      addEntryToHighscores("Phillip", todaysDate, 100);
+      List<Triple<String, String, Integer>> entries = readHighscores();
       for (Triple<String, String, Integer> entry : entries) {
         System.out.println(entry);
       }

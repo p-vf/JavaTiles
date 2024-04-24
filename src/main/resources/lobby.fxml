@@ -1,17 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
-   <children>
-      <Button id="JoinButton" layoutX="244.0" layoutY="200.0" mnemonicParsing="false" onAction="#joinPressed" text="Join/Create Lobby" />
-      <Text layoutX="229.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
-         <font>
-            <Font name="System Bold" size="34.0" />
-         </font>
-      </Text>
-   </children>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+   <center>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Button id="JoinButton" layoutX="244.0" layoutY="200.0" mnemonicParsing="false" onAction="#joinPressed" text="Join/Create Lobby" />
+            <Text layoutX="229.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+               <font>
+                  <Font name="System Bold" size="34.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </center>
+   <top>
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+   </top>
+   <left>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
+   <bottom>
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+   </bottom>
+   <right>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="401.0" prefWidth="160.0">
+               <children>
+                  <TextArea fx:id="chatArea" editable="false" prefHeight="387.0" prefWidth="160.0" />
+                  <TextField fx:id="chatInput" onAction="#chatInputPressed" />
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </right>
+</BorderPane>

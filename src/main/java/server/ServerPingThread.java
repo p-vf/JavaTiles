@@ -20,8 +20,8 @@ public class ServerPingThread extends Thread {
   private final ClientThread parent;
   private final long maxResponseTimeMillis;
   private static final long PING_INTERVALL = 1000;
-  public long timeLastResponse;
-  public volatile boolean receivedResponse;
+  private long timeLastResponse;
+  volatile boolean receivedResponse;
 
   /**
    * Constructs a new ServerPingThread instance that periodically sends PING messages to the associated client.

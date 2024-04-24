@@ -221,3 +221,10 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
     - LEFT: Anzeige, dass ein Spieler das Spiel verlassen hat. 
   - Highscore-Liste: Der Spieler, der am wenigsten Züge braucht steigt im Highscore.
 
+## 19.4.2024 Treffen Spiegelgasse (Boran, Robin, Istref, Pascal)
+- Besprechung über weiteres Vorgehen bis zum 4. Meilenstein; Zuständigkeiten:
+  - Istref: Unittests schreiben zu der Spiellogik
+  - Pascal: Refactoring von den Klassen auf dem Server
+  - Boran: Gameplay-GUI
+  - Robin: restliches GUI (Login, logout, Namensänderung, etc.)
+- Entspannter, produktiver Austausch

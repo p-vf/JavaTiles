@@ -10,36 +10,37 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <center>
-      <AnchorPane maxHeight="650.0" maxWidth="800.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0">
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <TextField fx:id="myTextField" layoutX="334.0" layoutY="328.0" onAction="#loginTextArea" promptText="Username" />
-            <Text fill="#222323" layoutX="288.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+            <Text layoutX="229.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
-                  <Font name="System Bold" size="60.0" />
+                  <Font name="System Bold" size="34.0" />
                </font>
             </Text>
-            <Text layoutX="352.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Username:">
+            <TextArea fx:id="loginWarning" editable="false" layoutX="33.0" layoutY="300.0" prefHeight="37.0" prefWidth="587.0" text="&#10;">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </TextArea>
+            <Text layoutX="260.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Username:">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextArea fx:id="loginWarning" editable="false" layoutX="141.0" layoutY="377.0" prefHeight="37.0" prefWidth="587.0" text="&#10;">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font></TextArea>
+            <TextField fx:id="myTextField" layoutX="235.0" layoutY="219.0" onAction="#loginTextArea" promptText="Username" />
          </children>
       </AnchorPane>
    </center>
    <top>
-      <Pane BorderPane.alignment="CENTER" />
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
    </top>
    <left>
-      <Pane BorderPane.alignment="CENTER" />
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </left>
-   <right>
-      <Pane BorderPane.alignment="CENTER" />
-   </right>
    <bottom>
-      <Pane BorderPane.alignment="CENTER" />
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
    </bottom>
+   <right>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>

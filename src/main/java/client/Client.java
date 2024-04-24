@@ -432,13 +432,15 @@ public class Client {
                     if (arguments.get(0).equals("b")) {
 
                         guiThread.updateChat(name + " sent to all: " + arguments.get(1));
-
+                        controller.chatIncoming(name + " sent to all: " + arguments.get(1));
                     }
                     if (arguments.get(0).equals("w")) {
                         guiThread.updateChat(name + " whispered: " + arguments.get(1));
+                        controller.chatIncoming(name + " whispered: " + arguments.get(1));
                     }
                     if (arguments.get(0).equals("l")) {
                         guiThread.updateChat(name + ": " + arguments.get(1));
+                        controller.chatIncoming(name + " whispered: " + arguments.get(1));
                     }
                     //hier handeln ob whisper broadcast etc mit case distinction
 
@@ -562,9 +564,11 @@ public class Client {
                     break;
 
                 case LOGI:
+                    ActionEvent event = new ActionEvent();
+
+                    changeScene("lobby");
                     nickname = arguments.get(0);
                     System.out.println("You have been logged in as: " + arguments.get(0));
-                    changeScene("lobby");
                     break;
 
                 case NAME:
@@ -578,12 +582,11 @@ public class Client {
                     break;
 
                 case LGAM:
-
+                    changeScene("lobbySelection");
                     if (arguments.get(1).isEmpty()) {
                         System.out.println("No lobbies with this status");
                         String message = "No open lobbies available";
                         controller.setInput(message);
-                        changeScene("lobbySelection");
                         break;
                     }
 
@@ -623,9 +626,17 @@ public class Client {
                         for (int i = 0; i < lobbies.length; i++) {
                             System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
                         }
-                        changeScene("lobbySelection");
-                    }
 
+                        StringBuilder sb = new StringBuilder();
+
+                        sb.append("Lobbynumber: \tNumber of players:\n");
+
+                        for (int i = 0; i < lobbies.length; i++) {
+                            sb.append(lobbies[i]).append("\t\t\t\t").append(players[i]).append("\n");
+                        }
+                        String message = sb.toString();
+                        controller.setInput(message);
+                    }
 
                     if (arguments.get(0).equals("r")) {
 
@@ -701,12 +712,18 @@ public class Client {
                 case CATC:
                     if (arguments.get(0).equals("l")) {
                         guiThread.updateChat("You:" + arguments.get(1));
+                        controller.chatIncoming("You:" + arguments.get(1));
+
                     }
                     if (arguments.get(0).equals("w")) {
                         guiThread.updateChat("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
+                        controller.chatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
+
                     }
                     if (arguments.get(0).equals("b")) {
                         guiThread.updateChat("You sent to all: " + arguments.get(1));
+                        controller.chatIncoming("You sent to all: " + arguments.get(1));
+
                     }
                     break;
 
