@@ -205,7 +205,7 @@ public class ClientThread implements Runnable {
           //TODO refactor so that you can give a tile and a tilearray as parameters to CheckiIfValid and CheckIfWOn
           if(cantPutTile()) return;
           if(!checkIfValid(tile, tileArray)) return;
-          if(checkIfWon(tile, tileArray)) return;
+          if(checkIfWon(tileArray)) return;
           send(encodeProtocolMessage("+PUTT", "t", "f"));
           lobby.gameState.putTile(tile, playerIndex);
           sendState();

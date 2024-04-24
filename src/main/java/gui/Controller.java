@@ -49,11 +49,11 @@ public class Controller {
     }
 
 
-
-
     public static void setClient(Client client) {
         Controller.client = client;
     }
+
+
 
     public void loginTextArea(ActionEvent event) throws IOException {
         client.setEvent(event);
@@ -125,9 +125,6 @@ public class Controller {
             }
         }
 
-    public void createPressed(ActionEvent actionEvent) {
-
-    }
 
     public void joinPressed(ActionEvent actionEvent) throws IOException {
        client.setEvent(actionEvent);
