@@ -9,14 +9,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class MyGameGUI extends Application implements Runnable {
+public class GameGUIActualGame extends Application implements Runnable {
 
 
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Load the FXML file
-        URL fxmlLocation = getClass().getResource("ourgame.fxml");
+        URL fxmlLocation = getClass().getResource("/ourgame.fxml");
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         Parent root = loader.load();
 
