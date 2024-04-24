@@ -37,6 +37,8 @@ public class Controller {
     public VBox vBoxLobbies;
 
     public String clientMessage;
+    public TextArea chatArea;
+    public TextField chatInput;
 
 
     private Stage stage;
@@ -47,9 +49,6 @@ public class Controller {
        client.setController(this);
 
     }
-
-
-
 
     public static void setClient(Client client) {
         Controller.client = client;
@@ -125,8 +124,14 @@ public class Controller {
             }
         }
 
-    public void createPressed(ActionEvent actionEvent) {
-
+    public void chatInputPressed(ActionEvent event) throws IOException {
+        String chatMessage = "/chat" + " " + chatInput.getText();
+        String messageToSend = client.handleInput(chatMessage);
+        client.send(messageToSend);
+        chatInput.clear();
+    }
+    public void chatIncoming(String message){
+        chatArea.appendText(message + "\n");
     }
 
     public void joinPressed(ActionEvent actionEvent) throws IOException {
@@ -173,5 +178,7 @@ public class Controller {
         client.send(encodeProtocolMessage(arg));
 
     }
+
+
 }
 
