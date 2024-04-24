@@ -41,7 +41,7 @@ public class ClientThread implements Runnable {
   private final ServerPingThread pingThread;
   public boolean isReady = false;
   public volatile boolean isRunning = true;
-  private HighScores highScores;
+  //private HighScores highScores;
   private String todaysDate;
 
   /**
@@ -62,7 +62,6 @@ public class ClientThread implements Runnable {
     } catch (IOException e) {
       e.printStackTrace(System.err);
     }
-    highScores = new HighScores();
     pingThread = new ServerPingThread(this, PING_TIMEOUT);
     pingThread.setName("PingThread-" + id);
     pingThread.start();
@@ -190,12 +189,13 @@ public class ClientThread implements Runnable {
         case DRAW -> {
           if (notAllowedToDraw()) break;
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
-          draw(arguments);
+          String stackName = arguments.get(0);
+          draw(stackName);
 
 
         }
         case HIGH ->{
-          send(encodeProtocolMessage("+HIGH", highScores.getHighScores()));
+          send(encodeProtocolMessage("+HIGH", HighScores.getHighScores()));
         }
 
         case PUTT -> {
@@ -223,7 +223,7 @@ public class ClientThread implements Runnable {
           }
         }
         case LGAM -> {
-          listDemandedGamestatus(arguments);
+          listDemandedGamestatus(arguments.get(0));
         }
         case LLPL -> {
           send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
@@ -255,8 +255,8 @@ public class ClientThread implements Runnable {
     }
   }
 
-  public void draw(ArrayList<String> arguments) throws IOException {
-    boolean isMainStack = isMainStack(arguments);
+  public void draw(String stackName) throws IOException {
+    boolean isMainStack = isMainStack(stackName);
     Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
     String tileString;
     if (tile == null) {
@@ -280,10 +280,9 @@ public class ClientThread implements Runnable {
     return false;
   }
 
-  public static boolean isMainStack(ArrayList<String> arguments) {
-    String pullStackName = arguments.get(0);
+  public static boolean isMainStack(String stackName) {
     boolean isMainStack;
-    switch (pullStackName) {
+    switch (stackName) {
       case "e" -> {
         isMainStack = false;
       }
@@ -291,7 +290,7 @@ public class ClientThread implements Runnable {
         isMainStack = true;
       }
       default -> {
-        throw new IllegalArgumentException("No Stack with name: " + pullStackName);
+        throw new IllegalArgumentException("No Stack with name: " + stackName);
       }
     }
     return isMainStack;
@@ -315,9 +314,6 @@ public class ClientThread implements Runnable {
       lobby.finishGame(nickname);
       lobby.sendToLobby(encodeProtocolMessage("PWIN", nickname), null);
       send(encodeProtocolMessage("+PUTT", "t", "t"));
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
-      todaysDate = LocalDateTime.now().format(dtf);
-      highScores.addEntryToHighscores(nickname, todaysDate, lobby.gameState.currentRoundNumber());
       return true;
     }
     return false;
@@ -336,9 +332,8 @@ public class ClientThread implements Runnable {
     return false;
   }
 
-  private void listDemandedGamestatus(ArrayList<String> arguments) throws IOException {
+  private void listDemandedGamestatus(String gameStatus) throws IOException {
     StringBuilder sb = new StringBuilder();
-    String gameStatus = arguments.get(0);
     ArrayList<Lobby> l;
     switch (gameStatus) {
       case "o" -> {

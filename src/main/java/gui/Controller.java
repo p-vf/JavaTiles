@@ -57,9 +57,12 @@ public class Controller {
 
     }
 
+
     public static void setClient(Client client) {
         Controller.client = client;
     }
+
+
 
     public void loginTextArea(ActionEvent event) throws IOException {
         client.setEvent(event);
@@ -129,6 +132,7 @@ public class Controller {
             }
         }
 
+
     public void chatInputPressed(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + chatInput.getText();
         String messageToSend = client.handleInput(chatMessage);
@@ -138,6 +142,7 @@ public class Controller {
     public void chatIncoming(String message){
         chatArea.appendText(message + "\n");
     }
+
 
     public void joinPressed(ActionEvent actionEvent) throws IOException {
        client.setEvent(actionEvent);

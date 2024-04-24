@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import gui.ControllerGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 
@@ -77,6 +78,7 @@ public class Client {
         guiThread = new GUIThread(this);
         this.gui = new GameGUI();
         Controller.setClient(this);
+        ControllerGame.setClient(this);
     }
 
 

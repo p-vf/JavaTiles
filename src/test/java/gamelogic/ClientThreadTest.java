@@ -35,7 +35,7 @@ class ClientThreadTest {
     lobbyOne.setAccessible(true);
     Field stateOfGame = Lobby.class.getDeclaredField("gameState");
     stateOfGame.setAccessible(true);
-    Field currentPlayerIndex = GameState.class.getDeclaredField("currentPlayerIdx");
+    Field currentPlayerIndex = GameState.class.getDeclaredField("currentPlayerIndex");
     currentPlayerIndex.setAccessible(true);
 
     try {
@@ -51,26 +51,23 @@ class ClientThreadTest {
 
   @Test
   void isMainStackShouldReturnTrueForMainStack() {
-    ArrayList<String> args = new ArrayList<String>();
-    args.add("m");
+    String args = "m";
     assertTrue(clientThread.isMainStack(args));
   }
 
   @Test
   void isMainStackShouldThrowExceptionForFalseStack() {
-    ArrayList<String> args = new ArrayList<String>();
-    args.add("s");
+    String args = "s";
     assertThrows(IllegalArgumentException.class, () -> {clientThread.isMainStack(args);});
   }
   @Test
   void isMainStackShouldThrowExceptionForNoStackSpecified() {
-    ArrayList<String> args = new ArrayList<String>();
-    assertThrows(IndexOutOfBoundsException.class, () -> {clientThread.isMainStack(args);});
+    String args = "";
+    assertThrows(IllegalArgumentException.class, () -> {clientThread.isMainStack(args);});
   }
   @Test
   void isMainStackShouldReturnFalseForExchangeStack() {
-    ArrayList<String> args = new ArrayList<String>();
-    args.add("e");
+   String args = "e";
     assertFalse(clientThread.isMainStack(args));
   }
 
@@ -141,10 +138,10 @@ class ClientThreadTest {
     mainStack.setAccessible(true);
     mainStack.set(this.gameState, emptyStack);
 
-    ArrayList<String> args = new ArrayList<String>();
-    args.add("m");
+    String args = "m";
 
-    doCallRealMethod().when(clientThread).draw(any(ArrayList.class));
+
+    doCallRealMethod().when(clientThread).draw(any(String.class));
     doCallRealMethod().when(clientThread).send(anyString());
 
     Field outPutStream = ClientThread.class.getDeclaredField("out");
@@ -199,10 +196,9 @@ class ClientThreadTest {
 
 
     mainStackField.set(this.gameState, stackWithTiles);
-    ArrayList<String> args = new ArrayList<String>();
-    args.add("m");
+    String args = "m";
 
-    doCallRealMethod().when(clientThread).draw(any(ArrayList.class));
+    doCallRealMethod().when(clientThread).draw(any(String.class));
     doCallRealMethod().when(clientThread).send(anyString());
     Field outPutStream = ClientThread.class.getDeclaredField("out");
     outPutStream.setAccessible(true);
