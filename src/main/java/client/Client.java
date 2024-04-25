@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import gui.ControllerGame;
+import gui.GameGUIActualGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 
@@ -54,13 +55,21 @@ public class Client {
 
     private Tile[] exchangeStacks; //Exchange stacks of the player for this particular round
 
+    private Tile[] deckTiles; //
+
     private GUIThread guiThread; //Thread responsible for displaying the GUI
 
     private GameGUI gui;
 
+
+
+
     private boolean lobby = false; //Whether the client is in a lobby or not
 
-    public static Controller controller; //Controller for the GUI
+    private static Controller controller; //Controller for the GUI
+
+    private static ControllerGame gameController;
+
 
     private ActionEvent event;
 
@@ -79,6 +88,7 @@ public class Client {
         this.gui = new GameGUI();
         Controller.setClient(this);
         ControllerGame.setClient(this);
+
     }
 
 
@@ -97,7 +107,7 @@ public class Client {
             Thread gThread = new Thread(client.guiThread);
             Thread thisThread = new Thread(client.gui);
             thisThread.start();
-            gThread.start();
+            //gThread.start();
             InThread th = new InThread(client.in, client, client.guiThread);
             Thread iT = new Thread(th);
             iT.start();
@@ -472,9 +482,11 @@ public class Client {
                         currentPlayerID = playerID;
 
                     }
-                    Tile[] tilesArrayStrt = stringsToTileArray(tilesStrt);
-                    yourDeck.setDeck(yourDeck.createDeckwithTileArray(tilesArrayStrt));
+                    deckTiles = stringsToTileArray(tilesStrt);
+                    changeScene("startGame");
+                    yourDeck.setDeck(yourDeck.createDeckwithTileArray(deckTiles));
                     showDeck();
+
                     send(encodeProtocolMessage("+STRT"));
                     break;
 
@@ -889,6 +901,13 @@ public class Client {
         }
     }
 
+    public void setgameController(ControllerGame gameController) {
+        this.gameController= gameController;
+    }
+
+    public Tile[] getTiles() {
+        return deckTiles;
+    }
 }
 
 

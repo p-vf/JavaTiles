@@ -1,17 +1,22 @@
 package gui;
 
 import client.Client;
+import game.Tile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+
+import static utils.NetworkUtils.encodeProtocolMessage;
 
 
 public class ControllerGame implements Initializable {
@@ -100,12 +105,43 @@ public class ControllerGame implements Initializable {
 
     private ArrayList<Button> deck;
 
-    private Client client;
+    private static Client client;
 
+    private Tile[] tiles;
+
+    public ControllerGame(){
+        client.setgameController(this);
+    }
 
     public static void setClient(Client client) {
-        Controller.client = client;
+        ControllerGame.client = client;
     }
+
+    public void fillTiles(Tile[] givenTiles) {
+        tiles = new Tile[givenTiles.length];
+        for (int i = 0; i < givenTiles.length; i++) {
+            tiles[i] = givenTiles[i];
+        }
+    }
+    @FXML
+    void showDeck(ActionEvent event) throws IOException {
+        this.tiles = client.getTiles();
+        for (int i = 0; i < deck.size(); i++) {
+            if(tiles[i]==null){
+                deck.get(i).setText("");
+            }
+            else{
+            deck.get(i).setText("" + tiles[i].getNumber());
+            deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tiles[i].getColor())));}
+            client.send(encodeProtocolMessage("+STRT"));
+
+        }
+    }
+
+
+
+
+
 
 
     @FXML
@@ -166,6 +202,7 @@ public class ControllerGame implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4,zero5, zero6, zero7, zero8, zero9,zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10,one11));
+        client.setgameController(this);
     }
 }
 

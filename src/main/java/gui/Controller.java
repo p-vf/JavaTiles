@@ -120,6 +120,9 @@ public class Controller {
                     sceneSwitcher(event,"/lobbyScreen.fxml");
                     break;
 
+                case "startGame":
+                    sceneSwitcher(event,"/ourgame.fxml");
+
             }
 
             } catch(IOException e){
