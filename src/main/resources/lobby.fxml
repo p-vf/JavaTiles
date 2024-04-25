@@ -15,9 +15,9 @@
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
             <Button id="JoinButton" layoutX="244.0" layoutY="200.0" mnemonicParsing="false" onAction="#joinPressed" text="Join/Create Lobby" />
-            <Text layoutX="229.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+            <Text fill="WHITE" layoutX="216.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
-                  <Font name="System Bold" size="34.0" />
+                  <Font name="System Bold" size="40.0" />
                </font>
             </Text>
          </children>

@@ -14,9 +14,9 @@
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Text layoutX="229.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+            <Text fill="WHITE" layoutX="216.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
-                  <Font name="System Bold" size="34.0" />
+                  <Font name="System Bold" size="40.0" />
                </font>
             </Text>
             <Button fx:id="readyButton" layoutX="264.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
