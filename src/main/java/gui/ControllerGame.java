@@ -117,6 +117,29 @@ public class ControllerGame implements Initializable {
     @FXML
     private Button startButton;
 
+    @FXML
+    private Label playerName0;
+
+
+    @FXML
+    private Label playerName1;
+
+    @FXML
+    private Label playerName2;
+
+    @FXML
+    private Label playerName3;
+
+    private ArrayList<Label> playerNames;
+    @FXML
+    private Label winLabel;
+
+    @FXML
+    private Label turnLabel;
+
+    private String nickname;
+
+
 
     private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
 
@@ -127,6 +150,7 @@ public class ControllerGame implements Initializable {
     public static void setClient(Client client) {
         ControllerGame.client = client;
     }
+
 
     @FXML
     void showDeck(ActionEvent event) throws IOException {
@@ -153,6 +177,32 @@ public class ControllerGame implements Initializable {
     public void setCanYouPlayThisMove(boolean canYouPlayThisMove){
         this.canYouPlayThisMove = canYouPlayThisMove;
     }
+
+    public void setWinLabel(String text) throws IOException {
+        winLabel.setDisable(false);
+        winLabel.setText(text);
+        if(text.equals("DRAW!")){
+            client.send(encodeProtocolMessage("+EMPT"));
+        }
+        else {
+            client.send(encodeProtocolMessage("+PWIN"));
+        }
+    }
+
+    public void setTurnLabel(String text) throws IOException {
+        turnLabel.setDisable(false);
+        turnLabel.setText(text);
+        client.send(encodeProtocolMessage("+STAT"));
+    }
+
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+        playerName0.setText(nickname);
+
+    }
+
+
+
 
     int[] TilePosition (Button button){
         int[] position = new int[2];
@@ -277,9 +327,27 @@ public class ControllerGame implements Initializable {
 
     }
 
+    public void setPlayerName(int i, String name){
+        playerNames.get(i).setText(name);
+
+    }
+
+    public void addThisTile(Tile tile){
+        int count = 0;
+            for(int i = 0; i < deck.size();i++){
+                if((deck.get(i).getText().isBlank())&&count==0){
+                    count++;
+                    deck.get(i).setText("" + tile.getNumber());
+                    deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+
+            }
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4,zero5, zero6, zero7, zero8, zero9,zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10,one11));
+        playerNames = new ArrayList<>(Arrays.asList(playerName0,playerName1,playerName2,playerName3));
         client.setgameController(this);
     }
 }

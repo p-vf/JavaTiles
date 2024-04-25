@@ -192,6 +192,7 @@ public class Client {
 
 
 
+
     /**
      * Initiates a new PingThread for the specified EchoClient.
      * This method creates a new thread responsible for sending periodic PING messages
@@ -482,6 +483,10 @@ public class Client {
                     }
                     deckTiles = stringsToTileArray(tilesStrt);
                     changeScene("startGame");
+                    Platform.runLater(() -> {
+                        gameController.setNickname(nickname); //hier eventuell platform
+                    });
+
                     yourDeck.setDeck(yourDeck.createDeckwithTileArray(deckTiles));
                     showDeck();
 
@@ -491,12 +496,24 @@ public class Client {
 
                 case PWIN:
                     System.out.println(arguments.get(0) + " won.");
-                    send(encodeProtocolMessage("+PWIN"));
+                    Platform.runLater(() -> {
+                        try {
+                            gameController.setWinLabel(arguments.get(0) + " won.");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                     break;
 
                 case EMPT:
                     System.out.println("The game ended with a draw:");
-                    send("+EMPT");
+                    Platform.runLater(() -> {
+                        try {
+                            gameController.setWinLabel("DRAW!");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                     break;
 
                 case NAMS:
@@ -529,6 +546,7 @@ public class Client {
                             System.out.println(nameArray[i]);
                         }
                     }
+
                     send(encodeProtocolMessage("+NAMS"));
                     break;
 
@@ -553,8 +571,16 @@ public class Client {
 
                     } else {
                         System.out.println("It's " + arguments.get(1) + "'s turn.");
+                        //gameController.setTurnLabel("It's yo mama turn.");
                     }
-                    send(encodeProtocolMessage("+STAT"));
+                    Platform.runLater(() -> {
+                        try {
+                            gameController.setTurnLabel("It's " + this.players.get(Integer.parseInt(arguments.get(1)))+"'s turn.");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    //send(encodeProtocolMessage("+STAT"));
                     break;
 
 
@@ -599,6 +625,7 @@ public class Client {
 
                 case NAME:
                     nickname = arguments.get(0);
+                    gameController.setPlayerName(0, nickname);
                     System.out.println("Your nickname has been changed to: " + nickname);
                     break;
 
@@ -754,6 +781,11 @@ public class Client {
                 case DRAW:
                     yourDeck.addTheseTiles(parseTile(arguments.get(0)));
                     Tile tile = parseTile(arguments.get(0));
+                    Platform.runLater(() -> {
+                        gameController.addThisTile(tile);
+                    });
+
+
                     System.out.println("You have drawn: " + tile.toStringPretty());
                     showDeck();
                     break;
@@ -763,7 +795,7 @@ public class Client {
                         System.out.println("Valid input");
 
                         if (arguments.get(1).equals("t")) {
-                            System.out.println("You won!");
+                              System.out.println("You won!");
                         }
                     } else {
                         System.out.println("Stop cheating!!");
