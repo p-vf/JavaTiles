@@ -104,6 +104,7 @@ public class Controller {
             System.out.println("Closing application...");
             System.exit(0);
         });
+        stage.setResizable(false);
         stage.show();
 
 

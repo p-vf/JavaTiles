@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,10 +21,14 @@ public class GameGUI extends Application implements Runnable {
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         Parent root = loader.load();
 
-        // Set the FXML content as the scene root
-        Scene scene = new Scene(root, 500, 300);
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest((WindowEvent ActionEvent) -> {
+            System.out.println("Closing application...");
+            System.exit(0);
+        });
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
     public void run() {
         launch();
