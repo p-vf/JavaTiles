@@ -21,6 +21,7 @@ public class GameGUI extends Application implements Runnable {
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         Parent root = loader.load();
 
+        root.setStyle("-fx-background-color: #008000;");
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest((WindowEvent ActionEvent) -> {

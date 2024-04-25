@@ -14,9 +14,9 @@
          <center>
             <AnchorPane prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Text layoutX="238.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+                  <Text fill="WHITE" layoutX="218.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                      <font>
-                        <Font name="System Bold" size="34.0" />
+                        <Font name="System Bold" size="40.0" />
                      </font>
                   </Text>
                   <TextArea fx:id="loginWarning" editable="false" layoutX="16.0" layoutY="286.0" prefHeight="37.0" prefWidth="587.0" text="&#10;">
@@ -24,7 +24,7 @@
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </TextArea>
-                  <Text layoutX="251.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Username:">
+                  <Text fill="WHITE" layoutX="251.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Username:">
                      <font>
                         <Font size="14.0" />
                      </font>
