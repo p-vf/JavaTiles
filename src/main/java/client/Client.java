@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import gui.ControllerGame;
-import gui.GameGUIActualGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 
@@ -71,6 +70,7 @@ public class Client {
 
 
     private ActionEvent event;
+    private ArrayList<String> players;
 
 
     /**
@@ -335,11 +335,15 @@ public class Client {
 
                 case "/putt":
                     if (playerID != currentPlayerID) {
-                        System.out.println("It's currently not your turn.");
+                        System.out.println("It's not your turn.");
+                        gameController.setTextofGameWarning("It's currently not your turn.");
+                        gameController.setCanYouPlayThisMove(false);
                         return null;
                     }
                     if (yourDeck.countTiles() < 15) {
                         System.out.println("You need to draw first.");
+                        gameController.setTextofGameWarning("You need to draw first.");
+                        gameController.setCanYouPlayThisMove(false);
                         return null;
                     }
                     if (!(arguments.get(0).matches("\\d+") && arguments.get(1).matches("\\d+"))) {
@@ -361,6 +365,7 @@ public class Client {
                     String tileString = tileToPut.toString();
                     Tile[] tileArray = yourDeck.DeckToTileArray();
                     String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
+                    gameController.setCanYouPlayThisMove(true);
                     showDeck();
                     return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
 
@@ -497,6 +502,7 @@ public class Client {
                 case NAMS:
                     String players = arguments.get(0);
                     ArrayList<String> newPLayers = decodeProtocolMessage(players);
+                    this.players = newPLayers;
                     String[] nameArray = newPLayers.toArray(new String[0]);
                     int counter = 0;
 

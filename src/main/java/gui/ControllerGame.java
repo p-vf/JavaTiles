@@ -6,8 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.io.IOException;
@@ -16,10 +16,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import static org.apache.commons.lang3.StringUtils.substring;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
 
 public class ControllerGame implements Initializable {
+
+    @FXML
+    private TextField gameWarning;
 
     @FXML
     private Button exchangeStack;
@@ -109,6 +113,8 @@ public class ControllerGame implements Initializable {
 
     private Tile[] tiles;
 
+    private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
+
     public ControllerGame(){
         client.setgameController(this);
     }
@@ -138,6 +144,32 @@ public class ControllerGame implements Initializable {
         }
     }
 
+    public void setTextofGameWarning(String text){
+        gameWarning.setVisible(true);
+        gameWarning.setText(text);
+    }
+
+    public void setCanYouPlayThisMove(boolean canYouPlayThisMove){
+        this.canYouPlayThisMove = canYouPlayThisMove;
+    }
+
+    int[] TilePosition (Button button){
+        int[] position = new int[2];
+        if(button.getId().contains("zero")){
+            position[0] = 0;
+            String columnString = button.getId().substring(4);
+            position[1] = Integer.valueOf(columnString);
+            return position;
+        }
+        else{
+            position[0] = 1;
+            String columnString = button.getId().substring(3);
+            position[1] = Integer.valueOf(columnString);
+            return position;
+            
+        }
+    }
+
 
 
 
@@ -148,7 +180,7 @@ public class ControllerGame implements Initializable {
     }
 
     @FXML
-    void pressTile(ActionEvent event) {
+    void pressTile(ActionEvent event) throws IOException {
 
         Button pressedButton = (Button) event.getTarget();
         pressedButtons.add(pressedButton);
@@ -158,19 +190,48 @@ public class ControllerGame implements Initializable {
             Button secondButton = pressedButtons.get(1);
 
             if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
+                ArrayList<String> args = new ArrayList<String>();
                 if (firstButton.equals(puttButton)) {
-                    System.out.println(secondButton.getText() + " wurde geputtet");
+                    if(secondButton.getText().isBlank()){
+
+                        gameWarning.setVisible(true);
+                        gameWarning.setText("choose an existing Tile");
+
+
+                    }
+                    else{
+                        int [] tilePosition = TilePosition(secondButton);
+                        gameWarning.setVisible(true);
+                        //gameWarning.setText("Button ist am Ort"+ tilePosition[0]+" "+ tilePosition[1]);
+                        args.add("/putt");
+                        args.add(tilePosition[0]+"");
+                        args.add(tilePosition[1]+"");
+                        System.out.println(encodeProtocolMessage(args));
+                        String message = client.handleInput(encodeProtocolMessage(args));
+                        System.out.println(message);
+                        client.send(message);
+                        if(canYouPlayThisMove){
+                            secondButton.setText("");
+                        }
+
+                    }
+                    pressedButtons.clear();
                 } else {
-                    System.out.println(firstButton.getText() + " wurde geputtet");
+                    gameWarning.setText("Please press on the puttButton first and then the chosen Tile for putting");
+                    System.out.println("nichts passiert.");
+                    pressedButtons.clear();
                 }
-                pressedButtons.clear();
             }
             else{
                 String firstTile = firstButton.getText();
                 String secondTile = secondButton.getText();
+                Paint firstTilePaint = firstButton.getTextFill();
+                Paint secondTilePaint = secondButton.getTextFill();
 
                 firstButton.setText(secondTile);
+                firstButton.setTextFill(secondTilePaint);
                 secondButton.setText(firstTile);
+                secondButton.setTextFill(firstTilePaint);
 
                 pressedButtons.clear();
             }
