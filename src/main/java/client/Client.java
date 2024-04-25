@@ -434,6 +434,7 @@ public class Client {
             switch (requestType) {
 
                 case CATS:
+                    if(nickname != null){
                     String name = arguments.get(2);
                     if (arguments.get(0).equals("b")) {
 
@@ -445,7 +446,7 @@ public class Client {
                     }
                     if (arguments.get(0).equals("l")) {
                         controller.chatIncoming(name + " whispered: " + arguments.get(1));
-                    }
+                    }}
                     //hier handeln ob whisper broadcast etc mit case distinction
 
 

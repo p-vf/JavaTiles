@@ -51,6 +51,7 @@ public class Controller {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private boolean isEmpty = false;
 
     public Controller() {
        client.setController(this);
@@ -72,15 +73,17 @@ public class Controller {
         if(nickname.isEmpty()){
             nickname = System.getProperty("user.name");
             arguments.add(nickname);
-
             client.send(encodeProtocolMessage(arguments));
+            isEmpty = true;
+            arguments.clear();
         }
         if(nickname.contains(" ")||nickname.contains("\"")){
             loginWarning.setText("Your nickname mustn't contain blank spaces or quotation marks");
         }
-        else {
+        if (!(isEmpty)){
             arguments.add(nickname);
             client.send(encodeProtocolMessage(arguments));
+            arguments.clear();
         }
     }
 
