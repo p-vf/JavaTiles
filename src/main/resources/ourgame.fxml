@@ -140,12 +140,12 @@
                   <Font name="Segoe UI Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="mainStack" layoutX="375.0" layoutY="159.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0" text="M" textFill="#0b6320">
+            <Button fx:id="mainStack" layoutX="375.0" layoutY="159.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" text="M" textFill="#0b6320">
                <font>
                   <Font name="Arial Rounded MT Bold" size="22.0" />
                </font>
             </Button>
-            <Button fx:id="exchangeStack" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0" text="E" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" text="E" textFill="#0b6320d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="22.0" />
                </font>

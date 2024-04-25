@@ -141,9 +141,6 @@ public class ControllerGame implements Initializable {
 
 
 
-
-
-
     @FXML
     void deleteSelection(MouseEvent event) {
         pressedButtons.clear();
@@ -152,51 +149,51 @@ public class ControllerGame implements Initializable {
 
     @FXML
     void pressTile(ActionEvent event) {
-        try {
 
-            Button pressedButton = (Button) event.getTarget();
-            pressedButtons.add(pressedButton);
+        Button pressedButton = (Button) event.getTarget();
+        pressedButtons.add(pressedButton);
 
-            if (pressedButtons.size() == 1) {
+        if (pressedButtons.size() == 2) {
+            Button firstButton = pressedButtons.get(0);
+            Button secondButton = pressedButtons.get(1);
 
-                if (pressedButton.equals(exchangeStack)) {
-                    System.out.println("exchangeStack wurde gedrückt");
-                    pressedButtons.clear();
-                    client.handleInput("/draw e");
-                }
-                if (pressedButton.equals(mainStack)) {
-                    System.out.println("mainStack wurde gedrückt");
-                    pressedButtons.clear();
-                    client.handleInput("/draw m");
-                }
-            }
-            if (pressedButtons.size() == 2) {
-                Button firstButton = pressedButtons.get(0);
-                Button secondButton = pressedButtons.get(1);
-
-                if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
-                    if (firstButton.equals(puttButton)) {
-                        System.out.println(secondButton.getText() + " wurde geputtet");
-                    } else {
-                        System.out.println(firstButton.getText() + " wurde geputtet");
-                    }
-                    pressedButtons.clear();
-                }
-                if (!(pressedButtons.contains(puttButton)) && pressedButtons.size() == 2) {
-                    String firstTile = firstButton.getText();
-                    String secondTile = secondButton.getText();
-
-                    firstButton.setText(secondTile);
-                    secondButton.setText(firstTile);
-
-                    pressedButtons.clear();
+            if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
+                if (firstButton.equals(puttButton)) {
+                    System.out.println(secondButton.getText() + " wurde geputtet");
+                } else {
+                    System.out.println(firstButton.getText() + " wurde geputtet");
                 }
                 pressedButtons.clear();
-
             }
-        } catch (IOException e) {
-            System.out.println("an IOException occurred");
+            else{
+                String firstTile = firstButton.getText();
+                String secondTile = secondButton.getText();
+
+                firstButton.setText(secondTile);
+                secondButton.setText(firstTile);
+
+                pressedButtons.clear();
+            }
+            pressedButtons.clear();
+
         }
+    }
+    @FXML
+    void draw(ActionEvent event) {
+        Button pressedButton = (Button) event.getSource();
+        if (pressedButton.equals(exchangeStack)) {
+            System.out.println("exchangeStack wurde gedrückt");
+            pressedButtons.clear();
+            //client.handleInput("/draw e");
+
+        }
+        if(pressedButton.equals(mainStack)){
+            System.out.println("mainStack wurde gedrückt");
+            pressedButtons.clear();
+            //client.handleInput("/draw m");
+        }
+
+
     }
 
     @Override

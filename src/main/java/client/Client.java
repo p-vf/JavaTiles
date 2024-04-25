@@ -57,7 +57,6 @@ public class Client {
 
     private Tile[] deckTiles; //
 
-    private GUIThread guiThread; //Thread responsible for displaying the GUI
 
     private GameGUI gui;
 
@@ -66,7 +65,7 @@ public class Client {
 
     private boolean lobby = false; //Whether the client is in a lobby or not
 
-    private static Controller controller; //Controller for the GUI
+    public static Controller controller; //Controller for the GUI
 
     private static ControllerGame gameController;
 
@@ -84,7 +83,6 @@ public class Client {
         this.socket = socket;
         this.out = socket.getOutputStream();
         this.in = socket.getInputStream();
-        guiThread = new GUIThread(this);
         this.gui = new GameGUI();
         Controller.setClient(this);
         ControllerGame.setClient(this);
@@ -104,11 +102,9 @@ public class Client {
 
             Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
             Client client = new Client(sock);
-            Thread gThread = new Thread(client.guiThread);
             Thread thisThread = new Thread(client.gui);
             thisThread.start();
-            //gThread.start();
-            InThread th = new InThread(client.in, client, client.guiThread);
+            InThread th = new InThread(client.in, client);
             Thread iT = new Thread(th);
             iT.start();
 
@@ -245,7 +241,6 @@ public class Client {
                 case "/chat":
                     if (arguments.get(0).equals("/all")) {
                         if (nickname == null) {
-                            guiThread.updateChat("You need to login first.");
                             return null;
                         }
                         String allMessage = concatenateWords(1, arguments);
@@ -267,7 +262,6 @@ public class Client {
                             String messageForServer = encodeProtocolMessage("CATC", "l", message);
                             return messageForServer;
                         } else {
-                            guiThread.updateChat("You are not in a lobby right now. Please join a lobby first.");
                             return null;
                         }
                     }
@@ -443,15 +437,13 @@ public class Client {
                     String name = arguments.get(2);
                     if (arguments.get(0).equals("b")) {
 
-                        guiThread.updateChat(name + " sent to all: " + arguments.get(1));
+
                         controller.chatIncoming(name + " sent to all: " + arguments.get(1));
                     }
                     if (arguments.get(0).equals("w")) {
-                        guiThread.updateChat(name + " whispered: " + arguments.get(1));
                         controller.chatIncoming(name + " whispered: " + arguments.get(1));
                     }
                     if (arguments.get(0).equals("l")) {
-                        guiThread.updateChat(name + ": " + arguments.get(1));
                         controller.chatIncoming(name + " whispered: " + arguments.get(1));
                     }
                     //hier handeln ob whisper broadcast etc mit case distinction
@@ -738,17 +730,14 @@ public class Client {
 
                 case CATC:
                     if (arguments.get(0).equals("l")) {
-                        guiThread.updateChat("You:" + arguments.get(1));
                         controller.chatIncoming("You:" + arguments.get(1));
 
                     }
                     if (arguments.get(0).equals("w")) {
-                        guiThread.updateChat("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
                         controller.chatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
 
                     }
                     if (arguments.get(0).equals("b")) {
-                        guiThread.updateChat("You sent to all: " + arguments.get(1));
                         controller.chatIncoming("You sent to all: " + arguments.get(1));
 
                     }

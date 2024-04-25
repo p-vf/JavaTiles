@@ -24,7 +24,6 @@ public class InThread implements Runnable {
 
     public Client client; // The associated client object
 
-    public GUIThread guiThread; // The associated GUI thread object
 
     InputStream in; // The input stream to read messages from
 
@@ -35,10 +34,10 @@ public class InThread implements Runnable {
      * @param in     the input stream to read messages from
      * @param client the associated client object
      */
-    public InThread(InputStream in, Client client, GUIThread guiThread) {
+    public InThread(InputStream in, Client client) {
         this.in = in;
         this.client = client;
-        this.guiThread = guiThread;
+
     }
 
 
