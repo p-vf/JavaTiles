@@ -485,7 +485,7 @@ public class Client {
                     yourDeck.setDeck(yourDeck.createDeckwithTileArray(deckTiles));
                     showDeck();
 
-                    send(encodeProtocolMessage("+STRT"));
+                    //send(encodeProtocolMessage("+STRT"));
                     break;
 
 

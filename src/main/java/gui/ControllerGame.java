@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
@@ -23,7 +24,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
 public class ControllerGame implements Initializable {
 
     @FXML
-    private TextField gameWarning;
+    private Label gameWarning;
 
     @FXML
     private Button exchangeStack;
@@ -113,6 +114,10 @@ public class ControllerGame implements Initializable {
 
     private Tile[] tiles;
 
+    @FXML
+    private Button startButton;
+
+
     private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
 
     public ControllerGame(){
@@ -123,14 +128,10 @@ public class ControllerGame implements Initializable {
         ControllerGame.client = client;
     }
 
-    public void fillTiles(Tile[] givenTiles) {
-        tiles = new Tile[givenTiles.length];
-        for (int i = 0; i < givenTiles.length; i++) {
-            tiles[i] = givenTiles[i];
-        }
-    }
     @FXML
     void showDeck(ActionEvent event) throws IOException {
+        startButton.setDisable(true);
+        startButton.setVisible(false);
         this.tiles = client.getTiles();
         for (int i = 0; i < deck.size(); i++) {
             if(tiles[i]==null){
@@ -181,6 +182,7 @@ public class ControllerGame implements Initializable {
 
     @FXML
     void pressTile(ActionEvent event) throws IOException {
+        ArrayList<String> args = new ArrayList<String>();
 
         Button pressedButton = (Button) event.getTarget();
         pressedButtons.add(pressedButton);
@@ -190,7 +192,7 @@ public class ControllerGame implements Initializable {
             Button secondButton = pressedButtons.get(1);
 
             if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
-                ArrayList<String> args = new ArrayList<String>();
+
                 if (firstButton.equals(puttButton)) {
                     if(secondButton.getText().isBlank()){
 
@@ -217,12 +219,23 @@ public class ControllerGame implements Initializable {
                     }
                     pressedButtons.clear();
                 } else {
-                    gameWarning.setText("Please press on the puttButton first and then the chosen Tile for putting");
+                    gameWarning.setText("Please press on the puttButton first before choosing a Tile");
                     System.out.println("nichts passiert.");
                     pressedButtons.clear();
                 }
             }
             else{
+                args.add("/swap");
+                int [] firstTilePosition = TilePosition(firstButton);
+                int [] secondTilePosition = TilePosition(secondButton);
+                args.add(firstTilePosition[0]+"");
+                args.add(firstTilePosition[1]+"");
+                args.add(secondTilePosition[0]+"");
+                args.add(secondTilePosition[1]+"");
+
+                String message = client.handleInput(encodeProtocolMessage(args));
+                client.send(message);
+
                 String firstTile = firstButton.getText();
                 String secondTile = secondButton.getText();
                 Paint firstTilePaint = firstButton.getTextFill();
@@ -240,18 +253,25 @@ public class ControllerGame implements Initializable {
         }
     }
     @FXML
-    void draw(ActionEvent event) {
+    void draw(ActionEvent event) throws IOException {
+        ArrayList<String> args = new ArrayList<>();
+        args.add("/draw");
         Button pressedButton = (Button) event.getSource();
         if (pressedButton.equals(exchangeStack)) {
             System.out.println("exchangeStack wurde gedrückt");
+
             pressedButtons.clear();
-            //client.handleInput("/draw e");
+            args.add("e");
+            String message = client.handleInput(encodeProtocolMessage(args));
+            client.send(message);
 
         }
         if(pressedButton.equals(mainStack)){
             System.out.println("mainStack wurde gedrückt");
             pressedButtons.clear();
-            //client.handleInput("/draw m");
+            args.add("m");
+            String message = client.handleInput(encodeProtocolMessage(args));
+            client.send(message);
         }
 
 
