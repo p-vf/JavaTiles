@@ -507,6 +507,19 @@ public class Client {
                     String[] nameArray = newPLayers.toArray(new String[0]);
                     int counter = 0;
 
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("The following players are in the lobby:\n");
+                    for(int i = 0; i < nameArray.length; i++){
+                        if (nameArray[i].isEmpty()) {
+                            sb.append("-----\n");
+                        } else {
+                            sb.append(nameArray[i]).append("\n");
+                        }
+                    }
+                    String messageClient = sb.toString();
+
+                    controller.showPlayersInLobby(messageClient);
+
                     System.out.println("The following players are in the lobby:");
 
                     for(int i = 0; i < nameArray.length; i++){

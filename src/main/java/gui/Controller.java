@@ -1,6 +1,8 @@
 package gui;
 
 import client.Client;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +15,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -36,9 +41,11 @@ public class Controller {
     public TextArea loginWarning;
     public VBox vBoxLobbies;
 
-    public String clientMessage;
+    public static String clientMessage;
     public TextArea chatArea;
     public TextField chatInput;
+    public VBox playersLobbyVbox;
+
 
 
     private Stage stage;
@@ -120,11 +127,12 @@ public class Controller {
                     sceneSwitcher(event,"/lobbyScreen.fxml");
                     break;
 
+
                 case "startGame":
                     sceneSwitcher(event,"/ourgame.fxml");
 
-            }
 
+            }
             } catch(IOException e){
                 e.printStackTrace();
             }
@@ -184,9 +192,18 @@ public class Controller {
         ArrayList<String> arg = new ArrayList<>();
         arg.add("LLOB");
         client.send(encodeProtocolMessage(arg));
-
     }
 
+    public void showPlayersInLobby(String message){
+        clientMessage = message;
+    }
 
+    public void showPlayersPressed() {
+        playersLobbyVbox.getChildren().clear();
+        Label label = new Label(clientMessage);
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        playersLobbyVbox.getChildren().add(label);
+
+    }
 }
 
