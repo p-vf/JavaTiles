@@ -804,6 +804,9 @@ public class Client {
 
                 case REDY:
                     System.out.println("ready to play!");
+                    Platform.runLater(() -> {
+                        controller.setReadyButton("Ready");
+                    });
                     break;
 
                 case LPLA:

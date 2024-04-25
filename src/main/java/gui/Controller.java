@@ -194,7 +194,6 @@ public class Controller {
         ArrayList<String> arg = new ArrayList<>();
         arg.add("REDY");
         client.send(encodeProtocolMessage(arg));
-        readyButton.setText("Ready");
     }
 
     public void leaveLobbyPressed(ActionEvent event) throws IOException {
@@ -206,6 +205,10 @@ public class Controller {
 
     public void showPlayersInLobby(String message){
         clientMessage = message;
+    }
+
+    public void setReadyButton(String text){
+        readyButton.setText(text);
     }
 
     public void showPlayersPressed() {
