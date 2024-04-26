@@ -21,6 +21,7 @@
             </Text>
             <Button fx:id="readyButton" layoutX="264.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
             <Button id="leaveLobbyButton" layoutX="259.0" layoutY="227.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave Lobby" />
+            <Button fx:id="showPlayersButton" layoutX="240.0" layoutY="270.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
          </children>
       </AnchorPane>
    </center>
@@ -30,8 +31,7 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="playersLobbyVbox" prefHeight="333.0" prefWidth="201.0" />
-            <Button fx:id="showPlayersButton" layoutY="333.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
+            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="183.0" prefWidth="269.0" />
          </children></Pane>
    </left>
    <right>

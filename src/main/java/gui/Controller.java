@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -175,6 +176,8 @@ public class Controller {
     public void refreshPressed(ActionEvent event) {
         vBoxLobbies.getChildren().clear();
         Label label = new Label(input);
+        label.setFont(Font.font("Bold", FontWeight.BOLD, 13));
+        label.setTextFill(Color.WHITE);
         vBoxLobbies.getChildren().add(label);
 
     }
@@ -214,7 +217,8 @@ public class Controller {
     public void showPlayersPressed() {
         playersLobbyVbox.getChildren().clear();
         Label label = new Label(clientMessage);
-        label.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        label.setFont(Font.font("Bold", FontWeight.BOLD, 14));
+        label.setTextFill(Color.WHITE);
         playersLobbyVbox.getChildren().add(label);
 
     }
