@@ -87,7 +87,6 @@ class ClientThreadTest {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 1);
-    OrderedDeck tiles= new OrderedDeck();
     Tile[][] deck = new Tile[2][12];
 
     for (int i = 0; i < 2; i++) {
@@ -95,7 +94,7 @@ class ClientThreadTest {
         deck[i][j] = new Tile(0, Color.BLUE);
       }
     }
-    tiles.setDeck(deck);
+    OrderedDeck tiles= new OrderedDeck(deck);
     Field playerDecksField = GameState.class.getDeclaredField("playerDecks");
     playerDecksField.setAccessible(true);
     ArrayList<OrderedDeck> playerDecks = (ArrayList<OrderedDeck>) playerDecksField.get(this.gameState);

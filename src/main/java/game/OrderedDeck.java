@@ -39,22 +39,27 @@ public class OrderedDeck {
    * @param tileArray The array of tiles to populate the deck with.
    */
   public OrderedDeck(Tile[] tileArray) {
-    if (tileArray.length > DECK_WIDTH * DECK_HEIGHT) {
-      throw new IllegalArgumentException("Tile[] tileArray is too big for deck");
-    }
-    deck = new Tile[DECK_HEIGHT][DECK_WIDTH];
-    int count = 0;
-    loop:
-    {
-      for (int i = 0; i < DECK_HEIGHT; i++) {
-        for (int j = 0; j < DECK_WIDTH; j++) {
-          if (count >= tileArray.length) {
+  }
+
+  public OrderedDeck(Tile[][] tileArrays) {
+    Tile[] tileArray = new Tile[DECK_WIDTH * DECK_HEIGHT];
+    int index = 0;
+    loop: {
+      for (Tile[] array : tileArrays) {
+        for (Tile tile : array) {
+          if (index >= DECK_WIDTH * DECK_HEIGHT) {
+            LOGGER.warn("Tried to fill deck with an array that is too large. ");
             break loop;
           }
-          deck[i][j] = tileArray[count++];
+          tileArray[index++] = tile;
         }
       }
     }
+    setDeck(tileArray);
+  }
+
+  private void setDeck(Tile[] tileArray) {
+    deck = deckFromTileArray(tileArray);
   }
 
   /**
@@ -72,8 +77,14 @@ public class OrderedDeck {
    * @param deck The 2D array representing the deck.
    */
   public void setDeck(Tile[][] deck) {
-    for (int i = 0; i < deck.length; i++) {
-      for (int j = 0; j < deck[i].length; j++) {
+    for (int i = 0; i < Math.min(DECK_HEIGHT, deck.length); i++) {
+      if (deck.length > DECK_HEIGHT) {
+        LOGGER.warn("Trying to set deck with too many rows");
+      }
+      for (int j = 0; j < Math.min(DECK_WIDTH, deck[i].length); j++) {
+        if (deck[i].length > DECK_WIDTH) {
+          LOGGER.warn("Trying to set deck with too many columns");
+        }
         this.deck[i][j] = deck[i][j];
       }
     }
