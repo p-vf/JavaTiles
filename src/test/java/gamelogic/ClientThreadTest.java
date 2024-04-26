@@ -278,11 +278,11 @@ class ClientThreadTest {
   void checkIfValidShouldReturnFalseForInvalidMoveBecauseTileToPuttIsNull() throws IOException, IllegalAccessException, NoSuchFieldException {
     //TODO: why does this testcase work wrong?
     Tile tile = null;
-    Tile[] deck = new Tile[24];
+    Tile[] tiles = new Tile[24];
 
     for (int i = 0; i < 14; i++) {
 
-        deck[i] = new Tile(0, Color.BLUE);
+        tiles[i] = new Tile(0, Color.BLUE);
 
     }
 
@@ -290,8 +290,9 @@ class ClientThreadTest {
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 0);
 
+    OrderedDeck deck = new OrderedDeck(tiles);
 
-    when(clientThread.checkIfValid(any(Tile.class), any(Tile[].class))).thenCallRealMethod();
+    when(clientThread.checkIfValid(any(Tile.class), any(OrderedDeck.class))).thenCallRealMethod();
     assertFalse(clientThread.checkIfValid(tile, deck));
     verify(clientThread, times(1)).checkIfValid(tile, deck);
   }
@@ -300,20 +301,20 @@ class ClientThreadTest {
   @Test
   void checkIfValidShouldReturnFalseForInvalidMoveBecauseDeckHasBeenModified() throws IOException, IllegalAccessException, NoSuchFieldException {
     Tile tile = new Tile(3,Color.BLUE);
-    Tile[] modifiedDeck = new Tile[24];
+    Tile[] modifiedTiles = new Tile[24];
 
     for (int i = 0; i < 14; i++) {
-
-      modifiedDeck[i] = new Tile(0, Color.BLUE);
-
+      modifiedTiles[i] = new Tile(0, Color.BLUE);
     }
-    Tile[] deck = new Tile[24];
+    OrderedDeck modifiedDeck = new OrderedDeck(modifiedTiles);
+
+    Tile[] tiles = new Tile[24];
     for (int i = 0; i < 14; i++) {
-      deck[i] = new Tile(0, Color.BLUE);
+      tiles[i] = new Tile(0, Color.BLUE);
     }
-    OrderedDeck orderedDeck = new OrderedDeck(deck);
+    OrderedDeck deck = new OrderedDeck(tiles);
     ArrayList<OrderedDeck> deckList = new ArrayList<>();
-    deckList.add(orderedDeck);
+    deckList.add(deck);
 
     Field actualDeck = GameState.class.getDeclaredField("playerDecks");
     actualDeck.setAccessible(true);
@@ -323,7 +324,7 @@ class ClientThreadTest {
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 0);
 
-    when(clientThread.checkIfValid(any(Tile.class), any(Tile[].class))).thenCallRealMethod();
+    when(clientThread.checkIfValid(any(Tile.class), any(OrderedDeck.class))).thenCallRealMethod();
     assertFalse(clientThread.checkIfValid(tile, modifiedDeck));
     verify(clientThread, times(1)).checkIfValid(tile, modifiedDeck);
   }
@@ -333,21 +334,21 @@ class ClientThreadTest {
   void checkIfValidShouldReturnTrueBecauseDeckHasNotBeenModified() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Tile tile = new Tile(3,Color.BLUE);
-    Tile[] modifiedDeck = new Tile[24];
+    Tile[] modifiedTiles = new Tile[24];
 
     for (int i = 0; i < 14; i++) {
-
-      modifiedDeck[i] = new Tile(0, Color.BLUE);
-
+      modifiedTiles[i] = new Tile(0, Color.BLUE);
     }
-    Tile[] deck = new Tile[24];
+    OrderedDeck modifiedDeck = new OrderedDeck(modifiedTiles);
+
+    Tile[] tiles = new Tile[24];
     for (int i = 0; i < 14; i++) {
-      deck[i] = new Tile(0, Color.BLUE);
+      tiles[i] = new Tile(0, Color.BLUE);
     }
-    deck[14] = new Tile(3,Color.BLUE);
-    OrderedDeck orderedDeck = new OrderedDeck(deck);
+    tiles[14] = new Tile(3,Color.BLUE);
+    OrderedDeck deck = new OrderedDeck(tiles);
     ArrayList<OrderedDeck> deckList = new ArrayList<>();
-    deckList.add(orderedDeck);
+    deckList.add(deck);
 
     Field actualDeck = GameState.class.getDeclaredField("playerDecks");
     actualDeck.setAccessible(true);
@@ -357,7 +358,7 @@ class ClientThreadTest {
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 0);
 
-    when(clientThread.checkIfValid(any(Tile.class), any(Tile[].class))).thenCallRealMethod();
+    when(clientThread.checkIfValid(any(Tile.class), any(OrderedDeck.class))).thenCallRealMethod();
     assertTrue(clientThread.checkIfValid(tile, modifiedDeck));
     verify(clientThread, times(1)).checkIfValid(tile, modifiedDeck);
   }
@@ -365,22 +366,23 @@ class ClientThreadTest {
   @Test
   void checkIfWonShouldReturnFalseBecauseNoWinningConfigurationAchieved() throws IOException, IllegalAccessException, NoSuchFieldException {
 
-    Tile[] winningDeck = new Tile[24];
+    Tile[] winningTileArray = new Tile[24];
 
     for (int i = 0; i < 7; i++) {
 
-      winningDeck[i] = new Tile(i, Color.BLUE);
+      winningTileArray[i] = new Tile(i, Color.BLUE);
     }
-    winningDeck[7] = new Tile(3,Color.YELLOW);
+    winningTileArray[7] = new Tile(3,Color.YELLOW);
     for (int i = 12; i < 18; i++) {
 
-      winningDeck[i] = new Tile(i - 12, Color.BLACK);
+      winningTileArray[i] = new Tile(i - 12, Color.BLACK);
     }
     Field nickname = ClientThread.class.getDeclaredField("nickname");
     nickname.setAccessible(true);
     nickname.set(clientThread, "Pascal");
 
-    when(clientThread.checkIfWon(any(Tile[].class))).thenCallRealMethod();
+    when(clientThread.checkIfWon(any(OrderedDeck.class))).thenCallRealMethod();
+    OrderedDeck winningDeck = new OrderedDeck(winningTileArray);
     assertFalse(clientThread.checkIfWon(winningDeck));
     verify(clientThread, times(1)).checkIfWon(winningDeck);
   }
@@ -389,21 +391,22 @@ class ClientThreadTest {
   @Test
   void checkIfWonShouldReturnTrueForWinningDeck() throws IOException, IllegalAccessException, NoSuchFieldException {
 
-    Tile[] winningDeck = new Tile[24];
+    Tile[] winningTileArray = new Tile[24];
 
     for (int i = 0; i < 7; i++) {
 
-      winningDeck[i] = new Tile(i, Color.BLUE);
+      winningTileArray[i] = new Tile(i, Color.BLUE);
     }
     for (int i = 12; i < 19; i++) {
 
-      winningDeck[i] = new Tile(i - 12, Color.BLACK);
+      winningTileArray[i] = new Tile(i - 12, Color.BLACK);
     }
     Field nickname = ClientThread.class.getDeclaredField("nickname");
     nickname.setAccessible(true);
     nickname.set(clientThread, "Pascal");
 
-    when(clientThread.checkIfWon(any(Tile[].class))).thenCallRealMethod();
+    when(clientThread.checkIfWon(any(OrderedDeck.class))).thenCallRealMethod();
+    OrderedDeck winningDeck = new OrderedDeck(winningTileArray);
     assertTrue(clientThread.checkIfWon(winningDeck));
     verify(clientThread, times(1)).checkIfWon(winningDeck);
   }

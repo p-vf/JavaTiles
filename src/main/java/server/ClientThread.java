@@ -201,11 +201,11 @@ public class ClientThread implements Runnable {
         case PUTT -> {
           //checks if player can put a tile, based on the Tile itself and wether his deck is valid
           Tile tile = Tile.parseTile(arguments.get(0));
-          Tile[] tileArray = Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1)));
+          OrderedDeck deck = new OrderedDeck(Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1))));
           //TODO refactor so that you can give a tile and a tilearray as parameters to CheckiIfValid and CheckIfWOn
           if(cantPutTile()) return;
-          if(!checkIfValid(tile, tileArray)) return;
-          if(checkIfWon(tileArray)) return;
+          if(!checkIfValid(tile, deck)) return;
+          if(checkIfWon(deck)) return;
           send(encodeProtocolMessage("+PUTT", "t", "f"));
           lobby.gameState.putTile(tile, playerIndex);
           sendState();
@@ -296,11 +296,10 @@ public class ClientThread implements Runnable {
     return isMainStack;
   }
 
-  public boolean checkIfValid(Tile tile, Tile[] tileArray) throws IOException {
-    OrderedDeck clientDeck = new OrderedDeck(tileArray);
-    boolean isValid = lobby.validateMove(tile, clientDeck, playerIndex);
+  public boolean checkIfValid(Tile tile, OrderedDeck deck) throws IOException {
+    boolean isValid = lobby.validateMove(tile, deck, playerIndex);
     if (!isValid) {
-      LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + Arrays.toString(tileArray) + " as a deck.");
+      LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + deck.toString() + " as a deck.");
       send(encodeProtocolMessage("+PUTT", "f", "f"));
       return false;
     }
@@ -308,9 +307,9 @@ public class ClientThread implements Runnable {
   }
 
 
-  public boolean checkIfWon(Tile[] tileArray) throws IOException {
+  public boolean checkIfWon(OrderedDeck deck) throws IOException {
     //OrderedDeck clientDeck = new OrderedDeck(tileArray);
-    if (Tile.isWinningDeck(tileArray)) {
+    if (deck.isWinningDeck()) {
       lobby.finishGame(nickname);
       lobby.sendToLobby(encodeProtocolMessage("PWIN", nickname), null);
       send(encodeProtocolMessage("+PUTT", "t", "t"));

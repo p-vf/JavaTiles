@@ -1,6 +1,7 @@
 package gamelogic;
 
 import game.Color;
+import game.OrderedDeck;
 import game.Tile;
 import org.junit.jupiter.api.Test;
 
@@ -16,98 +17,98 @@ class TileTest {
 
   @Test
   void isValidSetShouldReturnFalseForTooLargeSet() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
         new Tile(9, Color.BLACK),
         new Tile(0, Color.BLACK),
     };
-    assertFalse(Tile.isValidSet(deck, 0, 5));
+    assertFalse(OrderedDeck.isValidSet(deckRow, 0, 5));
   }
   @Test
   void isValidSetShouldReturnFalseForColorYellowTwice(){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
         new Tile(9, Color.YELLOW),
     };
-    assertFalse(Tile.isValidSet(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
   @Test
   void isValidSetShouldReturnFalseForColorRedTwice(){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
     };
-    assertFalse(Tile.isValidSet(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
   @Test
   void isValidSetShouldReturnFalseForColorBlackTwice(){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.BLACK),
         new Tile(9, Color.BLACK),
         new Tile(9, Color.YELLOW),
     };
-    assertFalse(Tile.isValidSet(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
   @Test
   void isValidSetShouldReturnFalseForColorBlueTwice(){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.BLUE),
         new Tile(9, Color.YELLOW),
     };
-    assertFalse(Tile.isValidSet(deck, 0, 3));
+    assertFalse(OrderedDeck.isValidSet(deckRow, 0, 3));
   }
 
   @Test
   void isValidSetShouldReturnFalseForDifferentNumber() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
         new Tile(10, Color.BLACK),
     };
-    assertFalse(Tile.isValidSet(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
   @Test
   void isValidSetShouldReturnTrueWithJoker() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(0, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
         new Tile(0, Color.BLACK),
     };
-    assertTrue(Tile.isValidSet(deck, 0, 4));
+    assertTrue(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
   @Test
   void isValidSetShouldReturnTrueWithColorDuplicateDueToJoker() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(0, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
         new Tile(0, Color.YELLOW),
     };
-    assertTrue(Tile.isValidSet(deck, 0, 3));
+    assertTrue(OrderedDeck.isValidSet(deckRow, 0, 3));
   }
 
   @Test
   void isValidSetShouldReturnTrueForSmallestSetPossible() {//Ist das nötig?
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
         new Tile(9, Color.YELLOW),
     };
-    assertTrue(Tile.isValidSet(deck, 0, 3));
+    assertTrue(OrderedDeck.isValidSet(deckRow, 0, 3));
   }
 
   /*
@@ -118,53 +119,53 @@ class TileTest {
 
   @Test
   void isValidRunShouldReturnFalseForWrongJokerUse( ){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(8, Color.RED),
         new Tile(9, Color.RED),
         new Tile(0, Color.YELLOW),
         new Tile(10, Color.RED),
     };
-    assertFalse(Tile.isValidRun(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
   @Test
   void isValidRunShouldReturnFalseForWrongColor(){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(8, Color.RED),
         new Tile(9, Color.RED),
         new Tile(10, Color.YELLOW),
         new Tile(11, Color.RED),
     };
-    assertFalse(Tile.isValidRun(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
   @Test
   void isValidRunShouldReturnFalseForWrongNumber(){
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(8, Color.RED),
         new Tile(9, Color.RED),
         new Tile(10, Color.RED),
         new Tile(12, Color.RED),
     };
-    assertFalse(Tile.isValidRun(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
   @Test
   void isValidRunShouldReturnFalseForRunWithJokerAfterTileNumber13() {
     //TODO: False, wenn der Joker gesetzt wird nach der 13
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(11, Color.RED),
         new Tile(12, Color.RED),
         new Tile(13, Color.RED),
         new Tile(0,Color.YELLOW),
     };
-    assertFalse(Tile.isValidRun(deck, 0, 4));
+    assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
 
   @Test
   void isValidRunShouldReturnTrueForRunWithJoker() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckRow = new Tile[]{
         new Tile(0, Color.RED),
         new Tile(9, Color.RED),
         new Tile(0, Color.RED),
@@ -172,12 +173,12 @@ class TileTest {
         new Tile(12, Color.RED),
         new Tile(13, Color.RED),
     };
-    assertTrue(Tile.isValidRun(deck, 0, 6));
+    assertTrue(OrderedDeck.isValidRun(deckRow, 0, 6));
   }
 
   @Test
   void isWinningDeckShouldReturnFalseForTooShortGroups() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
         new Tile(9, Color.BLUE), //4
@@ -203,11 +204,12 @@ class TileTest {
         null,
         null,
     };
-    assertFalse(Tile.isWinningDeck(deck));
+    OrderedDeck d = new OrderedDeck(deckArray);
+    assertFalse(d.isWinningDeck());
   }
   @Test
   void isWinningDeckShouldReturnFalseForBuildingRunFromIndexTenToIndexTwelve() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
         new Tile(9, Color.BLUE), //4
@@ -233,12 +235,13 @@ class TileTest {
         null,
         null,
     };
-    assertFalse(Tile.isWinningDeck(deck));
+    OrderedDeck d = new OrderedDeck(deckArray);
+    assertFalse(d.isWinningDeck());
   }
 
   @Test
   void isWinningDeckShouldReturnFalseForBuildingSetFromIndexTenToIndexTwelve() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
         new Tile(9, Color.BLUE), //4
@@ -264,12 +267,13 @@ class TileTest {
         null,
         null,
     };
-    assertFalse(Tile.isWinningDeck(deck));
+    OrderedDeck d = new OrderedDeck(deckArray);
+    assertFalse(d.isWinningDeck());
   }
 
   @Test
   void isWinningDeckShouldReturnFalseForNoNullTileInBetween() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckArray = new Tile[]{
         null,//0
         null,//1
         new Tile(0, Color.BLUE), //3
@@ -295,12 +299,13 @@ class TileTest {
         null,
         null,
     };
-    assertFalse(Tile.isWinningDeck(deck));
+    OrderedDeck d = new OrderedDeck(deckArray);
+    assertFalse(d.isWinningDeck());
   }
 
   @Test
   void isWinningDeckShouldReturnTrueForRegularWinningDeck() {
-    Tile[] deck = new Tile[]{
+    Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
         new Tile(9, Color.BLUE), //4
@@ -326,7 +331,8 @@ class TileTest {
         null,
         null,
     };
-    assertTrue(Tile.isWinningDeck(deck));
+    OrderedDeck d = new OrderedDeck(deckArray);
+    assertTrue(d.isWinningDeck());
   }
 
 
@@ -334,7 +340,7 @@ class TileTest {
   void isWinningDeckForCheatCodeShouldReturnTrue(){
 
 
-    Tile[] deck = new Tile[]{
+    Tile[] deckArray = new Tile[]{
         new Tile(0, Color.BLACK),
         new Tile(2, Color.BLUE),
         new Tile(3, Color.BLUE),
@@ -360,7 +366,8 @@ class TileTest {
         null,
         null,
     };
-    assertTrue(Tile.isWinningDeck(deck));
+    OrderedDeck d = new OrderedDeck(deckArray);
+    assertTrue(d.isWinningDeck());
   }
 
 
