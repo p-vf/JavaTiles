@@ -298,14 +298,14 @@ class ClientThreadTest {
 
 
   @Test
-  void checkIfValidShouldReturnFalseForInvalidMoveBecauseDeckHasBeenModified() throws IOException, IllegalAccessException, NoSuchFieldException {
-    Tile tile = new Tile(3,Color.BLUE);
-    Tile[] modifiedTiles = new Tile[24];
+  void checkIfValidShouldReturnFalseForInvalidMoveBecausePlayerDoesNotHaveTheTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
+    Tile tile = new Tile(3,Color.BLUE); // Player shouldn't be able to put this tile because he doesn't have it.
+    Tile[] tilesToBeChecked = new Tile[24];
 
     for (int i = 0; i < 14; i++) {
-      modifiedTiles[i] = new Tile(0, Color.BLUE);
+      tilesToBeChecked[i] = new Tile(0, Color.BLUE);
     }
-    OrderedDeck modifiedDeck = new OrderedDeck(modifiedTiles);
+    OrderedDeck deckToBeChecked = new OrderedDeck(tilesToBeChecked);
 
     Tile[] tiles = new Tile[24];
     for (int i = 0; i < 14; i++) {
@@ -324,21 +324,21 @@ class ClientThreadTest {
     playerIndex.set(clientThread, 0);
 
     when(clientThread.checkIfValid(any(Tile.class), any(OrderedDeck.class))).thenCallRealMethod();
-    assertFalse(clientThread.checkIfValid(tile, modifiedDeck));
-    verify(clientThread, times(1)).checkIfValid(tile, modifiedDeck);
+    assertFalse(clientThread.checkIfValid(tile, deckToBeChecked));
+    verify(clientThread, times(1)).checkIfValid(tile, deckToBeChecked);
   }
 
 
   @Test
-  void checkIfValidShouldReturnTrueBecauseDeckHasNotBeenModified() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void checkIfValidShouldReturnTrueBecausePlayerHasTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Tile tile = new Tile(3,Color.BLUE);
-    Tile[] modifiedTiles = new Tile[24];
+    Tile[] tilesToBeChecked = new Tile[24];
 
     for (int i = 0; i < 14; i++) {
-      modifiedTiles[i] = new Tile(0, Color.BLUE);
+      tilesToBeChecked[i] = new Tile(0, Color.BLUE);
     }
-    OrderedDeck modifiedDeck = new OrderedDeck(modifiedTiles);
+    OrderedDeck deckToBeChecked = new OrderedDeck(tilesToBeChecked);
 
     Tile[] tiles = new Tile[24];
     for (int i = 0; i < 14; i++) {
@@ -358,8 +358,8 @@ class ClientThreadTest {
     playerIndex.set(clientThread, 0);
 
     when(clientThread.checkIfValid(any(Tile.class), any(OrderedDeck.class))).thenCallRealMethod();
-    assertTrue(clientThread.checkIfValid(tile, modifiedDeck));
-    verify(clientThread, times(1)).checkIfValid(tile, modifiedDeck);
+    assertTrue(clientThread.checkIfValid(tile, deckToBeChecked));
+    verify(clientThread, times(1)).checkIfValid(tile, deckToBeChecked);
   }
 
   @Test
