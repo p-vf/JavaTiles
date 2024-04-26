@@ -86,7 +86,7 @@ public class ClientThread implements Runnable {
         request = bReader.readLine();
 
 
-        if (!request.equals("PING") && !request.equals("+PING") || Server.ENABLE_PING_LOGGING) {
+        if (!request.equals("PING") && !request.equals("+PING") || server.isPingLoggingEnabled()) {
           LOGGER.debug("received: " + request);
         }
         if (!request.isEmpty() && request.charAt(0) == '+') { //request kann null sein, wenn es
@@ -479,7 +479,7 @@ public class ClientThread implements Runnable {
    */
   public synchronized void send(String str) throws IOException {
     out.write((str + "\r\n").getBytes());
-    if (!str.equals("PING") && !str.equals("+PING") || Server.ENABLE_PING_LOGGING) {
+    if (!str.equals("PING") && !str.equals("+PING") || server.isPingLoggingEnabled()) {
       LOGGER.debug("sent: " + str);
     }
   }

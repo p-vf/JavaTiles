@@ -28,7 +28,6 @@ import static utils.NetworkUtils.encodeProtocolMessage;
 public class Lobby {
   public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
-  // TODO convert to ClientThread[]
   private ArrayList<ClientThread> players;
   private LobbyState lobbyState;
   GameState gameState;

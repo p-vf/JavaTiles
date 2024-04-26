@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class Server {
   public static final Logger LOGGER = LogManager.getLogger(Server.class);
-  public static boolean ENABLE_PING_LOGGING = false;
+  private boolean ENABLE_PING_LOGGING = false;
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
   public final ArrayList<Lobby> lobbies = new ArrayList<>();
@@ -26,11 +26,12 @@ public class Server {
     if (args.length < 1) {
       LOGGER.fatal("No port number given.");
     }
-    if (args.length == 2) {
-      ENABLE_PING_LOGGING = Boolean.parseBoolean(args[1]);
-    }
     LOGGER.info("Logging level: " + LOGGER.getLevel().toString());
     Server s = new Server(Integer.parseInt(args[0]));
+    if (args.length == 2) {
+      s.ENABLE_PING_LOGGING = Boolean.parseBoolean(args[1]);
+    }
+    s.start();
   }
 
   /**
@@ -42,11 +43,19 @@ public class Server {
    * @throws IOException If an I/O error occurs when waiting for a connection or if the server socket cannot be opened.
    */
   private Server(int port) {
-    int cnt = 0;
     try {
-      System.out.println("Waiting for connection on port: " + port + "..");
       serverSocket = new ServerSocket(port);
       clientList = new ArrayList<>();
+    } catch (IOException e) {
+      e.printStackTrace(System.err);
+      System.exit(1);
+    }
+  }
+
+  public void start() {
+    int cnt = 0;
+    try {
+      System.out.println("Waiting for connection on port: " + serverSocket.getLocalPort() + "..");
       while (true) {
         Socket socket = serverSocket.accept();
         ClientThread eC = new ClientThread(++cnt, socket, this);
@@ -58,6 +67,10 @@ public class Server {
       e.printStackTrace(System.err);
       System.exit(1);
     }
+  }
+
+  public boolean isPingLoggingEnabled() {
+    return ENABLE_PING_LOGGING;
   }
 
   /**

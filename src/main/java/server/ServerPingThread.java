@@ -21,6 +21,8 @@ public class ServerPingThread extends Thread {
   private final long maxResponseTimeMillis;
   private static final long PING_INTERVALL = 1000;
   private long timeLastResponse;
+
+  // TODO maybe change this field to private
   volatile boolean receivedResponse;
 
   /**
