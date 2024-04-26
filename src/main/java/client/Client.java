@@ -864,6 +864,17 @@ public class Client {
                     for (int i = 0; i < players.size(); i++) {
                         System.out.println(i + 1 + ". "+players.get(i));
                     }
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < players.size(); i++) {
+                        stringBuilder.append(i + 1).append(". ").append(players.get(i)).append("\n");
+                    }
+                    String result = stringBuilder.toString();
+                    if(!result.isEmpty()){
+                        controller.setHighscore("Highscore-List: " + "\n" + result);
+                    }
+                    else{
+                        controller.setHighscore("No highscores were made yet");
+                    }
 
 
                 default:

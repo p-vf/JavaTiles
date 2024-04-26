@@ -47,7 +47,7 @@ public class Controller {
     public TextArea chatArea;
     public TextField chatInput;
     public VBox playersLobbyVbox;
-
+    public VBox highscoreVbox;
 
 
     private Stage stage;
@@ -221,6 +221,20 @@ public class Controller {
         label.setTextFill(Color.WHITE);
         playersLobbyVbox.getChildren().add(label);
 
+    }
+
+    public void highscorePressed() throws IOException {
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("HIGH");
+        client.send(encodeProtocolMessage(arg));
+    }
+    public void setHighscore(String result){
+        Platform.runLater(() -> {
+            Label label = new Label(result);
+            label.setFont(Font.font("Bold", FontWeight.BOLD, 14));
+            label.setTextFill(Color.WHITE);
+            highscoreVbox.getChildren().add(label);
+        });
     }
 }
 
