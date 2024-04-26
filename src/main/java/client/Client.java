@@ -572,6 +572,7 @@ public class Client {
 
                 case JOND:
                     System.out.println(arguments.get(0) + " joined the lobby");
+                    controller.chatIncoming(arguments.get(0) + " joined the lobby");
                     send(encodeProtocolMessage("+JOND"));
                     break;
 

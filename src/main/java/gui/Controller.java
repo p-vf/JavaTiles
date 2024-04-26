@@ -222,6 +222,8 @@ public class Controller {
         clientMessage = message;
     }
 
+
+
     public void setReadyButton(String text){
         readyButton.setText(text);
     }
