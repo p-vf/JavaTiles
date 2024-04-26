@@ -21,7 +21,8 @@
             </Text>
             <Button fx:id="readyButton" layoutX="264.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
             <Button id="leaveLobbyButton" layoutX="259.0" layoutY="227.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave Lobby" />
-            <Button fx:id="showPlayersButton" layoutX="240.0" layoutY="270.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
+            <Button id="showPlayersButton" layoutX="240.0" layoutY="268.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
+            <Button layoutX="244.0" layoutY="306.0" mnemonicParsing="false" onAction="#highscorePressed" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
@@ -31,7 +32,8 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="183.0" prefWidth="269.0" />
+            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="180.0" prefWidth="270.0" />
+            <VBox fx:id="highscoreVbox" layoutX="14.0" layoutY="200.0" prefHeight="180.0" prefWidth="270.0" />
          </children></Pane>
    </left>
    <right>
