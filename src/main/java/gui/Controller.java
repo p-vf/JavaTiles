@@ -82,12 +82,13 @@ public class Controller {
         if(nickname.contains(" ")||nickname.contains("\"")){
             loginWarning.setText("Your nickname mustn't contain blank spaces or quotation marks");
         }
+        else{
         if (!(isEmpty)){
             arguments.add(nickname);
             client.send(encodeProtocolMessage(arguments));
             arguments.clear();
         }
-    }
+    }}
 
 
     /**

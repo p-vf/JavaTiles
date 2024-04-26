@@ -325,9 +325,13 @@ public class Client {
                         return null;
                     }
                     if (arguments.get(0).equals("m")) {
+                        gameController.disableStacks(true);
                         return encodeProtocolMessage("DRAW", "m");
                     }
                     if (arguments.get(0).equals("e")) {
+                        gameController.disableStacks(true);
+                        gameController.takeOffExchangeStack();
+
                         return encodeProtocolMessage("DRAW", "e");
                     } else {
                         System.out.println("Your draw command should look like /draw m or /draw e");
@@ -367,6 +371,7 @@ public class Client {
                     Tile[] tileArray = yourDeck.DeckToTileArray();
                     String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
                     gameController.setCanYouPlayThisMove(true);
+                    gameController.takeOffExchangeStack();
                     showDeck();
                     return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
 
@@ -461,7 +466,10 @@ public class Client {
 
                 case PING:
                     send(encodeProtocolMessage("+PING"));
-                    //System.out.println("+PING");
+                    if(gameController != null){
+                        Platform.runLater(() -> {
+                            gameController.setPlayerNames(playersInLobby);
+                        });}
                     break;
 
                 case STRT:
@@ -473,7 +481,8 @@ public class Client {
                     Platform.runLater(() -> {
                         gameController.setPlayerNames(playersInLobby);
                     });
-                    playerID = Integer.parseInt(arguments.get(1));
+                    if(arguments.get(1).matches("\\d+")){
+                    playerID = Integer.parseInt(arguments.get(1));}
                     ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
                     int tileCount=0;
                     for (String tileElement : tilesStrt) {
@@ -504,6 +513,11 @@ public class Client {
                     yourDeck.setDeck(yourDeck.createDeckwithTileArray(deckTiles));
                     showDeck();
 
+                    Platform.runLater(() -> {
+                        gameController.disableStacks(true);
+                    });
+
+
                     send(encodeProtocolMessage("+STRT"));
                     break;
 
@@ -531,15 +545,15 @@ public class Client {
                     break;
 
                 case NAMS:
+                    System.out.println("Ich habe NAMS bekommen");
                     String thePlayers = arguments.get(0);
                     ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
                     playersInLobby.clear();
                     this.playersInLobby.addAll(currentPlayers);
                     if(gameController != null){
-                    Platform.runLater(() -> {                        gameController.setPlayerNames(playersInLobby);
+                    Platform.runLater(() -> {
+                        gameController.setPlayerNames(playersInLobby);
                     });}
-
-
 
                     String[] nameArray = currentPlayers.toArray(new String[0]);
 
@@ -583,13 +597,11 @@ public class Client {
                 case STAT:
                     ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
                     exchangeStacks = stringsToTileArray(tileList);
-                    Platform.runLater(() -> {
-                        gameController.setPlayerNames(playersInLobby);
-                    });
 
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
                         Tile tile = parseTile(tileList.get(playerID));
+                        gameController.disableStacks(false);
                         Platform.runLater(() -> {
                             gameController.setExchangeStack(tile);
                         });
@@ -607,10 +619,14 @@ public class Client {
                     } else {
                         Platform.runLater(() -> {
                             try {
-                                gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");
+                                if(arguments.get(1).matches("\\d+")){
+                                gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");}
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+                        });
+                        Platform.runLater(() -> {
+                            gameController.setPlayerNames(playersInLobby);
                         });
                     }
 
@@ -816,6 +832,7 @@ public class Client {
                     yourDeck.addTheseTiles(parseTile(arguments.get(0)));
                     Tile tile = parseTile(arguments.get(0));
                     Platform.runLater(() -> {
+                        if(tile != null)
                         gameController.addThisTile(tile);
                     });
 

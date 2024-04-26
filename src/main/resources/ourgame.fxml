@@ -145,9 +145,9 @@
                   <Font name="Arial Rounded MT Bold" size="22.0" />
                </font>
             </Button>
-            <Button fx:id="exchangeStack" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" text="E" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
                <font>
-                  <Font name="Arial Rounded MT Bold" size="22.0" />
+                  <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
             <Button fx:id="startButton" layoutX="375.0" layoutY="347.0" mnemonicParsing="false" onAction="#showDeck" text="start">

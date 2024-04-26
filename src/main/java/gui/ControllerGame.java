@@ -172,6 +172,17 @@ public class ControllerGame implements Initializable {
         }
     }
 
+    public void takeOffExchangeStack(){
+        exchangeStack.setText("");
+    }
+
+    public void disableStacks(boolean bool){
+        mainStack.setDisable(bool);
+        exchangeStack.setDisable(bool);
+    }
+
+
+
     public void setTextofGameWarning(String text){
         gameWarning.setVisible(true);
         gameWarning.setText(text);
@@ -205,8 +216,9 @@ public class ControllerGame implements Initializable {
     }
 
     public void setExchangeStack(Tile tile){
+        if(tile != null){
         exchangeStack.setText("" + tile.getNumber());
-        exchangeStack.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+        exchangeStack.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));}
 
 
     }
@@ -219,13 +231,15 @@ public class ControllerGame implements Initializable {
         if(button.getId().contains("zero")){
             position[0] = 0;
             String columnString = button.getId().substring(4);
-            position[1] = Integer.valueOf(columnString);
+            if(columnString.matches("\\d+")){
+            position[1] = Integer.valueOf(columnString);}
             return position;
         }
         else{
             position[0] = 1;
             String columnString = button.getId().substring(3);
-            position[1] = Integer.valueOf(columnString);
+            if(columnString.matches("\\d+")){
+            position[1] = Integer.valueOf(columnString);}
             return position;
             
         }
@@ -325,7 +339,7 @@ public class ControllerGame implements Initializable {
             args.add("e");
             String message = client.handleInput(encodeProtocolMessage(args));
             client.send(message);
-            exchangeStack.setText("");
+
 
         }
         if(pressedButton.equals(mainStack)){
