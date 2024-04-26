@@ -2,6 +2,7 @@ package gui;
 
 import client.Client;
 import game.Tile;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -131,6 +132,8 @@ public class ControllerGame implements Initializable {
     private Label playerName3;
 
     private ArrayList<Label> playerNames;
+
+    private ArrayList<String> playersInGame;
     @FXML
     private Label winLabel;
 
@@ -142,7 +145,6 @@ public class ControllerGame implements Initializable {
 
 
     private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
-    private ArrayList<String> players;
 
     public ControllerGame(){
         client.setgameController(this);
@@ -240,6 +242,7 @@ public class ControllerGame implements Initializable {
 
     @FXML
     void pressTile(ActionEvent event) throws IOException {
+
         ArrayList<String> args = new ArrayList<String>();
 
         Button pressedButton = (Button) event.getTarget();
@@ -322,6 +325,7 @@ public class ControllerGame implements Initializable {
             args.add("e");
             String message = client.handleInput(encodeProtocolMessage(args));
             client.send(message);
+            exchangeStack.setText("");
 
         }
         if(pressedButton.equals(mainStack)){
@@ -335,19 +339,33 @@ public class ControllerGame implements Initializable {
 
     }
 
-    public void setPlayerNames(ArrayList<String> playerNames) {
-        int count = 0;
-        this.players = playerNames;
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).equals(nickname)) {
-                count++;
-            } else {
-                playerName1.setText(players.get(i + count));
-                playerName2.setText(players.get(i + count + 1));
-                playerName3.setText(players.get(i + count + 2));
+    public void setPlayerNames(ArrayList<String> players) {
+
+        for(int i =0; i < players.size();i++){
+            if(nickname.equals(players.get(i))){
+                if(i==0){
+                    playerName1.setText(players.get(1));
+                    playerName2.setText(players.get(2));
+                    playerName3.setText(players.get(3));
+                }
+                if(i==1){
+                    playerName1.setText(players.get(2));
+                    playerName2.setText(players.get(3));
+                    playerName3.setText(players.get(0));
+                }
+                if(i==2){
+                    playerName1.setText(players.get(3));
+                    playerName2.setText(players.get(0));
+                    playerName3.setText(players.get(1));
+                }
+                if(i==3){
+                    playerName1.setText(players.get(0));
+                    playerName2.setText(players.get(1));
+                    playerName3.setText(players.get(2));
+                }
 
             }
-            break;
+
         }
     }
 

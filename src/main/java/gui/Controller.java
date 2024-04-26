@@ -101,14 +101,15 @@ public class Controller {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         root.setStyle("-fx-background-color: #008000;");
-        stage.setScene(scene);
-        stage.setOnCloseRequest((WindowEvent ActionEvent) -> {
-            System.out.println("Closing application...");
-            System.exit(0);
-        });
-        stage.setResizable(true);
-        stage.show();
-
+        if(stage != null) {
+            stage.setScene(scene);
+            stage.setOnCloseRequest((WindowEvent ActionEvent) -> {
+                System.out.println("Closing application...");
+                System.exit(0);
+            });
+            stage.setResizable(true);
+            stage.show();
+        }
 
     }
 

@@ -70,7 +70,7 @@ public class Client {
 
 
     private ActionEvent event;
-    private ArrayList<String> players;
+    private ArrayList<String> playersInLobby = new ArrayList<>();
 
 
     /**
@@ -471,7 +471,7 @@ public class Client {
                     });
 
                     Platform.runLater(() -> {
-                        gameController.setPlayerNames(players);
+                        gameController.setPlayerNames(playersInLobby);
                     });
                     playerID = Integer.parseInt(arguments.get(1));
                     ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
@@ -531,11 +531,17 @@ public class Client {
                     break;
 
                 case NAMS:
-                    String players = arguments.get(0);
-                    ArrayList<String> newPLayers = decodeProtocolMessage(players);
-                    this.players = newPLayers;
-                    String[] nameArray = newPLayers.toArray(new String[0]);
-                    int counter = 0;
+                    String thePlayers = arguments.get(0);
+                    ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
+                    playersInLobby.clear();
+                    this.playersInLobby.addAll(currentPlayers);
+                    if(gameController != null){
+                    Platform.runLater(() -> {                        gameController.setPlayerNames(playersInLobby);
+                    });}
+
+
+
+                    String[] nameArray = currentPlayers.toArray(new String[0]);
 
                     StringBuilder sb = new StringBuilder();
                     sb.append("The following players are in the lobby:\n");
@@ -577,6 +583,9 @@ public class Client {
                 case STAT:
                     ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
                     exchangeStacks = stringsToTileArray(tileList);
+                    Platform.runLater(() -> {
+                        gameController.setPlayerNames(playersInLobby);
+                    });
 
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
@@ -587,18 +596,24 @@ public class Client {
 
                         System.out.println("It's your turn.");
                         currentPlayerID = playerID;
+                        Platform.runLater(() -> {
+                            try {
+                                gameController.setTurnLabel("It's your turn.");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
 
                     } else {
-                        System.out.println("It's " + arguments.get(1) + "'s turn.");
-                        //gameController.setTurnLabel("It's yo mama turn.");
+                        Platform.runLater(() -> {
+                            try {
+                                gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
                     }
-                    Platform.runLater(() -> {
-                        try {
-                            gameController.setTurnLabel("It's " + this.players.get(Integer.parseInt(arguments.get(1)))+"'s turn.");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+
                     send(encodeProtocolMessage("+STAT"));
                     break;
 
