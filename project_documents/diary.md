@@ -221,6 +221,20 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
     - LEFT: Anzeige, dass ein Spieler das Spiel verlassen hat. 
   - Highscore-Liste: Der Spieler, der am wenigsten Züge braucht steigt im Highscore.
 
+## 14.4.2024 Treffen im Lernoullianum (Pascal, Boran, Robin)
+- An diesem Tag haben wir uns zusammengesetzt, um die Commit Conventions festzulegen. Da Istref nicht kommen konnte, haben wir 
+ihm nach der Erstellung des Files bescheid gegeben, sodass er sich auch daran halten kann und selbstverständlich haben wir ihm 
+gesagt, dass er auch Verbesserungsvorschläge bringen kann.
+
+## 14.04-18.04.2024 Einzelarbeit
+- Implementation von:
+- JOND
+- LEFT
+- NAMS
+- Zusätzlich über Whatsapp besprochene Funktion LLOB welche uns helfen soll, die Lobby zu verlassen ohne den Server verlassen zu müssen. 
+- Auch hat das Client-Team (Robin und Boran) am GUI gearbeitet. 
+
+
 ## 19.4.2024 Treffen Spiegelgasse (Boran, Robin, Istref, Pascal)
 - Besprechung über weiteres Vorgehen bis zum 4. Meilenstein; Zuständigkeiten:
   - Istref: Unittests schreiben zu der Spiellogik
@@ -228,3 +242,17 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
   - Boran: Gameplay-GUI
   - Robin: restliches GUI (Login, logout, Namensänderung, etc.)
 - Entspannter, produktiver Austausch
+
+## 19.4-21.4.2024 Einzelarbeit
+- Highscore Klasse erstellt (Serverseite)
+- HIGH: Funktion um die Highscores anzuzeigen.
+- Erste Unit-Tests implemetiert
+- Weiterarbeiten am GUI
+
+## 22.4.2024 Übungsstunde (Boran, Robin, Istref, Pascal)
+-In der Übungsstunde haben wir Fragen gestellt bezüglich der Unit-Tests und des GUI, die uns helfen sollten effizienter und fehlerfrei zu arbeiten.
+Ausserdem haben wir dann direkt daran weiter gearbeitet.
+
+## 23.4 - 26.4.2024 Einzelarbeit 
+- Weiterarbeiten am GUI und am an den Unit Tests.
+
