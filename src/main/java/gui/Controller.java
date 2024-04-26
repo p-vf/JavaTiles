@@ -164,23 +164,34 @@ public class Controller {
 
 
     public void joinPressed(ActionEvent actionEvent) throws IOException {
-       client.setEvent(actionEvent);
-       ArrayList<String> arg = new ArrayList<>();
-       arg.add("LGAM");
-       arg.add("o");
-       client.send(encodeProtocolMessage(arg));
+        Platform.runLater(() -> {
+            client.setEvent(actionEvent);
+            ArrayList<String> arg = new ArrayList<>();
+            arg.add("LGAM");
+            arg.add("o");
+            try {
+                client.send(encodeProtocolMessage(arg));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
-    public static void setInput(String message) {
-        input = message;
-    }
-
-
-    public void refreshPressed(ActionEvent event) {
+    public void setInput(String message) {
+        Platform.runLater(() -> {
         vBoxLobbies.getChildren().clear();
-        Label label = new Label(input);
+        Label label = new Label(message);
         label.setFont(Font.font("Bold", FontWeight.BOLD, 13));
         label.setTextFill(Color.WHITE);
         vBoxLobbies.getChildren().add(label);
+        });
+    }
+
+
+    public void refreshPressed() throws IOException {
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("LGAM");
+        arg.add("o");
+        client.send(encodeProtocolMessage(arg));
 
     }
 
@@ -211,6 +222,8 @@ public class Controller {
     public void showPlayersInLobby(String message){
         clientMessage = message;
     }
+
+
 
     public void setReadyButton(String text){
         readyButton.setText(text);
