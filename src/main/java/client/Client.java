@@ -465,6 +465,14 @@ public class Client {
                     break;
 
                 case STRT:
+                    changeScene("startGame");
+                    Platform.runLater(() -> {
+                        gameController.setNickname(nickname);
+                    });
+
+                    Platform.runLater(() -> {
+                        gameController.setPlayerNames(players);
+                    });
                     playerID = Integer.parseInt(arguments.get(1));
                     ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
                     int tileCount=0;
@@ -478,19 +486,25 @@ public class Client {
                     }
                     if (tileCount == 15) {
                         System.out.println("It's your turn.");
+                        Platform.runLater(() -> {
+                            try {
+                                gameController.setTurnLabel("It's your turn.");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+
                         currentPlayerID = playerID;
 
                     }
                     deckTiles = stringsToTileArray(tilesStrt);
-                    changeScene("startGame");
-                    Platform.runLater(() -> {
-                        gameController.setNickname(nickname); //hier eventuell platform
-                    });
+
+
 
                     yourDeck.setDeck(yourDeck.createDeckwithTileArray(deckTiles));
                     showDeck();
 
-                    //send(encodeProtocolMessage("+STRT"));
+                    send(encodeProtocolMessage("+STRT"));
                     break;
 
 
@@ -566,6 +580,11 @@ public class Client {
 
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
+                        Tile tile = parseTile(tileList.get(playerID));
+                        Platform.runLater(() -> {
+                            gameController.setExchangeStack(tile);
+                        });
+
                         System.out.println("It's your turn.");
                         currentPlayerID = playerID;
 
@@ -580,7 +599,7 @@ public class Client {
                             throw new RuntimeException(e);
                         }
                     });
-                    //send(encodeProtocolMessage("+STAT"));
+                    send(encodeProtocolMessage("+STAT"));
                     break;
 
 
@@ -625,7 +644,7 @@ public class Client {
 
                 case NAME:
                     nickname = arguments.get(0);
-                    gameController.setPlayerName(0, nickname);
+                    gameController.setNickname(nickname);
                     System.out.println("Your nickname has been changed to: " + nickname);
                     break;
 

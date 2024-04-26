@@ -142,6 +142,7 @@ public class ControllerGame implements Initializable {
 
 
     private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
+    private ArrayList<String> players;
 
     public ControllerGame(){
         client.setgameController(this);
@@ -164,7 +165,7 @@ public class ControllerGame implements Initializable {
             else{
             deck.get(i).setText("" + tiles[i].getNumber());
             deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tiles[i].getColor())));}
-            client.send(encodeProtocolMessage("+STRT"));
+            //client.send(encodeProtocolMessage("+STRT"));
 
         }
     }
@@ -192,12 +193,19 @@ public class ControllerGame implements Initializable {
     public void setTurnLabel(String text) throws IOException {
         turnLabel.setDisable(false);
         turnLabel.setText(text);
-        client.send(encodeProtocolMessage("+STAT"));
+
     }
 
     public void setNickname(String nickname){
         this.nickname = nickname;
         playerName0.setText(nickname);
+
+    }
+
+    public void setExchangeStack(Tile tile){
+        exchangeStack.setText("" + tile.getNumber());
+        exchangeStack.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+
 
     }
 
@@ -327,10 +335,23 @@ public class ControllerGame implements Initializable {
 
     }
 
-    public void setPlayerName(int i, String name){
-        playerNames.get(i).setText(name);
+    public void setPlayerNames(ArrayList<String> playerNames) {
+        int count = 0;
+        this.players = playerNames;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).equals(nickname)) {
+                count++;
+            } else {
+                playerName1.setText(players.get(i + count));
+                playerName2.setText(players.get(i + count + 1));
+                playerName3.setText(players.get(i + count + 2));
 
+            }
+            break;
+        }
     }
+
+
 
     public void addThisTile(Tile tile){
         int count = 0;
