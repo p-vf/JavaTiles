@@ -39,6 +39,7 @@ public class OrderedDeck {
    * @param tileArray The array of tiles to populate the deck with.
    */
   public OrderedDeck(Tile[] tileArray) {
+    setDeck(tileArray);
   }
 
   public OrderedDeck(Tile[][] tileArrays) {
