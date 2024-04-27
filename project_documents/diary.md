@@ -226,6 +226,14 @@ und auch, dass wir gerne einen Cheatcode einfügen würden.
 ihm nach der Erstellung des Files bescheid gegeben, sodass er sich auch daran halten kann und selbstverständlich haben wir ihm 
 gesagt, dass er auch Verbesserungsvorschläge bringen kann.
 
+ ## 15.04.2024 Übungsstunde zum 3.Meilenstei
+ - Wir waren sehr zufrieden mit unserer Präsentation und haben das Gefühl, dass unsere Arbeit den gegebenen Anforderungen entsprach.
+ - Zudem hatten wir noch eine Frage bezüglich den Unit-Tests:
+   - Welcher Teil des Projekts kann/soll getestet werden?
+   - Fazit: Diese Entscheidung liegt bei uns, jedoch wurde uns die Spiellogik auf der Serverseite oder auch die Server-Client Verbindung zum testen empfohlen. Zudem wurde uns die Programmbibliothek "Mockito" vorgestellt.
+
+
+
 ## 14.04-18.04.2024 Einzelarbeit
 - Implementation von:
 - JOND
@@ -235,9 +243,11 @@ gesagt, dass er auch Verbesserungsvorschläge bringen kann.
 - Auch hat das Client-Team (Robin und Boran) am GUI gearbeitet. 
 
 
+
 ## 19.4.2024 Treffen Spiegelgasse (Boran, Robin, Istref, Pascal)
+- Wir haben uns dafür entschieden, die Spiellogik auf der Serverseite zu testen.
 - Besprechung über weiteres Vorgehen bis zum 4. Meilenstein; Zuständigkeiten:
-  - Istref: Unittests schreiben zu der Spiellogik
+  - Istref: Unittests schreiben zu der Spiellogik.
   - Pascal: Refactoring von den Klassen auf dem Server
   - Boran: Gameplay-GUI
   - Robin: restliches GUI (Login, logout, Namensänderung, etc.)
@@ -250,9 +260,17 @@ gesagt, dass er auch Verbesserungsvorschläge bringen kann.
 - Weiterarbeiten am GUI
 
 ## 22.4.2024 Übungsstunde (Boran, Robin, Istref, Pascal)
--In der Übungsstunde haben wir Fragen gestellt bezüglich der Unit-Tests und des GUI, die uns helfen sollten effizienter und fehlerfrei zu arbeiten.
-Ausserdem haben wir dann direkt daran weiter gearbeitet.
+- Fragen, die wir in der Übungsstunde gestellt haben: 
+  - GUI: Wie können wir dafür sorgen, dass das GUI auf verschiedene Grösseneinstellungen des Fensters entsprechend reagiert.
+    - Fazit: Wir könnten mit verschiedenen Panes innerhalb eines Borderpanes arbeiten und dem mittleren Pane eine feste Grösse geben, während die anderen Panes beliebig ihre Grösse ändern können.
+  - Unittests: Wie sollen wir die Tests gliedern? 
+    - Fazit: Die Tests kann man Klassenweise gliedern. Alle zu prüfenden Methoden der gleichen Klasse werden somit auch in der selben Testklasse geprüft.
+
 
 ## 23.4 - 26.4.2024 Einzelarbeit 
 - Weiterarbeiten am GUI und am an den Unit Tests.
+- Aufteilung der Arbeit am GUI.
+  - Robin ist nun primär für den Login und die Lobbyauswahl zuständig, während sich Boran auf den Spielablauf konzentriert.
+  - erste Erfolge: 26.04.2024 Das Spiel konnte komplett auf dem GUI, durchgespielt werden. 
+- Die letzten Unit tests wurden am 26.04.2024 implementiert und konnten erfolgreich ausgeführt werden.
 

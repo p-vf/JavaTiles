@@ -105,6 +105,7 @@ public class Controller {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         root.setStyle("-fx-background-color: #008000;");
+        if(stage!= null) {
 
             stage.setScene(scene);
             stage.setOnCloseRequest((WindowEvent ActionEvent) -> {
@@ -113,7 +114,7 @@ public class Controller {
             });
             stage.setResizable(true);
             stage.show();
-
+        }
 
     }
 
@@ -146,6 +147,7 @@ public class Controller {
 
                 case "startGame":
                     sceneSwitcher(event,"/ourgame.fxml");
+                    break;
 
 
             }

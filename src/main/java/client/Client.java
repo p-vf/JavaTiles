@@ -471,10 +471,6 @@ public class Client {
 
                 case PING:
                     send(encodeProtocolMessage("+PING"));
-                    if(gameController != null){
-                        Platform.runLater(() -> {
-                            gameController.setPlayerNames(playersInLobby);
-                        });}
                     break;
 
                 case STRT:
@@ -486,9 +482,7 @@ public class Client {
                         gameController.setNickname(nickname);
                     });
 
-                    Platform.runLater(() -> {
-                        gameController.setPlayerNames(playersInLobby);
-                    });
+                    send(encodeProtocolMessage("RNAM"));
                     if(arguments.get(1).matches("\\d+")){
                     playerID = Integer.parseInt(arguments.get(1));}
                     ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
@@ -593,6 +587,7 @@ public class Client {
                     break;
 
                 case JOND:
+                    send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " joined the lobby");
                     Platform.runLater(() -> {
                         controller.chatIncoming(arguments.get(0) + " joined the lobby");
@@ -602,6 +597,7 @@ public class Client {
                     break;
 
                 case LEFT:
+                    send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " left the lobby");
                     send(encodeProtocolMessage("+LEFT"));
                     break;
@@ -820,9 +816,11 @@ public class Client {
                     break;
 
                 case JLOB:
+
                     Platform.runLater(() -> {
                         changeScene("lobbyScreen");
                     });
+
 
                     String confirmation = arguments.get(0);
                     if (confirmation.equals("t")) {
@@ -926,6 +924,7 @@ public class Client {
                     Tile[][] newDeck = yourDeck.createDeckwithTileArray(tilesArray);
                     yourDeck.setDeck(newDeck);
                     showDeck();
+                    break;
 
                 case HIGH:
                     ArrayList<String> players = decodeProtocolMessage(arguments.get(0));
@@ -943,6 +942,20 @@ public class Client {
                     else{
                         controller.setHighscore("No highscores were made yet");
                     }
+                    break;
+
+                case RNAM:
+                    System.out.println("Ich habe RNAM bekommen.");
+                    String thePlayers = arguments.get(0);
+                    ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
+                    playersInLobby.clear();
+                    this.playersInLobby.addAll(currentPlayers);
+                    if(gameController != null){
+                        Platform.runLater(() -> {
+                            gameController.setPlayerNames(playersInLobby);
+                        });}
+                    break;
+
 
 
                 default:

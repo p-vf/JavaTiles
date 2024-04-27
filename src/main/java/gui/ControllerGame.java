@@ -401,6 +401,12 @@ public class ControllerGame implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4,zero5, zero6, zero7, zero8, zero9,zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10,one11));
         playerNames = new ArrayList<>(Arrays.asList(playerName0,playerName1,playerName2,playerName3));
+        try {
+            client.send(encodeProtocolMessage("RNAM"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         client.setgameController(this);
     }
 }
