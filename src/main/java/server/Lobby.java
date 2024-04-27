@@ -33,6 +33,24 @@ public class Lobby {
   GameState gameState;
   private String winnerName;
 
+  public int getNumberOfPlayers() {
+    int count = 0;
+    for (ClientThread player : players) {
+      if (player != null) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  public LobbyState getLobbyState() {
+    return lobbyState;
+  }
+
+  public String getWinnerName() {
+    return winnerName;
+  }
+
   /**
    * Constructs a new Lobby instance with a specified lobby number. Upon creation, the lobby is initialized
    * as open, ready to accept players. This constructor sets the initial state of the lobby and prepares an
@@ -51,24 +69,6 @@ public class Lobby {
     return players;
   }
 
-  public int getNumberOfPlayers() {
-    int count = 0;
-    for (ClientThread player : players) {
-      if (player != null) {
-        count++;
-      }
-    }
-    return count;
-  }
-
-
-  public LobbyState getLobbyState() {
-    return lobbyState;
-  }
-
-  public String getWinnerName() {
-    return winnerName;
-  }
 
   /**
    * Starts the game.

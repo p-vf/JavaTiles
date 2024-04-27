@@ -26,6 +26,18 @@ public class GameState {
   private int currentPlayerIndex;
   private int numberOfDraws = 0;
 
+  public void setPlayerDeck(int playerIndex, OrderedDeck deck) {
+    playerDecks.set(playerIndex, deck);
+  }
+
+  public OrderedDeck getPlayerDeck(int playerIndex) {
+    return playerDecks.get(playerIndex);
+  }
+
+  public int getCurrentPlayerIndex() {
+    return currentPlayerIndex;
+  }
+
   /**
    * Constructor of the {@code GameState} class.
    * Initializes {@code Gamestate} with a shuffled set of Tiles that get distributed to the playerdecks.
@@ -70,18 +82,6 @@ public class GameState {
     for (; counter < tiles.length; counter++) {
       mainStack.add(tiles[counter]);
     }
-  }
-
-  public void setPlayerDeck(int playerIndex, OrderedDeck deck) {
-    playerDecks.set(playerIndex, deck);
-  }
-
-  public OrderedDeck getPlayerDeck(int playerIndex) {
-    return playerDecks.get(playerIndex);
-  }
-
-  public int getCurrentPlayerIndex() {
-    return currentPlayerIndex;
   }
 
   /**

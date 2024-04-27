@@ -24,6 +24,49 @@ public class OrderedDeck {
 
   private Tile[][] deck; // The 2D array representing the deck of tiles.
 
+  private void setDeck(Tile[] tileArray) {
+    deck = deckFromTileArray(tileArray);
+  }
+
+  /**
+   * Sets the this.deck to the given deck.
+   *
+   * @param deck The 2D array representing the deck.
+   */
+  public void setDeck(Tile[][] deck) {
+    for (int i = 0; i < Math.min(DECK_HEIGHT, deck.length); i++) {
+      if (deck.length > DECK_HEIGHT) {
+        LOGGER.warn("Trying to set deck with too many rows");
+      }
+      for (int j = 0; j < Math.min(DECK_WIDTH, deck[i].length); j++) {
+        if (deck[i].length > DECK_WIDTH) {
+          LOGGER.warn("Trying to set deck with too many columns");
+        }
+        this.deck[i][j] = deck[i][j];
+      }
+    }
+  }
+
+  /**
+   * Retrieves the 2D array representing the deck of tiles.
+   *
+   * @return The deck of tiles as a 2D array of Tile objects.
+   */
+  public Tile[][] getDeck() {
+    return deck;
+  }
+
+  /**
+   * Retrieves a specific tile from the deck based on its column and row indices.
+   *
+   * @param column The column index of the desired tile.
+   * @param row    The row index of the desired tile.
+   * @return The tile located at the specified column and row in the deck.
+   */
+  public Tile getTile(int column, int row) {
+    return deck[column][row];
+  }
+
   /**
    * Constructs a new ClientDeck object with a default size of 2 rows and 12 columns.
    * The deck is initialized as a 2D array of Tile objects.
@@ -57,49 +100,6 @@ public class OrderedDeck {
       }
     }
     setDeck(tileArray);
-  }
-
-  private void setDeck(Tile[] tileArray) {
-    deck = deckFromTileArray(tileArray);
-  }
-
-  /**
-   * Retrieves the 2D array representing the deck of tiles.
-   *
-   * @return The deck of tiles as a 2D array of Tile objects.
-   */
-  public Tile[][] getDeck() {
-    return deck;
-  }
-
-  /**
-   * Sets the this.deck to the given deck.
-   *
-   * @param deck The 2D array representing the deck.
-   */
-  public void setDeck(Tile[][] deck) {
-    for (int i = 0; i < Math.min(DECK_HEIGHT, deck.length); i++) {
-      if (deck.length > DECK_HEIGHT) {
-        LOGGER.warn("Trying to set deck with too many rows");
-      }
-      for (int j = 0; j < Math.min(DECK_WIDTH, deck[i].length); j++) {
-        if (deck[i].length > DECK_WIDTH) {
-          LOGGER.warn("Trying to set deck with too many columns");
-        }
-        this.deck[i][j] = deck[i][j];
-      }
-    }
-  }
-
-  /**
-   * Retrieves a specific tile from the deck based on its column and row indices.
-   *
-   * @param column The column index of the desired tile.
-   * @param row    The row index of the desired tile.
-   * @return The tile located at the specified column and row in the deck.
-   */
-  public Tile getTile(int column, int row) {
-    return deck[column][row];
   }
 
 

@@ -22,8 +22,18 @@ public class Server {
   private ServerSocket serverSocket;
   private final ArrayList<Lobby> lobbies = new ArrayList<>();
 
+  // TODO minimize the use of this method
   public ArrayList<Lobby> getLobbies() {
     return lobbies;
+  }
+
+  /**
+   * Retrieves the list of active client threads connected to the server.
+   *
+   * @return an ArrayList of {@code ClientThread} objects representing the connected clients.
+   */
+  public ArrayList<ClientThread> getClientList() {
+    return clientList;
   }
 
   public static void main(String[] args) {
@@ -189,15 +199,6 @@ public class Server {
     Lobby l = new Lobby(lobbyNumber);
     lobbies.add(l);
     return l;
-  }
-
-  /**
-   * Retrieves the list of active client threads connected to the server.
-   *
-   * @return an ArrayList of {@code ClientThread} objects representing the connected clients.
-   */
-  public ArrayList<ClientThread> getClientList() {
-    return this.clientList;
   }
 
 }
