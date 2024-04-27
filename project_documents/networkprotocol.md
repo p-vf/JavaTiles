@@ -127,6 +127,21 @@ Client: ```+NAMS```
 
 ---
 
+## Namensliste anfordern
+| Command | Response            | Sender |
+|---------|---------------------|--------|
+| `RNAM`  | `+RNAM <nicknames>` | Client |
+### Beschreibung
+Wird geschickt, wenn der Client die aktuelle namen in der Lobby haben will. 
+`<nicknames>` hat immer 4 Werte, die entweder leer sind oder den Namen des Spielers an dieser Stelle in der Lobby beinhalten.
+### Beispiel
+Client: ```RNAM```  
+Server: ```+RNAM "boran \"%\" istref robin%"```
+
+(Hier hat die Lobby nur 3 Spieler, der Spieler mit index 1 hat das Spiel verlassen)
+
+---
+
 ## Lobby verlassen
 | Command           | Response        | Sender |
 |-------------------|-----------------|--------|
