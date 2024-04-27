@@ -16,11 +16,25 @@ import java.util.ArrayList;
  * @author Istref Uka
  */
 public class Server {
-  public static final Logger LOGGER = LogManager.getLogger(Server.class);
+  private static final Logger LOGGER = LogManager.getLogger(Server.class);
   private boolean ENABLE_PING_LOGGING = false;
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
-  public final ArrayList<Lobby> lobbies = new ArrayList<>();
+  private final ArrayList<Lobby> lobbies = new ArrayList<>();
+
+  // TODO minimize the use of this method
+  public ArrayList<Lobby> getLobbies() {
+    return lobbies;
+  }
+
+  /**
+   * Retrieves the list of active client threads connected to the server.
+   *
+   * @return an ArrayList of {@code ClientThread} objects representing the connected clients.
+   */
+  public ArrayList<ClientThread> getClientList() {
+    return clientList;
+  }
 
   public static void main(String[] args) {
     if (args.length < 1) {
@@ -102,7 +116,7 @@ public class Server {
   public boolean sendToNickname(String str, String nickname) {
     boolean sent = false;
     for (ClientThread client : clientList) {
-      if (client.nickname.equals(nickname)) {
+      if (client.getNickname().equals(nickname)) {
         try {
           client.send(str);
           sent = true;
@@ -134,8 +148,9 @@ public class Server {
   public ArrayList<String> getNicknames() {
     ArrayList<String> nicknames = new ArrayList<>();
     for (ClientThread client : clientList) {
-      if (client.nickname != null && !client.nickname.isEmpty()) {
-        nicknames.add(client.nickname);
+      String clientName = client.getNickname();
+      if (clientName != null && !clientName.isEmpty()) {
+        nicknames.add(clientName);
       }
     }
     return nicknames;
@@ -184,15 +199,6 @@ public class Server {
     Lobby l = new Lobby(lobbyNumber);
     lobbies.add(l);
     return l;
-  }
-
-  /**
-   * Retrieves the list of active client threads connected to the server.
-   *
-   * @return an ArrayList of {@code ClientThread} objects representing the connected clients.
-   */
-  public ArrayList<ClientThread> getClientList() {
-    return this.clientList;
   }
 
 }

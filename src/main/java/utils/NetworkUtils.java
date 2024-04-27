@@ -152,7 +152,7 @@ public class NetworkUtils {
       playerNames.add("" + lobby.lobbyNumber);
       for (var player : lobby.getPlayers()) {
         if (player != null) {
-          playerNames.add(player.nickname);
+          playerNames.add(player.getNickname());
         } else {
           playerNames.add("");
         }

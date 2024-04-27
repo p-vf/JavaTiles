@@ -16,7 +16,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  * else it is a normal tile with a number and a color.
  */
 public class Tile {
-  public static final Logger LOGGER = LogManager.getLogger(Tile.class);
+  private static final Logger LOGGER = LogManager.getLogger(Tile.class);
 
   private final int number;
   private final Color color;
