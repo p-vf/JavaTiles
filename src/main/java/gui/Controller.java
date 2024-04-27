@@ -49,6 +49,9 @@ public class Controller {
     public VBox playersLobbyVbox;
     public VBox highscoreVbox;
 
+    @FXML
+    private TextArea lobbySelection;
+
 
     private Stage stage;
     private Scene scene;
@@ -102,7 +105,7 @@ public class Controller {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         root.setStyle("-fx-background-color: #008000;");
-        if(stage != null) {
+
             stage.setScene(scene);
             stage.setOnCloseRequest((WindowEvent ActionEvent) -> {
                 System.out.println("Closing application...");
@@ -110,7 +113,7 @@ public class Controller {
             });
             stage.setResizable(true);
             stage.show();
-        }
+
 
     }
 
@@ -153,6 +156,7 @@ public class Controller {
 
 
     public void chatInputPressed(ActionEvent event) throws IOException {
+        client.setEvent(event);
         String chatMessage = "/chat" + " " + chatInput.getText();
         String messageToSend = client.handleInput(chatMessage);
         client.send(messageToSend);
@@ -164,26 +168,22 @@ public class Controller {
 
 
     public void joinPressed(ActionEvent actionEvent) throws IOException {
-        Platform.runLater(() -> {
+
+            switchToScene(actionEvent,"lobbySelection");
             client.setEvent(actionEvent);
-            ArrayList<String> arg = new ArrayList<>();
-            arg.add("LGAM");
-            arg.add("o");
-            try {
-                client.send(encodeProtocolMessage(arg));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+    }
+
+    public void setLobbySelection(String message){
+        lobbySelection.setText(message);
     }
     public void setInput(String message) {
-        Platform.runLater(() -> {
+
         vBoxLobbies.getChildren().clear();
         Label label = new Label(message);
         label.setFont(Font.font("Bold", FontWeight.BOLD, 13));
         label.setTextFill(Color.WHITE);
         vBoxLobbies.getChildren().add(label);
-        });
+
     }
 
 

@@ -12,6 +12,10 @@ import javafx.event.ActionEvent;
 import game.Tile;
 import gui.Controller;
 import gui.GameGUI;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -147,6 +151,7 @@ public class Client {
             System.exit(0);
         } catch (IOException e) {
             System.out.println("Your connection to the server has been lost");
+            System.out.println(e.getMessage());
             System.exit(0);
 
 
@@ -473,7 +478,10 @@ public class Client {
                     break;
 
                 case STRT:
-                    changeScene("startGame");
+                    Platform.runLater(() -> {
+                        changeScene("startGame");
+                    });
+
                     Platform.runLater(() -> {
                         gameController.setNickname(nickname);
                     });
@@ -586,7 +594,10 @@ public class Client {
 
                 case JOND:
                     System.out.println(arguments.get(0) + " joined the lobby");
-                    controller.chatIncoming(arguments.get(0) + " joined the lobby");
+                    Platform.runLater(() -> {
+                        controller.chatIncoming(arguments.get(0) + " joined the lobby");
+                    });
+
                     send(encodeProtocolMessage("+JOND"));
                     break;
 
@@ -667,9 +678,10 @@ public class Client {
                     break;
 
                 case LOGI:
-                    ActionEvent event = new ActionEvent();
+                    Platform.runLater(() -> {
+                        changeScene("lobby");
+                    });
 
-                    changeScene("lobby");
                     nickname = arguments.get(0);
                     System.out.println("You have been logged in as: " + arguments.get(0));
                     break;
@@ -686,11 +698,14 @@ public class Client {
                     break;
 
                 case LGAM:
-                    changeScene("lobbySelection");
+
                     if (arguments.get(1).isEmpty()) {
                         System.out.println("No lobbies with this status");
                         String message = "No open lobbies available";
-                        controller.setInput(message);
+                        Platform.runLater(() -> {
+                            controller.setInput(message);
+                        });
+
                         break;
                     }
 
@@ -739,7 +754,9 @@ public class Client {
                             sb.append(lobbies[i]).append("\t\t\t\t").append(players[i]).append("\n");
                         }
                         String message = sb.toString();
-                        controller.setInput(message);
+                        Platform.runLater(() -> {
+                            controller.setInput(message);
+                        });
                     }
 
                     if (arguments.get(0).equals("r")) {
@@ -802,7 +819,10 @@ public class Client {
                     break;
 
                 case JLOB:
-                    changeScene("lobbyScreen");
+                    Platform.runLater(() -> {
+                        changeScene("lobbyScreen");
+                    });
+
                     String confirmation = arguments.get(0);
                     if (confirmation.equals("t")) {
                         System.out.println("Joined lobby successfully");
@@ -815,15 +835,24 @@ public class Client {
 
                 case CATC:
                     if (arguments.get(0).equals("l")) {
-                        controller.chatIncoming("You:" + arguments.get(1));
+                        Platform.runLater(() -> {
+                            controller.chatIncoming("You:" + arguments.get(1));
+                        });
+
 
                     }
                     if (arguments.get(0).equals("w")) {
-                        controller.chatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
+                        Platform.runLater(() -> {
+                            controller.chatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
+                        });
+
 
                     }
                     if (arguments.get(0).equals("b")) {
-                        controller.chatIncoming("You sent to all: " + arguments.get(1));
+                        Platform.runLater(() -> {
+                            controller.chatIncoming("You sent to all: " + arguments.get(1));
+                        });
+
 
                     }
                     break;
@@ -833,7 +862,6 @@ public class Client {
                     yourDeck.addTheseTiles(parseTile(arguments.get(0)));
                     Tile tile = parseTile(arguments.get(0));
                     Platform.runLater(() -> {
-                        if(tile != null)
                         gameController.addThisTile(tile);
                     });
 
@@ -875,7 +903,10 @@ public class Client {
                     break;
 
                 case LLOB:
-                    changeScene("lobbySelection");
+                    Platform.runLater(() -> {
+                        changeScene("lobbySelection");
+                    });
+
                     if (arguments.get(0).equals("t")){
                         System.out.println("Lobby left successfully");
                     }
@@ -931,7 +962,7 @@ public class Client {
     }
 
     private void changeScene(String argument){
-        Platform.runLater(()-> controller.switchToScene(event,argument));
+        controller.switchToScene(event,argument);
     }
 
     /**
