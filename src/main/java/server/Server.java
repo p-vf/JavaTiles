@@ -16,11 +16,15 @@ import java.util.ArrayList;
  * @author Istref Uka
  */
 public class Server {
-  public static final Logger LOGGER = LogManager.getLogger(Server.class);
+  private static final Logger LOGGER = LogManager.getLogger(Server.class);
   private boolean ENABLE_PING_LOGGING = false;
   private volatile ArrayList<ClientThread> clientList;
   private ServerSocket serverSocket;
-  public final ArrayList<Lobby> lobbies = new ArrayList<>();
+  private final ArrayList<Lobby> lobbies = new ArrayList<>();
+
+  public ArrayList<Lobby> getLobbies() {
+    return lobbies;
+  }
 
   public static void main(String[] args) {
     if (args.length < 1) {
@@ -102,7 +106,7 @@ public class Server {
   public boolean sendToNickname(String str, String nickname) {
     boolean sent = false;
     for (ClientThread client : clientList) {
-      if (client.nickname.equals(nickname)) {
+      if (client.getNickname().equals(nickname)) {
         try {
           client.send(str);
           sent = true;
@@ -134,8 +138,9 @@ public class Server {
   public ArrayList<String> getNicknames() {
     ArrayList<String> nicknames = new ArrayList<>();
     for (ClientThread client : clientList) {
-      if (client.nickname != null && !client.nickname.isEmpty()) {
-        nicknames.add(client.nickname);
+      String clientName = client.getNickname();
+      if (clientName != null && !clientName.isEmpty()) {
+        nicknames.add(clientName);
       }
     }
     return nicknames;

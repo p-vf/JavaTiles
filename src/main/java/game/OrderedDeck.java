@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 public class OrderedDeck {
 
-  public static final Logger LOGGER = LogManager.getLogger(OrderedDeck.class);
+  private static final Logger LOGGER = LogManager.getLogger(OrderedDeck.class);
   public static final int DECK_HEIGHT = 2;
   public static final int DECK_WIDTH = 12;
 

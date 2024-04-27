@@ -16,7 +16,7 @@ import static java.lang.System.currentTimeMillis;
  * @author Istref Uka
  */
 public class ServerPingThread extends Thread {
-  public static final Logger LOGGER = LogManager.getLogger(ServerPingThread.class);
+  private static final Logger LOGGER = LogManager.getLogger(ServerPingThread.class);
   private final ClientThread parent;
   private final long maxResponseTimeMillis;
   private static final long PING_INTERVALL = 1000;
@@ -61,7 +61,7 @@ public class ServerPingThread extends Thread {
           continue;
         }
         if (timeLastResponse - currentTimeMillis() >= maxResponseTimeMillis) {
-          LOGGER.info("Client # " + parent.id + " with nickname \"" + parent.nickname + "\" is being logged out because the timeout of " + (double) maxResponseTimeMillis / 1000.0 + " seconds has been exceeded.");
+          LOGGER.info("Client # " + parent.getId() + " with nickname \"" + parent.getNickname() + "\" is being logged out because the timeout of " + (double) maxResponseTimeMillis / 1000.0 + " seconds has been exceeded.");
           parent.logout();
         }
       }

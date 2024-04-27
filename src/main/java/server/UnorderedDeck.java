@@ -14,7 +14,7 @@ import static game.Color.*;
  * Represents a deck that contains different tiles. Is only relevant for server-side calculations (validation).
  */
 public class UnorderedDeck {
-  public final Logger LOGGER = LogManager.getLogger(UnorderedDeck.class);
+  private final Logger LOGGER = LogManager.getLogger(UnorderedDeck.class);
 
   // array filled with counts (either 0, 1, or 2) for each tile
   // there are 53 distinct tiles in the game, two of each, so 106 in total

@@ -28,21 +28,35 @@ import java.time.format.DateTimeFormatter;
  * @author Istref Uka
  */
 public class ClientThread implements Runnable {
-  public static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
-  public int id;
-  public String nickname;
+  private static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
+  private final int id;
+  private String nickname;
   private final Server server;
   private Lobby lobby;
-  public int playerIndex = -1;
+  private int playerIndex = -1;
   private final Socket socket;
-  public OutputStream out;
+  private OutputStream out;
   private BufferedReader bReader;
   private static final int PING_TIMEOUT = 15000;
   private final ServerPingThread pingThread;
-  public boolean isReady = false;
-  public volatile boolean isRunning = true;
-  //private HighScores highScores;
-  private String todaysDate;
+  private boolean isReady = false;
+  private volatile boolean isRunning = true;
+
+  public int getId() {
+    return id;
+  }
+
+  public String getNickname() {
+    return nickname;
+  }
+
+  public int getPlayerIndex() {
+    return playerIndex;
+  }
+
+  public void setIsReady(boolean newValue) {
+    isReady = newValue;
+  }
 
   /**
    * Constructor of the EchoClientThread class.
@@ -226,7 +240,7 @@ public class ClientThread implements Runnable {
           listDemandedGamestatus(arguments.get(0));
         }
         case LLPL -> {
-          send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.lobbies)));
+          send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.getLobbies())));
         }
         case LPLA -> {
           listPlayersConnectedToServer();
@@ -589,7 +603,7 @@ public class ClientThread implements Runnable {
       return false;
     }
     boolean createdNewLobby = false;
-    synchronized (server.lobbies) {
+    //synchronized (server.lobbies) { // TODO is this synchronized block necessary?
       Lobby potentialLobby = server.getLobby(lobbyNumber);
       if (potentialLobby == null) {
         potentialLobby = server.createLobby(lobbyNumber);
@@ -603,7 +617,7 @@ public class ClientThread implements Runnable {
       }
       send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
       return false;
-    }
+    //}
   }
 
   /**
@@ -614,7 +628,7 @@ public class ClientThread implements Runnable {
    */
   private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
-    for (var lobby : server.lobbies) {
+    for (var lobby : server.getLobbies()) {
       if (lobby.getLobbyState() == status) {
         lobbiesWithStatus.add(lobby);
       }

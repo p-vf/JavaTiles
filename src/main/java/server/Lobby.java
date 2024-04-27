@@ -26,7 +26,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  */
 
 public class Lobby {
-  public final static Logger LOGGER = LogManager.getLogger(Lobby.class);
+  private final static Logger LOGGER = LogManager.getLogger(Lobby.class);
   public final int lobbyNumber;
   private ArrayList<ClientThread> players;
   private LobbyState lobbyState;
@@ -47,6 +47,7 @@ public class Lobby {
   }
 
   public ArrayList<ClientThread> getPlayers() {
+    // TODO minimize the use of this method
     return players;
   }
 
@@ -151,20 +152,19 @@ public class Lobby {
   }
 
   public String getNicknameList(){
+    // TODO could use some refactoring
     int length = 4;
     StringBuilder sb = new StringBuilder();
-    for(int i = 0; i < players.size(); i++){
-      if(players.get(i) == null){
+    for (ClientThread currentPlayer : players) {
+      if (currentPlayer == null) {
         sb.append("\"%\"" + " ");
         continue;
       }
-      if ((players.get(i).playerIndex == -1)) {
+      if ((currentPlayer.getPlayerIndex() == -1)) {
         sb.append(" ");
+      } else if (currentPlayer.getPlayerIndex() != -1) {
+        sb.append(currentPlayer.getNickname() + " ");
       }
-      else if (players.get(i).playerIndex != -1){
-        sb.append(players.get(i).nickname + " " );
-      }
-
     }
     while(players.size() < length){
       sb.append("\"%\"" + " ");
@@ -239,7 +239,7 @@ public class Lobby {
     gameState = null;
     for (ClientThread p : players) {
       // so that the players can start a game if they feel like it.
-      p.isReady = false;
+      p.setIsReady(false);
     }
     lobbyState = LobbyState.FINISHED;
   }
