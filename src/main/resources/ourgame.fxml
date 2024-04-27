@@ -192,6 +192,8 @@
                   <Font name="Arial Italic" size="18.0" />
                </font>
             </Label>
+            <TextField fx:id="changeNicknameField" layoutX="13.0" layoutY="13.0" onAction="#changeNickname" promptText="change nickname" />
+            <Label fx:id="changeNicknameWarning" layoutX="14.0" layoutY="40.0" prefHeight="19.0" prefWidth="317.0" />
          </children>
       </AnchorPane>
    </center>
