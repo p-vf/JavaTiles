@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Represents a deck of tiles used by a client in a game scenario.
- * This class manages operations related to the deck, such as creating,
- * modifying, and querying the deck's contents.
+ * Represents a deck on the client and on the server.
+ * This class makes it easy to create, modify and query
+ * decks.
  *
  * @author Robin Gökcen
  * @author Boran Gökcen
+ * @author Istref Uka
+ * @author Pascal von Fellenberg
  */
 
 public class OrderedDeck {
