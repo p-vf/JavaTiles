@@ -9,10 +9,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class implements basic functionalities required for the communication specified in the file networkprotocol.md.
+ *
+ * @author Pascal von Fellenberg
+ */
 public class NetworkUtils {
-  public static final Logger LOGGER = LogManager.getLogger(NetworkUtils.class);
+  private static final Logger LOGGER = LogManager.getLogger(NetworkUtils.class);
 
-  // for testing purposes
+  /**
+   * for testing purposes
+   * @param args is not used
+   */
   public static void main(String[] args) {
     String req = "CATC t \"\\\"bruh \\\"  skldjf wpeoi -.öelppoweir\" bruh b";
     System.out.println(req);
@@ -21,20 +29,16 @@ public class NetworkUtils {
     System.out.println(req);
     System.out.println(decodeProtocolMessage(req));
 
-
     ArrayList<String> msg = new ArrayList<>(Arrays.asList("CATC", "sldkfj", "sldkfj ", "\"\" hdlf\\\\\\\\\\\"\" hallo"));
     System.out.println(msg);
     System.out.println(decodeProtocolMessage(encodeProtocolMessage(msg)));
 
     System.out.println(encodeProtocolMessage("lskdfj", "sldkfj", "weoiablkn"));
-
-
   }
 
 
   /**
-   * Decodes a message conforming to the network protocol into an ArrayList of Strings,
-   * the first element being the command name and the rest being arguments to said command.
+   * Decodes a message conforming to the network protocol into an ArrayList of Strings.
    *
    * @param request String with a defined format in the network protocol.
    * @return An ArrayList having as first element the command name and the rest being arguments to the command.
@@ -172,8 +176,8 @@ public class NetworkUtils {
   public static String getBeautifullyFormattedDecodedLobbiesWithPlayerList(String receivedLobbiesList) {
     ArrayList<String> lobbies = decodeProtocolMessage(receivedLobbiesList);
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < lobbies.size(); i++) {
-      ArrayList<String> lobbyPlayers = decodeProtocolMessage(lobbies.get(i));
+    for (String lobby : lobbies) {
+      ArrayList<String> lobbyPlayers = decodeProtocolMessage(lobby);
       for (int j = 0; j < lobbyPlayers.size(); j++) {
         if (j == 0) {
           sb.append("Lobby ");
@@ -208,35 +212,52 @@ public class NetworkUtils {
      * This Enum describes either the type of request from the client or the type of response from the server.
      */
     public enum ClientRequest {
-      // log in:
+      /** log in */
       LOGI,
-      // log out:
+
+      /** log out */
       LOGO,
 
-      // draw tile:
+      /** draw tile */
       DRAW,
-      // put tile on stack:
+
+      /** put tile on stack */
       PUTT,
-      // send message to Chat:
+
+      /** send message to Chat */
       CATC,
-      // check if connection is still working:
+
+      /** check if connection is still working */
       PING,
-      // change name:
+
+      /** change name */
       NAME,
-      // list lobbies:
+
+      /** list lobbies */
       LGAM,
-      // list players in lobby:
+
+      /** list players in lobby */
       LLPL,
-      // list players on server:
+
+      /** list players on server */
       LPLA,
-      // join lobby:
+
+      /** join lobby */
       JLOB,
-      // ready for game:
+
+      /** ready for game */
       REDY,
-      // get winning configuration:
+
+      /** get winning configuration (from cheatcode) */
       WINC,
+
+      /** leave lobby */
       LLOB,
+
+      /** get high-scores */
       HIGH,
+
+      /** get names from lobby */
       RNAM,
     }
 
@@ -244,20 +265,31 @@ public class NetworkUtils {
      * This enum describes either the type of request from the server or the type of response from the client.
      */
     public enum ServerRequest {
-      // start game:
+      /** start game */
       STRT,
-      // when the game ends due to a player win:
+
+      /** end game due to player win */
       PWIN,
-      // when the game ends due to a draw:
+
+      /** end game due to draw (no winner) */
       EMPT,
-      // chat message distribution:
+
+      /** send chat message to all relevant clients */
       CATS,
-      // check if connection is still working:
+
+      /** check if connection is still working */
       PING,
-      // send game state relevant to client:
+
+      /** send relevant game state to client */
       STAT,
+
+      /** send name list of lobby */
       NAMS,
+
+      /** notify that a player left */
       LEFT,
+
+      /** notify that a player joined */
       JOND,
     }
   }
