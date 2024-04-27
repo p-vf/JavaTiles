@@ -158,7 +158,6 @@ public class Controller {
 
 
     public void chatInputPressed(ActionEvent event) throws IOException {
-        client.setEvent(event);
         String chatMessage = "/chat" + " " + chatInput.getText();
         String messageToSend = client.handleInput(chatMessage);
         client.send(messageToSend);
@@ -247,6 +246,7 @@ public class Controller {
     }
     public void setHighscore(String result){
         Platform.runLater(() -> {
+            highscoreVbox.getChildren().clear();
             Label label = new Label(result);
             label.setFont(Font.font("Bold", FontWeight.BOLD, 14));
             label.setTextFill(Color.WHITE);

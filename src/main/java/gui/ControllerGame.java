@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
@@ -143,15 +144,34 @@ public class ControllerGame implements Initializable {
     private String nickname;
 
 
+    @FXML
+    private TextArea gameChatArea;
+
+    @FXML
+    private TextField gameChatField;
+
 
     private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
 
-    public ControllerGame(){
+    public ControllerGame() {
         client.setgameController(this);
     }
 
     public static void setClient(Client client) {
         ControllerGame.client = client;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4, zero5, zero6, zero7, zero8, zero9, zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10, one11));
+        playerNames = new ArrayList<>(Arrays.asList(playerName0, playerName1, playerName2, playerName3));
+        try {
+            client.send(encodeProtocolMessage("RNAM"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        client.setgameController(this);
     }
 
 
@@ -161,44 +181,42 @@ public class ControllerGame implements Initializable {
         startButton.setVisible(false);
         this.tiles = client.getTiles();
         for (int i = 0; i < deck.size(); i++) {
-            if(tiles[i]==null){
+            if (tiles[i] == null) {
                 deck.get(i).setText("");
+            } else {
+                deck.get(i).setText("" + tiles[i].getNumber());
+                deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tiles[i].getColor())));
             }
-            else{
-            deck.get(i).setText("" + tiles[i].getNumber());
-            deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tiles[i].getColor())));}
             //client.send(encodeProtocolMessage("+STRT"));
 
         }
     }
 
-    public void takeOffExchangeStack(){
+    public void takeOffExchangeStack() {
         exchangeStack.setText("");
     }
 
-    public void disableStacks(boolean bool){
+    public void disableStacks(boolean bool) {
         mainStack.setDisable(bool);
         exchangeStack.setDisable(bool);
     }
 
 
-
-    public void setTextofGameWarning(String text){
+    public void setTextofGameWarning(String text) {
         gameWarning.setVisible(true);
         gameWarning.setText(text);
     }
 
-    public void setCanYouPlayThisMove(boolean canYouPlayThisMove){
+    public void setCanYouPlayThisMove(boolean canYouPlayThisMove) {
         this.canYouPlayThisMove = canYouPlayThisMove;
     }
 
     public void setWinLabel(String text) throws IOException {
         winLabel.setDisable(false);
         winLabel.setText(text);
-        if(text.equals("DRAW!")){
+        if (text.equals("DRAW!")) {
             client.send(encodeProtocolMessage("+EMPT"));
-        }
-        else {
+        } else {
             client.send(encodeProtocolMessage("+PWIN"));
         }
     }
@@ -209,43 +227,41 @@ public class ControllerGame implements Initializable {
 
     }
 
-    public void setNickname(String nickname){
+    public void setNickname(String nickname) {
         this.nickname = nickname;
         playerName0.setText(nickname);
 
     }
 
-    public void setExchangeStack(Tile tile){
-        if(tile != null){
-        exchangeStack.setText("" + tile.getNumber());
-        exchangeStack.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));}
+    public void setExchangeStack(Tile tile) {
+        if (tile != null) {
+            exchangeStack.setText("" + tile.getNumber());
+            exchangeStack.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+        }
 
 
     }
 
 
-
-
-    int[] TilePosition (Button button){
+    int[] TilePosition(Button button) {
         int[] position = new int[2];
-        if(button.getId().contains("zero")){
+        if (button.getId().contains("zero")) {
             position[0] = 0;
             String columnString = button.getId().substring(4);
-            if(columnString.matches("\\d+")){
-            position[1] = Integer.valueOf(columnString);}
+            if (columnString.matches("\\d+")) {
+                position[1] = Integer.valueOf(columnString);
+            }
             return position;
-        }
-        else{
+        } else {
             position[0] = 1;
             String columnString = button.getId().substring(3);
-            if(columnString.matches("\\d+")){
-            position[1] = Integer.valueOf(columnString);}
+            if (columnString.matches("\\d+")) {
+                position[1] = Integer.valueOf(columnString);
+            }
             return position;
-            
+
         }
     }
-
-
 
 
     @FXML
@@ -269,25 +285,24 @@ public class ControllerGame implements Initializable {
             if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
 
                 if (firstButton.equals(puttButton)) {
-                    if(secondButton.getText().isBlank()){
+                    if (secondButton.getText().isBlank()) {
 
                         gameWarning.setVisible(true);
                         gameWarning.setText("choose an existing Tile");
 
 
-                    }
-                    else{
-                        int [] tilePosition = TilePosition(secondButton);
+                    } else {
+                        int[] tilePosition = TilePosition(secondButton);
                         gameWarning.setVisible(true);
                         //gameWarning.setText("Button ist am Ort"+ tilePosition[0]+" "+ tilePosition[1]);
                         args.add("/putt");
-                        args.add(tilePosition[0]+"");
-                        args.add(tilePosition[1]+"");
+                        args.add(tilePosition[0] + "");
+                        args.add(tilePosition[1] + "");
                         System.out.println(encodeProtocolMessage(args));
                         String message = client.handleInput(encodeProtocolMessage(args));
                         System.out.println(message);
                         client.send(message);
-                        if(canYouPlayThisMove){
+                        if (canYouPlayThisMove) {
                             secondButton.setText("");
                         }
 
@@ -298,15 +313,14 @@ public class ControllerGame implements Initializable {
                     System.out.println("nichts passiert.");
                     pressedButtons.clear();
                 }
-            }
-            else{
+            } else {
                 args.add("/swap");
-                int [] firstTilePosition = TilePosition(firstButton);
-                int [] secondTilePosition = TilePosition(secondButton);
-                args.add(firstTilePosition[0]+"");
-                args.add(firstTilePosition[1]+"");
-                args.add(secondTilePosition[0]+"");
-                args.add(secondTilePosition[1]+"");
+                int[] firstTilePosition = TilePosition(firstButton);
+                int[] secondTilePosition = TilePosition(secondButton);
+                args.add(firstTilePosition[0] + "");
+                args.add(firstTilePosition[1] + "");
+                args.add(secondTilePosition[0] + "");
+                args.add(secondTilePosition[1] + "");
 
                 String message = client.handleInput(encodeProtocolMessage(args));
                 client.send(message);
@@ -327,6 +341,7 @@ public class ControllerGame implements Initializable {
 
         }
     }
+
     @FXML
     void draw(ActionEvent event) throws IOException {
         ArrayList<String> args = new ArrayList<>();
@@ -342,7 +357,7 @@ public class ControllerGame implements Initializable {
 
 
         }
-        if(pressedButton.equals(mainStack)){
+        if (pressedButton.equals(mainStack)) {
             System.out.println("mainStack wurde gedrückt");
             pressedButtons.clear();
             args.add("m");
@@ -355,24 +370,24 @@ public class ControllerGame implements Initializable {
 
     public void setPlayerNames(ArrayList<String> players) {
 
-        for(int i =0; i < players.size();i++){
-            if(nickname.equals(players.get(i))){
-                if(i==0){
+        for (int i = 0; i < players.size(); i++) {
+            if (nickname.equals(players.get(i))) {
+                if (i == 0) {
                     playerName1.setText(players.get(1));
                     playerName2.setText(players.get(2));
                     playerName3.setText(players.get(3));
                 }
-                if(i==1){
+                if (i == 1) {
                     playerName1.setText(players.get(2));
                     playerName2.setText(players.get(3));
                     playerName3.setText(players.get(0));
                 }
-                if(i==2){
+                if (i == 2) {
                     playerName1.setText(players.get(3));
                     playerName2.setText(players.get(0));
                     playerName3.setText(players.get(1));
                 }
-                if(i==3){
+                if (i == 3) {
                     playerName1.setText(players.get(0));
                     playerName2.setText(players.get(1));
                     playerName3.setText(players.get(2));
@@ -384,31 +399,35 @@ public class ControllerGame implements Initializable {
     }
 
 
-
-    public void addThisTile(Tile tile){
+    public void addThisTile(Tile tile) {
         int count = 0;
-            for(int i = 0; i < deck.size();i++){
-                if((deck.get(i).getText().isBlank())&&count==0){
-                    count++;
-                    deck.get(i).setText("" + tile.getNumber());
-                    deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+        for (int i = 0; i < deck.size(); i++) {
+            if ((deck.get(i).getText().isBlank()) && count == 0) {
+                count++;
+                deck.get(i).setText("" + tile.getNumber());
+                deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
 
             }
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4,zero5, zero6, zero7, zero8, zero9,zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10,one11));
-        playerNames = new ArrayList<>(Arrays.asList(playerName0,playerName1,playerName2,playerName3));
-        try {
-            client.send(encodeProtocolMessage("RNAM"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @FXML
+    void toGameChat(ActionEvent event) throws IOException {
+            String chatMessage = "/chat" + " " + gameChatField.getText();
+            String messageToSend = client.handleInput(chatMessage);
+            client.send(messageToSend);
+            gameChatField.clear();
         }
 
-        client.setgameController(this);
+    public void gameChatIncoming(String message){
+        gameChatArea.appendText(message + "\n");
     }
-}
+
+    }
+
+
+
+
+
 
 

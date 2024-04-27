@@ -255,7 +255,7 @@ public class Client {
                         String allMessageForServer = encodeProtocolMessage("CATC", "b", allMessage);
                         return allMessageForServer;
                     }
-                    if (arguments.get(0).equals("/whisper")) {
+                    if (arguments.get(0).equals("/w")) {
                         String whisperMessage = concatenateWords(2, arguments);
                         //LOGGER.debug(whisperMessage);
                         String whisperMessageForServer = encodeProtocolMessage("CATC", "w", whisperMessage, arguments.get(1));
@@ -456,12 +456,27 @@ public class Client {
 
 
                         controller.chatIncoming(name + " sent to all: " + arguments.get(1));
+                        if (gameController != null) {
+                            Platform.runLater(() -> {
+                                gameController.gameChatIncoming(name + " sent to all: " + arguments.get(1));
+                            });
+                        }
                     }
                     if (arguments.get(0).equals("w")) {
                         controller.chatIncoming(name + " whispered: " + arguments.get(1));
+                        if (gameController != null) {
+                            Platform.runLater(() -> {
+                                gameController.gameChatIncoming(name + " whispered: " + arguments.get(1));
+                            });
+                        }
                     }
                     if (arguments.get(0).equals("l")) {
                         controller.chatIncoming(name + " whispered: " + arguments.get(1));
+                        if (gameController != null) {
+                            Platform.runLater(() -> {
+                                gameController.gameChatIncoming(name + " whispered: " + arguments.get(1));
+                            });
+                        }
                     }}
                     //hier handeln ob whisper broadcast etc mit case distinction
 
@@ -835,8 +850,15 @@ public class Client {
                 case CATC:
                     if (arguments.get(0).equals("l")) {
                         Platform.runLater(() -> {
-                            controller.chatIncoming("You:" + arguments.get(1));
+                            controller.chatIncoming("You: " + arguments.get(1));
                         });
+                        if(gameController != null){
+                            Platform.runLater(() -> {
+                                gameController.gameChatIncoming("You: " + arguments.get(1));
+                            });
+                        }
+                        break;
+
 
 
                     }
@@ -844,6 +866,12 @@ public class Client {
                         Platform.runLater(() -> {
                             controller.chatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
                         });
+                        if(gameController != null){
+                            Platform.runLater(() -> {
+                                gameController.gameChatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
+                            });
+                        }
+                        break;
 
 
                     }
@@ -851,6 +879,12 @@ public class Client {
                         Platform.runLater(() -> {
                             controller.chatIncoming("You sent to all: " + arguments.get(1));
                         });
+                        if(gameController != null){
+                            Platform.runLater(() -> {
+                                gameController.gameChatIncoming("You sent to all: " + arguments.get(1));
+                            });
+                        }
+                        break;
 
 
                     }
