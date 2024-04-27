@@ -239,9 +239,8 @@ public class Client {
 
             switch (inputCommand) {
 
-                case "/nickname":
-                    String changedName = login();
-                    return encodeProtocolMessage("NAME", changedName);
+                case "/nickname": //müsste man noch ändern falls man doch auf dem Terminal spielen möchte;
+                    return encodeProtocolMessage("NAME", arguments.get(0));
 
 
                 case "/chat":
@@ -424,7 +423,7 @@ public class Client {
 
 
                 default:
-                    System.out.println("invalid command");
+                    System.out.println(input);
                     return null;
             }
         } catch (IndexOutOfBoundsException e) {
@@ -522,7 +521,8 @@ public class Client {
                     }
                     else{
                         try {
-                            gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");
+                            if(gameController != null){
+                            gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");}
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

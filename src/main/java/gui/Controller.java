@@ -85,6 +85,10 @@ public class Controller {
         if(nickname.contains(" ")||nickname.contains("\"")){
             loginWarning.setText("Your nickname mustn't contain blank spaces or quotation marks");
         }
+        if(nickname.length()>20){
+            loginWarning.setText("Your nickname mustn't contain more than 20 characters");
+
+        }
         else{
         if (!(isEmpty)){
             arguments.add(nickname);

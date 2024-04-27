@@ -150,6 +150,15 @@ public class ControllerGame implements Initializable {
     @FXML
     private TextField gameChatField;
 
+    @FXML
+    private TextField changeNicknameField;
+
+    @FXML
+    private Label changeNicknameWarning;
+
+    private boolean nameIsEmpty = false;
+
+
 
     private boolean canYouPlayThisMove = false; //falls ja das Deck auf dem GUI updaten sonst nicht
 
@@ -227,9 +236,9 @@ public class ControllerGame implements Initializable {
 
     }
 
-    public void setNickname(String nickname) {
+     public void setNickname(String nickname) {
         this.nickname = nickname;
-        playerName0.setText(nickname);
+
 
     }
 
@@ -373,21 +382,25 @@ public class ControllerGame implements Initializable {
         for (int i = 0; i < players.size(); i++) {
             if (nickname.equals(players.get(i))) {
                 if (i == 0) {
+                    playerName0.setText(players.get(0));
                     playerName1.setText(players.get(1));
                     playerName2.setText(players.get(2));
                     playerName3.setText(players.get(3));
                 }
                 if (i == 1) {
+                    playerName0.setText(players.get(1));
                     playerName1.setText(players.get(2));
                     playerName2.setText(players.get(3));
                     playerName3.setText(players.get(0));
                 }
                 if (i == 2) {
+                    playerName0.setText(players.get(2));
                     playerName1.setText(players.get(3));
                     playerName2.setText(players.get(0));
                     playerName3.setText(players.get(1));
                 }
                 if (i == 3) {
+                    playerName0.setText(players.get(3));
                     playerName1.setText(players.get(0));
                     playerName2.setText(players.get(1));
                     playerName3.setText(players.get(2));
@@ -422,6 +435,36 @@ public class ControllerGame implements Initializable {
     public void gameChatIncoming(String message){
         gameChatArea.appendText(message + "\n");
     }
+
+    @FXML
+    void changeNickname(ActionEvent event) throws IOException {
+        ArrayList<String> args = new ArrayList<>();
+        args.add("NAME");
+        String newName = changeNicknameField.getText();
+        if (newName.isEmpty()) {
+            args.add(System.getProperty("user.name"));
+            client.send(encodeProtocolMessage(args));
+            nameIsEmpty = true;
+            args.clear();
+            changeNicknameWarning.setText("");
+
+        }
+        if (newName.contains(" ") || newName.contains("\"")) {
+            changeNicknameWarning.setText("no blank spaces or quotation marks");
+
+        } else {
+            if (!(nameIsEmpty)) {
+                args.add(newName);
+                client.send(encodeProtocolMessage(args));
+                args.clear();
+                changeNicknameWarning.setText("");
+            }
+
+
+        }
+    }
+
+
 
     }
 
