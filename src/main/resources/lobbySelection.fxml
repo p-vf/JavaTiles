@@ -30,7 +30,7 @@
                   <Font size="15.0" />
                </font>
             </Text>
-            <VBox fx:id="vBoxLobbies" layoutX="200.0" layoutY="119.0" prefHeight="326.0" prefWidth="252.0" />
+            <VBox fx:id="vBoxLobbies" layoutX="146.0" layoutY="119.0" prefHeight="200.0" prefWidth="312.0" />
          </children>
       </AnchorPane>
    </center>
