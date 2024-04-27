@@ -18,31 +18,46 @@ import java.util.*;
  * @author Istref Uka
  */
 public class GameState {
-  // check out the following methods to get the elements in the stack:
-  // elements() and toArray(Tile[] t);
-  private Stack<Tile> mainStack;
-  private ArrayList<Stack<Tile>> exchangeStacks;
-  private ArrayList<OrderedDeck> playerDecks;
+  private final Stack<Tile> mainStack;
+  private final ArrayList<Stack<Tile>> exchangeStacks;
+  private final ArrayList<OrderedDeck> playerDecks;
   private int currentPlayerIndex;
   private int numberOfDraws = 0;
 
+  /**
+   * Replaces the deck of a player with the specified deck.
+   *
+   * @param playerIndex index of the player (must be a number between 0 and 3)
+   * @param deck        deck that the player gets
+   */
   public void setPlayerDeck(int playerIndex, OrderedDeck deck) {
     playerDecks.set(playerIndex, deck);
   }
 
+  /**
+   * Returns the deck of a player
+   *
+   * @param playerIndex index of the player (must be a number between 0 and 3)
+   * @return            deck of the player on the specified index
+   */
   public OrderedDeck getPlayerDeck(int playerIndex) {
     return playerDecks.get(playerIndex);
   }
 
+  /**
+   * Returns the index of the player who is to move (the current player).
+   *
+   * @return index of the current player (must be a number between 0 and 3)
+   */
   public int getCurrentPlayerIndex() {
     return currentPlayerIndex;
   }
 
   /**
    * Constructor of the {@code GameState} class.
-   * Initializes {@code Gamestate} with a shuffled set of Tiles that get distributed to the playerdecks.
+   * Initializes {@code GameState} with a shuffled set of Tiles that get distributed to the playerdecks.
    *
-   * @param startPlayerIdx the index of the players that gets 15 instead of 14 tiles and is the first player that gets to make a move.
+   * @param startPlayerIdx the index of the players that gets 15 instead of 14 tiles and is the first player that gets to make a move. (must be a number between 0 and 3)
    */
   public GameState(int startPlayerIdx) {
     currentPlayerIndex = startPlayerIdx;
@@ -106,8 +121,8 @@ public class GameState {
   /**
    * Draws a tile for the specified player from either the main stack or their exchange stack.
    *
-   * @param isMainStack true to draw from the main stack, false to draw from the player's exchange stack.
-   * @param playerIndex the index of the player who is drawing the tile.
+   * @param isMainStack represents the stack from which the player draws; {@code true} for main stack, {@code false} for the player's exchange stack
+   * @param playerIndex the index of the player who is drawing the tile (must be a number between 0 and 3)
    * @return the drawn tile, or null if the chosen stack is empty.
    */
   public Tile drawTile(boolean isMainStack, int playerIndex) {
@@ -129,10 +144,10 @@ public class GameState {
   }
 
   /**
-   * Checks if a player can draw a tile, which is true when the player's deck contains 14 tiles.
+   * Checks if a player can draw a tile, which is true if and only if the player's deck contains 14 tiles.
    *
-   * @param playerIndex the index of the player to check.
-   * @return true if the player can draw a tile, false otherwise.
+   * @param playerIndex index of the player to check (must be a number between 0 and 3)
+   * @return {@code true} if the player can draw a tile, {@code false} otherwise
    */
   public boolean canDraw(int playerIndex) {
     return playerDecks.get(playerIndex).countTiles() == 14;
@@ -141,8 +156,8 @@ public class GameState {
   /**
    * Determines if it is the specified player's turn.
    *
-   * @param playerIndex the index of the player to check.
-   * @return true if it is the player's turn, false otherwise.
+   * @param playerIndex index of the player to check (must be between 0 and 3)
+   * @return            {@code true} if it is the player's turn, {@code false} otherwise
    */
   public boolean isPlayersTurn(int playerIndex) {
     return currentPlayerIndex == playerIndex;
@@ -151,8 +166,8 @@ public class GameState {
   /**
    * Puts a specified tile into the exchange stack of the next player and updates the game state.
    *
-   * @param tile        the tile to be placed into the next player's exchange stack.
-   * @param playerIndex the index of the player who is putting the tile.
+   * @param tile        tile to be placed into the next player's exchange stack
+   * @param playerIndex index of the player who is putting the tile (must be a number between 0 and 3)
    */
   public void putTile(Tile tile, int playerIndex) {
 
@@ -168,19 +183,25 @@ public class GameState {
   /**
    * Checks if a player can put a tile into the exchange stack, which is true when the player's deck contains 15 tiles.
    *
-   * @param playerIndex the index of the player to check.
-   * @return true if the player can put a tile, false otherwise.
+   * @param playerIndex index of the player to check (must be a number between 0 and 3)
+   * @return {@code true} if the player can put a tile, {@code false} otherwise
    */
   public boolean canPutTile(int playerIndex) {
     return playerDecks.get(playerIndex).countTiles() == 15;
   }
 
+  /**
+   * Returns the number of rounds played since the start of the game.
+   * @return number of rounds played since the start of the game
+   */
   public int currentRoundNumber() {
     return numberOfDraws / 4 + 1;
   }
-  // for testing purposes:
-  // doesn't get called during normal gameplay
 
+  /**
+   * for testing purposes, doesn't get called during normal gameplay
+   * @param args isn't needed for execution of method
+   */
   public static void main(String[] args) {
     GameState g = new GameState(2);
   }

@@ -11,10 +11,11 @@ import java.util.List;
 
 /**
  * This class implements basic functionalities required for the communication specified in the file networkprotocol.md.
+ *
+ * @author Pascal von Fellenberg
  */
 public class NetworkUtils {
-  /** for logging*/
-  public static final Logger LOGGER = LogManager.getLogger(NetworkUtils.class);
+  private static final Logger LOGGER = LogManager.getLogger(NetworkUtils.class);
 
   /**
    * for testing purposes
