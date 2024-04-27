@@ -224,7 +224,7 @@ class ClientThreadTest {
   }
 
   @Test
-  void cantPutTileShouldReturnTrueBecausePlayerHasntDrawnYet() throws NoSuchFieldException, IllegalAccessException, IOException {
+  void cantPutTileShouldReturnTrueBecausePlayerHasNotDrawnYet() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 1);
