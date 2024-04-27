@@ -629,6 +629,7 @@ public class Client {
                         });
 
                     } else {
+                        gameController.disableStacks(true);
                         Platform.runLater(() -> {
                             try {
                                 if(arguments.get(1).matches("\\d+")){
@@ -867,6 +868,9 @@ public class Client {
 
 
                     System.out.println("You have drawn: " + tile.toStringPretty());
+                    Platform.runLater(() -> {
+                        gameController.disableStacks(true);
+                    });
                     showDeck();
                     break;
 
