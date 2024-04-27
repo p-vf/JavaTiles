@@ -264,7 +264,6 @@ public class Client {
                     } else {
                         if (lobby == true) {
                             String message = concatenateWords(0, arguments);
-                            //LOGGER.debug(message);
                             String messageForServer = encodeProtocolMessage("CATC", "l", message);
                             return messageForServer;
                         } else {
@@ -453,8 +452,6 @@ public class Client {
                     if(nickname != null){
                     String name = arguments.get(2);
                     if (arguments.get(0).equals("b")) {
-
-
                         controller.chatIncoming(name + " sent to all: " + arguments.get(1));
                         if (gameController != null) {
                             Platform.runLater(() -> {
@@ -471,10 +468,10 @@ public class Client {
                         }
                     }
                     if (arguments.get(0).equals("l")) {
-                        controller.chatIncoming(name + " whispered: " + arguments.get(1));
+                        controller.chatIncoming(name + ": " + arguments.get(1));
                         if (gameController != null) {
                             Platform.runLater(() -> {
-                                gameController.gameChatIncoming(name + " whispered: " + arguments.get(1));
+                                gameController.gameChatIncoming(name + ": " + arguments.get(1));
                             });
                         }
                     }}
@@ -522,6 +519,13 @@ public class Client {
 
                         currentPlayerID = playerID;
 
+                    }
+                    else{
+                        try {
+                            gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     deckTiles = stringsToTileArray(tilesStrt);
 
