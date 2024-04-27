@@ -340,7 +340,7 @@ public class ClientThread implements Runnable {
         for (var lobby : l) {
           sb.append(lobby.lobbyNumber);
           sb.append(":");
-          sb.append(lobby.getPlayers().size());
+          sb.append(lobby.getNumberOfPlayers());
           sb.append(" ");
         }
         // delete unnecessary space

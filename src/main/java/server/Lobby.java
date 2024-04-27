@@ -50,6 +50,17 @@ public class Lobby {
     return players;
   }
 
+  public int getNumberOfPlayers() {
+    int count = 0;
+    for (ClientThread player : players) {
+      if (player != null) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+
   public LobbyState getLobbyState() {
     return lobbyState;
   }
@@ -232,6 +243,7 @@ public class Lobby {
     }
     lobbyState = LobbyState.FINISHED;
   }
+
 
   /*public void printDebug() {
     System.out.println("Main stack:");
