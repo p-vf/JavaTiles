@@ -134,24 +134,12 @@ public class ClientThread implements Runnable {
     // TODO add log, if cmdStr is not of size 4
     ServerRequest command = ServerRequest.valueOf(cmdStr);
     switch (command) {
-      case PWIN -> {
-      }
-      case EMPT -> {
-      }
-      case CATS -> {
-      }
-      case STAT -> {
+      case PWIN, EMPT, CATS, STAT, NAMS, LEFT, JOND -> {
       }
       case PING -> {
         synchronized (pingThread) {
           pingThread.receivedResponse = true;
         }
-      }
-      case NAMS ->{
-      }
-      case LEFT -> {
-      }
-      case JOND -> {
       }
     }
   }
@@ -187,9 +175,7 @@ public class ClientThread implements Runnable {
   private void handleRequest(String request) throws IOException {
     ArrayList<String> arguments = decodeProtocolMessage(request);
     String cmdStr = arguments.remove(0);
-    // TODO use encodeProtocolMessage()
     try {
-      // TODO change this so that incorrect input gets handled
       ClientRequest command = ClientRequest.valueOf(cmdStr);
       // TODO handle all cases
       switch (command) {
@@ -261,6 +247,10 @@ public class ClientThread implements Runnable {
         }
         case WINC -> {
           activateCheatCode();
+        }
+        case RNAM -> {
+          String nicknames = lobby.getNicknameList();
+          send(encodeProtocolMessage("+RNAM", nicknames));
         }
       }
     } catch (IndexOutOfBoundsException | IllegalArgumentException e) {

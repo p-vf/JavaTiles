@@ -237,6 +237,7 @@ public class NetworkUtils {
       WINC,
       LLOB,
       HIGH,
+      RNAM,
     }
 
     /**

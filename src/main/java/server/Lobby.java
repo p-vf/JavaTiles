@@ -151,19 +151,19 @@ public class Lobby {
     }
   }
 
-  public String getNicknameList(){
-    // TODO could use some refactoring
+  public String getNicknameList() {
     int length = 4;
     StringBuilder sb = new StringBuilder();
     for (ClientThread currentPlayer : players) {
       if (currentPlayer == null) {
-        sb.append("\"%\"" + " ");
+        sb.append(encodeProtocolMessage("") + " ");
         continue;
       }
       if ((currentPlayer.getPlayerIndex() == -1)) {
         sb.append(" ");
       } else if (currentPlayer.getPlayerIndex() != -1) {
-        sb.append(currentPlayer.getNickname() + " ");
+        String nickname = currentPlayer.getNickname();
+        sb.append(encodeProtocolMessage(nickname) + " ");
       }
     }
     while(players.size() < length){
