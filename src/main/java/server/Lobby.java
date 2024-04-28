@@ -27,12 +27,20 @@ import static utils.NetworkUtils.encodeProtocolMessage;
 
 public class Lobby {
   private final static Logger LOGGER = LogManager.getLogger(Lobby.class);
+  /**
+   * Represents the lobby number of the lobby instance.
+   */
   public final int lobbyNumber;
   private ArrayList<ClientThread> players;
   private LobbyState lobbyState;
   GameState gameState;
   private String winnerName;
 
+  /**
+   * Retrieves the number of players in the lobby.
+   *
+   * @return The number of players in the lobby.
+   */
   public int getNumberOfPlayers() {
     int count = 0;
     for (ClientThread player : players) {
@@ -43,10 +51,20 @@ public class Lobby {
     return count;
   }
 
+  /**
+   * Retrieves the current state of the lobby.
+   *
+   * @return The current state of the lobby.
+   */
   public LobbyState getLobbyState() {
     return lobbyState;
   }
 
+  /**
+   * Retrieves the name of the winner.
+   *
+   * @return The name of the winner.
+   */
   public String getWinnerName() {
     return winnerName;
   }
@@ -64,6 +82,11 @@ public class Lobby {
     lobbyState = LobbyState.OPEN;
   }
 
+  /**
+   * Retrieves the list of players in the lobby.
+   *
+   * @return An ArrayList containing the ClientThread instances of all players in the lobby.
+   */
   public ArrayList<ClientThread> getPlayers() {
     // TODO minimize the use of this method
     return players;
