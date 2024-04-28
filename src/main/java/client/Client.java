@@ -854,7 +854,7 @@ public class Client {
                         lobby = true;
                     } else {
                         Platform.runLater(() -> {
-                            controller.setLobbyWarning("The lobby with this lobby number is already in game.");
+                            controller.setLobbyWarning("The lobby with this lobby number is already full.");
                         });
                         System.out.println("Unsuccessful lobby connection");
                     }
