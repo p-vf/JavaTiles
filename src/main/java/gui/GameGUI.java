@@ -10,10 +10,21 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * The GameGUI class represents the graphical user interface for the game application.
+ * It extends the Application class and implements the Runnable interface.
+ * This class is responsible for initializing and displaying the main GUI of the game.
+ */
 public class GameGUI extends Application implements Runnable {
 
 
-
+    /**
+     * The start method is called when the JavaFX application is launched.
+     * It loads the FXML file, sets up the scene, and displays the GUI.
+     *
+     * @param primaryStage the primary stage for the JavaFX application
+     * @throws IOException if an error occurs while loading the FXML file
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Load the FXML file
@@ -31,6 +42,11 @@ public class GameGUI extends Application implements Runnable {
         primaryStage.show();
         primaryStage.setResizable(false);
     }
+
+    /**
+     * The run method is called when the application is run as a separate thread.
+     * It launches the JavaFX application.
+     */
     public void run() {
         launch();
 
