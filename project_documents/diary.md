@@ -274,7 +274,15 @@ gesagt, dass er auch Verbesserungsvorschläge bringen kann.
   - erste Erfolge: 26.04.2024 Das Spiel konnte komplett auf dem GUI, durchgespielt werden. 
 - Die letzten Unit tests wurden am 26.04.2024 implementiert und konnten erfolgreich ausgeführt werden.
 
-## 27.4 Einzelarbeit unterbrochen von kurzen Besprechungen (Boran, Istref, Pascal)
+## 27.4.2024 Einzelarbeit unterbrochen von kurzen Besprechungen (Boran, Istref, Pascal)
 - JavaDoc wurde weitergeführt
 - Refactors auf dem Server (public Felder eliminiert)
-- Neuer Netzwerkcommand RNAM wurde auf Server- sowie auf Clientseite implementiert
+- Neuer Netzwerkcommand RNAM wurde auf Server- sowie auf Clientseite implementiert nachdem dies in der kurzen Besprechung vereinbart wurde.
+- Das nächste Treffen wurde für morgen um 21:00 im Lernoullianum geplant.
+
+## 28.4.2024 Treffen Lernoullianum (Boran, Robin, Pascal, Istref)
+- Beim Treffen haben wir uns gegenseitig ausgetauscht, wie alles läuft und auch schon spezifische TODOs in unser TODO-Dokument eingetragen.
+- Was in Einzelarbeit erledigt wurde:
+  - Javadoc wurde vervollständigt
+  - Auf dem GUI wurden viele Funktionalitäten verbessert und Fehler wurden behoben.
+  - Wir sollten nun bereit sein unser Spiel morgen vorzustellen.
