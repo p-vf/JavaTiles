@@ -281,7 +281,7 @@ gesagt, dass er auch Verbesserungsvorschläge bringen kann.
 - Das nächste Treffen wurde für morgen um 21:00 im Lernoullianum geplant.
 
 ## 28.4.2024 Treffen Lernoullianum (Boran, Robin, Pascal, Istref)
-- Beim Treffen haben wir uns gegenseitig ausgetauscht, wie alles läuft und auch schon spezifische TODOs in unser TODO-Dokument eingetragen.
+- Beim Treffen haben wir uns gegenseitig ausgetauscht, wie alles läuft und auch schon spezifische TODOs in unser TODO-Dokument eingetragen für den nächsten Meilenstein.
 - Was in Einzelarbeit erledigt wurde:
   - Javadoc wurde vervollständigt
   - Auf dem GUI wurden viele Funktionalitäten verbessert und Fehler wurden behoben.
