@@ -200,7 +200,8 @@ public class Controller {
     public void chatInputPressed(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + chatInput.getText();
         String messageToSend = client.handleInput(chatMessage);
-        client.send(messageToSend);
+        if(messageToSend != null){
+        client.send(messageToSend);}
         chatInput.clear();
     }
 

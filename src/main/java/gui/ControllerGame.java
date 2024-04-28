@@ -501,7 +501,8 @@ public class ControllerGame implements Initializable {
     void toGameChat(ActionEvent event) throws IOException {
             String chatMessage = "/chat" + " " + gameChatField.getText();
             String messageToSend = client.handleInput(chatMessage);
-            client.send(messageToSend);
+        if(messageToSend != null){
+            client.send(messageToSend);}
             gameChatField.clear();
         }
 
