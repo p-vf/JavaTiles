@@ -144,7 +144,10 @@ public class Lobby {
         continue;
       }
       try {
-        p.send(cmd);
+        if(p != null){
+          p.send(cmd);
+        }
+
       } catch (IOException e) {
         LOGGER.error("From Lobby.sendToLobby():" + e.getMessage());
       }
