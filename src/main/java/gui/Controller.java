@@ -29,6 +29,10 @@ import java.util.Arrays;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
+/**
+ * The Controller class manages the user interface and user interactions for the application.
+ * It controls the various UI elements such as text fields, buttons, and displays.
+ */
 public class Controller {
 
     /** The label for displaying lobby warnings. */
