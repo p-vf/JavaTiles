@@ -89,7 +89,6 @@ public class ClientThread implements Runnable {
 
   @Override
   public void run() {
-    // TODO handle SocketTimeoutException, SocketException
 
     LOGGER.info("Server: Connection " + id + " established");
     try {
@@ -259,6 +258,13 @@ public class ClientThread implements Runnable {
     }
   }
 
+  /**
+   * Using this method you can either draw from the main stack or the exchange stack. If the main stack is
+   * empty and you try to draw from it, then the game will be ended with no winner. Sends response and game state accordingly to client.
+   *
+   * @param stackName should either be "m" for main stack or "e" for exchange stack.
+   * @throws IOException
+   */
   public void draw(String stackName) throws IOException {
     boolean isMainStack = isMainStack(stackName);
     Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
@@ -272,6 +278,13 @@ public class ClientThread implements Runnable {
     }
   }
 
+  /**
+   * Checks if the player is allowed to draw a tile. The player is allowed to draw only if it's the payers turn
+   * and he hasn't already drawn a tile. Sends response accordingly to client.
+   *
+   * @return true if the player is not allowed to draw, false otherwise.
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   public boolean notAllowedToDraw() throws IOException {
     if (!lobby.gameState.isPlayersTurn(playerIndex)) {
       send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
@@ -284,6 +297,13 @@ public class ClientThread implements Runnable {
     return false;
   }
 
+  /**
+   * Checks if a given stack is the main stack.
+   *
+   * @param stackName The name of the stack. Must be "m" for main stack or "e" for exchange stack.
+   * @return true if the stack is the main stack, false otherwise.
+   * @throws IllegalArgumentException if the stack specified is neither the main stack nor the exchange stack.
+   */
   public static boolean isMainStack(String stackName) {
     boolean isMainStack;
     switch (stackName) {
@@ -300,6 +320,14 @@ public class ClientThread implements Runnable {
     return isMainStack;
   }
 
+  /**
+   * Checks if the player's move is valid. Sends response accordingly to client.
+   *
+   * @param tile The tile to be placed.
+   * @param deck The player's deck.
+   * @return true if the move is valid, false otherwise.
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   public boolean checkIfValid(Tile tile, OrderedDeck deck) throws IOException {
     boolean isValid = lobby.validateMove(tile, deck, playerIndex);
     if (!isValid) {
@@ -310,7 +338,13 @@ public class ClientThread implements Runnable {
     return true;
   }
 
-
+  /**
+   * Checks if the player has won. Sends response accordingly to client.
+   *
+   * @param deck The player's deck.
+   * @return true if the player has won, false otherwise.
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   public boolean checkIfWon(OrderedDeck deck) throws IOException {
     //OrderedDeck clientDeck = new OrderedDeck(tileArray);
     if (deck.isWinningDeck()) {
@@ -321,6 +355,13 @@ public class ClientThread implements Runnable {
     }
     return false;
   }
+
+  /**
+   * Checks if the player is allowed to put a tile. Sends response accordingly to client.
+   *
+   * @return true if the player is not allowed to put a tile, false otherwise.
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   public boolean cantPutTile() throws IOException {
     // this checks if it's the players turn rn
     if (!lobby.gameState.isPlayersTurn(playerIndex)) {
@@ -335,6 +376,14 @@ public class ClientThread implements Runnable {
     return false;
   }
 
+  /**
+   * This method shows sends the demanded game status to the client which can either be open lobbies, running lobbies meaning
+   * lobbies that are currently playing or finished lobbies meaning lobbies that have finished playing. Sends response accordingly to client.
+   *
+   * @param gameStatus which can be either "o" for open lobbies, "r" for running lobbies or "f" for finished lobbies.
+   * @throws IOException If an I/O error occurs while sending the response.
+   * @throws IllegalArgumentException if gameStatus is not equal to either of the parameters specified above.
+   */
   private void listDemandedGamestatus(String gameStatus) throws IOException {
     StringBuilder sb = new StringBuilder();
     ArrayList<Lobby> l;
@@ -386,6 +435,11 @@ public class ClientThread implements Runnable {
     send(encodeProtocolMessage("+LGAM", gameStatus, sb.toString()));
   }
 
+  /**
+   * This method is used when a player wants to cheat and win. It sends to the client a winning deck.
+   *
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   private void activateCheatCode() throws IOException {
     // TODO update the winner-configuration to be more overpowered
     ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
@@ -419,6 +473,11 @@ public class ClientThread implements Runnable {
     send(encodeProtocolMessage("+WINC", deckString));
   }
 
+  /**
+   * Distributes deck to clients as soon as all clients are ready to play.
+   *
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   private void distributeDecks() throws IOException {
     LOGGER.debug("All players ready!");
     Random rnd = new Random();
@@ -434,6 +493,12 @@ public class ClientThread implements Runnable {
     }
   }
 
+  /**
+   * Checks if all players are ready or not.
+   *
+   * @return true if not all players are ready.
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   private boolean notAllReady() throws IOException {
     isReady = true;
     send(encodeProtocolMessage("+REDY"));
@@ -454,6 +519,11 @@ public class ClientThread implements Runnable {
     return false;
   }
 
+  /**
+   * This method lists all the players that are connected to the server.
+   *
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   private void listPlayersConnectedToServer() throws IOException {
     ArrayList<ClientThread> clientNames = server.getClientList();
     StringBuilder namesServer = new StringBuilder();
@@ -466,6 +536,12 @@ public class ClientThread implements Runnable {
     send(encodeProtocolMessage("+LPLA", namesServer.toString()));
   }
 
+  /**
+   * Ends the game with no winner. This case occurs when there are no more tiles to be drawn from the
+   * main stack. Sends response accordingly to the client.
+   *
+   * @throws IOException If an I/O error occurs while sending the response.
+   */
   private void endGameWithNoWinner() throws IOException {
     String tileString;
     tileString = "";
@@ -637,11 +713,22 @@ public class ClientThread implements Runnable {
     lobby.sendToLobby(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
   }
 
+  /**
+   * Sends the list of nicknames of players in the lobby to all clients.
+   *
+   * @throws IOException Thrown if an I/O error occurs while sending the nickname list.
+   */
   private void sendNicknameList() throws IOException {
     String names = lobby.getNicknameList();
     lobby.sendToLobby(encodeProtocolMessage("NAMS", names), null);
   }
 
+  /**
+   * Removes the client from the lobby.
+   * If the client is not in a lobby, sends a failure message.
+   *
+   * @throws IOException Thrown if an I/O error occurs while removing the client from the lobby.
+   */
   private void removeFromLobby() throws IOException {
     if (lobby != null && playerIndex >= 0) {
       lobby.removePlayer(playerIndex);

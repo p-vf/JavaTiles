@@ -151,6 +151,13 @@ public class Lobby {
     }
   }
 
+  /**
+   * Creates a String containing the nicknames of players in the lobby.
+   * The nicknames are encoded as a protocol message.
+   * If a player has not yet joined the lobby, their nickname is represented as an empty string.
+   *
+   * @return A protocol-encoded String containing the nicknames of players in the lobby.
+   */
   public String getNicknameList() {
     int length = 4;
     StringBuilder sb = new StringBuilder();
@@ -226,6 +233,7 @@ public class Lobby {
    * Marks the game as finished and records the winner's name.
    *
    * @param winnerName The name of the player who won the game.
+   * @throws IOException if an error occurs while entering the winners name in the file.
    */
   public void finishGame(String winnerName) throws IOException {
     this.winnerName = winnerName;

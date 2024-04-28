@@ -12,13 +12,23 @@ import java.util.Scanner;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
+/**
+ * This class handles reading, adding, and retrieving high scores.
+ */
 public class HighScores {
+  // path to the file containing the high scores
   private static final Path filePath = Path.of("HighScores.ssv");
 
+  /**
+   * Reads high scores from the high scores file. The high scores always contain the name of the player,
+   * date and time of the high score and the score itself.
+   *
+   * @return An ArrayList of type Triple of high score entries.
+   * @throws IOException Thrown if an I/O error occurs while reading the high scores file.
+   */
   public static ArrayList<Triple<String, String, Integer>> readHighscores() throws IOException {
     ArrayList<Triple<String, String, Integer>> highScores = new ArrayList<>();
 
-    // Benutze Scanner um die Datei zu lesen
 
     if (!Files.exists(filePath)) {
       return new ArrayList<>();
@@ -44,6 +54,15 @@ public class HighScores {
     return highScores;
   }
 
+  /**
+   * Adds a new high score entry to the high scores file.
+   * The lower the score and the earlier it was achieved the higher the name in the file.
+   *
+   * @param name  The name of the player.
+   * @param date  The date and time when the score was achieved.
+   * @param score The score achieved by the player, must be larger than 1.
+   * @throws IOException Thrown if an I/O error occurs while adding the high score entry.
+   */
   public static void addEntryToHighscores(String name, String date, int score) throws IOException {
     ArrayList<Triple<String, String, Integer>> highScores = readHighscores();
     Triple<String, String, Integer> newEntry = Triple.of(name, date, score);
@@ -64,7 +83,12 @@ public class HighScores {
     saveHighscores(highScores);
   }
 
-
+  /**
+   * Saves the high score entries to the high scores file.
+   *
+   * @param entries The high score entries to be saved.
+   * @throws IOException Thrown if an I/O error occurs while saving the high score entries.
+   */
   private static void  saveHighscores(ArrayList<Triple<String, String, Integer>> entries) throws IOException {
     if (!Files.exists(filePath)) {
       Files.createFile(filePath);
@@ -78,6 +102,12 @@ public class HighScores {
     }
   }
 
+  /**
+   * Retrieves the high scores as an encoded string.
+   *
+   * @return The high scores as an encoded string.
+   * @throws IOException Thrown if an I/O error occurs while retrieving the high scores.
+   */
   public static String getHighScores() throws IOException {
     List<Triple<String, String, Integer>> highScores = readHighscores();
     ArrayList<String> encodedHighScores = new ArrayList<>();

@@ -46,8 +46,8 @@ public class UnorderedDeck {
   /**
    * This is a bijection from tile to number. It's inverse (indexToTile()) is also a bijection.
    *
-   * @param tile
-   * @return
+   * @param tile the tile to convert to its corresponding index.
+   * @return the index corresponding to the given tile.
    */
   private static int tileToIndex(Tile tile) {
     // TODO implement this
@@ -64,8 +64,8 @@ public class UnorderedDeck {
   /**
    * This is a bijection from tile to number. It's inverse (tileToIndex()) is also a bijection.
    *
-   * @param index
-   * @return
+   * @param index the index to convert to its corresponding tile.
+   * @return the tile corresponding to the given index.
    */
   private static Tile indexToTile(int index) {
     if (index == 0) {

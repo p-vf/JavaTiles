@@ -149,6 +149,13 @@ public class GameState {
    * @param playerIndex index of the player to check (must be a number between 0 and 3)
    * @return {@code true} if the player can draw a tile, {@code false} otherwise
    */
+
+  /**
+   * Checks if the player has already drawn a tile.
+   *
+   * @param playerIndex index of the player to check (must be a number between 0 and 3)
+   * @return true if the player hasn't already drawn a tile, false otherwise
+   */
   public boolean canDraw(int playerIndex) {
     return playerDecks.get(playerIndex).countTiles() == 14;
   }

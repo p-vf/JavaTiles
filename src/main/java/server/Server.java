@@ -36,6 +36,13 @@ public class Server {
     return clientList;
   }
 
+  /**
+   * Main method to start the server. It accepts a port number as input.
+   * Optionally, the second parameter can enable ping logging.
+   *
+   * @param args The command-line arguments. The first argument is the port number.
+   *             The second argument (optional) is a boolean indicating whether to enable ping logging.
+   */
   public static void main(String[] args) {
     if (args.length < 1) {
       LOGGER.fatal("No port number given.");
@@ -54,7 +61,6 @@ public class Server {
    * The server runs indefinitely, accepting new client connections.
    *
    * @param port The port number on which the server will listen.
-   * @throws IOException If an I/O error occurs when waiting for a connection or if the server socket cannot be opened.
    */
   private Server(int port) {
     try {
@@ -66,6 +72,11 @@ public class Server {
     }
   }
 
+  /**
+   * Starts the server, accepting incoming connections from clients.
+   * Upon accepting a new connection, a new {@code ClientThread} is created to manage communication
+   * with the client.
+   */
   public void start() {
     int cnt = 0;
     try {
@@ -112,6 +123,7 @@ public class Server {
    *
    * @param str      The message to be sent to the client.
    * @param nickname The nickname of the client to whom the message is to be sent.
+   * @return true if the message was sent.
    */
   public boolean sendToNickname(String str, String nickname) {
     boolean sent = false;
