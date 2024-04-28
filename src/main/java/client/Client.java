@@ -22,13 +22,25 @@ import static utils.NetworkUtils.Protocol.ServerRequest;
 
 
 /**
- * The EchoClient class represents a client in our application.
- * It connects to a server and allows users to send Strings and perform actions.
- * This class handles input/output operations and communication with the server.
+ * The Client class represents a client in the application. It connects to a server,
+ * handles input/output operations, and communicates with the server.
+ * <p>
+ * This class includes attributes for managing the client's connection to the server,
+ * handling user input, maintaining game state, and interacting with the GUI.
+ * </p>
+ * <p>
+ * The client communicates with the server using a socket connection and implements a basic
+ * protocol for exchanging messages.
+ * </p>
+ * <p>
+ * It also interacts with a GUI for user interaction and provides methods to update
+ * the GUI based on server responses.
+ * </p>
  *
  * @author Boran Gökcen
  * @author Robin Gökcen
  * @author Pascal von Fellenberg
+ * @version 1.0
  */
 public class Client {
 
@@ -54,25 +66,22 @@ public class Client {
 
     private Tile[] exchangeStacks; //Exchange stacks of the player for this particular round
 
-    private Tile[] deckTiles; //
+    private Tile[] deckTiles; // Tiles representing the deck of the player
 
 
-    private GameGUI gui;
+    private GameGUI gui; // GUI for the game
 
-    private boolean pressedStart = false;
-
-
-
+    private boolean pressedStart = false; // Flag indicating whether the player has pressed start
 
     private boolean lobby = false; //Whether the client is in a lobby or not
 
-    public static Controller controller; //Controller for the GUI
+    private static Controller controller; //Controller for the GUI before the game starts
 
-    private static ControllerGame gameController;
+    private static ControllerGame gameController; //Controller for the GUI of the game
 
 
-    private ActionEvent event;
-    private ArrayList<String> playersInLobby = new ArrayList<>();
+    private ActionEvent event; // Event for GUI interaction
+    private ArrayList<String> playersInLobby = new ArrayList<>(); // List of players in the lobby
 
 
     /**
@@ -184,16 +193,24 @@ public class Client {
     }
 
 
-
-    public void setEvent(ActionEvent event){
+    /**
+     * Sets the ActionEvent for GUI interaction.
+     *
+     * @param event the ActionEvent to be set
+     */
+    public void setEvent(ActionEvent event) {
         this.event = event;
     }
 
-    public static void setController(Controller controller){
-        Client.controller =  controller;
+
+    /**
+     * Sets the Controller for GUI interaction.
+     *
+     * @param controller the Controller to be set
+     */
+    public static void setController(Controller controller) {
+        Client.controller = controller;
     }
-
-
 
 
     /**
@@ -424,8 +441,6 @@ public class Client {
                     return encodeProtocolMessage("HIGH");
 
 
-
-
                 default:
                     System.out.println(input);
                     return null;
@@ -452,32 +467,33 @@ public class Client {
             switch (requestType) {
 
                 case CATS:
-                    if(nickname != null){
-                    String name = arguments.get(2);
-                    if (arguments.get(0).equals("b")) {
-                        controller.chatIncoming(name + " sent to all: " + arguments.get(1));
-                        if (gameController != null) {
-                            Platform.runLater(() -> {
-                                gameController.gameChatIncoming(name + " sent to all: " + arguments.get(1));
-                            });
+                    if (nickname != null) {
+                        String name = arguments.get(2);
+                        if (arguments.get(0).equals("b")) {
+                            controller.chatIncoming(name + " sent to all: " + arguments.get(1));
+                            if (gameController != null) {
+                                Platform.runLater(() -> {
+                                    gameController.gameChatIncoming(name + " sent to all: " + arguments.get(1));
+                                });
+                            }
+                        }
+                        if (arguments.get(0).equals("w")) {
+                            controller.chatIncoming(name + " whispered: " + arguments.get(1));
+                            if (gameController != null) {
+                                Platform.runLater(() -> {
+                                    gameController.gameChatIncoming(name + " whispered: " + arguments.get(1));
+                                });
+                            }
+                        }
+                        if (arguments.get(0).equals("l")) {
+                            controller.chatIncoming(name + ": " + arguments.get(1));
+                            if (gameController != null) {
+                                Platform.runLater(() -> {
+                                    gameController.gameChatIncoming(name + ": " + arguments.get(1));
+                                });
+                            }
                         }
                     }
-                    if (arguments.get(0).equals("w")) {
-                        controller.chatIncoming(name + " whispered: " + arguments.get(1));
-                        if (gameController != null) {
-                            Platform.runLater(() -> {
-                                gameController.gameChatIncoming(name + " whispered: " + arguments.get(1));
-                            });
-                        }
-                    }
-                    if (arguments.get(0).equals("l")) {
-                        controller.chatIncoming(name + ": " + arguments.get(1));
-                        if (gameController != null) {
-                            Platform.runLater(() -> {
-                                gameController.gameChatIncoming(name + ": " + arguments.get(1));
-                            });
-                        }
-                    }}
                     //hier handeln ob whisper broadcast etc mit case distinction
 
 
@@ -498,14 +514,14 @@ public class Client {
                     });
 
                     send(encodeProtocolMessage("RNAM"));
-                    if(arguments.get(1).matches("\\d+")){
-                    playerID = Integer.parseInt(arguments.get(1));}
+                    if (arguments.get(1).matches("\\d+")) {
+                        playerID = Integer.parseInt(arguments.get(1));
+                    }
                     ArrayList<String> tilesStrt = decodeProtocolMessage(arguments.get(0));
-                    int tileCount=0;
+                    int tileCount = 0;
                     for (String tileElement : tilesStrt) {
-                        if(tileElement.isEmpty()) {
-                        }
-                        else{
+                        if (tileElement.isEmpty()) {
+                        } else {
                             tileCount++;
                         }
 
@@ -522,17 +538,16 @@ public class Client {
 
                         currentPlayerID = playerID;
 
-                    }
-                    else{
+                    } else {
                         try {
-                            if(gameController != null){
-                            gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");}
+                            if (gameController != null) {
+                                gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
+                            }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     }
                     deckTiles = stringsToTileArray(tilesStrt);
-
 
 
                     yourDeck.setDeck(yourDeck.createDeckwithTileArray(deckTiles));
@@ -575,16 +590,17 @@ public class Client {
                     ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
                     playersInLobby.clear();
                     this.playersInLobby.addAll(currentPlayers);
-                    if(gameController != null){
-                    Platform.runLater(() -> {
-                        gameController.setPlayerNames(playersInLobby);
-                    });}
+                    if (gameController != null) {
+                        Platform.runLater(() -> {
+                            gameController.setPlayerNames(playersInLobby);
+                        });
+                    }
 
                     String[] nameArray = currentPlayers.toArray(new String[0]);
 
                     StringBuilder sb = new StringBuilder();
                     sb.append("The following players are in the lobby:\n");
-                    for(int i = 0; i < nameArray.length; i++){
+                    for (int i = 0; i < nameArray.length; i++) {
                         if (nameArray[i].isEmpty()) {
                             sb.append("-----\n");
                         } else {
@@ -597,11 +613,10 @@ public class Client {
 
                     System.out.println("The following players are in the lobby:");
 
-                    for(int i = 0; i < nameArray.length; i++){
-                        if(nameArray[i].isEmpty()){
+                    for (int i = 0; i < nameArray.length; i++) {
+                        if (nameArray[i].isEmpty()) {
                             System.out.println("-----");
-                        }
-                        else{
+                        } else {
                             System.out.println(nameArray[i]);
                         }
                     }
@@ -632,8 +647,9 @@ public class Client {
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
                         Tile tile = parseTile(tileList.get(playerID));
-                        if(pressedStart){
-                        gameController.disableStacks(false);}
+                        if (pressedStart) {
+                            gameController.disableStacks(false);
+                        }
                         Platform.runLater(() -> {
                             gameController.setExchangeStack0(tile);
                         });
@@ -652,8 +668,9 @@ public class Client {
                         gameController.disableStacks(true);
                         Platform.runLater(() -> {
                             try {
-                                if(arguments.get(1).matches("\\d+")){
-                                gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1)))+"'s turn.");}
+                                if (arguments.get(1).matches("\\d+")) {
+                                    gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
+                                }
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -666,7 +683,8 @@ public class Client {
                         });
 
 
-                    send(encodeProtocolMessage("+STAT"));}
+                        send(encodeProtocolMessage("+STAT"));
+                    }
                     break;
 
 
@@ -845,8 +863,6 @@ public class Client {
                 case JLOB:
 
 
-
-
                     String confirmation = arguments.get(0);
                     if (confirmation.equals("t")) {
                         Platform.runLater(() -> {
@@ -868,7 +884,7 @@ public class Client {
                         Platform.runLater(() -> {
                             controller.chatIncoming("You: " + arguments.get(1));
                         });
-                        if(gameController != null){
+                        if (gameController != null) {
                             Platform.runLater(() -> {
                                 gameController.gameChatIncoming("You: " + arguments.get(1));
                             });
@@ -876,13 +892,12 @@ public class Client {
                         break;
 
 
-
                     }
                     if (arguments.get(0).equals("w")) {
                         Platform.runLater(() -> {
                             controller.chatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
                         });
-                        if(gameController != null){
+                        if (gameController != null) {
                             Platform.runLater(() -> {
                                 gameController.gameChatIncoming("You whispered to " + arguments.get(2) + ": " + arguments.get(1));
                             });
@@ -895,7 +910,7 @@ public class Client {
                         Platform.runLater(() -> {
                             controller.chatIncoming("You sent to all: " + arguments.get(1));
                         });
-                        if(gameController != null){
+                        if (gameController != null) {
                             Platform.runLater(() -> {
                                 gameController.gameChatIncoming("You sent to all: " + arguments.get(1));
                             });
@@ -927,7 +942,7 @@ public class Client {
                         System.out.println("Valid input");
 
                         if (arguments.get(1).equals("t")) {
-                              System.out.println("You won!");
+                            System.out.println("You won!");
                         }
                     } else {
                         System.out.println("Stop cheating!!");
@@ -959,10 +974,10 @@ public class Client {
                         changeScene("lobbySelection");
                     });
 
-                    if (arguments.get(0).equals("t")){
+                    if (arguments.get(0).equals("t")) {
                         System.out.println("Lobby left successfully");
                     }
-                    if(arguments.get(0).equals("f")){
+                    if (arguments.get(0).equals("f")) {
                         System.out.println("You have to be in a lobby to leave");
                     }
                     break;
@@ -979,17 +994,16 @@ public class Client {
                 case HIGH:
                     ArrayList<String> players = decodeProtocolMessage(arguments.get(0));
                     for (int i = 0; i < players.size(); i++) {
-                        System.out.println(i + 1 + ". "+players.get(i));
+                        System.out.println(i + 1 + ". " + players.get(i));
                     }
                     StringBuilder stringBuilder = new StringBuilder();
                     for (int i = 0; i < players.size(); i++) {
                         stringBuilder.append(i + 1).append(". ").append(players.get(i)).append("\n");
                     }
                     String result = stringBuilder.toString();
-                    if(!result.isEmpty()){
+                    if (!result.isEmpty()) {
                         controller.setHighscore("Highscore-List: " + "\n" + result);
-                    }
-                    else{
+                    } else {
                         controller.setHighscore("No highscores were made yet");
                     }
                     break;
@@ -1000,12 +1014,12 @@ public class Client {
                     ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
                     playersInLobby.clear();
                     this.playersInLobby.addAll(currentPlayers);
-                    if(gameController != null){
+                    if (gameController != null) {
                         Platform.runLater(() -> {
                             gameController.setPlayerNames(playersInLobby);
-                        });}
+                        });
+                    }
                     break;
-
 
 
                 default:
@@ -1028,8 +1042,17 @@ public class Client {
         System.out.println(yourDeck.toStringPretty());
     }
 
-    private void changeScene(String argument){
-        controller.switchToScene(event,argument);
+    /**
+     * Changes the scene in the GUI based on the provided argument.
+     * <p>
+     * This method invokes the {@code switchToScene} method in the {@code controller} object,
+     * passing the {@code event} and {@code argument} as parameters to facilitate the scene change.
+     * </p>
+     *
+     * @param argument the argument specifying the scene to switch to
+     */
+    private void changeScene(String argument) {
+        controller.switchToScene(event, argument);
     }
 
     /**
@@ -1078,6 +1101,17 @@ public class Client {
         System.out.println(res.toString());
     }
 
+    /**
+     * Concatenates words from the specified index in the provided list of arguments.
+     * <p>
+     * This method concatenates words starting from the specified {@code start} index in the {@code arguments} list,
+     * combining them into a single string separated by spaces.
+     * </p>
+     *
+     * @param start     the starting index from which to concatenate words
+     * @param arguments the list of arguments containing words to concatenate
+     * @return the concatenated string of words
+     */
     private String concatenateWords(int start, ArrayList<String> arguments) {
         String message = arguments.get(start);
         for (int i = start + 1; i < arguments.size(); i++) {
@@ -1106,14 +1140,36 @@ public class Client {
         }
     }
 
+    /**
+     * Sets the controller of the game for the client.
+     * <p>
+     * This method sets the {@code gameController} attribute of the client to the provided {@code gameController} object.
+     * </p>
+     *
+     * @param gameController the controller of the game to be set
+     */
+
     public void setgameController(ControllerGame gameController) {
-        this.gameController= gameController;
+        this.gameController = gameController;
     }
 
+    /**
+     * Retrieves the deck of the client.
+     *
+     * @return an array of tiles representing the deck.
+     */
     public Tile[] getTiles() {
         return deckTiles;
     }
 
+    /**
+     * Sets the flag indicating whether the player has pressed start.
+     * <p>
+     * This method sets the {@code pressedStart} attribute of the client to the specified boolean value.
+     * </p>
+     *
+     * @param bool the boolean value indicating whether the game has started
+     */
     public void setPressedStart(boolean bool) {
         pressedStart = bool;
     }

@@ -200,12 +200,28 @@ public class Tile {
         String.format("%2d", number) +
         Color.ansiReset();
   }
-
+  /**
+   * Returns a string representation of the tile.
+   * <p>
+   * The string representation includes the tile's number and color separated by a colon.
+   * </p>
+   *
+   * @return a string representation of the tile
+   */
   @Override
   public String toString() {
     return  number + ":"+ color.toString();
   }
 
+  /**
+   * Indicates whether some other object is "equal to" this tile.
+   * <p>
+   * This method compares the color and number of the tile with another object.
+   * </p>
+   *
+   * @param other the object to compare with
+   * @return {@code true} if this tile is the same as the {@code other} object; {@code false} otherwise
+   */
   @Override
   public boolean equals(Object other) {
     if (other instanceof Tile t) {
