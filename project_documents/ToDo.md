@@ -43,3 +43,17 @@ Client:
     - LLOB command senden (siehe networkprotocol.md)
     - NAMS command abhandeln (siehe networkprotocol.md)
     - JOND command abhandeln (siehe networkprotocol.md)
+
+# aktuelle TODOs:
+
+was noch zu tun ist beim GUI:
+    - name sollte man immer ändern können (egal ob ausserhalb einer Lobby innerhalb einer Lobby oder im laufenden Spiel)
+    - Login screen sollte gelöscht werden (wenn kein name angegeben wird, sollte man den Systemnamen nehmen)
+    - richtige Anzeige beim Putten wenn spieler nicht dran ist
+    Das Netzwerkprotokoll betreffend:
+    - Lobby sollte man immer verlassen können (auch während dem Spiel) (LLOB)
+    - wenn jemand die lobby verlässt sollte das angezeigt werden (LEFT)
+    - server-Spielerliste sollte aufgelistet werden können (LPLA) 
+    - Lobbies mit den beinhalteten Spielern sollte aufgezeigt werden können (LLPL) (vielleicht sollte das mit LGAM vereint werden)
+
+- Jar datei in einem anderen ordner ausprobieren
