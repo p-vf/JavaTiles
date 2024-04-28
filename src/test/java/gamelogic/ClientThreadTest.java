@@ -20,12 +20,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * Tests for the {@link ClientThread} class.
+ */
 class ClientThreadTest {
   GameState gameState;
 
   Lobby lobby;
   ClientThread clientThread;
 
+  /**
+   * Sets up the test environment before each test method. Could be that some tests need to modify this environment.
+   *
+   * @throws NoSuchFieldException   When a specified field cannot be found.
+   */
   @BeforeEach
   public void setUp() throws NoSuchFieldException {
     clientThread = mock(ClientThread.class);
@@ -49,28 +57,52 @@ class ClientThreadTest {
   }
 
 
+  /**
+   * Tests {@link ClientThread#isMainStack(String)}.
+   * It checks if the method returns true for the main stack.
+   */
   @Test
   void isMainStackShouldReturnTrueForMainStack() {
     String args = "m";
     assertTrue(clientThread.isMainStack(args));
   }
 
+  /**
+   * Tests {@link ClientThread#isMainStack(String)}.
+   * It verifies that the method throws an IllegalArgumentException when an invalid stack identifier is provided.
+   */
   @Test
   void isMainStackShouldThrowExceptionForFalseStack() {
     String args = "s";
     assertThrows(IllegalArgumentException.class, () -> {clientThread.isMainStack(args);});
   }
+  /**
+   * Tests {@link ClientThread#isMainStack(String)}.
+   * It verifies that the method throws an IllegalArgumentException when no stack identifier is provided.
+   */
   @Test
   void isMainStackShouldThrowExceptionForNoStackSpecified() {
     String args = "";
     assertThrows(IllegalArgumentException.class, () -> {clientThread.isMainStack(args);});
   }
+  /**
+   * Tests {@link ClientThread#isMainStack(String)}.
+   * It checks if the method returns false for the exchange stack.
+   */
   @Test
   void isMainStackShouldReturnFalseForExchangeStack() {
    String args = "e";
     assertFalse(clientThread.isMainStack(args));
   }
 
+  /**
+   * Tests {@link ClientThread#notAllowedToDraw()}.
+   * It verifies that the method returns true because it's not the player's turn.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   */
    @Test
   void notAllowedToDrawShouldReturnTrueBecauseItIsNotThePlayersTurn() throws IOException, NoSuchFieldException, IllegalAccessException {
      Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
@@ -81,6 +113,15 @@ class ClientThreadTest {
      assertTrue(clientThread.notAllowedToDraw());
 
   }
+
+  /**
+   * Tests {@link ClientThread#notAllowedToDraw()}.
+   * It verifies that the method returns true because the player has already drawn a tile.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   */
   @Test
   void notAllowedToDrawShouldReturnTrueBecausePlayerHasAlreadyDrawn() throws IOException, IllegalAccessException, NoSuchFieldException {
 
@@ -105,6 +146,14 @@ class ClientThreadTest {
     assertTrue(clientThread.notAllowedToDraw());
   }
 
+  /**
+   * Tests {@link ClientThread#notAllowedToDraw()}.
+   * It verifies that the method returns false because the player is allowed to draw a tile.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   */
   @Test
   void notAllowedToDrawShouldReturnFalseBecausePlayerCanDraw() throws IOException, IllegalAccessException, NoSuchFieldException {
 
@@ -129,6 +178,14 @@ class ClientThreadTest {
     assertFalse(clientThread.notAllowedToDraw());
   }
 
+  /**
+   * Tests {@link ClientThread#draw(String)}.
+   * It verifies that the game ends with no winner when no tile can be drawn by verifying the expected output from the OutputStream.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   */
   @Test
   void drawShouldEndGameWithNoWinnerWhenNoTileCanBeDrawn() throws IOException, NoSuchFieldException, IllegalAccessException {
 
@@ -175,10 +232,18 @@ class ClientThreadTest {
     assertTrue(lines.contains("+DRAW \"%\""));
     assertTrue(lines.contains("EMPT"));
   }
+
+  /**
+   * Tests {@link ClientThread#draw(String)}.
+   * It verifies that the method sends a message for a regular draw action.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   */
   @Test
   void drawShouldSendMessageForRegularDrawAction() throws IOException, NoSuchFieldException, IllegalAccessException {
 
-    //TODO: use PipedInputstream to read outcontent
     Stack<Tile> stackWithTiles = new Stack<>();
 
 
@@ -212,6 +277,15 @@ class ClientThreadTest {
     String output = reader.readLine();
     assertEquals("+DRAW 3:YELLOW", output);
   }
+
+  /**
+   * Tests {@link ClientThread#cantPutTile()}.
+   * It verifies that the method returns true if it's not the player's turn.
+   *
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws IOException            if an I/O error occurs.
+   */
   @Test
   void cantPutTileShouldReturnTrueIfItIsNotThePlayersTurn() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
@@ -223,6 +297,14 @@ class ClientThreadTest {
 
   }
 
+  /**
+   * Tests {@link ClientThread#cantPutTile()}.
+   * It verifies that the method returns true because the player has not yet drawn a tile.
+   *
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws IOException            if an I/O error occurs.
+   */
   @Test
   void cantPutTileShouldReturnTrueBecausePlayerHasNotDrawnYet() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
@@ -248,6 +330,14 @@ class ClientThreadTest {
 
   }
 
+  /**
+   * Tests {@link ClientThread#cantPutTile()}.
+   * It verifies that the method returns false because it's the player's turn and the player has already drawn a tile.
+   *
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws IOException            if an I/O error occurs.
+   */
   @Test
   void cantPutTileShouldReturnFalseBecauseItsYourTurnAndYouHaveAlreadyDrawn() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
@@ -273,6 +363,14 @@ class ClientThreadTest {
     assertFalse(clientThread.cantPutTile());
   }
 
+  /**
+   * Tests {@link ClientThread#checkIfValid(Tile, OrderedDeck)}.
+   * It verifies that the method returns false for an invalid move because the tile to put is null.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   */
   @Test
   void checkIfValidShouldReturnFalseForInvalidMoveBecauseTileToPuttIsNull() throws IOException, IllegalAccessException, NoSuchFieldException {
     //TODO: why does this testcase work wrong?
@@ -296,7 +394,14 @@ class ClientThreadTest {
     verify(clientThread, times(1)).checkIfValid(tile, deck);
   }
 
-
+  /**
+   * Tests {@link ClientThread#checkIfValid(Tile, OrderedDeck)}.
+   * It verifies that the method returns false for an invalid move because the player does not have the tile he is trying to put.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   */
   @Test
   void checkIfValidShouldReturnFalseForInvalidMoveBecausePlayerDoesNotHaveTheTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
     Tile tile = new Tile(3,Color.BLUE); // Player shouldn't be able to put this tile because he doesn't have it.
@@ -328,7 +433,14 @@ class ClientThreadTest {
     verify(clientThread, times(1)).checkIfValid(tile, deckToBeChecked);
   }
 
-
+  /**
+   * Tests {@link ClientThread#checkIfValid(Tile, OrderedDeck)}.
+   * It verifies that the method returns true because the player has the tile he is trying to put.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   */
   @Test
   void checkIfValidShouldReturnTrueBecausePlayerHasTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
 
@@ -362,6 +474,14 @@ class ClientThreadTest {
     verify(clientThread, times(1)).checkIfValid(tile, deckToBeChecked);
   }
 
+  /**
+   * Tests {@link ClientThread#checkIfWon(OrderedDeck)}.
+   * It verifies that the method returns false because no winning configuration is achieved.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   */
   @Test
   void checkIfWonShouldReturnFalseBecauseNoWinningConfigurationAchieved() throws IOException, IllegalAccessException, NoSuchFieldException {
 
@@ -386,7 +506,14 @@ class ClientThreadTest {
     verify(clientThread, times(1)).checkIfWon(winningDeck);
   }
 
-
+  /**
+   * Tests {@link ClientThread#checkIfWon(OrderedDeck)}.
+   * It verifies that the method returns true for a winning deck.
+   *
+   * @throws IOException            if an I/O error occurs.
+   * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
+   * @throws NoSuchFieldException   if a specified field cannot be found.
+   */
   @Test
   void checkIfWonShouldReturnTrueForWinningDeck() throws IOException, IllegalAccessException, NoSuchFieldException {
 
@@ -409,5 +536,4 @@ class ClientThreadTest {
     assertTrue(clientThread.checkIfWon(winningDeck));
     verify(clientThread, times(1)).checkIfWon(winningDeck);
   }
-//TODO: GameState.putt
 }

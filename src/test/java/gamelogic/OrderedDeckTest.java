@@ -7,8 +7,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link OrderedDeck} class.
+ */
 class OrderedDeckTest {
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns false
+   * for a set that contains too many tiles.
+   */
   @Test
   void isValidSetShouldReturnFalseForTooLargeSet() {
     Tile[] deckRow = new Tile[]{
@@ -20,6 +27,11 @@ class OrderedDeckTest {
     };
     assertFalse(OrderedDeck.isValidSet(deckRow, 0, 5));
   }
+
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns false
+   * for a set where the color yellow appears twice, since all colors should be distinct.
+   */
   @Test
   void isValidSetShouldReturnFalseForColorYellowTwice(){
     Tile[] deckRow = new Tile[]{
@@ -31,6 +43,10 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns false
+   * for a set where the color red appears twice, since all colors should be distinct.
+   */
   @Test
   void isValidSetShouldReturnFalseForColorRedTwice(){
     Tile[] deckRow = new Tile[]{
@@ -42,6 +58,10 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns false
+   * for a set where the color black appears twice, since all colors should be distinct.
+   */
   @Test
   void isValidSetShouldReturnFalseForColorBlackTwice(){
     Tile[] deckRow = new Tile[]{
@@ -53,6 +73,10 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns false
+   * for a set where the color blue appears twice, since all colors should be distinct.
+   */
   @Test
   void isValidSetShouldReturnFalseForColorBlueTwice(){
     Tile[] deckRow = new Tile[]{
@@ -63,6 +87,10 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidSet(deckRow, 0, 3));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns false
+   * for a set where not all numbers are the same.
+   */
   @Test
   void isValidSetShouldReturnFalseForDifferentNumber() {
     Tile[] deckRow = new Tile[]{
@@ -74,8 +102,12 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns true
+   * for a set where the joker is being used.
+   */
   @Test
-  void isValidSetShouldReturnTrueWithJoker() {
+  void isValidSetShouldReturnTrueWithJokerUse() {
     Tile[] deckRow = new Tile[]{
         new Tile(0, Color.BLUE),
         new Tile(9, Color.RED),
@@ -84,6 +116,12 @@ class OrderedDeckTest {
     };
     assertTrue(OrderedDeck.isValidSet(deckRow, 0, 4));
   }
+
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns true
+   * for a set where the joker is being used twice, once even creating a color duplicate of the color yellow,
+   * but due to the game rules it is still a valid set.
+   */
   @Test
   void isValidSetShouldReturnTrueWithColorDuplicateDueToJoker() {
     Tile[] deckRow = new Tile[]{
@@ -95,6 +133,10 @@ class OrderedDeckTest {
     assertTrue(OrderedDeck.isValidSet(deckRow, 0, 3));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidSet(Tile[], int, int)} returns true
+   * for a set with three tiles, which is the smallest set allowed.
+   */
   @Test
   void isValidSetShouldReturnTrueForSmallestSetPossible() {//Ist das nötig?
     Tile[] deckRow = new Tile[]{
@@ -105,12 +147,12 @@ class OrderedDeckTest {
     assertTrue(OrderedDeck.isValidSet(deckRow, 0, 3));
   }
 
-  /*
-  @Test
-  void isJoker() {
-  }
-*/
-
+  /**
+   * Verifies that {@link OrderedDeck#isValidRun(Tile[], int, int)} returns false
+   * for a run where the joker is used incorrectly. In this case the joker is used incorrectly, because
+   * the joker can't be used between the number 9 and 10 in a run since it can't substitute a correct tile because there
+   * should be no tile at all between tile number 9 and 10 in a run.
+   */
   @Test
   void isValidRunShouldReturnFalseForWrongJokerUse( ){
     Tile[] deckRow = new Tile[]{
@@ -122,6 +164,11 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
+
+  /**
+   * Verifies that {@link OrderedDeck#isValidRun(Tile[], int, int)} returns false
+   * for a run where not all the tiles have the same color.
+   */
   @Test
   void isValidRunShouldReturnFalseForWrongColor(){
     Tile[] deckRow = new Tile[]{
@@ -133,6 +180,10 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidRun(Tile[], int, int)} returns false
+   * for a run where tiles don't have consecutive numbers.
+   */
   @Test
   void isValidRunShouldReturnFalseForWrongNumber(){
     Tile[] deckRow = new Tile[]{
@@ -144,6 +195,11 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isValidRun(Tile[], int, int)} returns false
+   * for a run where the joker is placed after tile number 13, since a run is not defined to be
+   * continuous.
+   */
   @Test
   void isValidRunShouldReturnFalseForRunWithJokerAfterTileNumber13() {
     //TODO: False, wenn der Joker gesetzt wird nach der 13
@@ -156,7 +212,10 @@ class OrderedDeckTest {
     assertFalse(OrderedDeck.isValidRun(deckRow, 0, 4));
   }
 
-
+  /**
+   * Verifies that {@link OrderedDeck#isValidRun(Tile[], int, int)} returns true
+   * for a run where the joker is used correctly.
+   */
   @Test
   void isValidRunShouldReturnTrueForRunWithJoker() {
     Tile[] deckRow = new Tile[]{
@@ -170,6 +229,10 @@ class OrderedDeckTest {
     assertTrue(OrderedDeck.isValidRun(deckRow, 0, 6));
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isWinningDeck()} returns false
+   * for a deck with a too short group. Said group is the tile 4, red which is alone.
+   */
   @Test
   void isWinningDeckShouldReturnFalseForTooShortGroups() {
     Tile[] deckArray = new Tile[]{
@@ -201,6 +264,12 @@ class OrderedDeckTest {
     OrderedDeck d = new OrderedDeck(deckArray);
     assertFalse(d.isWinningDeck());
   }
+
+  /**
+   * Verifies that {@link OrderedDeck#isWinningDeck()} returns false
+   * for a run from index ten to index 12 because runs and sets have to be in the same row of the
+   * OrderedDeck.
+   */
   @Test
   void isWinningDeckShouldReturnFalseForBuildingRunFromIndexTenToIndexTwelve() {
     Tile[] deckArray = new Tile[]{
@@ -233,6 +302,11 @@ class OrderedDeckTest {
     assertFalse(d.isWinningDeck());
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isWinningDeck()} returns false
+   * for a set from index ten to index 12 because runs and sets have to be in the same row of the
+   * OrderedDeck.
+   */
   @Test
   void isWinningDeckShouldReturnFalseForBuildingSetFromIndexTenToIndexTwelve() {
     Tile[] deckArray = new Tile[]{
@@ -265,6 +339,10 @@ class OrderedDeckTest {
     assertFalse(d.isWinningDeck());
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isWinningDeck()} returns false
+   * if there is no null tile between two separate groups.
+   */
   @Test
   void isWinningDeckShouldReturnFalseForNoNullTileInBetween() {
     Tile[] deckArray = new Tile[]{
@@ -297,6 +375,10 @@ class OrderedDeckTest {
     assertFalse(d.isWinningDeck());
   }
 
+  /**
+   * Verifies that {@link OrderedDeck#isWinningDeck()} returns true
+   * for a regular winning deck.
+   */
   @Test
   void isWinningDeckShouldReturnTrueForRegularWinningDeck() {
     Tile[] deckArray = new Tile[]{
@@ -330,6 +412,10 @@ class OrderedDeckTest {
   }
 
 
+  /**
+   * Verifies that {@link OrderedDeck#isWinningDeck()} returns true
+   * for a winning deck created with the implemented cheat code.
+   */
   @Test
   void isWinningDeckForCheatCodeShouldReturnTrue(){
 

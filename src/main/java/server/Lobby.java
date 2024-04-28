@@ -252,20 +252,6 @@ public class Lobby {
     lobbyState = LobbyState.FINISHED;
   }
 
-
-  /*public void printDebug() {
-    System.out.println("Main stack:");
-    gameState.mainStack.forEach((x) -> System.out.print(x.toStringPretty() + " "));
-    System.out.println();
-    for (int i = 0; i < 4; i++) {
-      System.out.println("Deck of Player " + players.get(i).nickname + " (index " + i + "):");
-      System.out.println(gameState.playerDecks.get(i).toStringPretty());
-      System.out.println("Exchange-stack:");
-      gameState.exchangeStacks.get(i).forEach((x) -> System.out.print(x.toStringPretty() + " "));
-      System.out.println("\n");
-    }
-  }*/
-
   /**
    * Represents the rough state of the lobby.
    */
