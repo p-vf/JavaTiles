@@ -378,7 +378,7 @@ public class Client {
                     Tile[] tileArray = yourDeck.DeckToTileArray();
                     String DeckToBeSent = tileArrayToProtocolArgument(tileArray);
                     gameController.setCanYouPlayThisMove(true);
-                    gameController.takeOffExchangeStack();
+
                     showDeck();
                     return encodeProtocolMessage("PUTT", tileString, DeckToBeSent);
 

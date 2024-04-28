@@ -13,7 +13,7 @@
    <center>
       <AnchorPane maxHeight="600.0" maxWidth="800.0" minHeight="400.0" minWidth="600.0" onMouseClicked="#deleteSelection" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
-            <TilePane layoutX="104.0" layoutY="387.0" maxHeight="147.0" maxWidth="600.0" prefHeight="147.0" prefWidth="600.0">
+            <TilePane layoutX="90.0" layoutY="387.0" maxHeight="147.0" maxWidth="640.0" minHeight="147.0" minWidth="640.0" prefHeight="147.0" prefWidth="640.0">
                <children>
                   <Button fx:id="zero0" maxHeight="70.0" maxWidth="50.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
                      <font>
