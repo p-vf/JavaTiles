@@ -13,7 +13,15 @@ import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the {@link GameState} class.
+ */
 public class GameStateTest {
+  /**
+   * Verifies that {@link GameState#putTile(Tile, int)} throws an {@link IllegalArgumentException}
+   * when trying to put a tile that is not in the player's deck which is kept on the server. This could happen if the client tries to
+   * cheat.
+   */
   @Test
 void putTileCanNotPutTileBecauseDeckKeptOnServerDoesNotContainTile(){
 
@@ -35,6 +43,10 @@ void putTileCanNotPutTileBecauseDeckKeptOnServerDoesNotContainTile(){
     });
   }
 
+  /**
+   * Verifies that {@link GameState#putTile(Tile, int)} successfully puts a tile
+   * when the deck kept on the server contains the tile.
+   */
   @Test
   void putTileCanPutTileBecauseDeckContainsTile() throws IllegalAccessException, NoSuchFieldException {
 
