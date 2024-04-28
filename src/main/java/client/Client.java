@@ -12,10 +12,6 @@ import javafx.event.ActionEvent;
 import game.Tile;
 import gui.Controller;
 import gui.GameGUI;
-import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -636,7 +632,7 @@ public class Client {
                         Tile tile = parseTile(tileList.get(playerID));
                         gameController.disableStacks(false);
                         Platform.runLater(() -> {
-                            gameController.setExchangeStack(tile);
+                            gameController.setExchangeStack0(tile);
                         });
 
                         System.out.println("It's your turn.");
@@ -658,6 +654,9 @@ public class Client {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+                            Platform.runLater(() -> {
+                                gameController.setExchangeStacks(exchangeStacks, playerID);
+                            });
                         });
                         Platform.runLater(() -> {
                             gameController.setPlayerNames(playersInLobby);

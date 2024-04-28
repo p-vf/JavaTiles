@@ -2,7 +2,6 @@ package gui;
 
 import client.Client;
 import game.Tile;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,7 +28,17 @@ public class ControllerGame implements Initializable {
     private Label gameWarning;
 
     @FXML
-    private Button exchangeStack;
+    private Button exchangeStack0;
+
+
+    @FXML
+    private Button exchangeStack1;
+
+    @FXML
+    private Button exchangeStack2;
+
+    @FXML
+    private Button exchangeStack3;
 
     @FXML
     private Button mainStack;
@@ -202,12 +211,12 @@ public class ControllerGame implements Initializable {
     }
 
     public void takeOffExchangeStack() {
-        exchangeStack.setText("");
+        exchangeStack0.setText("");
     }
 
     public void disableStacks(boolean bool) {
         mainStack.setDisable(bool);
-        exchangeStack.setDisable(bool);
+        exchangeStack0.setDisable(bool);
     }
 
 
@@ -242,14 +251,75 @@ public class ControllerGame implements Initializable {
 
     }
 
-    public void setExchangeStack(Tile tile) {
+    public void setExchangeStack0(Tile tile) {
         if (tile != null) {
-            exchangeStack.setText("" + tile.getNumber());
-            exchangeStack.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+            exchangeStack0.setText("" + tile.getNumber());
+            exchangeStack0.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
         }
 
 
     }
+
+    public void setExchangeStacks(Tile[] tiles, int index){
+
+            for (int i = 0; i < tiles.length; i++) {
+                if (i == index) {
+                    if (i == 0) {
+                        if(tiles[1] != null){
+                        exchangeStack1.setText("" + tiles[1].getNumber());
+                        exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[1].getColor())));}
+                        if(tiles[2] != null){
+                        exchangeStack2.setText("" + tiles[2].getNumber());
+                        exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[2].getColor())));}
+                        if(tiles[3] != null){
+                        exchangeStack3.setText("" + tiles[3].getNumber());
+                        exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[3].getColor())));}
+                    }
+                    if (i == 1) {
+                        if(tiles[2] != null){
+                            exchangeStack1.setText("" + tiles[2].getNumber());
+                            exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[2].getColor())));}
+                        if(tiles[3] != null){
+                            exchangeStack2.setText("" + tiles[3].getNumber());
+                            exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[3].getColor())));}
+                        if(tiles[0] != null){
+                            exchangeStack3.setText("" + tiles[0].getNumber());
+                            exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[0].getColor())));}
+                    }
+                    if (i == 2) {
+                        if(tiles[3] != null){
+                            exchangeStack1.setText("" + tiles[3].getNumber());
+                            exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[3].getColor())));}
+                        if(tiles[0] != null){
+                            exchangeStack2.setText("" + tiles[0].getNumber());
+                            exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[0].getColor())));}
+                        if(tiles[1] != null){
+                            exchangeStack3.setText("" + tiles[1].getNumber());
+                            exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[1].getColor())));}
+
+                    }
+                    if (i == 3) {
+                        if(tiles[0] != null){
+                        exchangeStack1.setText("" + tiles[0].getNumber());
+                        exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[0].getColor())));}
+                        if(tiles[1] != null){
+                            exchangeStack2.setText("" + tiles[1].getNumber());
+                            exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[1].getColor())));}
+                        if(tiles[2] != null){
+                            exchangeStack3.setText("" + tiles[2].getNumber());
+                            exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[2].getColor())));}
+
+                    }
+
+                }
+
+            }
+        }
+
+
+
+
+
 
 
     int[] TilePosition(Button button) {
@@ -356,7 +426,7 @@ public class ControllerGame implements Initializable {
         ArrayList<String> args = new ArrayList<>();
         args.add("/draw");
         Button pressedButton = (Button) event.getSource();
-        if (pressedButton.equals(exchangeStack)) {
+        if (pressedButton.equals(exchangeStack0)) {
             System.out.println("exchangeStack wurde gedrückt");
 
             pressedButtons.clear();
