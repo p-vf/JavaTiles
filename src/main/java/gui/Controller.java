@@ -32,6 +32,8 @@ import static utils.NetworkUtils.encodeProtocolMessage;
 public class Controller {
 
     public Button buttonSend;
+    @FXML
+    private Label lobbyWarning;
     public TextField myTextField;
     @FXML
     public VBox lsVBox;
@@ -85,10 +87,6 @@ public class Controller {
         if(nickname.contains(" ")||nickname.contains("\"")){
             loginWarning.setText("Your nickname mustn't contain blank spaces or quotation marks");
         }
-        if(nickname.length()>20){
-            loginWarning.setText("Your nickname mustn't contain more than 20 characters");
-
-        }
         else{
         if (!(isEmpty)){
             arguments.add(nickname);
@@ -96,6 +94,11 @@ public class Controller {
             arguments.clear();
         }
     }}
+
+    public void setLobbyWarning(String text){
+        lobbyWarning.setText(text);
+
+    }
 
 
     /**

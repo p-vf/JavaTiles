@@ -309,11 +309,17 @@ public class Client {
                             int num = Integer.parseInt(number);
                             return encodeProtocolMessage("JLOB", String.valueOf(num));
                         } catch (NumberFormatException e) {
-                            System.out.println("Please enter a number");
+                            Platform.runLater(() -> {
+                                controller.setLobbyWarning("Please enter a number.");
+                            });
+                            System.out.println("Please enter a number.");
                             return null;
                         }
                     } else {
-                        System.out.println("You must provide a number to enter a lobby");
+                        Platform.runLater(() -> {
+                            controller.setLobbyWarning("You must provide a number to enter a lobby.");
+                        });
+                        System.out.println("You must provide a number to enter a lobby.");
                         return null;
                     }
 
@@ -836,16 +842,20 @@ public class Client {
 
                 case JLOB:
 
-                    Platform.runLater(() -> {
-                        changeScene("lobbyScreen");
-                    });
+
 
 
                     String confirmation = arguments.get(0);
                     if (confirmation.equals("t")) {
+                        Platform.runLater(() -> {
+                            changeScene("lobbyScreen");
+                        });
                         System.out.println("Joined lobby successfully");
                         lobby = true;
                     } else {
+                        Platform.runLater(() -> {
+                            controller.setLobbyWarning("The lobby with this lobby number is already in game.");
+                        });
                         System.out.println("Unsuccessful lobby connection");
                     }
 
