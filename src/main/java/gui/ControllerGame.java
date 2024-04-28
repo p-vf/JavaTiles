@@ -188,6 +188,7 @@ public class ControllerGame implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        disableStacks(true);
 
         client.setgameController(this);
     }
@@ -195,8 +196,10 @@ public class ControllerGame implements Initializable {
 
     @FXML
     void showDeck(ActionEvent event) throws IOException {
+        client.setPressedStart(true);
         startButton.setDisable(true);
         startButton.setVisible(false);
+        disableStacks(false);
         this.tiles = client.getTiles();
         for (int i = 0; i < deck.size(); i++) {
             if (tiles[i] == null) {

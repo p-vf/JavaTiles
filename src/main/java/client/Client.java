@@ -59,6 +59,8 @@ public class Client {
 
     private GameGUI gui;
 
+    private boolean pressedStart = false;
+
 
 
 
@@ -630,7 +632,8 @@ public class Client {
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
                         Tile tile = parseTile(tileList.get(playerID));
-                        gameController.disableStacks(false);
+                        if(pressedStart){
+                        gameController.disableStacks(false);}
                         Platform.runLater(() -> {
                             gameController.setExchangeStack0(tile);
                         });
@@ -661,9 +664,9 @@ public class Client {
                         Platform.runLater(() -> {
                             gameController.setPlayerNames(playersInLobby);
                         });
-                    }
 
-                    send(encodeProtocolMessage("+STAT"));
+
+                    send(encodeProtocolMessage("+STAT"));}
                     break;
 
 
@@ -1109,6 +1112,10 @@ public class Client {
 
     public Tile[] getTiles() {
         return deckTiles;
+    }
+
+    public void setPressedStart(boolean bool) {
+        pressedStart = bool;
     }
 }
 

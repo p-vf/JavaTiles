@@ -142,7 +142,7 @@
                   <Font name="Segoe UI Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="mainStack" layoutX="375.0" layoutY="159.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" text="M" textFill="#0b6320">
+            <Button fx:id="mainStack" layoutX="380.0" layoutY="195.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" text="M" textFill="#0b6320">
                <font>
                   <Font name="Arial Rounded MT Bold" size="22.0" />
                </font>
@@ -182,7 +182,7 @@
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label id="winnerLabel" fx:id="winLabel" disable="true" layoutX="163.0" layoutY="63.0" prefHeight="335.0" prefWidth="476.0">
+            <Label id="winnerLabel" fx:id="winLabel" disable="true" layoutX="163.0" layoutY="62.0" prefHeight="335.0" prefWidth="476.0">
                <font>
                   <Font name="Bookman Old Style Bold" size="80.0" />
                </font>
@@ -199,7 +199,7 @@
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="exchangeStack2" disable="true" layoutX="589.0" layoutY="124.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack2" disable="true" layoutX="589.0" layoutY="120.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
