@@ -42,18 +42,38 @@ public class ClientThread implements Runnable {
   private boolean isReady = false;
   private volatile boolean isRunning = true;
 
+  /**
+   * Retrieves the unique identifier of this client thread.
+   *
+   * @return The ID of this client thread.
+   */
   public int getId() {
     return id;
   }
 
+  /**
+   * Retrieves the nickname of this client.
+   *
+   * @return The nickname of the client.
+   */
   public String getNickname() {
     return nickname;
   }
 
+  /**
+   * Retrieves the index of the player associated with this client in the current lobby.
+   *
+   * @return The index of the player in the lobby, or -1 if not assigned to any player.
+   */
   public int getPlayerIndex() {
     return playerIndex;
   }
 
+  /**
+   * Sets the readiness status of the client.
+   *
+   * @param newValue The new readiness status.
+   */
   public void setIsReady(boolean newValue) {
     isReady = newValue;
   }
@@ -263,7 +283,7 @@ public class ClientThread implements Runnable {
    * empty and you try to draw from it, then the game will be ended with no winner. Sends response and game state accordingly to client.
    *
    * @param stackName should either be "m" for main stack or "e" for exchange stack.
-   * @throws IOException
+   * @throws IOException if send method fails.
    */
   public void draw(String stackName) throws IOException {
     boolean isMainStack = isMainStack(stackName);
@@ -605,7 +625,6 @@ public class ClientThread implements Runnable {
    * Otherwise, the name is modified so that it is unique on the server.
    *
    * @param newNickname The name to which the nickname should be changed.
-   * @return The nickname received by the client.
    */
   private void changeName(String newNickname) {
     ArrayList<String> names = server.getNicknames();

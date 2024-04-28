@@ -23,6 +23,11 @@ public class Server {
   private final ArrayList<Lobby> lobbies = new ArrayList<>();
 
   // TODO minimize the use of this method
+  /**
+   * Retrieves the list of active lobbies on the server.
+   *
+   * @return An ArrayList of active lobbies on the server.
+   */
   public ArrayList<Lobby> getLobbies() {
     return lobbies;
   }
@@ -94,6 +99,11 @@ public class Server {
     }
   }
 
+  /**
+   * Checks if ping logging is enabled on the server.
+   *
+   * @return {@code true} if ping logging is enabled, {@code false} otherwise.
+   */
   public boolean isPingLoggingEnabled() {
     return ENABLE_PING_LOGGING;
   }
