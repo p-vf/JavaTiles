@@ -184,6 +184,7 @@ public class ControllerGame implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4, zero5, zero6, zero7, zero8, zero9, zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10, one11));
         playerNames = new ArrayList<>(Arrays.asList(playerName0, playerName1, playerName2, playerName3));
+        puttButton.setDisable(true);
         try {
             client.send(encodeProtocolMessage("RNAM"));
         } catch (IOException e) {
@@ -350,6 +351,7 @@ public class ControllerGame implements Initializable {
     @FXML
     void deleteSelection(MouseEvent event) {
         pressedButtons.clear();
+        puttButton.setDisable(true);
 
     }
 
@@ -361,21 +363,31 @@ public class ControllerGame implements Initializable {
         Button pressedButton = (Button) event.getTarget();
         pressedButtons.add(pressedButton);
 
+        if(pressedButtons.size()==1){
+            for(int i = 0; i < deck.size(); i++){
+                if(pressedButtons.get(0).equals(deck.get(i))){
+                    puttButton.setDisable(false);
+                }
+            }
+
+
+        }
+
         if (pressedButtons.size() == 2) {
             Button firstButton = pressedButtons.get(0);
             Button secondButton = pressedButtons.get(1);
 
             if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
 
-                if (firstButton.equals(puttButton)) {
-                    if (secondButton.getText().isBlank()) {
+                if (secondButton.equals(puttButton)) {
+                    if (firstButton.getText().isBlank()) {
 
                         gameWarning.setVisible(true);
                         gameWarning.setText("choose an existing Tile");
 
 
                     } else {
-                        int[] tilePosition = TilePosition(secondButton);
+                        int[] tilePosition = TilePosition(firstButton);
                         gameWarning.setVisible(true);
                         //gameWarning.setText("Button ist am Ort"+ tilePosition[0]+" "+ tilePosition[1]);
                         args.add("/putt");
@@ -386,15 +398,15 @@ public class ControllerGame implements Initializable {
                         System.out.println(message);
                         client.send(message);
                         if (canYouPlayThisMove) {
-                            secondButton.setText("");
+                            firstButton.setText("");
                         }
 
                     }
                     pressedButtons.clear();
+                    puttButton.setDisable(true);
                 } else {
-                    gameWarning.setText("Please press on the puttButton first before choosing a Tile");
-                    System.out.println("nichts passiert.");
                     pressedButtons.clear();
+                    puttButton.setDisable(true);
                 }
             } else {
                 args.add("/swap");
@@ -419,8 +431,11 @@ public class ControllerGame implements Initializable {
                 secondButton.setTextFill(firstTilePaint);
 
                 pressedButtons.clear();
+                puttButton.setDisable(true);
             }
+            puttButton.setDisable(true);
             pressedButtons.clear();
+
 
         }
     }

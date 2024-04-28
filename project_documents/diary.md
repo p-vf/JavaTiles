@@ -274,3 +274,7 @@ gesagt, dass er auch Verbesserungsvorschläge bringen kann.
   - erste Erfolge: 26.04.2024 Das Spiel konnte komplett auf dem GUI, durchgespielt werden. 
 - Die letzten Unit tests wurden am 26.04.2024 implementiert und konnten erfolgreich ausgeführt werden.
 
+## 27.4 Einzelarbeit unterbrochen von kurzen Besprechungen (Boran, Istref, Pascal)
+- JavaDoc wurde weitergeführt
+- Refactors auf dem Server (public Felder eliminiert)
+- Neuer Netzwerkcommand RNAM wurde auf Server- sowie auf Clientseite implementiert
