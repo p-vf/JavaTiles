@@ -39,34 +39,40 @@ public class Controller {
     @FXML
     private Label lobbyWarning;
     /** The text field for user input in the login screen. */
-    public TextField myTextField;
+    @FXML
+    private TextField myTextField;
     /** The text field for lobby input in lobby screen. */
-    public TextField lobbyTextfield;
+    @FXML
+    private TextField lobbyTextfield;
     /** The button for indicating readiness to join lobby. */
-    public Button readyButton;
+    @FXML
+    private Button readyButton;
     /** The client instance used for communication. */
-
     public static Client client;
     /** The text area for displaying login warnings. */
-    public TextArea loginWarning;
+    @FXML
+    private TextArea loginWarning;
     /** The VBox container for lobby views. */
-    public VBox vBoxLobbies;
+    @FXML
+    private VBox vBoxLobbies;
     /**
      * The clientMessage field stores the message received from the client.
      * It is used to display information about players in the lobby.
      */
     public static String clientMessage;
     /** The text area for displaying chat messages. */
-    public TextArea chatArea;
-    /** The text field for entering chat messages. */
-    public TextField chatInput;
-    /** The VBox container for displaying players in lobby. */
-    public VBox playersLobbyVbox;
-    /** The VBox container for displaying highscores. */
-    public VBox highscoreVbox;
-    /** The text area for displaying lobby selection. */
     @FXML
-    private TextArea lobbySelection;
+    private TextArea chatArea;
+    /** The text field for entering chat messages. */
+    @FXML
+    private TextField chatInput;
+    /** The VBox container for displaying players in lobby. */
+    @FXML
+    private VBox playersLobbyVbox;
+    /** The VBox container for displaying highscores. */
+    @FXML
+    private VBox highscoreVbox;
+
     /** Flag to check if the lobby is empty. */
     private boolean isEmpty = false;
 
@@ -223,14 +229,6 @@ public class Controller {
 
             switchToScene(actionEvent,"lobbySelection");
             client.setEvent(actionEvent);
-    }
-
-    /**
-     * Sets the lobby selection text to the specified message.
-     * @param message The message to be set as the lobby selection text.
-     */
-    public void setLobbySelection(String message){
-        lobbySelection.setText(message);
     }
 
     /**

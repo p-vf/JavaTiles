@@ -22,6 +22,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
 
+
 public class ControllerGame implements Initializable {
 
     @FXML
