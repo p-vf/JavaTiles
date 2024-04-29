@@ -56,4 +56,11 @@ was noch zu tun ist beim GUI:
     - server-Spielerliste sollte aufgelistet werden können (LPLA) 
     - Lobbies mit den beinhalteten Spielern sollte aufgezeigt werden können (LLPL) (vielleicht sollte das mit LGAM vereint werden)
 
+
+
 - Jar datei in einem anderen ordner ausprobieren
+Server:
+    - Unittests: Test hinzufügen für wenn jemand versucht zu drawen aber nicht dran ist.
+
+Client:
+    - optionaler parameter nickname zum funktionieren bringen
