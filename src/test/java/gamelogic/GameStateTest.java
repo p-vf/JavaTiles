@@ -23,7 +23,7 @@ public class GameStateTest {
    * cheat.
    */
   @Test
-void putTileCanNotPutTileBecauseDeckKeptOnServerDoesNotContainTile(){
+void testOfPutTileCanNotPutTileBecauseDeckKeptOnServerDoesNotContainTile(){
 
     GameState gameState = new GameState(0); // Initialisiere GameState
     Tile tileToRemove = new Tile(0, Color.BLUE);// Erstelle ein Tile, das nicht im playerDeck ist
@@ -48,7 +48,7 @@ void putTileCanNotPutTileBecauseDeckKeptOnServerDoesNotContainTile(){
    * when the deck kept on the server contains the tile.
    */
   @Test
-  void putTileCanPutTileBecauseDeckContainsTile() throws IllegalAccessException, NoSuchFieldException {
+  void testOfPutTileCanPutTileBecauseDeckContainsTile() throws IllegalAccessException, NoSuchFieldException {
 
     GameState gameState = new GameState(0); // Initialisiere GameState
 

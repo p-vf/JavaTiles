@@ -62,7 +62,7 @@ class ClientThreadTest {
    * It checks if the method returns true for the main stack.
    */
   @Test
-  void isMainStackShouldReturnTrueForMainStack() {
+  void testOfIsMainStackShouldReturnTrueForMainStack() {
     String args = "m";
     assertTrue(clientThread.isMainStack(args));
   }
@@ -72,7 +72,7 @@ class ClientThreadTest {
    * It verifies that the method throws an IllegalArgumentException when an invalid stack identifier is provided.
    */
   @Test
-  void isMainStackShouldThrowExceptionForFalseStack() {
+  void testOfIsMainStackShouldThrowExceptionForFalseStack() {
     String args = "s";
     assertThrows(IllegalArgumentException.class, () -> {clientThread.isMainStack(args);});
   }
@@ -81,7 +81,7 @@ class ClientThreadTest {
    * It verifies that the method throws an IllegalArgumentException when no stack identifier is provided.
    */
   @Test
-  void isMainStackShouldThrowExceptionForNoStackSpecified() {
+  void testOfIsMainStackShouldThrowExceptionForNoStackSpecified() {
     String args = "";
     assertThrows(IllegalArgumentException.class, () -> {clientThread.isMainStack(args);});
   }
@@ -90,7 +90,7 @@ class ClientThreadTest {
    * It checks if the method returns false for the exchange stack.
    */
   @Test
-  void isMainStackShouldReturnFalseForExchangeStack() {
+  void testOfIsMainStackShouldReturnFalseForExchangeStack() {
    String args = "e";
     assertFalse(clientThread.isMainStack(args));
   }
@@ -104,7 +104,7 @@ class ClientThreadTest {
    * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
    */
    @Test
-  void notAllowedToDrawShouldReturnTrueBecauseItIsNotThePlayersTurn() throws IOException, NoSuchFieldException, IllegalAccessException {
+  void testOfNotAllowedToDrawShouldReturnTrueBecauseItIsNotThePlayersTurn() throws IOException, NoSuchFieldException, IllegalAccessException {
      Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
      playerIndex.setAccessible(true);
      playerIndex.set(clientThread, 0);
@@ -123,7 +123,7 @@ class ClientThreadTest {
    * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
    */
   @Test
-  void notAllowedToDrawShouldReturnTrueBecausePlayerHasAlreadyDrawn() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfNotAllowedToDrawShouldReturnTrueBecausePlayerHasAlreadyDrawn() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
@@ -155,7 +155,7 @@ class ClientThreadTest {
    * @throws NoSuchFieldException   if a specified field cannot be found.
    */
   @Test
-  void notAllowedToDrawShouldReturnFalseBecausePlayerCanDraw() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfNotAllowedToDrawShouldReturnFalseBecausePlayerCanDraw() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
@@ -187,7 +187,7 @@ class ClientThreadTest {
    * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
    */
   @Test
-  void drawShouldEndGameWithNoWinnerWhenNoTileCanBeDrawn() throws IOException, NoSuchFieldException, IllegalAccessException {
+  void testOfDrawShouldEndGameWithNoWinnerWhenNoTileCanBeDrawn() throws IOException, NoSuchFieldException, IllegalAccessException {
 
     Stack<Tile> emptyStack = new Stack<>();
     Field mainStack = GameState.class.getDeclaredField("mainStack");
@@ -242,7 +242,7 @@ class ClientThreadTest {
    * @throws IllegalAccessException if the current Java Security Manager denies reflective access to the field.
    */
   @Test
-  void drawShouldSendMessageForRegularDrawAction() throws IOException, NoSuchFieldException, IllegalAccessException {
+  void testOfDrawShouldSendMessageForRegularDrawAction() throws IOException, NoSuchFieldException, IllegalAccessException {
 
     Stack<Tile> stackWithTiles = new Stack<>();
 
@@ -287,7 +287,7 @@ class ClientThreadTest {
    * @throws IOException            if an I/O error occurs.
    */
   @Test
-  void cantPutTileShouldReturnTrueIfItIsNotThePlayersTurn() throws NoSuchFieldException, IllegalAccessException, IOException {
+  void testOfCantPutTileShouldReturnTrueIfItIsNotThePlayersTurn() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 0);
@@ -306,7 +306,7 @@ class ClientThreadTest {
    * @throws IOException            if an I/O error occurs.
    */
   @Test
-  void cantPutTileShouldReturnTrueBecausePlayerHasNotDrawnYet() throws NoSuchFieldException, IllegalAccessException, IOException {
+  void testOfCantPutTileShouldReturnTrueBecausePlayerHasNotDrawnYet() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 1);
@@ -339,7 +339,7 @@ class ClientThreadTest {
    * @throws IOException            if an I/O error occurs.
    */
   @Test
-  void cantPutTileShouldReturnFalseBecauseItsYourTurnAndYouHaveAlreadyDrawn() throws NoSuchFieldException, IllegalAccessException, IOException {
+  void testOfCantPutTileShouldReturnFalseBecauseItsYourTurnAndYouHaveAlreadyDrawn() throws NoSuchFieldException, IllegalAccessException, IOException {
     Field playerIndex = ClientThread.class.getDeclaredField("playerIndex");
     playerIndex.setAccessible(true);
     playerIndex.set(clientThread, 1);
@@ -372,7 +372,7 @@ class ClientThreadTest {
    * @throws NoSuchFieldException   if a specified field cannot be found.
    */
   @Test
-  void checkIfValidShouldReturnFalseForInvalidMoveBecauseTileToPuttIsNull() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfCheckIfValidShouldReturnFalseForInvalidMoveBecauseTileToPuttIsNull() throws IOException, IllegalAccessException, NoSuchFieldException {
     //TODO: why does this testcase work wrong?
     Tile tile = null;
     Tile[] tiles = new Tile[24];
@@ -403,7 +403,7 @@ class ClientThreadTest {
    * @throws NoSuchFieldException   if a specified field cannot be found.
    */
   @Test
-  void checkIfValidShouldReturnFalseForInvalidMoveBecausePlayerDoesNotHaveTheTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfCheckIfValidShouldReturnFalseForInvalidMoveBecausePlayerDoesNotHaveTheTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
     Tile tile = new Tile(3,Color.BLUE); // Player shouldn't be able to put this tile because he doesn't have it.
     Tile[] tilesToBeChecked = new Tile[24];
 
@@ -442,7 +442,7 @@ class ClientThreadTest {
    * @throws NoSuchFieldException   if a specified field cannot be found.
    */
   @Test
-  void checkIfValidShouldReturnTrueBecausePlayerHasTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfCheckIfValidShouldReturnTrueBecausePlayerHasTileHePuts() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Tile tile = new Tile(3,Color.BLUE);
     Tile[] tilesToBeChecked = new Tile[24];
@@ -483,7 +483,7 @@ class ClientThreadTest {
    * @throws NoSuchFieldException   if a specified field cannot be found.
    */
   @Test
-  void checkIfWonShouldReturnFalseBecauseNoWinningConfigurationAchieved() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfCheckIfWonShouldReturnFalseBecauseNoWinningConfigurationAchieved() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Tile[] winningTileArray = new Tile[24];
 
@@ -515,7 +515,7 @@ class ClientThreadTest {
    * @throws NoSuchFieldException   if a specified field cannot be found.
    */
   @Test
-  void checkIfWonShouldReturnTrueForWinningDeck() throws IOException, IllegalAccessException, NoSuchFieldException {
+  void testOfCheckIfWonShouldReturnTrueForWinningDeck() throws IOException, IllegalAccessException, NoSuchFieldException {
 
     Tile[] winningTileArray = new Tile[24];
 

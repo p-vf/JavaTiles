@@ -17,7 +17,7 @@ class OrderedDeckTest {
    * for a set that contains too many tiles.
    */
   @Test
-  void isValidSetShouldReturnFalseForTooLargeSet() {
+  void testOfIsValidSetShouldReturnFalseForTooLargeSet() {
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
@@ -33,7 +33,7 @@ class OrderedDeckTest {
    * for a set where the color yellow appears twice, since all colors should be distinct.
    */
   @Test
-  void isValidSetShouldReturnFalseForColorYellowTwice(){
+  void testOfIsValidSetShouldReturnFalseForColorYellowTwice(){
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
@@ -48,7 +48,7 @@ class OrderedDeckTest {
    * for a set where the color red appears twice, since all colors should be distinct.
    */
   @Test
-  void isValidSetShouldReturnFalseForColorRedTwice(){
+  void testOfIsValidSetShouldReturnFalseForColorRedTwice(){
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
@@ -63,7 +63,7 @@ class OrderedDeckTest {
    * for a set where the color black appears twice, since all colors should be distinct.
    */
   @Test
-  void isValidSetShouldReturnFalseForColorBlackTwice(){
+  void testOfIsValidSetShouldReturnFalseForColorBlackTwice(){
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.BLACK),
@@ -78,7 +78,7 @@ class OrderedDeckTest {
    * for a set where the color blue appears twice, since all colors should be distinct.
    */
   @Test
-  void isValidSetShouldReturnFalseForColorBlueTwice(){
+  void testOfIsValidSetShouldReturnFalseForColorBlueTwice(){
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.BLUE),
@@ -92,7 +92,7 @@ class OrderedDeckTest {
    * for a set where not all numbers are the same.
    */
   @Test
-  void isValidSetShouldReturnFalseForDifferentNumber() {
+  void testOfIsValidSetShouldReturnFalseForDifferentNumber() {
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
@@ -107,7 +107,7 @@ class OrderedDeckTest {
    * for a set where the joker is being used.
    */
   @Test
-  void isValidSetShouldReturnTrueWithJokerUse() {
+  void testOfIsValidSetShouldReturnTrueWithJokerUse() {
     Tile[] deckRow = new Tile[]{
         new Tile(0, Color.BLUE),
         new Tile(9, Color.RED),
@@ -123,7 +123,7 @@ class OrderedDeckTest {
    * but due to the game rules it is still a valid set.
    */
   @Test
-  void isValidSetShouldReturnTrueWithColorDuplicateDueToJoker() {
+  void testOfIsValidSetShouldReturnTrueWithColorDuplicateDueToJoker() {
     Tile[] deckRow = new Tile[]{
         new Tile(0, Color.BLUE),
         new Tile(9, Color.RED),
@@ -138,7 +138,7 @@ class OrderedDeckTest {
    * for a set with three tiles, which is the smallest set allowed.
    */
   @Test
-  void isValidSetShouldReturnTrueForSmallestSetPossible() {//Ist das nötig?
+  void testOfIsValidSetShouldReturnTrueForSmallestSetPossible() {//Ist das nötig?
     Tile[] deckRow = new Tile[]{
         new Tile(9, Color.BLUE),
         new Tile(9, Color.RED),
@@ -154,7 +154,7 @@ class OrderedDeckTest {
    * should be no tile at all between tile number 9 and 10 in a run.
    */
   @Test
-  void isValidRunShouldReturnFalseForWrongJokerUse( ){
+  void testOfIsValidRunShouldReturnFalseForWrongJokerUse( ){
     Tile[] deckRow = new Tile[]{
         new Tile(8, Color.RED),
         new Tile(9, Color.RED),
@@ -170,7 +170,7 @@ class OrderedDeckTest {
    * for a run where not all the tiles have the same color.
    */
   @Test
-  void isValidRunShouldReturnFalseForWrongColor(){
+  void testOfIsValidRunShouldReturnFalseForWrongColor(){
     Tile[] deckRow = new Tile[]{
         new Tile(8, Color.RED),
         new Tile(9, Color.RED),
@@ -185,7 +185,7 @@ class OrderedDeckTest {
    * for a run where tiles don't have consecutive numbers.
    */
   @Test
-  void isValidRunShouldReturnFalseForWrongNumber(){
+  void testOfIsValidRunShouldReturnFalseForWrongNumber(){
     Tile[] deckRow = new Tile[]{
         new Tile(8, Color.RED),
         new Tile(9, Color.RED),
@@ -201,7 +201,7 @@ class OrderedDeckTest {
    * continuous.
    */
   @Test
-  void isValidRunShouldReturnFalseForRunWithJokerAfterTileNumber13() {
+  void testOfIsValidRunShouldReturnFalseForRunWithJokerAfterTileNumber13() {
     //TODO: False, wenn der Joker gesetzt wird nach der 13
     Tile[] deckRow = new Tile[]{
         new Tile(11, Color.RED),
@@ -217,7 +217,7 @@ class OrderedDeckTest {
    * for a run where the joker is used correctly.
    */
   @Test
-  void isValidRunShouldReturnTrueForRunWithJoker() {
+  void testOfIsValidRunShouldReturnTrueForRunWithJoker() {
     Tile[] deckRow = new Tile[]{
         new Tile(0, Color.RED),
         new Tile(9, Color.RED),
@@ -234,7 +234,7 @@ class OrderedDeckTest {
    * for a deck with a too short group. Said group is the tile 4, red which is alone.
    */
   @Test
-  void isWinningDeckShouldReturnFalseForTooShortGroups() {
+  void testOfIsWinningDeckShouldReturnFalseForTooShortGroups() {
     Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
@@ -271,7 +271,7 @@ class OrderedDeckTest {
    * OrderedDeck.
    */
   @Test
-  void isWinningDeckShouldReturnFalseForBuildingRunFromIndexTenToIndexTwelve() {
+  void testOfIsWinningDeckShouldReturnFalseForBuildingRunFromIndexTenToIndexTwelve() {
     Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
@@ -308,7 +308,7 @@ class OrderedDeckTest {
    * OrderedDeck.
    */
   @Test
-  void isWinningDeckShouldReturnFalseForBuildingSetFromIndexTenToIndexTwelve() {
+  void testOfIsWinningDeckShouldReturnFalseForBuildingSetFromIndexTenToIndexTwelve() {
     Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
@@ -344,7 +344,7 @@ class OrderedDeckTest {
    * if there is no null tile between two separate groups.
    */
   @Test
-  void isWinningDeckShouldReturnFalseForNoNullTileInBetween() {
+  void testOfIsWinningDeckShouldReturnFalseForNoNullTileInBetween() {
     Tile[] deckArray = new Tile[]{
         null,//0
         null,//1
@@ -380,7 +380,7 @@ class OrderedDeckTest {
    * for a regular winning deck.
    */
   @Test
-  void isWinningDeckShouldReturnTrueForRegularWinningDeck() {
+  void testOfIsWinningDeckShouldReturnTrueForRegularWinningDeck() {
     Tile[] deckArray = new Tile[]{
         null,//1
         new Tile(0, Color.BLUE), //3
@@ -417,7 +417,7 @@ class OrderedDeckTest {
    * for a winning deck created with the implemented cheat code.
    */
   @Test
-  void isWinningDeckForCheatCodeShouldReturnTrue(){
+  void testOfIsWinningDeckForCheatCodeShouldReturnTrue(){
 
 
     Tile[] deckArray = new Tile[]{
