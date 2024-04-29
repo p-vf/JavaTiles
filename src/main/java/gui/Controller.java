@@ -1,8 +1,6 @@
 package gui;
 
 import client.Client;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,10 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,7 +30,11 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  * It controls the various UI elements such as text fields, buttons, and displays.
  */
 public class Controller {
+    @FXML
+    private VBox whosOnlineVBox;
 
+    @FXML
+    private Button showPlayersButton;
 
     @FXML
     private Label lobbyWarning; //The label for displaying lobby warnings.
@@ -57,7 +57,6 @@ public class Controller {
     private VBox vBoxLobbies; // The VBox container for showing Lobbies
 
     public static String clientMessage; // The clientMessage field stores the message received from the client. It is used to display information about players in the lobby.
-
 
     @FXML
     private TextArea chatArea; // The text area for displaying chat messages.
@@ -369,5 +368,24 @@ public class Controller {
             highscoreVbox.getChildren().add(label);
         });
     }
+
+
+    public void showOnlinePressed(ActionEvent event) throws IOException {
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("LPLA");
+        client.send(encodeProtocolMessage(arg));
+    }
+
+    public void showOnlinePlayers(String message){
+        Platform.runLater(() -> {
+            whosOnlineVBox.getChildren().clear();
+            Label label = new Label(message);
+            label.setFont(Font.font("Bold", FontWeight.BOLD, 12));
+            label.setTextFill(Color.BLACK);
+            whosOnlineVBox.getChildren().add(label);
+        });
+    }
+
+
 }
 

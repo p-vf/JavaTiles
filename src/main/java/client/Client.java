@@ -957,12 +957,22 @@ public class Client {
                     break;
 
                 case LPLA:
+
                     ArrayList<String> playerList = decodeProtocolMessage(arguments.get(0));
                     for (int i = 0; i < playerList.size(); i++) {
                         if (!(arguments.get(0).equals("null"))) {
                             System.out.println(playerList.get(i));
                         }
                     }
+                    StringBuilder concatenatedString = new StringBuilder();
+
+                    for (String player : playerList) {
+                        if (!player.equals("null")) {
+                            concatenatedString.append(player).append("\n");
+                        }
+                    }
+                    String onlinePlayers = concatenatedString.toString();
+                    controller.showOnlinePlayers(onlinePlayers);
                     break;
 
                 case LLPL:
