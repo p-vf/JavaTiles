@@ -55,6 +55,7 @@ was noch zu tun ist beim GUI:
     - wenn jemand die lobby verlässt sollte das angezeigt werden (LEFT)
     - server-Spielerliste sollte aufgelistet werden können (LPLA) 
     - Lobbies mit den beinhalteten Spielern sollte aufgezeigt werden können (LLPL) (vielleicht sollte das mit LGAM vereint werden)
+    - Allle Highscores sollten angezeigt werden können.
 
 
 
