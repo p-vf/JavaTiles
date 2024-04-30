@@ -181,6 +181,7 @@ class ClientThreadTest {
   /**
    * Tests {@link ClientThread#draw(String)}.
    * It verifies that the game ends with no winner when no tile can be drawn by verifying the expected output from the OutputStream.
+   * It should only occur that no tile can be drawn when the main stack is empty.
    *
    * @throws IOException            if an I/O error occurs.
    * @throws NoSuchFieldException   if a specified field cannot be found.
@@ -231,6 +232,31 @@ class ClientThreadTest {
 
     assertTrue(lines.contains("+DRAW \"%\""));
     assertTrue(lines.contains("EMPT"));
+  }
+
+  /**
+   *  Tests {@link ClientThread#draw(String)}.
+   *  It verifies that the draw method throws an IllegalArgumentException if you try to draw from
+   *  an empty exchange stack, which shouldn't be possible due to earlier checks and the game logic itself.
+   */
+  @Test
+  void testOfDrawShouldThrowIllegalArgumentExceptionForEmptyExchangeStack() throws IOException, NoSuchFieldException, IllegalAccessException {
+    ArrayList<Stack<Tile>> exchangeStacks = new ArrayList<>(4);
+    exchangeStacks.add(new Stack<>());
+    //TODO: Der Fall das vom Exchange Stack gezogen wird, obwohl dieser Empty ist sollte eigentlich unmöglich sein.
+    Field exchangeStacksField = GameState.class.getDeclaredField("exchangeStacks");
+    exchangeStacksField.setAccessible(true);
+    exchangeStacksField.set(this.gameState, exchangeStacks);
+
+    doCallRealMethod().when(clientThread).draw(any(String.class));
+    Field playerIndexField = ClientThread.class.getDeclaredField("playerIndex");
+    playerIndexField.setAccessible(true);
+    playerIndexField.set(clientThread, 0);
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      clientThread.draw("e");
+    });
+
   }
 
   /**
