@@ -284,11 +284,16 @@ public class ClientThread implements Runnable {
    *
    * @param stackName should either be "m" for main stack or "e" for exchange stack.
    * @throws IOException if send method fails.
+   * @throws IllegalArgumentException if exchange stack is empty and you still reach this method.
    */
-  public void draw(String stackName) throws IOException {
+  public void draw(String stackName) throws IOException, IllegalArgumentException {
     boolean isMainStack = isMainStack(stackName);
     Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
     String tileString;
+    if (tile == null && stackName.equals("e")) {
+      //code should never reach this line because of previous checks in handleRequest in case DRAW
+      throw new IllegalArgumentException("exchangestack is empty");
+    }
     if (tile == null) {
       endGameWithNoWinner();
     } else {
@@ -564,6 +569,7 @@ public class ClientThread implements Runnable {
    */
   private void endGameWithNoWinner() throws IOException {
     String tileString;
+    System.out.println("Game ended with no winner");
     tileString = "";
     send(encodeProtocolMessage("+DRAW", tileString));
     send("EMPT");
