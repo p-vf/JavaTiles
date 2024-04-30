@@ -623,9 +623,7 @@ public class ControllerGame implements Initializable {
                     playerName2.setText(players.get(1));
                     playerName3.setText(players.get(2));
                 }
-
             }
-
         }
     }
 
@@ -702,8 +700,6 @@ public class ControllerGame implements Initializable {
                 args.clear();
                 changeNicknameWarning.setText("");
             }
-
-
         }
     }
 

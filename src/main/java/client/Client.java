@@ -637,6 +637,8 @@ public class Client {
                 case LEFT:
                     send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " left the lobby");
+                    String message = arguments.get(0) + " left the lobby";
+                    gameController.gameChatIncoming(message);
                     send(encodeProtocolMessage("+LEFT"));
                     break;
 
