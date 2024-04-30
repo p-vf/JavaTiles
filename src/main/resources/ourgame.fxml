@@ -209,6 +209,7 @@
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
+            <Button layoutX="688.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave lobby" />
          </children>
       </AnchorPane>
    </center>

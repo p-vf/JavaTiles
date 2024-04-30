@@ -70,6 +70,8 @@ public class Controller {
     @FXML
     private VBox highscoreVbox; //The VBox container for displaying highscores.
 
+    public String lobbyNumber; // The number of the lobby
+
 
     private boolean isEmpty = false; //Flag to check if the lobby is empty.
 
@@ -278,10 +280,15 @@ public class Controller {
         ArrayList<String> arg = new ArrayList<>();
         arg.add("JLOB");
         String number = lobbyTextfield.getText();
+        this.lobbyNumber = number;
         arg.add(number);
         client.send(encodeProtocolMessage(arg));
-
     }
+
+    public String getLobbyNumber(){
+        return this.lobbyNumber;
+    }
+
 
     /**
      * Handles the action event triggered by pressing the ready button.
@@ -385,7 +392,5 @@ public class Controller {
             whosOnlineVBox.getChildren().add(label);
         });
     }
-
-
 }
 

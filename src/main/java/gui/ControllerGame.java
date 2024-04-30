@@ -2,6 +2,7 @@ package gui;
 
 import client.Client;
 import game.Tile;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,6 +47,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  */
 public class ControllerGame implements Initializable {
 
+    public Controller controller;
     @FXML
     private Label gameWarning; // Label for displaying game warnings.
 
@@ -706,6 +708,12 @@ public class ControllerGame implements Initializable {
     }
 
 
+    public void leaveLobbyPressed(ActionEvent event) throws IOException {
+        client.setEvent(event);
+        ArrayList<String> arg = new ArrayList<>();
+        arg.add("LLOB");
+        client.send(encodeProtocolMessage(arg));
+    }
 }
 
 
