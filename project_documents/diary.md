@@ -286,3 +286,13 @@ gesagt, dass er auch Verbesserungsvorschläge bringen kann.
   - Javadoc wurde vervollständigt
   - Auf dem GUI wurden viele Funktionalitäten verbessert und Fehler wurden behoben.
   - Wir sollten nun bereit sein unser Spiel morgen vorzustellen.
+
+## 2.5.2024 Treffen Lernoullianum (Robin, Pascal, Istref)
+- Wir haben uns an diesem Tag getroffen, um die Peer Review für das Spiel Javatzy zu schreiben.
+- Die Vereinbarung an diesem Tag die Peer Review für Javatzy zu schreiben hat über 
+WhatsApp stattgefunden.
+- Das nächste Treffen wurde für morgen festgelegt in der Mathefakultät, jedoch 
+ohne Robin, da wir fanden, dass es nicht viel Sinn macht zu dritt daran zu arbeiten.
+
+## 3.5.2024 Treffen in der Mathefakultät (Pascal, Istref)
+- An diesem Tag haben wir dann die Peer Review zum Spiel Hol's der Compiler geschrieben und zusammen mit der Peer Review von Gestern abgegeben.
