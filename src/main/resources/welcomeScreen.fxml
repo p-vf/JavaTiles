@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+   <children>
+      <Text fill="WHITE" layoutX="138.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to JavaTiles">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="300.0" fitWidth="482.0" layoutX="79.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@welcome.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="273.0" layoutY="380.0" mnemonicParsing="false" onAction="#startPressed" text="Start the game" />
+   </children>
+</AnchorPane>

@@ -83,6 +83,8 @@ public class Client {
     private ActionEvent event; // Event for GUI interaction
     private ArrayList<String> playersInLobby = new ArrayList<>(); // List of players in the lobby
 
+    private String[] arguments;
+
 
     /**
      * Constructs a new EchoClient with the given socket.
@@ -123,6 +125,8 @@ public class Client {
             client.ping(client);
 
             String loginData;
+
+            client.setArguments(args);
 
             if (args.length == 3) {
                 boolean isValid = !(args[2].contains(" ") || args[2].contains("\""));
@@ -192,6 +196,13 @@ public class Client {
         }
     }
 
+    public void setArguments(String[] arguments) {
+        this.arguments = arguments;
+    }
+
+    public String[] getArguments() {
+        return arguments;
+    }
 
     /**
      * Sets the ActionEvent for GUI interaction.
@@ -722,10 +733,13 @@ public class Client {
                     break;
 
                 case LOGI:
-                    Platform.runLater(() -> {
-                        changeScene("lobby");
-                    });
-
+                    String[] args = getArguments();
+                    int numb = args.length;
+                    if(numb <= 2){
+                        Platform.runLater(() -> {
+                            changeScene("lobby");
+                        });
+                    }
                     nickname = arguments.get(0);
                     System.out.println("You have been logged in as: " + arguments.get(0));
                     break;

@@ -176,6 +176,10 @@ public class Controller {
         try {
             switch (inputCommand) {
 
+                case "login":
+                    sceneSwitcher(event, "/login.fxml");
+                    break;
+
                 case "lobby":
                     sceneSwitcher(event, "/lobby.fxml");
                     break;
@@ -391,6 +395,16 @@ public class Controller {
             label.setTextFill(Color.BLACK);
             whosOnlineVBox.getChildren().add(label);
         });
+    }
+
+    public void startPressed(ActionEvent event) {
+        String[] args = client.getArguments();
+
+        if(args.length > 2){
+          switchToScene(event, "lobby");
+        }else{
+            switchToScene(event, "login");
+        }
     }
 }
 
