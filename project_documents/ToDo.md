@@ -49,19 +49,26 @@ Client:
 was noch zu tun ist beim GUI:
     - name sollte man immer ändern können (egal ob ausserhalb einer Lobby innerhalb einer Lobby oder im laufenden Spiel)
     - Login screen sollte gelöscht werden (wenn kein name angegeben wird, sollte man den Systemnamen nehmen)
-    - richtige Anzeige beim Putten wenn spieler nicht dran ist
     Das Netzwerkprotokoll betreffend:
-    - Lobby sollte man immer verlassen können (auch während dem Spiel) (LLOB)
     - wenn jemand die lobby verlässt sollte das angezeigt werden (LEFT)
-    - server-Spielerliste sollte aufgelistet werden können (LPLA) 
-    - Lobbies mit den beinhalteten Spielern sollte aufgezeigt werden können (LLPL) (vielleicht sollte das mit LGAM vereint werden)
-    - Allle Highscores sollten angezeigt werden können.
-
-
-
-- Jar datei in einem anderen ordner ausprobieren
-Server:
-    - Unittests: Test hinzufügen für wenn jemand versucht zu drawen aber nicht dran ist.
+    - Alle Highscores sollten angezeigt werden können. (mit scrolling)
+    - Nickname von Anfang an sicht- und änderbar machen
 
 Client:
     - optionaler parameter nickname zum funktionieren bringen
+    - Broadcast Funktionalität ohne Chat-Command möglich machen (z.B. mit einem Button)
+    - Cheatcode implementieren im Chat
+    - (Tutorial einbauen)
+
+- Logo designen
+- Manual updaten
+- QA Report machen
+- Video und Screenshots machen
+
+Präsentation:
+    - About a Game
+    - Demo einüben
+    - Logo
+    - QA
+    - Technology!
+    - We are smarter now (lessons learned)
