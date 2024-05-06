@@ -115,8 +115,6 @@ public class Client {
 
             Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
             Client client = new Client(sock);
-            Thread thisThread = new Thread(client.gui);
-            thisThread.start();
             InThread th = new InThread(client.in, client);
             Thread iT = new Thread(th);
             iT.start();
@@ -134,10 +132,10 @@ public class Client {
                     loginData = "LOGI " + args[2];
                 } else {
                     System.out.println("Invalid argument for username: must not contain any spaces or double quotes");
-                    loginData = "LOGI " + client.login();
+                    loginData = "LOGI " + System.getProperty("user.name");
                 }
             } else {
-                loginData = "LOGI " + client.login();
+                loginData = "LOGI " + System.getProperty("user.name");
             }
             client.send(loginData);
 
@@ -169,31 +167,6 @@ public class Client {
         }
 
 
-    }
-
-    /**
-     * Prompts the user to enter a username and validates it.
-     * If the entered username is empty, it defaults to the system username.
-     * Ensures that the username does not contain blank spaces or quotation marks.
-     *
-     * @return The validated username entered by the user.
-     * @throws IOException If an I/O error occurs while reading input.
-     */
-    private String login() throws IOException {
-        while (true) {
-            System.out.println("Enter username:");
-            String username = bReader.readLine();
-            if (username.isEmpty()) {
-                username = System.getProperty("user.name");
-                return username;
-            }
-            if (username.contains(" ") || username.contains("\"")) {
-                System.out.println("Your nickname mustn't contain blank spaces or quotation marks");
-
-            } else {
-                return username;
-            }
-        }
     }
 
     public void setArguments(String[] arguments) {
@@ -733,15 +706,11 @@ public class Client {
                     break;
 
                 case LOGI:
-                    String[] args = getArguments();
-                    int numb = args.length;
-                    if(numb <= 2){
-                        Platform.runLater(() -> {
-                            changeScene("lobby");
-                        });
-                    }
                     nickname = arguments.get(0);
                     System.out.println("You have been logged in as: " + arguments.get(0));
+                    Thread thisThread = new Thread(gui);
+                    thisThread.start();
+
                     break;
 
                 case NAME:

@@ -75,6 +75,18 @@ public class Controller {
 
     private boolean isEmpty = false; //Flag to check if the lobby is empty.
 
+
+    @FXML
+    private TextField changeUsername;
+
+    @FXML
+    private Label usernameLabel;
+
+    @FXML
+    private Label usernameWarning;
+
+
+
     /**
      * Constructor for the Controller class.
      * Initializes the controller with the given client.
@@ -175,10 +187,6 @@ public class Controller {
         String inputCommand = argumentslist.remove(0);
         try {
             switch (inputCommand) {
-
-                case "login":
-                    sceneSwitcher(event, "/login.fxml");
-                    break;
 
                 case "lobby":
                     sceneSwitcher(event, "/lobby.fxml");
@@ -398,13 +406,19 @@ public class Controller {
     }
 
     public void startPressed(ActionEvent event) {
-        String[] args = client.getArguments();
-
-        if(args.length > 2){
-          switchToScene(event, "lobby");
-        }else{
-            switchToScene(event, "login");
-        }
+        Platform.runLater(() -> {
+            switchToScene(event, "lobby");
+        });
     }
+
+    public void setUsernameLabel(String username){
+        usernameLabel.setText(username);
+    }
+
+    @FXML
+    void toChangeUsername(ActionEvent event) {
+
+    }
+
 }
 
