@@ -296,3 +296,7 @@ ohne Robin, da wir fanden, dass es nicht viel Sinn macht zu dritt daran zu arbei
 
 ## 3.5.2024 Treffen in der Mathefakultät (Pascal, Istref)
 - An diesem Tag haben wir dann die Peer Review zum Spiel Hol's der Compiler geschrieben und zusammen mit der Peer Review von Gestern abgegeben.
+
+## 6.5.2024 Übungsstunde (Istref, Boran, Pascal)
+- ToDos aktualisiert
+- noch zu klären: Müssen die Spieler vom Server während dem Spiel aufgelistet werden können?
