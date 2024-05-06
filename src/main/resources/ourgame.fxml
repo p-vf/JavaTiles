@@ -218,6 +218,7 @@
          <children>
             <TextArea fx:id="gameChatArea" editable="false" layoutY="119.0" prefHeight="541.0" prefWidth="200.0" />
             <TextField fx:id="gameChatField" layoutY="660.0" onAction="#toGameChat" prefHeight="29.0" prefWidth="201.0" />
+            <Button fx:id="broadcastButton" layoutY="699.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
          </children>
       </AnchorPane>
    </right>

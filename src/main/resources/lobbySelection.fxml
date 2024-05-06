@@ -79,6 +79,9 @@
          </children></Pane>
    </right>
    <bottom>
-      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="broadcastButton" layoutX="762.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
+         </children></Pane>
    </bottom>
 </BorderPane>

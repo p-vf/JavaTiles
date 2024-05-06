@@ -49,6 +49,8 @@ public class ControllerGame implements Initializable {
 
     public Controller controller;
     @FXML
+    private Button broadcastButton;
+    @FXML
     private Label gameWarning; // Label for displaying game warnings.
 
 
@@ -199,6 +201,8 @@ public class ControllerGame implements Initializable {
 
 
     private boolean canYouPlayThisMove = false; // Flag indicating if the current player can play a move
+
+    private boolean broadcastPressed = false;
 
 
     /**
@@ -655,8 +659,10 @@ public class ControllerGame implements Initializable {
     @FXML
     void toGameChat(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + gameChatField.getText();
+        if(broadcastPressed == true){
+            chatMessage = "/chat" + " " + "/all" + " " + gameChatField.getText();
+        }
         String messageToSend = client.handleInput(chatMessage);
-
         if(gameChatField.getText().equals("/secretcheatcode42")){
             client.send("WINC");
         }
@@ -714,7 +720,17 @@ public class ControllerGame implements Initializable {
         arg.add("LLOB");
         client.send(encodeProtocolMessage(arg));
     }
-}
+
+    public void broadcastPressed() {
+        broadcastPressed = !broadcastPressed;
+        if(broadcastPressed == true){
+            broadcastButton.setText("Broadcast-On");
+        }
+        if(broadcastPressed == false){
+            broadcastButton.setText("Broadcast-Off");
+        }
+    }
+    }
 
 
 

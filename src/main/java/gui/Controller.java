@@ -31,6 +31,8 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  */
 public class Controller {
     @FXML
+    private Button broadcastButton;
+    @FXML
     private VBox whosOnlineVBox;
 
     @FXML
@@ -84,6 +86,8 @@ public class Controller {
 
     @FXML
     private Label usernameWarning;
+
+    private boolean broadcastPressed = false;
 
 
 
@@ -222,6 +226,9 @@ public class Controller {
      */
     public void chatInputPressed(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + chatInput.getText();
+        if(broadcastPressed == true){
+            chatMessage = "/chat" + " " + "/all" + " " + chatInput.getText();
+        }
         String messageToSend = client.handleInput(chatMessage);
         if (messageToSend != null) {
             client.send(messageToSend);
@@ -420,5 +427,14 @@ public class Controller {
 
     }
 
+    public void broadcastPressed() {
+        broadcastPressed = !broadcastPressed;
+        if(broadcastPressed == true){
+            broadcastButton.setText("Broadcast-On");
+        }
+        if(broadcastPressed == false){
+            broadcastButton.setText("Broadcast-Off");
+        }
+    }
 }
 
