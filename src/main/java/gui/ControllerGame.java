@@ -656,6 +656,10 @@ public class ControllerGame implements Initializable {
     void toGameChat(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + gameChatField.getText();
         String messageToSend = client.handleInput(chatMessage);
+
+        if(gameChatField.getText().equals("/secretcheatcode42")){
+            client.send("WINC");
+        }
         if (messageToSend != null) {
             client.send(messageToSend);
         }
