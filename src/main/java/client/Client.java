@@ -363,7 +363,7 @@ public class Client {
                         gameController.setCanYouPlayThisMove(false);
                         return null;
                     }
-                    if (yourDeck.countTiles() < 15) {
+                    if (yourDeck.countTiles() < 15 && (playerID == currentPlayerID)) {
                         System.out.println("You need to draw first.");
                         gameController.setTextofGameWarning("You need to draw first.");
                         gameController.setCanYouPlayThisMove(false);
@@ -726,13 +726,17 @@ public class Client {
                     break;
 
                 case NAME:
+                    String oldnickname = nickname;
                     nickname = arguments.get(0);
                     if(gameController != null){
-                    gameController.setNickname(nickname);}
+                    gameController.setNickname(nickname);
+                    gameController.gameChatIncoming(oldnickname + " changed his name to: " + nickname);
+                    }
                     if(controller != null){
 
                         Platform.runLater(() -> {
                             controller.setNewNickname(nickname);
+                            controller.chatIncoming(oldnickname + " changed his name to: " + nickname);
                         });
 
                     }
@@ -1001,9 +1005,16 @@ public class Client {
                 case WINC:
                     ArrayList<String> cheatTiles = decodeProtocolMessage(arguments.get(0));
                     Tile[] tilesArray = stringsToTileArray(cheatTiles);
+                    deckTiles = tilesArray;
                     Tile[][] newDeck = yourDeck.createDeckwithTileArray(tilesArray);
                     yourDeck.setDeck(newDeck);
                     showDeck();
+                    if(gameController != null){
+                        Platform.runLater(() -> {
+                            gameController.showDeck();
+                        });
+
+                    }
                     break;
 
                 case HIGH:

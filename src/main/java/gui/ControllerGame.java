@@ -2,7 +2,6 @@ package gui;
 
 import client.Client;
 import game.Tile;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -203,6 +202,10 @@ public class ControllerGame implements Initializable {
     private boolean canYouPlayThisMove = false; // Flag indicating if the current player can play a move
 
     private boolean broadcastPressed = false;
+    private boolean startPressed = false;
+    private boolean isCheatCode = false;
+
+
 
 
     /**
@@ -244,15 +247,17 @@ public class ControllerGame implements Initializable {
     /**
      * Displays the deck of tiles in the game GUI.
      *
-     * @param event the ActionEvent triggered by the button click
      */
     @FXML
-    void showDeck(ActionEvent event) {
+    public void showDeck() {
         client.setPressedStart(true);
         startButton.setDisable(true);
         startButton.setVisible(false);
-        disableStacks(false);
+        if(!(isCheatCode)){
+        disableStacks(false);}
+        startPressed = true;
         this.tiles = client.getTiles();
+
         for (int i = 0; i < deck.size(); i++) {
             if (tiles[i] == null) {
                 deck.get(i).setText("");
@@ -659,18 +664,26 @@ public class ControllerGame implements Initializable {
     @FXML
     void toGameChat(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + gameChatField.getText();
-        if(broadcastPressed == true){
+        if (broadcastPressed) {
             chatMessage = "/chat" + " " + "/all" + " " + gameChatField.getText();
         }
         String messageToSend = client.handleInput(chatMessage);
-        if(gameChatField.getText().equals("/secretcheatcode42")){
-            client.send("WINC");
+        if (gameChatField.getText().equals("/secretcheatcode42")) {
+            if (startPressed) {
+                isCheatCode = true;
+                client.send("WINC");
+            } else {
+                isCheatCode = true;
+                gameChatIncoming("Before entering a cheat code, ");
+                gameChatIncoming("you need to press start first.");
+            }
         }
-        if (messageToSend != null) {
-            client.send(messageToSend);
+            if (messageToSend != null && !(isCheatCode)) {
+                client.send(messageToSend);
+            }
+            gameChatField.clear();
         }
-        gameChatField.clear();
-    }
+
 
     /**
      * Displays an incoming message in the game chat area.
