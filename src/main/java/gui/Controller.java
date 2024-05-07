@@ -397,8 +397,8 @@ public class Controller implements Initializable {
         Platform.runLater(() -> {
             highscoreVbox.getChildren().clear();
             Label label = new Label(result);
-            label.setFont(Font.font("Bold", FontWeight.BOLD, 14));
-            label.setTextFill(Color.WHITE);
+            label.setFont(Font.font("Arial", 11));
+            label.setTextFill(Color.BLACK);
             highscoreVbox.getChildren().add(label);
         });
     }
