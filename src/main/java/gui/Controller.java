@@ -80,6 +80,8 @@ public class Controller implements Initializable {
 
     private boolean isEmpty = false; //Flag to check if the lobby is empty.
 
+    private boolean nameIsEmpty = false; //Flag to check if the given nickname is empty
+
 
     @FXML
     private TextField changeNickname;
@@ -419,7 +421,12 @@ public class Controller implements Initializable {
     }
 
     public void setNickname(String name){
-        this.nickname = name;
+        nickname = name;
+    }
+
+    public void setNewNickname(String name){
+        nickname = name;
+        nicknameLabel.setText(name);
     }
 
     public void startPressed(ActionEvent event) throws IOException {
@@ -429,8 +436,30 @@ public class Controller implements Initializable {
 
 
     @FXML
-    void toChangeUsername(ActionEvent event) {
-       // nicknameLabel.setText("dinimom");
+    void toChangeUsername(ActionEvent event) throws IOException {
+        System.out.println("toChangeUsername wurde ausgelöst");
+        ArrayList<String> args = new ArrayList<>();
+        args.add("NAME");
+        String newName = changeNickname.getText();
+        if (newName.isEmpty()) {
+            args.add(System.getProperty("user.name"));
+            client.send(encodeProtocolMessage(args));
+            nameIsEmpty = true;
+            args.clear();
+            nicknameWarning.setText("");
+
+        }
+        if (newName.contains(" ") || newName.contains("\"")) {
+            nicknameWarning.setText("no blank spaces or quotation marks");
+
+        } else {
+            if (!(nameIsEmpty)) {
+                args.add(newName);
+                client.send(encodeProtocolMessage(args));
+                args.clear();
+                nicknameWarning.setText("");
+            }
+        }
 
     }
 
@@ -446,6 +475,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         if(nickname != null){
             nicknameLabel.setText(nickname);
         }

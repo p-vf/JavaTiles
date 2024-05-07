@@ -727,7 +727,15 @@ public class Client {
 
                 case NAME:
                     nickname = arguments.get(0);
-                    gameController.setNickname(nickname);
+                    if(gameController != null){
+                    gameController.setNickname(nickname);}
+                    if(controller != null){
+
+                        Platform.runLater(() -> {
+                            controller.setNewNickname(nickname);
+                        });
+
+                    }
                     System.out.println("Your nickname has been changed to: " + nickname);
                     break;
 
