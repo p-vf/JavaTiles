@@ -69,7 +69,7 @@ public class Client {
     private Tile[] deckTiles; // Tiles representing the deck of the player
 
 
-    private GameGUI gui; // GUI for the game
+    public GameGUI gui; // GUI for the game
 
     private boolean pressedStart = false; // Flag indicating whether the player has pressed start
 
@@ -84,6 +84,10 @@ public class Client {
     private ArrayList<String> playersInLobby = new ArrayList<>(); // List of players in the lobby
 
     private String[] arguments;
+
+    private Thread guiThread;
+
+    private String login;
 
 
     /**
@@ -119,12 +123,17 @@ public class Client {
             Thread iT = new Thread(th);
             iT.start();
 
+            client.guiThread = new Thread(client.gui);
+            client.guiThread.start();
 
             client.ping(client);
 
             String loginData;
 
             client.setArguments(args);
+
+
+            String line = " ";
 
             if (args.length == 3) {
                 boolean isValid = !(args[2].contains(" ") || args[2].contains("\""));
@@ -137,10 +146,7 @@ public class Client {
             } else {
                 loginData = "LOGI " + System.getProperty("user.name");
             }
-            client.send(loginData);
-
-
-            String line = " ";
+            client.login = loginData;
             while (true) {
                 line = bReader.readLine();
                 if (line.equalsIgnoreCase("QUIT")) {
@@ -167,6 +173,10 @@ public class Client {
         }
 
 
+    }
+
+    public void sendLogin() throws IOException {
+        send(login);
     }
 
     public void setArguments(String[] arguments) {
@@ -707,9 +717,11 @@ public class Client {
 
                 case LOGI:
                     nickname = arguments.get(0);
+                    controller.setNickname(nickname);
                     System.out.println("You have been logged in as: " + arguments.get(0));
-                    Thread thisThread = new Thread(gui);
-                    thisThread.start();
+                    Platform.runLater(() -> {
+                        changeScene("lobby");
+                    });
 
                     break;
 
@@ -1167,6 +1179,11 @@ public class Client {
      */
     public void setPressedStart(boolean bool) {
         pressedStart = bool;
+    }
+
+
+    public String getNickname(){
+    return this.nickname;
     }
 }
 

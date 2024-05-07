@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,8 +21,10 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -29,7 +32,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  * The Controller class manages the user interface and user interactions for the application.
  * It controls the various UI elements such as text fields, buttons, and displays.
  */
-public class Controller {
+public class Controller implements Initializable {
     @FXML
     private Button broadcastButton;
     @FXML
@@ -79,16 +82,18 @@ public class Controller {
 
 
     @FXML
-    private TextField changeUsername;
+    private TextField changeNickname;
 
     @FXML
-    private Label usernameLabel;
+    private Label nicknameLabel;
 
     @FXML
-    private Label usernameWarning;
+    private Label nicknameWarning;
 
     private boolean broadcastPressed = false;
+    private static String nickname;
 
+    private static boolean showUsername = false;
 
 
     /**
@@ -193,6 +198,7 @@ public class Controller {
             switch (inputCommand) {
 
                 case "lobby":
+                    showUsername=true;
                     sceneSwitcher(event, "/lobby.fxml");
                     break;
 
@@ -412,18 +418,19 @@ public class Controller {
         });
     }
 
-    public void startPressed(ActionEvent event) {
-        Platform.runLater(() -> {
-            switchToScene(event, "lobby");
-        });
+    public void setNickname(String name){
+        this.nickname = name;
     }
 
-    public void setUsernameLabel(String username){
-        usernameLabel.setText(username);
+    public void startPressed(ActionEvent event) throws IOException {
+        client.setEvent(event);
+        client.sendLogin();
     }
+
 
     @FXML
     void toChangeUsername(ActionEvent event) {
+       // nicknameLabel.setText("dinimom");
 
     }
 
@@ -435,6 +442,14 @@ public class Controller {
         if(broadcastPressed == false){
             broadcastButton.setText("Broadcast-Off");
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if(nickname != null){
+            nicknameLabel.setText(nickname);
+        }
+
     }
 }
 
