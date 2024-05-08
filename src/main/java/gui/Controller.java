@@ -9,10 +9,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import javafx.scene.image.Image;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -482,7 +486,34 @@ public class Controller implements Initializable {
 
     }
 
-    public void manualOpened(ActionEvent actionEvent) {
+    public void manualOpened() {
+    Stage stage = new Stage();
+    stage.setTitle("Manual");
+
+    ScrollPane scroll = new ScrollPane();
+    VBox box = new VBox();
+    Image firstImage = new Image("/manualImageOne.jpg");
+    Image secImage = new Image("/manualImageTwo.jpg");
+
+    ImageView firstImageView = new ImageView();
+    ImageView secImageView = new ImageView();
+
+    firstImageView.setImage(firstImage);
+    firstImageView.setFitWidth(1200);
+    firstImageView.setPreserveRatio(true);
+    firstImageView.setSmooth(true);
+    secImageView.setImage(secImage);
+    secImageView.setFitWidth(1200);
+    secImageView.setPreserveRatio(true);
+    secImageView.setSmooth(true);
+
+    box.getChildren().addAll(firstImageView, secImageView);
+    scroll.setContent(box);
+    Scene scene = new Scene(scroll,1280, 720);
+    stage.setScene(scene);
+    stage.show();
+
+
     }
 }
 
