@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -22,6 +23,7 @@
                </font>
             </Text>
             <Button fx:id="showPlayersButton" layoutX="-15.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" text="Show players" />
+            <Label fx:id="nicknameWarning" layoutX="230.0" layoutY="120.0" text="Label" />
          </children>
       </AnchorPane>
    </center>
@@ -52,6 +54,7 @@
             <Button fx:id="broadcastButton" layoutX="741.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
             <Button layoutX="844.0" layoutY="14.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
+            <Label fx:id="nicknameLabel" layoutX="40.0" layoutY="-8.0" text="Label" />
          </children></Pane>
    </bottom>
    <right>

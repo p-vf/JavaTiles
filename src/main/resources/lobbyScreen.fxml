@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -54,6 +55,8 @@
             <Button fx:id="broadcastButton" layoutX="800.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
             <Button fx:id="manualOpened" layoutX="903.0" layoutY="14.0" mnemonicParsing="false" text="How to play?" />
+            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-8.0" text="Label" />
+            <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="41.0" text="Label" />
          </children></Pane>
    </bottom>
 </BorderPane>
