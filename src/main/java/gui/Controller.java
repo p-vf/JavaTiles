@@ -481,5 +481,8 @@ public class Controller implements Initializable {
         }
 
     }
+
+    public void manualOpened(ActionEvent actionEvent) {
+    }
 }
 
