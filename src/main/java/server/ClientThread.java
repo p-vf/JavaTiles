@@ -41,6 +41,7 @@ public class ClientThread implements Runnable {
   private final ServerPingThread pingThread;
   private boolean isReady = false;
   private volatile boolean isRunning = true;
+  private boolean spectator = false;
 
   /**
    * Retrieves the unique identifier of this client thread.
@@ -206,6 +207,7 @@ public class ClientThread implements Runnable {
           logout();
         }
         case DRAW -> {
+          if (spectator) break;
           if (notAllowedToDraw()) break;
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           String stackName = arguments.get(0);
@@ -216,8 +218,33 @@ public class ClientThread implements Runnable {
         case HIGH ->{
           send(encodeProtocolMessage("+HIGH", HighScores.getHighScores()));
         }
+        case SPEC ->{
+          if (lobby != null) {
+            send(encodeProtocolMessage("SPEC", "f", "Already in Lobby " + lobby.lobbyNumber));
+            break;
+          }
+          try {
+            int lobbyNumber = Integer.parseInt(arguments.get(0));
+            Lobby potentialLobby = server.getLobby(lobbyNumber);
+            if (potentialLobby == null) {
+              send(encodeProtocolMessage("SPEC", "f", "Lobby not existent yet"));
+              break;
+            }
+            if (potentialLobby != null) {
+              this.spectator = true;
+              lobby.addSpectator(this);
+              send(encodeProtocolMessage("SPEC", "t"));
+              break;
+            }
+
+          } catch (NumberFormatException e) {
+
+            send(encodeProtocolMessage("SPEC", "f", "NumberFormatException"));
+          }
+        }
 
         case PUTT -> {
+          if(spectator) break;
           //checks if player can put a tile, based on the Tile itself and wether his deck is valid
           Tile tile = Tile.parseTile(arguments.get(0));
           OrderedDeck deck = new OrderedDeck(Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1))));
