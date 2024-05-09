@@ -86,6 +86,7 @@
             <Button fx:id="broadcastButton" layoutX="762.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
             <Button layoutX="865.0" layoutY="14.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
+            <TextField fx:id="spectatorTextfield" layoutX="451.0" layoutY="14.0" onAction="#spectatorPressed" promptText="Spectator #" />
          </children></Pane>
    </bottom>
 </BorderPane>

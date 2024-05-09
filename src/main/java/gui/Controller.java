@@ -37,6 +37,7 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  * It controls the various UI elements such as text fields, buttons, and displays.
  */
 public class Controller implements Initializable {
+    public TextField spectatorTextfield;
     @FXML
     private Button broadcastButton;
     @FXML
@@ -512,6 +513,14 @@ public class Controller implements Initializable {
     stage.show();
 
 
+    }
+
+    public void spectatorPressed(ActionEvent actionEvent) throws IOException {
+        ArrayList<String> args = new ArrayList<>();
+        args.add("SPEC");
+        String lobbynumb = spectatorTextfield.getText();
+        args.add(lobbynumb);
+        client.send(encodeProtocolMessage(args));
     }
 }
 
