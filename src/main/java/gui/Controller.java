@@ -430,7 +430,7 @@ public class Controller implements Initializable {
 
     public void setNewNickname(String name){
         nickname = name;
-        nicknameLabel.setText(name);
+        nicknameLabel.setText("Nickname: " + name);
     }
 
     public void startPressed(ActionEvent event) throws IOException {
@@ -479,11 +479,9 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         if(nickname != null){
-            nicknameLabel.setText(nickname);
+            nicknameLabel.setText("Nickname: " + nickname);
         }
-
     }
 
     public void manualOpened() {

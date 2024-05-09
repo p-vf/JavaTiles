@@ -23,7 +23,6 @@
                </font>
             </Text>
             <Button fx:id="showPlayersButton" layoutX="-15.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" text="Show players" />
-            <Label fx:id="nicknameWarning" layoutX="230.0" layoutY="120.0" text="Label" />
          </children>
       </AnchorPane>
    </center>
@@ -54,7 +53,14 @@
             <Button fx:id="broadcastButton" layoutX="741.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
             <Button layoutX="844.0" layoutY="14.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
-            <Label fx:id="nicknameLabel" layoutX="40.0" layoutY="-8.0" text="Label" />
+            <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
+            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-9.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
          </children></Pane>
    </bottom>
    <right>
