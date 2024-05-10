@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Random;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -126,6 +125,7 @@ public class Lobby {
         if (gameState != null) {
           try {
             client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.getPlayerDeck(i).toStringArrayList()), Integer.toString(i)));
+            client.send(getStatProtocolString());
           } catch (IOException e) {
             LOGGER.error("Lobby.addPlayer: IOException thrown" + e.getMessage());
             return false;
@@ -211,6 +211,22 @@ public class Lobby {
       sb.deleteCharAt(sb.length() - 1);
     }
     return sb.toString();
+  }
+
+  /**
+   * Returns a String that conforms to the STAT command in the network-protocol
+   * with the information relevant to the lobby. <br>
+   * This means that it has the following form:<br>
+   * {@code "STAT <exchangestacks> <currentplayerindex>"} <br>
+   * Example:<br>
+   * {@code "STAT "3:RED \"%\" \"%\" 13:BLUE" 2"}
+   *
+   * @return String conforming to the STAT command specified by the network-protocol with the information of the lobby
+   */
+  public String getStatProtocolString() {
+    String exchangeStacks = Tile.tileArrayToProtocolArgument(gameState.getVisibleTiles());
+    String currentPlayerIdx = Integer.toString(gameState.getCurrentPlayerIndex());
+    return encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx);
   }
 
 

@@ -3,7 +3,6 @@ package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import game.Color;
@@ -17,8 +16,6 @@ import utils.NetworkUtils;
 import static utils.NetworkUtils.*;
 import static utils.NetworkUtils.Protocol.ClientRequest;
 import static utils.NetworkUtils.Protocol.ServerRequest;
-
-import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -732,9 +729,7 @@ public class ClientThread implements Runnable {
    * @throws IOException If send() throws an IOException.
    */
   private void sendState() {
-    String exchangeStacks = Tile.tileArrayToProtocolArgument(lobby.gameState.getVisibleTiles());
-    String currentPlayerIdx = Integer.toString(lobby.gameState.getCurrentPlayerIndex());
-    lobby.sendToLobby(encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx), null);
+    lobby.sendToLobby(lobby.getStatProtocolString(), null);
   }
 
   /**
