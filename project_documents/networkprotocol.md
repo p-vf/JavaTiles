@@ -342,24 +342,7 @@ Client: `+STAT`
 
 ---
 
-## Spiele beobachten als Zuschauer
-| Command    | Response                | Sender |
-|------------|-------------------------|--------|
-| `SPEC <n>` | `+SPEC <valid> <deck> ` | Client |
-### Beschreibung
-Der Client gibt mit diesem Command an, dass er ein Zuschauer (spectator) des Spiels sein will und gibt mit der Lobbynummer an, welches Spiel er schauen will.
-Als Antwort gibt der Server über die Flag zurück, ob diese Lobby überhaupt existiert und übergibt auch das Deck des Spielers, der gerade an der Reihe ist.
-Falls valid den Wert `"f"` hat, wird eine Leere String statt des Decks geschickt.
-Auch wenn man gerade erst ein Spiel beobachten will, muss man warten bis ein Spielzug das man beobachtet, wird eine leere String mitgeschickt.
-Somit kann man immer zusehen, was auf dem Deck des Spielers der an der Reihe ist geschieht.
 
-
-### Beispiel
-Client: `SPEC 1`  
-Server: `+SPEC t "\"%\" 3:RED 11:RED 12:RED 13:RED 2:BLUE 3:BLACK \"%\" \"%\" 11:BLUE 12:BLUE \"%\" 2:YELLOW 7:YELLOW \"%\" 1:YELLOW 1:RED \"%\" \"%\" \"%\" 9:BLACK 9:RED \"%\" \"%\"%"`  
-(Client wollte beim Spiel der Lobby 1 zusehen und hat ein Deck geschickt bekommen)
-
----
 
 ## Tile ziehen
 | Command            | Response       | Sender |

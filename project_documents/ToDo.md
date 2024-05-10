@@ -47,23 +47,20 @@ Client:
 # aktuelle TODOs:
 
 was noch zu tun ist beim GUI:
-    - name sollte man immer ändern können (egal ob ausserhalb einer Lobby innerhalb einer Lobby oder im laufenden Spiel)
-    - Login screen sollte gelöscht werden (wenn kein name angegeben wird, sollte man den Systemnamen nehmen)
     Das Netzwerkprotokoll betreffend:
-    - wenn jemand die lobby verlässt sollte das angezeigt werden (LEFT)
-    - Alle Highscores sollten angezeigt werden können. (mit scrolling)
-    - Nickname von Anfang an sicht- und änderbar machen
+    - Alle Highscores sollten angezeigt werden können. (mit scrolling, auch wenn man noch nicht in einer lobby ist)
 
 Client:
-    - optionaler parameter nickname zum funktionieren bringen
-    - Broadcast Funktionalität ohne Chat-Command möglich machen (z.B. mit einem Button)
-    - Cheatcode implementieren im Chat
-    - (Tutorial einbauen)
+    - Anweisung im Chat updaten (anstatt /all den broadcast toggle button zum Broadcast in die Anweisung nehmen)
+    - (Tutorial einbauen (aktualisiertes Manual einfügen))
+    - list open/run/finished games
+    - revert changes of spectator
 
-- Logo designen
 - Manual updaten
-- QA Report machen
+- QA Report machen (Diskussion und Graph aktualisieren)
 - Video und Screenshots machen
+- debug statements entfernen
+
 
 Präsentation:
     - About a Game
@@ -72,3 +69,7 @@ Präsentation:
     - QA
     - Technology!
     - We are smarter now (lessons learned)
+
+nicht so wichtig beim Client:
+    - title vom Window auf "JavaTiles" setzen
+    - anstatt FX-alien unser logo als icon in der Taskleiste
