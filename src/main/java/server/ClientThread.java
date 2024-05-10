@@ -104,8 +104,9 @@ public class ClientThread implements Runnable {
 
   // for testing purposes
   public static void main(String[] args) {
-    String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
-    System.out.println("Result: " + decodeProtocolMessage(request).toString());
+    //String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
+    //System.out.println("Result: " + decodeProtocolMessage(request).toString());
+    String request = encodeProtocolMessage("SPEC", "1");
   }
 
   @Override
@@ -207,44 +208,49 @@ public class ClientThread implements Runnable {
           logout();
         }
         case DRAW -> {
-          if (spectator) break;
+          if (spectator){
+            send(encodeProtocolMessage("+DRAW", "", "You are in spectator mode"));
+            break;
+          }
           if (notAllowedToDraw()) break;
           // TODO put much of this functionality into a method in class GameState (or somewhere where it makes sense)
           String stackName = arguments.get(0);
           draw(stackName);
-
-
+          lobby.sendPlayerDeckToSpectator();
         }
         case HIGH ->{
           send(encodeProtocolMessage("+HIGH", HighScores.getHighScores()));
         }
         case SPEC ->{
           if (lobby != null) {
-            send(encodeProtocolMessage("SPEC", "f", "Already in Lobby " + lobby.lobbyNumber));
+            //send(encodeProtocolMessage("SPEC", "f", "Already in Lobby " + lobby.lobbyNumber));
             break;
           }
           try {
             int lobbyNumber = Integer.parseInt(arguments.get(0));
             Lobby potentialLobby = server.getLobby(lobbyNumber);
             if (potentialLobby == null) {
-              send(encodeProtocolMessage("SPEC", "f", "Lobby not existent yet"));
-              break;
+              send(encodeProtocolMessage("+SPEC", "f", "lobby not existent"));
+              break; // Handle Lobby not existent
             }
             if (potentialLobby != null) {
+              lobby = potentialLobby;
               this.spectator = true;
               lobby.addSpectator(this);
-              send(encodeProtocolMessage("SPEC", "t"));
+              //lobby.sendPlayerDeckToSpectator(); // TODO: ist diese Methode hier am richtigen Platz?
               break;
             }
-
           } catch (NumberFormatException e) {
 
-            send(encodeProtocolMessage("SPEC", "f", "NumberFormatException"));
+            //send(encodeProtocolMessage("SPEC", "f", "NumberFormatException"));
           }
         }
 
         case PUTT -> {
-          if(spectator) break;
+          if(spectator){
+            send(encodeProtocolMessage("+PUTT", "f", "f", "You are in spectator mode"));
+            break;
+          }
           //checks if player can put a tile, based on the Tile itself and wether his deck is valid
           Tile tile = Tile.parseTile(arguments.get(0));
           OrderedDeck deck = new OrderedDeck(Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1))));
@@ -255,6 +261,7 @@ public class ClientThread implements Runnable {
           send(encodeProtocolMessage("+PUTT", "t", "f"));
           lobby.gameState.putTile(tile, playerIndex);
           sendState();
+          lobby.sendPlayerDeckToSpectator();
         }
         case CATC -> {
           handleChat(arguments);
@@ -290,6 +297,7 @@ public class ClientThread implements Runnable {
         case REDY -> {
           if (notAllReady()) break;
           distributeDecks();
+          lobby.sendPlayerDeckToSpectator();
         }
         case WINC -> {
           activateCheatCode();

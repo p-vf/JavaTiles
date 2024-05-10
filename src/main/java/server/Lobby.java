@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -110,6 +111,42 @@ public class Lobby {
     lobbyState = LobbyState.RUNNING;
     return true;
   }
+  public void sendPlayerDeckToSpectator() throws IOException {
+    int currentPlayer = gameState.getCurrentPlayerIndex();
+
+    int amountOfPlayers = getPlayers().size();
+    try {
+      if (getPlayers().get(currentPlayer) == null) {
+        sendToSpectator(encodeProtocolMessage("+SPEC", "f"));//TODO: anderer Send command
+        return;
+      }
+    }
+    catch (IndexOutOfBoundsException e) {
+      sendToSpectator(encodeProtocolMessage("+SPEC", "f"));//TODO: anderer Send command
+      return;
+    }
+    //ClientThread player = lobby.getPlayers().get(playerIndex);
+    OrderedDeck deck = gameState.getPlayerDeck(currentPlayer);
+    if (deck == null) {
+      sendToSpectator(encodeProtocolMessage("+SPEC", "f"));
+      return;
+    }
+    String deckTiles = deck.toString();
+    sendToSpectator(encodeProtocolMessage("+SPEC","t", deckTiles));
+  }
+
+  private void sendToSpectator(String cmd) {
+    for(var spec: spectators){
+      try {
+        if(spec != null){
+          spec.send(cmd);
+        }
+
+      } catch (IOException e) {
+        LOGGER.error("From Lobby.sendToSpectator():" + e.getMessage());
+      }
+    }
+  }
 
   /**
    * Adds a player to the lobby, if the lobby isn't full.
@@ -189,19 +226,11 @@ public class Lobby {
     }
   }
 
-  public void addSpectator(ClientThread client) throws IOException {
+  public void addSpectator(ClientThread client) {
     // TODO: add a spectator that can watch from the pov of the player which is currently playing
     spectators.add(client);
     // Optional: Senden des aktuellen Spielzustands an den Zuschauer
-    if (gameState != null) {
-      try {
-        client.send(encodeProtocolMessage("SPEC", "t"));
-        return;
-      } catch (IOException e) {
-        LOGGER.error("Lobby.addSpectator: IOException thrown" + e.getMessage());
-      }
-    }
-    client.send(encodeProtocolMessage("SPEC", "f"));
+
   }
 
   /**
