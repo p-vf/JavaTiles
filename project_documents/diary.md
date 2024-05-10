@@ -300,3 +300,16 @@ ohne Robin, da wir fanden, dass es nicht viel Sinn macht zu dritt daran zu arbei
 ## 6.5.2024 Übungsstunde (Istref, Boran, Pascal)
 - ToDos aktualisiert
 - noch zu klären: Müssen die Spieler vom Server während dem Spiel aufgelistet werden können?
+
+## 7.-9.5.2024 Einzelarbeit
+- Wir haben am Manual und am QA-Konzept.
+- Wir haben über WhatsApp besprochen, dass wir probieren einen Zuschauer Modus einzufügen, falls dieser uns
+nicht zu viel Zeit kostet.
+- Einige Funktionalitäten und Designs wurden dem GUI hinzugefügt.
+- Ein Treffen wurde ausgemacht für den 10.05.2024 im Lernoullianum.
+
+## 10.05.2024 Treffen im Lernoullianum
+- Beim Treffen haben wir als erstes Besprochen, ob wir den Zuschauer Modus nun implementieren oder nicht
+und sind zu dem Entschluss gekommen, dass es zeitlich etwas knapp wird und der Zuschauer Modus auch die anderen bereits
+vorhandenen Funktionen beeinträchtigen könnte und haben uns dagegen entschieden.
+- Danach haben wir unsere TODO-Liste aktualisiert.
