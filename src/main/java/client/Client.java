@@ -756,52 +756,54 @@ public class Client {
                             Platform.runLater(() -> {
                                 controller.setInput(message);
                             });
-                        }
+                        }else{
 
-                        String argList = arguments.get(1);
-                        String[] status = argList.split(" ");
-                        String infos = String.join(":", status);
-                        String[] splitString = infos.split(":");
-                        int[] intArray = new int[splitString.length];
+                            String argList = arguments.get(1);
+                            String[] status = argList.split(" ");
+                            String infos = String.join(":", status);
+                            String[] splitString = infos.split(":");
+                            int[] intArray = new int[splitString.length];
 
-                        for (int i = 0; i < splitString.length; i++) {
-                            intArray[i] = Integer.parseInt(splitString[i]);
+                            for (int i = 0; i < splitString.length; i++) {
+                                intArray[i] = Integer.parseInt(splitString[i]);
 
-                        }
-
-                        int[] lobbies = new int[intArray.length / 2];
-                        int[] players = new int[intArray.length / 2];
-
-                        int indexLobby = 0;
-                        int indexPlayer = 0;
-
-                        for (int i = 0; i < intArray.length; i++) {
-                            if (i % 2 == 0) {
-                                lobbies[indexLobby] = intArray[i];
-                                indexLobby++;
-                            } else {
-                                players[indexPlayer] = intArray[i];
-                                indexPlayer++;
                             }
+
+                            int[] lobbies = new int[intArray.length / 2];
+                            int[] players = new int[intArray.length / 2];
+
+                            int indexLobby = 0;
+                            int indexPlayer = 0;
+
+                            for (int i = 0; i < intArray.length; i++) {
+                                if (i % 2 == 0) {
+                                    lobbies[indexLobby] = intArray[i];
+                                    indexLobby++;
+                                } else {
+                                    players[indexPlayer] = intArray[i];
+                                    indexPlayer++;
+                                }
+                            }
+
+                            System.out.println("Open Lobbies");
+                            System.out.println("Lobbynumber: \tNumber of players:");
+                            for (int i = 0; i < lobbies.length; i++) {
+                                System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
+                            }
+
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("Open Lobbies\n");
+                            sb.append("Lobbynumber: \tNumber of players:\n");
+
+                            for (int i = 0; i < lobbies.length; i++) {
+                                sb.append(lobbies[i]).append("\t\t\t\t").append(players[i]).append("\n");
+                            }
+                            String message = sb.toString();
+                            Platform.runLater(() -> {
+                                controller.setInput(message);
+                            });
                         }
 
-                        System.out.println("Open Lobbies");
-                        System.out.println("Lobbynumber: \tNumber of players:");
-                        for (int i = 0; i < lobbies.length; i++) {
-                            System.out.println(lobbies[i] + "\t\t\t\t" + players[i]);
-                        }
-
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("Open Lobbies\n");
-                        sb.append("Lobbynumber: \tNumber of players:\n");
-
-                        for (int i = 0; i < lobbies.length; i++) {
-                            sb.append(lobbies[i]).append("\t\t\t\t").append(players[i]).append("\n");
-                        }
-                        String message = sb.toString();
-                        Platform.runLater(() -> {
-                            controller.setInput(message);
-                        });
                     }
 
                     if (arguments.get(0).equals("r")) {
@@ -831,39 +833,41 @@ public class Client {
                             String message = "No finished games available";
                             Platform.runLater(() -> {
                                 controller.showFinishedGames(message);
-                            });}
-                        String argList = arguments.get(1);
-                        String[] status = argList.split(",");
-                        String infos = String.join(":", status);
-                        String[] splitString = infos.split(":");
-                        String[] StringArray = new String[splitString.length];
+                            });}else{
+                            String argList = arguments.get(1);
+                            String[] status = argList.split(",");
+                            String infos = String.join(":", status);
+                            String[] splitString = infos.split(":");
+                            String[] StringArray = new String[splitString.length];
 
-                        for (int i = 0; i < splitString.length; i++) {
-                            StringArray[i] = splitString[i];
+                            for (int i = 0; i < splitString.length; i++) {
+                                StringArray[i] = splitString[i];
 
-                        }
+                            }
 
-                        String[] lobbies = new String[StringArray.length / 2];
-                        String[] winners = new String[StringArray.length / 2];
+                            String[] lobbies = new String[StringArray.length / 2];
+                            String[] winners = new String[StringArray.length / 2];
 
-                        int indexLobby = 0;
-                        int indexPlayer = 0;
+                            int indexLobby = 0;
+                            int indexPlayer = 0;
 
-                        for (int i = 0; i < StringArray.length; i++) {
-                            if (i % 2 == 0) {
-                                lobbies[indexLobby] = StringArray[i];
-                                indexLobby++;
-                            } else {
-                                winners[indexPlayer] = StringArray[i];
-                                indexPlayer++;
+                            for (int i = 0; i < StringArray.length; i++) {
+                                if (i % 2 == 0) {
+                                    lobbies[indexLobby] = StringArray[i];
+                                    indexLobby++;
+                                } else {
+                                    winners[indexPlayer] = StringArray[i];
+                                    indexPlayer++;
+                                }
+                            }
+
+                            System.out.println("Finished games");
+                            System.out.println("Lobbynumber: \tWinners:");
+                            for (int i = 0; i < lobbies.length; i++) {
+                                System.out.println(lobbies[i] + "\t\t\t\t" + winners[i]);
                             }
                         }
 
-                        System.out.println("Finished games");
-                        System.out.println("Lobbynumber: \tWinners:");
-                        for (int i = 0; i < lobbies.length; i++) {
-                            System.out.println(lobbies[i] + "\t\t\t\t" + winners[i]);
-                        }
                     }
                     break;
 
