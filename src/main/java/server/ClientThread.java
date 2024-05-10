@@ -531,7 +531,7 @@ public class ClientThread implements Runnable {
   private boolean notAllReady() throws IOException {
     isReady = true;
     send(encodeProtocolMessage("+REDY"));
-    if (lobby.getPlayers().size() != 4) {
+    if (lobby.getNumberOfPlayers() != 4) {
       return true;
     }
     boolean allPlayersReady = true;
@@ -542,10 +542,7 @@ public class ClientThread implements Runnable {
       }
 
     }
-    if (!allPlayersReady) {
-      return true;
-    }
-    return false;
+    return !allPlayersReady;
   }
 
   /**
