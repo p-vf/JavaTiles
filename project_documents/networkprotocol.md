@@ -342,6 +342,8 @@ Client: `+STAT`
 
 ---
 
+
+
 ## Tile ziehen
 | Command            | Response       | Sender |
 |--------------------|----------------|--------|

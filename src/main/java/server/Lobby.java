@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -35,7 +36,6 @@ public class Lobby {
   private LobbyState lobbyState;
   GameState gameState;
   private String winnerName;
-  private ArrayList<ClientThread> spectators;
 
 
   /**
@@ -81,7 +81,6 @@ public class Lobby {
   public Lobby(int lobbyNumber) {
     this.lobbyNumber = lobbyNumber;
     players = new ArrayList<>();
-    spectators = new ArrayList<>();
     lobbyState = LobbyState.OPEN;
   }
 
@@ -178,31 +177,9 @@ public class Lobby {
         LOGGER.error("From Lobby.sendToLobby():" + e.getMessage());
       }
     }
-    for (var spectator : spectators) {
-      try {
-        if (spectator != null) {
-          spectator.send(cmd);
-        }
-      } catch (IOException e) {
-        LOGGER.error("From Lobby.sendToLobby() to Spectator: " + e.getMessage());
-      }
-    }
   }
 
-  public void addSpectator(ClientThread client) throws IOException {
-    // TODO: add a spectator that can watch from the pov of the player which is currently playing
-    spectators.add(client);
-    // Optional: Senden des aktuellen Spielzustands an den Zuschauer
-    if (gameState != null) {
-      try {
-        client.send(encodeProtocolMessage("SPEC", "t"));
-        return;
-      } catch (IOException e) {
-        LOGGER.error("Lobby.addSpectator: IOException thrown" + e.getMessage());
-      }
-    }
-    client.send(encodeProtocolMessage("SPEC", "f"));
-  }
+
 
   /**
    * Creates a String containing the nicknames of players in the lobby.
