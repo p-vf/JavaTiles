@@ -36,7 +36,6 @@ public class Lobby {
   private LobbyState lobbyState;
   GameState gameState;
   private String winnerName;
-  private ArrayList<ClientThread> spectators;
 
 
   /**
@@ -82,7 +81,6 @@ public class Lobby {
   public Lobby(int lobbyNumber) {
     this.lobbyNumber = lobbyNumber;
     players = new ArrayList<>();
-    spectators = new ArrayList<>();
     lobbyState = LobbyState.OPEN;
   }
 
@@ -110,42 +108,6 @@ public class Lobby {
     gameState = new GameState(startPlayerIdx);
     lobbyState = LobbyState.RUNNING;
     return true;
-  }
-  public void sendPlayerDeckToSpectator() throws IOException {
-    int currentPlayer = gameState.getCurrentPlayerIndex();
-
-    int amountOfPlayers = getPlayers().size();
-    try {
-      if (getPlayers().get(currentPlayer) == null) {
-        sendToSpectator(encodeProtocolMessage("+SPEC", "f"));//TODO: anderer Send command
-        return;
-      }
-    }
-    catch (IndexOutOfBoundsException e) {
-      sendToSpectator(encodeProtocolMessage("+SPEC", "f"));//TODO: anderer Send command
-      return;
-    }
-    //ClientThread player = lobby.getPlayers().get(playerIndex);
-    OrderedDeck deck = gameState.getPlayerDeck(currentPlayer);
-    if (deck == null) {
-      sendToSpectator(encodeProtocolMessage("+SPEC", "f"));
-      return;
-    }
-    String deckTiles = deck.toString();
-    sendToSpectator(encodeProtocolMessage("+SPEC","t", deckTiles));
-  }
-
-  private void sendToSpectator(String cmd) {
-    for(var spec: spectators){
-      try {
-        if(spec != null){
-          spec.send(cmd);
-        }
-
-      } catch (IOException e) {
-        LOGGER.error("From Lobby.sendToSpectator():" + e.getMessage());
-      }
-    }
   }
 
   /**
@@ -215,23 +177,9 @@ public class Lobby {
         LOGGER.error("From Lobby.sendToLobby():" + e.getMessage());
       }
     }
-    for (var spectator : spectators) {
-      try {
-        if (spectator != null) {
-          spectator.send(cmd);
-        }
-      } catch (IOException e) {
-        LOGGER.error("From Lobby.sendToLobby() to Spectator: " + e.getMessage());
-      }
-    }
   }
 
-  public void addSpectator(ClientThread client) {
-    // TODO: add a spectator that can watch from the pov of the player which is currently playing
-    spectators.add(client);
-    // Optional: Senden des aktuellen Spielzustands an den Zuschauer
 
-  }
 
   /**
    * Creates a String containing the nicknames of players in the lobby.
