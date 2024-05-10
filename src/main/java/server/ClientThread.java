@@ -99,12 +99,6 @@ public class ClientThread implements Runnable {
     pingThread.start();
   }
 
-  // for testing purposes
-  public static void main(String[] args) {
-    //String request = "CATC t \"hallo ich bin emanuel \\\"bruh\\\"\" 3 bruh";
-    //System.out.println("Result: " + decodeProtocolMessage(request).toString());
-  }
-
   @Override
   public void run() {
 

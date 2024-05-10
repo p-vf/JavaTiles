@@ -124,7 +124,10 @@ public class HighScores {
   }
 
 
-  // only for test purposes
+  /**
+   * This method is for testing purposes only and is never called during normal operation
+   * @param args not relevant
+   */
   public static void main(String[] args) {
     try {
       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd,HH:mm");
@@ -137,7 +140,7 @@ public class HighScores {
         System.out.println(entry);
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      e.printStackTrace(System.err);
     }
   }
 }
