@@ -750,19 +750,13 @@ public class Client {
 
                 case LGAM:
 
-                    if (arguments.get(1).isEmpty()) {
-                        System.out.println("No lobbies with this status");
-                        String message = "No open lobbies available";
-                        Platform.runLater(() -> {
-                            controller.setInput(message);
-                        });
-
-                        break;
-                    }
-
-
                     if (arguments.get(0).equals("o")) {
-
+                        if(arguments.get(1).isEmpty()){
+                            String message = "No open lobbies available";
+                            Platform.runLater(() -> {
+                                controller.setInput(message);
+                            });
+                        }
 
                         String argList = arguments.get(1);
                         String[] status = argList.split(" ");
@@ -798,7 +792,7 @@ public class Client {
                         }
 
                         StringBuilder sb = new StringBuilder();
-
+                        sb.append("Open Lobbies\n");
                         sb.append("Lobbynumber: \tNumber of players:\n");
 
                         for (int i = 0; i < lobbies.length; i++) {
@@ -833,7 +827,11 @@ public class Client {
                     }
 
                     if (arguments.get(0).equals("f")) {
-
+                        if(arguments.get(1).isEmpty()){
+                            String message = "No finished games available";
+                            Platform.runLater(() -> {
+                                controller.showFinishedGames(message);
+                            });}
                         String argList = arguments.get(1);
                         String[] status = argList.split(",");
                         String infos = String.join(":", status);

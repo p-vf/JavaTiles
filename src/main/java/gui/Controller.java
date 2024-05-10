@@ -39,6 +39,8 @@ import static utils.NetworkUtils.encodeProtocolMessage;
 public class Controller implements Initializable {
     public TextField spectatorTextfield;
     @FXML
+    public VBox vBoxFinishedGames;
+    @FXML
     private Button broadcastButton;
     @FXML
     private VBox whosOnlineVBox;
@@ -277,13 +279,20 @@ public class Controller implements Initializable {
      * @param message The message to be displayed in the lobby view.
      */
     public void setInput(String message) {
-
         vBoxLobbies.getChildren().clear();
         Label label = new Label(message);
-        label.setFont(Font.font("Bold", FontWeight.BOLD, 13));
-        label.setTextFill(Color.WHITE);
+        label.setFont(Font.font("Arial", FontWeight.MEDIUM, 13));
+        label.setTextFill(Color.BLACK);
         vBoxLobbies.getChildren().add(label);
 
+    }
+
+    public void showFinishedGames(String message){
+        vBoxFinishedGames.getChildren().clear();
+        Label label = new Label(message);
+        label.setFont(Font.font("Bold", FontWeight.MEDIUM, 13));
+        label.setTextFill(Color.BLACK);
+        vBoxFinishedGames.getChildren().add(label);
     }
 
     /**
@@ -298,6 +307,10 @@ public class Controller implements Initializable {
         arg.add("o");
         client.send(encodeProtocolMessage(arg));
 
+        ArrayList<String> args = new ArrayList<>();
+        args.add("LGAM");
+        args.add("f");
+        client.send(encodeProtocolMessage(args));
     }
 
     /**
