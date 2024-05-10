@@ -302,13 +302,12 @@ public class Lobby {
    * Represents the rough state of the lobby.
    */
   public enum LobbyState {
-    // TODO maybe add more states (when someone leaved etc.)
 
-    // when the game hasn't started yet
+    /** when the game hasn't started yet or a player left it */
     OPEN,
-    // when the game is running
+    /** when the game is running */
     RUNNING,
-    // when the game is finished
+    /** when the game has finished */
     FINISHED,
   }
 }
