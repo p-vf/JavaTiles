@@ -511,16 +511,6 @@ public class Controller implements Initializable {
     Scene scene = new Scene(scroll,1280, 720);
     stage.setScene(scene);
     stage.show();
-
-
-    }
-
-    public void spectatorPressed(ActionEvent actionEvent) throws IOException {
-        ArrayList<String> args = new ArrayList<>();
-        args.add("SPEC");
-        String lobbynumb = spectatorTextfield.getText();
-        args.add(lobbynumb);
-        client.send(encodeProtocolMessage(args));
     }
 }
 
