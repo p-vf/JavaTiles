@@ -58,7 +58,7 @@ Client:
 
 - Manual updaten
 - QA Report machen (Diskussion und Graph aktualisieren)
-- Video und Screenshots machen
+- Video (zwischen 20 Sekunden und 2 Minuten) und Screenshot machen
 - debug statements entfernen
 
 
@@ -73,3 +73,7 @@ Präsentation:
 nicht so wichtig beim Client:
     - title vom Window auf "JavaTiles" setzen
     - anstatt FX-alien unser logo als icon in der Taskleiste
+
+Montag in Übungsstunde:
+    - (Wichtig!!!!!!!) Connection loss überprüfen!!
+    - Reconnect testen
