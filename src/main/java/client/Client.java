@@ -610,9 +610,8 @@ public class Client {
                             sb.append(nameArray[i]).append("\n");
                         }
                     }
-                    String messageClient = sb.toString();
 
-                    controller.showPlayersInLobby(messageClient);
+
 
                     System.out.println("The following players are in the lobby:");
 
@@ -645,6 +644,7 @@ public class Client {
                     gameController.gameChatIncoming(message);}
                     if(controller != null){
                         controller.chatIncoming(message);
+
                     }
                     send(encodeProtocolMessage("+LEFT"));
                     break;
@@ -888,6 +888,15 @@ public class Client {
                             for (int i = 0; i < lobbies.length; i++) {
                                 System.out.println(lobbies[i] + "\t\t\t\t" + winners[i]);
                             }
+                            StringBuilder output = new StringBuilder();
+                            output.append("Finished games\n");
+                            output.append("Lobbynumber: \tWinners:\n");
+                            for (int i = 0; i < lobbies.length; i++) {
+                                output.append(lobbies[i]).append("\t\t\t\t").append(winners[i]).append("\n");
+                            }
+                            String outputString = output.toString();
+                            controller.showFinishedGames(outputString);
+
                         }
 
                     }
@@ -1074,6 +1083,20 @@ public class Client {
                             gameController.setPlayerNames(playersInLobby);
                         });
                     }
+                    String[] nameArray = currentPlayers.toArray(new String[0]);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("The following players are in the lobby:\n");
+                    for (int i = 0; i < nameArray.length; i++) {
+                        if (nameArray[i].isEmpty()) {
+                            sb.append("-----\n");
+                        } else {
+                            sb.append(nameArray[i]).append("\n");
+                        }
+                    }
+                    String pInLobby = sb.toString();
+                    Platform.runLater(() -> {
+                        controller.showPlayersInLobby(pInLobby);
+                    });
                     break;
 
 

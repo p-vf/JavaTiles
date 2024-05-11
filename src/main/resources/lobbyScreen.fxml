@@ -12,11 +12,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Text fill="WHITE" layoutX="216.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+            <Text fill="WHITE" layoutX="216.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
@@ -45,16 +45,16 @@
    <right>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea fx:id="chatArea" editable="false" layoutY="-76.0" prefHeight="476.0" prefWidth="169.0" />
-            <TextField fx:id="chatInput" layoutY="387.0" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="170.0" />
+            <TextArea fx:id="chatArea" editable="false" layoutX="-2.0" layoutY="-89.0" prefHeight="449.0" prefWidth="191.0" />
+            <TextField fx:id="chatInput" layoutX="-2.0" layoutY="361.0" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="192.0" />
+            <Button fx:id="broadcastButton" layoutX="-2.0" layoutY="387.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
+            <Button layoutX="104.0" layoutY="387.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
          </children></Pane>
    </right>
    <bottom>
       <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="broadcastButton" layoutX="800.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
-            <Button layoutX="903.0" layoutY="14.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
             <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-8.0" text="Label" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
