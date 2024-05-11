@@ -69,11 +69,11 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <Label fx:id="nicknameLabel" layoutX="21.0" layoutY="391.0" text="Label" textFill="WHITE">
+            <Label fx:id="nicknameLabel" layoutX="21.0" layoutY="391.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <Label fx:id="nicknameWarning" layoutX="22.0" layoutY="448.0" text="Label" textFill="WHITE" />
+            <Label fx:id="nicknameWarning" layoutX="22.0" layoutY="448.0" textFill="WHITE" />
             <TextField fx:id="changeNickname" layoutX="21.0" layoutY="415.0" onAction="#toChangeUsername" promptText="change nickname" />
          </children></Pane>
    </left>

@@ -53,11 +53,11 @@
             <Button fx:id="broadcastButton" layoutX="685.0" layoutY="2.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
             <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
-            <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" text="Label" textFill="WHITE">
+            <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-9.0" text="Label" textFill="WHITE">
+            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-9.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>

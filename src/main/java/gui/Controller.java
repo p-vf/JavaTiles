@@ -192,7 +192,7 @@ public class Controller implements Initializable {
                 System.out.println("Closing application...");
                 System.exit(0);
             });
-            stage.setResizable(false);
+            stage.setResizable(true);
             stage.show();
         }
     }
