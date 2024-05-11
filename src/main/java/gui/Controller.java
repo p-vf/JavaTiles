@@ -175,7 +175,7 @@ public class Controller implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(new StackPane(root));
+        Scene scene = new Scene(new StackPane(root), 900, 600);
 
         Image backgroundImage = new Image(getClass().getResourceAsStream("/lobbyBackground.png"));
         ImageView backgroundImageView = new ImageView(backgroundImage);
@@ -192,10 +192,11 @@ public class Controller implements Initializable {
                 System.out.println("Closing application...");
                 System.exit(0);
             });
-            stage.setResizable(true);
+            stage.setResizable(false);
             stage.show();
         }
     }
+
 
 
     /**
