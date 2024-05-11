@@ -870,6 +870,15 @@ public class Client {
                             for (int i = 0; i < lobbies.length; i++) {
                                 System.out.println(lobbies[i] + "\t\t\t\t" + winners[i]);
                             }
+                            StringBuilder output = new StringBuilder();
+                            output.append("Finished games\n");
+                            output.append("Lobbynumber: \tWinners:\n");
+                            for (int i = 0; i < lobbies.length; i++) {
+                                output.append(lobbies[i]).append("\t\t\t\t").append(winners[i]).append("\n");
+                            }
+                            String outputString = output.toString();
+                            controller.showFinishedGames(outputString);
+
                         }
 
                     }
