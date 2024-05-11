@@ -523,6 +523,10 @@ public class Client {
 
                     }
                     if (tileCount == 15) {
+                        Platform.runLater(() -> {
+                                gameController.setYourTurn(true);
+                        });
+
                         System.out.println("It's your turn.");
                         Platform.runLater(() -> {
                             try {
@@ -535,12 +539,15 @@ public class Client {
                         currentPlayerID = playerID;
 
                     } else {
-                        try {
-                            if (gameController != null) {
-                                gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
-                            }
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if (gameController != null) {
+                            Platform.runLater(() -> {
+                                try {
+                                    gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+
                         }
                     }
                     deckTiles = stringsToTileArray(tilesStrt);
@@ -634,7 +641,11 @@ public class Client {
                     send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " left the lobby");
                     String message = arguments.get(0) + " left the lobby";
-                    gameController.gameChatIncoming(message);
+                    if(gameController != null){
+                    gameController.gameChatIncoming(message);}
+                    if(controller != null){
+                        controller.chatIncoming(message);
+                    }
                     send(encodeProtocolMessage("+LEFT"));
                     break;
 
@@ -643,9 +654,16 @@ public class Client {
                     ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
                     exchangeStacks = stringsToTileArray(tileList);
 
+
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
+                        Platform.runLater(() -> {
+                            gameController.setYourTurn(true);
+                            gameController.setCouldHaveNewlyJoined(true);
+                        });
+
                         Tile tile = parseTile(tileList.get(playerID));
+
                         if (pressedStart && !(drawnATile)) {
                             gameController.disableStacks(false);
                         }
@@ -664,8 +682,9 @@ public class Client {
                         });
 
                     } else {
-                        gameController.disableStacks(true);
+
                         Platform.runLater(() -> {
+                            gameController.disableStacks(true);
                             try {
                                 if (arguments.get(1).matches("\\d+")) {
                                     gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
@@ -942,6 +961,7 @@ public class Client {
                     Platform.runLater(() -> {
                         gameController.addThisTile(tile);
                         gameController.disableStacks(true);
+                        gameController.setTextofGameWarning("");
                     });
 
 
@@ -1196,6 +1216,9 @@ public class Client {
     public Tile[] getTiles() {
         return deckTiles;
     }
+    public Tile[] getDeckTiles(){
+        return yourDeck.DeckToTileArray();
+    }
 
     /**
      * Sets the flag indicating whether the player has pressed start.
@@ -1213,6 +1236,7 @@ public class Client {
     public String getNickname(){
     return this.nickname;
     }
+
 }
 
 

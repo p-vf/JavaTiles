@@ -2,6 +2,7 @@ package gui;
 
 import client.Client;
 import game.Tile;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
@@ -20,10 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-import static game.Color.BLACK;
 import static game.Color.YELLOW;
 import static javafx.scene.paint.Color.DARKGOLDENROD;
-import static javafx.scene.paint.Color.INDIGO;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -211,6 +209,10 @@ public class ControllerGame implements Initializable {
     private boolean startPressed = false;
     private boolean isCheatCode = false;
 
+    private boolean yourTurn = false;
+
+    private boolean couldHaveNewlyJoined = false;
+
 
 
 
@@ -241,7 +243,6 @@ public class ControllerGame implements Initializable {
         playerNames = new ArrayList<>(Arrays.asList(playerName0, playerName1, playerName2, playerName3));
         puttButton.setDisable(true);
         disableStacks(true);
-
         client.setgameController(this);
     }
 
@@ -251,7 +252,7 @@ public class ControllerGame implements Initializable {
      */
     @FXML
     public void showDeck() throws IOException {
-        client.send(encodeProtocolMessage("RNAM"));
+
         client.setPressedStart(true);
         startButton.setDisable(true);
         startButton.setVisible(false);
@@ -266,6 +267,23 @@ public class ControllerGame implements Initializable {
 
                 }
             }
+        if(!couldHaveNewlyJoined){
+            disableStacks(true);
+        }
+        else{
+            disableStacks(false);
+            if(client.getDeckTiles().length==15){
+                disableStacks(true);
+            }
+        }
+        Platform.runLater(() -> {
+            try {
+                client.send(encodeProtocolMessage("RNAM"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
 
 
         }
@@ -325,6 +343,10 @@ public class ControllerGame implements Initializable {
         this.canYouPlayThisMove = canYouPlayThisMove;
     }
 
+    public void setCouldHaveNewlyJoined(boolean bool){
+        couldHaveNewlyJoined = bool;
+    }
+
 
     /**
      * Sets the text of the win label and sends a corresponding message to the server.
@@ -363,6 +385,10 @@ public class ControllerGame implements Initializable {
         this.nickname = nickname;
 
 
+    }
+
+    public void setYourTurn(boolean bool){
+        yourTurn = bool;
     }
 
     /**
@@ -504,7 +530,8 @@ public class ControllerGame implements Initializable {
         if (pressedButtons.size() == 1) {
             for (int i = 0; i < deck.size(); i++) {
                 if (pressedButtons.get(0).equals(deck.get(i))) {
-                    puttButton.setDisable(false);
+                    if(yourTurn){
+                    puttButton.setDisable(false);}
                 }
             }
 
