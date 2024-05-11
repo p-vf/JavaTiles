@@ -16,29 +16,34 @@
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Text fill="WHITE" layoutX="216.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+            <Text fill="WHITE" layoutX="220.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Text fill="WHITE" layoutX="249.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open lobbies:">
-               <font>
-                  <Font size="17.0" />
-               </font></Text>
-            <Button id="rBLobbySelection" layoutX="474.0" layoutY="166.0" mnemonicParsing="false" onAction="#refreshPressed" text="refresh" />
+            <Button id="rBLobbySelection" layoutX="194.0" layoutY="218.0" mnemonicParsing="false" onAction="#refreshPressed" text="show open lobbies &amp; finished games" />
             <TextField fx:id="lobbyTextfield" layoutX="251.0" layoutY="461.0" onAction="#lobbyNumEntered" promptText="Lobby #" />
             <Text fill="WHITE" layoutX="188.0" layoutY="451.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the lobby number you'd like to join:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font>
             </Text>
-            <VBox fx:id="vBoxLobbies" layoutX="145.0" layoutY="166.0" prefHeight="200.0" prefWidth="312.0" />
-            <Label fx:id="lobbyWarning" alignment="CENTER" layoutX="44.0" layoutY="401.0" prefHeight="34.0" prefWidth="514.0" textFill="WHITE">
+            <ScrollPane layoutX="148.0" layoutY="76.0">
+               <content>
+                  <VBox fx:id="vBoxLobbies" prefHeight="125.0" prefWidth="312.0" />
+               </content>
+            </ScrollPane>
+            <Label fx:id="lobbyWarning" alignment="CENTER" layoutX="47.0" layoutY="428.0" prefHeight="34.0" prefWidth="514.0" textFill="WHITE">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Label>
             <Button fx:id="showPlayersButton" layoutX="-20.0" layoutY="38.0" mnemonicParsing="false" onAction="#showOnlinePressed" text="Show players" />
+            <ScrollPane layoutX="148.0" layoutY="260.0">
+               <content>
+                  <VBox fx:id="vBoxFinishedGames" prefHeight="125.0" prefWidth="312.0" />
+               </content>
+            </ScrollPane>
          </children>
       </AnchorPane>
    </center>
@@ -88,7 +93,6 @@
             <Button fx:id="broadcastButton" layoutX="762.0" layoutY="14.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
             <Button layoutX="865.0" layoutY="14.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
-            <TextField fx:id="spectatorTextfield" layoutX="451.0" layoutY="14.0" onAction="#spectatorPressed" promptText="Spectator #" />
             <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" text="Label" textFill="WHITE" />
          </children></Pane>
    </bottom>

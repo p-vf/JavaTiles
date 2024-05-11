@@ -259,7 +259,6 @@ public class NetworkUtils {
 
       /** get names from lobby */
       RNAM,
-      SPEC,
     }
 
     /**

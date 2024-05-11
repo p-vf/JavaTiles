@@ -20,7 +20,29 @@ public class UnorderedDeck {
   // there are 53 distinct tiles in the game, two of each, so 106 in total
   int[] tileCounts = new int[53];
 
-  // for testing purposes
+  /**
+   * Default constructor for UnorderedDeck. Initializes an empty deck.
+   */
+  public UnorderedDeck() {
+    // tileCounts already has a default value so this constructor doesn't have to do anything.
+  }
+
+  /**
+   * Constructs an UnorderedDeck instance from a list of {@link Tile} objects. This constructor initializes
+   * the deck with the given tiles, accounting for each tile's frequency.
+   *
+   * @param deck the list of {@link Tile} objects to initialize the deck with.
+   */
+  public UnorderedDeck(ArrayList<Tile> deck) {
+    for (var tile : deck) {
+      this.add(tile);
+    }
+  }
+
+  /**
+   * This method is for testing purposes only and is never called during normal operation
+   * @param args not relevant
+   */
   public static void main(String[] args) {
     try {
       for (int i = 0; i < 53; i++) {
@@ -78,25 +100,6 @@ public class UnorderedDeck {
   }
 
   /**
-   * Constructs an UnorderedDeck instance from a list of {@link Tile} objects. This constructor initializes
-   * the deck with the given tiles, accounting for each tile's frequency.
-   *
-   * @param deck the list of {@link Tile} objects to initialize the deck with.
-   */
-  public UnorderedDeck(ArrayList<Tile> deck) {
-    for (var tile : deck) {
-      this.add(tile);
-    }
-  }
-
-  /**
-   * Default constructor for UnorderedDeck. Initializes an empty deck.
-   */
-  public UnorderedDeck() {
-
-  }
-
-  /**
    * Adds a tile to the deck.
    *
    * @param tile tile to be added to deck. If null, nothing is changed about the deck.
@@ -126,7 +129,7 @@ public class UnorderedDeck {
   }
 
   /**
-   * Removes tile from deck.
+   * Removes tile from the deck.
    *
    * @param tile tile to be removed. Should not be null
    */
@@ -157,7 +160,16 @@ public class UnorderedDeck {
     return res;
   }
 
-  // only for debugging purposes..
+  /**
+   * Returns a human-readable string that shows the difference between two decks.
+   * Should only be used for debugging purposes.
+   *
+   * @param a first deck
+   * @param b second deck
+   * @param nameA name of the first deck
+   * @param nameB name of the second deck
+   * @return human-readable string that describes how the two decks are different
+   */
   public static String showDiffDebug(UnorderedDeck a, UnorderedDeck b, String nameA, String nameB) {
     if (a.equals(b)) {
       return nameA + " is equal to " + nameB + "\n";

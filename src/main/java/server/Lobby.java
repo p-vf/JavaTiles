@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Random;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -36,7 +35,6 @@ public class Lobby {
   private LobbyState lobbyState;
   GameState gameState;
   private String winnerName;
-  private ArrayList<ClientThread> spectators;
 
 
   /**
@@ -82,7 +80,6 @@ public class Lobby {
   public Lobby(int lobbyNumber) {
     this.lobbyNumber = lobbyNumber;
     players = new ArrayList<>();
-    spectators = new ArrayList<>();
     lobbyState = LobbyState.OPEN;
   }
 
@@ -111,42 +108,6 @@ public class Lobby {
     lobbyState = LobbyState.RUNNING;
     return true;
   }
-  public void sendPlayerDeckToSpectator() throws IOException {
-    int currentPlayer = gameState.getCurrentPlayerIndex();
-
-    int amountOfPlayers = getPlayers().size();
-    try {
-      if (getPlayers().get(currentPlayer) == null) {
-        sendToSpectator(encodeProtocolMessage("+SPEC", "f"));//TODO: anderer Send command
-        return;
-      }
-    }
-    catch (IndexOutOfBoundsException e) {
-      sendToSpectator(encodeProtocolMessage("+SPEC", "f"));//TODO: anderer Send command
-      return;
-    }
-    //ClientThread player = lobby.getPlayers().get(playerIndex);
-    OrderedDeck deck = gameState.getPlayerDeck(currentPlayer);
-    if (deck == null) {
-      sendToSpectator(encodeProtocolMessage("+SPEC", "f"));
-      return;
-    }
-    String deckTiles = deck.toString();
-    sendToSpectator(encodeProtocolMessage("+SPEC","t", deckTiles));
-  }
-
-  private void sendToSpectator(String cmd) {
-    for(var spec: spectators){
-      try {
-        if(spec != null){
-          spec.send(cmd);
-        }
-
-      } catch (IOException e) {
-        LOGGER.error("From Lobby.sendToSpectator():" + e.getMessage());
-      }
-    }
-  }
 
   /**
    * Adds a player to the lobby, if the lobby isn't full.
@@ -164,6 +125,7 @@ public class Lobby {
         if (gameState != null) {
           try {
             client.send(encodeProtocolMessage("STRT", encodeProtocolMessage(gameState.getPlayerDeck(i).toStringArrayList()), Integer.toString(i)));
+            client.send(getStatProtocolString());
           } catch (IOException e) {
             LOGGER.error("Lobby.addPlayer: IOException thrown" + e.getMessage());
             return false;
@@ -215,23 +177,9 @@ public class Lobby {
         LOGGER.error("From Lobby.sendToLobby():" + e.getMessage());
       }
     }
-    for (var spectator : spectators) {
-      try {
-        if (spectator != null) {
-          spectator.send(cmd);
-        }
-      } catch (IOException e) {
-        LOGGER.error("From Lobby.sendToLobby() to Spectator: " + e.getMessage());
-      }
-    }
   }
 
-  public void addSpectator(ClientThread client) {
-    // TODO: add a spectator that can watch from the pov of the player which is currently playing
-    spectators.add(client);
-    // Optional: Senden des aktuellen Spielzustands an den Zuschauer
 
-  }
 
   /**
    * Creates a String containing the nicknames of players in the lobby.
@@ -263,6 +211,22 @@ public class Lobby {
       sb.deleteCharAt(sb.length() - 1);
     }
     return sb.toString();
+  }
+
+  /**
+   * Returns a String that conforms to the STAT command in the network-protocol
+   * with the information relevant to the lobby. <br>
+   * This means that it has the following form:<br>
+   * {@code "STAT <exchangestacks> <currentplayerindex>"} <br>
+   * Example:<br>
+   * {@code "STAT "3:RED \"%\" \"%\" 13:BLUE" 2"}
+   *
+   * @return String conforming to the STAT command specified by the network-protocol with the information of the lobby
+   */
+  public String getStatProtocolString() {
+    String exchangeStacks = Tile.tileArrayToProtocolArgument(gameState.getVisibleTiles());
+    String currentPlayerIdx = Integer.toString(gameState.getCurrentPlayerIndex());
+    return encodeProtocolMessage("STAT", exchangeStacks, currentPlayerIdx);
   }
 
 
@@ -338,13 +302,12 @@ public class Lobby {
    * Represents the rough state of the lobby.
    */
   public enum LobbyState {
-    // TODO maybe add more states (when someone leaved etc.)
 
-    // when the game hasn't started yet
+    /** when the game hasn't started yet or a player left it */
     OPEN,
-    // when the game is running
+    /** when the game is running */
     RUNNING,
-    // when the game is finished
+    /** when the game has finished */
     FINISHED,
   }
 }
