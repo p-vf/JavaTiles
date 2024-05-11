@@ -603,9 +603,8 @@ public class Client {
                             sb.append(nameArray[i]).append("\n");
                         }
                     }
-                    String messageClient = sb.toString();
 
-                    controller.showPlayersInLobby(messageClient);
+
 
                     System.out.println("The following players are in the lobby:");
 
@@ -634,7 +633,9 @@ public class Client {
                     send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " left the lobby");
                     String message = arguments.get(0) + " left the lobby";
-                    gameController.gameChatIncoming(message);
+                    if(gameController != null){
+                        gameController.gameChatIncoming(message);
+                    }
                     send(encodeProtocolMessage("+LEFT"));
                     break;
 
@@ -1054,6 +1055,20 @@ public class Client {
                             gameController.setPlayerNames(playersInLobby);
                         });
                     }
+                    String[] nameArray = currentPlayers.toArray(new String[0]);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("The following players are in the lobby:\n");
+                    for (int i = 0; i < nameArray.length; i++) {
+                        if (nameArray[i].isEmpty()) {
+                            sb.append("-----\n");
+                        } else {
+                            sb.append(nameArray[i]).append("\n");
+                        }
+                    }
+                    String pInLobby = sb.toString();
+                    Platform.runLater(() -> {
+                        controller.showPlayersInLobby(pInLobby);
+                    });
                     break;
 
 

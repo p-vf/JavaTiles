@@ -68,8 +68,6 @@ public class Controller implements Initializable {
     @FXML
     private VBox vBoxLobbies; // The VBox container for showing Lobbies
 
-    public static String clientMessage; // The clientMessage field stores the message received from the client. It is used to display information about players in the lobby.
-
     @FXML
     private TextArea chatArea; // The text area for displaying chat messages.
 
@@ -370,14 +368,6 @@ public class Controller implements Initializable {
         client.send(encodeProtocolMessage(arg));
     }
 
-    /**
-     * Stores the message received from the server about players in the lobby.
-     *
-     * @param message The message received from the server.
-     */
-    public void showPlayersInLobby(String message) {
-        clientMessage = message;
-    }
 
 
     /**
@@ -392,13 +382,18 @@ public class Controller implements Initializable {
     /**
      * Displays the players in the lobby.
      */
-    public void showPlayersPressed() {
+    public void showPlayersPressed() throws IOException {
+        ArrayList<String> args = new ArrayList<>();
+        args.add("RNAM");
+        client.send(encodeProtocolMessage(args));
+    }
+
+    public void showPlayersInLobby(String message){
         playersLobbyVbox.getChildren().clear();
-        Label label = new Label(clientMessage);
+        Label label = new Label(message);
         label.setFont(Font.font("Bold", FontWeight.BOLD, 14));
         label.setTextFill(Color.WHITE);
         playersLobbyVbox.getChildren().add(label);
-
     }
 
     /**
