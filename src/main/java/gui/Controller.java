@@ -16,7 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -177,10 +177,18 @@ public class Controller implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        root.setStyle("-fx-background-color: #008000;");
-        if (stage != null) {
+        Scene scene = new Scene(new StackPane(root));
 
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/lobbyBackground.png"));
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+
+        backgroundImageView.fitWidthProperty().bind(scene.widthProperty());
+        backgroundImageView.fitHeightProperty().bind(scene.heightProperty());
+
+        StackPane stackPane = (StackPane) scene.getRoot();
+        stackPane.getChildren().add(0, backgroundImageView);
+
+        if (stage != null) {
             stage.setScene(scene);
             stage.setOnCloseRequest((WindowEvent ActionEvent) -> {
                 System.out.println("Closing application...");
@@ -189,7 +197,6 @@ public class Controller implements Initializable {
             stage.setResizable(true);
             stage.show();
         }
-
     }
 
 
