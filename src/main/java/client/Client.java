@@ -936,13 +936,12 @@ public class Client {
                     Tile tile = parseTile(arguments.get(0));
                     Platform.runLater(() -> {
                         gameController.addThisTile(tile);
+                        gameController.disableStacks(true);
                     });
 
 
                     System.out.println("You have drawn: " + tile.toStringPretty());
-                    Platform.runLater(() -> {
-                        gameController.disableStacks(true);
-                    });
+
                     showDeck();
                     break;
 

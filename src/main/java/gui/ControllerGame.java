@@ -10,7 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import static game.Color.BLACK;
+import static game.Color.YELLOW;
+import static javafx.scene.paint.Color.DARKGOLDENROD;
+import static javafx.scene.paint.Color.INDIGO;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -262,13 +268,31 @@ public class ControllerGame implements Initializable {
             if (tiles[i] == null) {
                 deck.get(i).setText("");
             } else {
-                deck.get(i).setText("" + tiles[i].getNumber());
-                deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tiles[i].getColor())));
+                createTile(deck.get(i), tiles[i].getColor(), tiles[i].getNumber());
+
+                }
             }
 
 
         }
-    }
+
+        private void createTile(Button tile, game.Color color, int tileNumber){
+        if(tileNumber == 0){
+            tile.setFont(Font.font("Algerian",22));
+            tile.setTextFill(Paint.valueOf(String.valueOf(color)));
+            tile.setText("J");
+        }
+        else{
+            tile.setFont(Font.font("Arial Rounded MT Bold",19));
+            tile.setTextFill(Paint.valueOf(String.valueOf(color)));
+            tile.setText(""+tileNumber);
+            if(color.equals(YELLOW)){
+                tile.setTextFill(DARKGOLDENROD);
+            }
+        }
+
+        }
+
 
     /**
      * Removes a tile from the exchange stack.
@@ -354,8 +378,7 @@ public class ControllerGame implements Initializable {
      */
     public void setExchangeStack0(Tile tile) {
         if (tile != null) {
-            exchangeStack0.setText("" + tile.getNumber());
-            exchangeStack0.setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+            createTile(exchangeStack0, tile.getColor(), tile.getNumber());
         }
 
 
@@ -368,64 +391,58 @@ public class ControllerGame implements Initializable {
      * @param index the index of the exchange stack to be updated
      */
     public void setExchangeStacks(Tile[] tiles, int index) {
+        exchangeStack1.setText("");
+        exchangeStack2.setText("");
+        exchangeStack3.setText("");
 
         for (int i = 0; i < tiles.length; i++) {
             if (i == index) {
                 if (i == 0) {
                     if (tiles[1] != null) {
-                        exchangeStack1.setText("" + tiles[1].getNumber());
-                        exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[1].getColor())));
+                        createTile(exchangeStack1, tiles[1].getColor(), tiles[1].getNumber());
                     }
                     if (tiles[2] != null) {
-                        exchangeStack2.setText("" + tiles[2].getNumber());
-                        exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[2].getColor())));
+                        createTile(exchangeStack2, tiles[2].getColor(), tiles[2].getNumber());
                     }
                     if (tiles[3] != null) {
-                        exchangeStack3.setText("" + tiles[3].getNumber());
-                        exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[3].getColor())));
+                        createTile(exchangeStack3, tiles[3].getColor(), tiles[3].getNumber());
                     }
                 }
                 if (i == 1) {
                     if (tiles[2] != null) {
-                        exchangeStack1.setText("" + tiles[2].getNumber());
-                        exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[2].getColor())));
+                        createTile(exchangeStack1, tiles[2].getColor(), tiles[2].getNumber());
+
                     }
                     if (tiles[3] != null) {
-                        exchangeStack2.setText("" + tiles[3].getNumber());
-                        exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[3].getColor())));
+                        createTile(exchangeStack2, tiles[3].getColor(), tiles[3].getNumber());
+
                     }
                     if (tiles[0] != null) {
-                        exchangeStack3.setText("" + tiles[0].getNumber());
-                        exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[0].getColor())));
+                        createTile(exchangeStack3, tiles[0].getColor(), tiles[0].getNumber());
                     }
                 }
                 if (i == 2) {
                     if (tiles[3] != null) {
-                        exchangeStack1.setText("" + tiles[3].getNumber());
-                        exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[3].getColor())));
+                        createTile(exchangeStack1, tiles[3].getColor(), tiles[3].getNumber());
                     }
                     if (tiles[0] != null) {
-                        exchangeStack2.setText("" + tiles[0].getNumber());
-                        exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[0].getColor())));
+                        createTile(exchangeStack2, tiles[0].getColor(), tiles[0].getNumber());
+
                     }
                     if (tiles[1] != null) {
-                        exchangeStack3.setText("" + tiles[1].getNumber());
-                        exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[1].getColor())));
+                        createTile(exchangeStack3, tiles[1].getColor(), tiles[1].getNumber());
                     }
 
                 }
                 if (i == 3) {
                     if (tiles[0] != null) {
-                        exchangeStack1.setText("" + tiles[0].getNumber());
-                        exchangeStack1.setTextFill(Paint.valueOf(String.valueOf(tiles[0].getColor())));
+                        createTile(exchangeStack1, tiles[0].getColor(), tiles[0].getNumber());
                     }
                     if (tiles[1] != null) {
-                        exchangeStack2.setText("" + tiles[1].getNumber());
-                        exchangeStack2.setTextFill(Paint.valueOf(String.valueOf(tiles[1].getColor())));
+                        createTile(exchangeStack2, tiles[1].getColor(), tiles[1].getNumber());
                     }
                     if (tiles[2] != null) {
-                        exchangeStack3.setText("" + tiles[2].getNumber());
-                        exchangeStack3.setTextFill(Paint.valueOf(String.valueOf(tiles[2].getColor())));
+                        createTile(exchangeStack3, tiles[2].getColor(), tiles[2].getNumber());
                     }
 
                 }
