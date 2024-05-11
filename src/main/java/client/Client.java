@@ -89,6 +89,8 @@ public class Client {
 
     private String login;
 
+    private boolean drawnATile;
+
 
     /**
      * Constructs a new EchoClient with the given socket.
@@ -637,13 +639,14 @@ public class Client {
                     break;
 
                 case STAT:
+                    send(encodeProtocolMessage("RNAM"));
                     ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
                     exchangeStacks = stringsToTileArray(tileList);
 
                     showExchangeStacks();
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
                         Tile tile = parseTile(tileList.get(playerID));
-                        if (pressedStart) {
+                        if (pressedStart && !(drawnATile)) {
                             gameController.disableStacks(false);
                         }
                         Platform.runLater(() -> {
@@ -678,7 +681,7 @@ public class Client {
                             gameController.setPlayerNames(playersInLobby);
                         });
 
-
+                        drawnATile = false;
                         send(encodeProtocolMessage("+STAT"));
                     }
                     break;
@@ -945,6 +948,7 @@ public class Client {
                     System.out.println("You have drawn: " + tile.toStringPretty());
 
                     showDeck();
+                    drawnATile = true;
                     break;
 
                 case PUTT:
@@ -1012,7 +1016,11 @@ public class Client {
                     showDeck();
                     if(gameController != null){
                         Platform.runLater(() -> {
-                            gameController.showDeck();
+                            try {
+                                gameController.showDeck();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         });
 
                     }

@@ -240,11 +240,6 @@ public class ControllerGame implements Initializable {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4, zero5, zero6, zero7, zero8, zero9, zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10, one11));
         playerNames = new ArrayList<>(Arrays.asList(playerName0, playerName1, playerName2, playerName3));
         puttButton.setDisable(true);
-        try {
-            client.send(encodeProtocolMessage("RNAM"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         disableStacks(true);
 
         client.setgameController(this);
@@ -255,12 +250,11 @@ public class ControllerGame implements Initializable {
      *
      */
     @FXML
-    public void showDeck() {
+    public void showDeck() throws IOException {
+        client.send(encodeProtocolMessage("RNAM"));
         client.setPressedStart(true);
         startButton.setDisable(true);
         startButton.setVisible(false);
-        if(!(isCheatCode)){
-        disableStacks(false);}
         startPressed = true;
         this.tiles = client.getTiles();
 
@@ -664,8 +658,7 @@ public class ControllerGame implements Initializable {
         for (int i = 0; i < deck.size(); i++) {
             if ((deck.get(i).getText().isBlank()) && count == 0) {
                 count++;
-                deck.get(i).setText("" + tile.getNumber());
-                deck.get(i).setTextFill(Paint.valueOf(String.valueOf(tile.getColor())));
+                createTile(deck.get(i), tile.getColor(), tile.getNumber());
 
             }
         }
