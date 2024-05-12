@@ -192,10 +192,14 @@ public class Controller implements Initializable {
                 System.out.println("Closing application...");
                 System.exit(0);
             });
+
             stage.setResizable(false);
             if(url.contains("/ourgame.fxml")){
                 stage.setResizable(true);
             }
+
+            stage.setTitle("JavaTiles");
+
             stage.show();
         }
     }
