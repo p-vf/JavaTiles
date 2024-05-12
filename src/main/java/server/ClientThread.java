@@ -470,7 +470,7 @@ public class ClientThread implements Runnable {
    */
   public boolean cantPutTile() throws IOException {
     if (lobby.getNumberOfPlayers() < 4) {
-      send(encodeProtocolMessage("+DRAW", "", "One or more players left the game, please wait until the lobby is full again"));
+      send(encodeProtocolMessage("+PUTT", "f", "f", "One or more players left the game, please wait until the lobby is full again"));
       return true;
     }
     // this checks if it's the players turn rn
