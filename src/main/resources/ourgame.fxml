@@ -15,122 +15,122 @@
          <children>
             <TilePane layoutX="90.0" layoutY="387.0" maxHeight="147.0" maxWidth="640.0" minHeight="147.0" minWidth="640.0" prefHeight="147.0" prefWidth="640.0">
                <children>
-                  <Button fx:id="zero0" maxHeight="70.0" maxWidth="50.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero0" maxHeight="70.0" maxWidth="50.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero1" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero1" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero2" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero2" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero3" layoutX="114.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero3" layoutX="114.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero4" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero4" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero5" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero5" layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero6" layoutX="218.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero6" layoutX="218.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero7" layoutX="270.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero7" layoutX="270.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero8" layoutX="322.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero8" layoutX="322.0" layoutY="10.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero9" layoutX="10.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero9" layoutX="10.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c8c8c8d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero10" layoutX="62.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero10" layoutX="62.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="zero11" layoutX="114.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="zero11" layoutX="114.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one0" layoutX="166.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one0" layoutX="166.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one1" layoutX="218.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0" textFill="BLUE">
+                  <Button fx:id="one1" layoutX="218.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one2" layoutX="270.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one2" layoutX="270.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one3" layoutX="322.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one3" layoutX="322.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one4" layoutX="218.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one4" layoutX="218.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one5" layoutX="270.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one5" layoutX="270.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one6" layoutX="322.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one6" layoutX="322.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one7" layoutX="374.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one7" layoutX="374.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one8" layoutX="426.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one8" layoutX="426.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#e9e9e9d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one9" layoutX="478.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one9" layoutX="478.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one10" layoutX="530.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one10" layoutX="530.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
                   </Button>
-                  <Button fx:id="one11" layoutX="530.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="70.0" prefWidth="50.0">
+                  <Button fx:id="one11" layoutX="530.0" layoutY="35.0" mnemonicParsing="false" onAction="#pressTile" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="19.0" />
                      </font>
@@ -139,15 +139,15 @@
             </TilePane>
             <Button fx:id="puttButton" layoutX="658.0" layoutY="347.0" mnemonicParsing="false" onAction="#pressTile" text="put">
                <font>
-                  <Font name="Segoe UI Bold" size="14.0" />
+                  <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="mainStack" layoutX="380.0" layoutY="195.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" text="M" textFill="#0b6320">
+            <Button fx:id="mainStack" layoutX="380.0" layoutY="195.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" text="M" textFill="#1b6538d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="22.0" />
                </font>
             </Button>
-            <Button fx:id="exchangeStack0" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack0" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textAlignment="CENTER" textFill="#c1c1c1d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
@@ -182,7 +182,7 @@
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label id="winnerLabel" fx:id="winLabel" disable="true" layoutX="163.0" layoutY="62.0" prefHeight="335.0" prefWidth="476.0">
+            <Label id="winnerLabel" fx:id="winLabel" disable="true" layoutX="167.0" layoutY="98.0" prefHeight="335.0" prefWidth="476.0">
                <font>
                   <Font name="Bookman Old Style Bold" size="80.0" />
                </font>
@@ -194,22 +194,25 @@
             </Label>
             <TextField fx:id="changeNicknameField" layoutX="13.0" layoutY="13.0" onAction="#changeNickname" promptText="change nickname" />
             <Label fx:id="changeNicknameWarning" layoutX="14.0" layoutY="40.0" prefHeight="19.0" prefWidth="317.0" />
-            <Button fx:id="exchangeStack3" disable="true" layoutX="148.0" layoutY="124.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack3" disable="true" layoutX="148.0" layoutY="124.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="exchangeStack2" disable="true" layoutX="589.0" layoutY="120.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack2" disable="true" layoutX="589.0" layoutY="120.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="exchangeStack1" disable="true" layoutX="589.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" textFill="#0b6320d4">
+            <Button fx:id="exchangeStack1" disable="true" layoutX="589.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button layoutX="688.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave lobby" />
+            <Button layoutX="688.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave lobby">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="12.0" />
+               </font></Button>
          </children>
       </AnchorPane>
    </center>
