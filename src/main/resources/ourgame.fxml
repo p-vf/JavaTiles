@@ -182,9 +182,9 @@
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label id="winnerLabel" fx:id="winLabel" disable="true" layoutX="167.0" layoutY="98.0" prefHeight="335.0" prefWidth="476.0">
+            <Label id="winnerLabel" fx:id="winLabel" alignment="CENTER" disable="true" layoutX="39.0" layoutY="98.0" prefHeight="335.0" prefWidth="743.0">
                <font>
-                  <Font name="Bookman Old Style Bold" size="80.0" />
+                  <Font name="Bookman Old Style Bold" size="35.0" />
                </font>
             </Label>
             <Label fx:id="turnLabel" alignment="CENTER" layoutX="292.0" layoutY="99.0" prefHeight="41.0" prefWidth="230.0" textAlignment="CENTER" textFill="WHITE">
