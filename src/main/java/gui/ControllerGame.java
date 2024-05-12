@@ -708,8 +708,8 @@ public class ControllerGame implements Initializable {
         for (int i = 0; i < deck.size(); i++) {
             if ((deck.get(i).getText().isBlank()) && count == 0) {
                 count++;
-                createTile(deck.get(i), tile.getColor(), tile.getNumber());
-
+                if(tile != null){
+                createTile(deck.get(i), tile.getColor(), tile.getNumber());}
             }
         }
     }
