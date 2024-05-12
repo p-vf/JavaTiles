@@ -334,6 +334,9 @@ public class ClientThread implements Runnable {
           String nicknames = lobby.getNicknameList();
           send(encodeProtocolMessage("+RNAM", nicknames));
         }
+        case RSTA ->{
+          sendState();
+        }
       }
     } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
       // in an ideal world, this line should never be reached:

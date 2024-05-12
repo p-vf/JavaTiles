@@ -416,7 +416,6 @@ public class ControllerGame implements Initializable {
     public void endGame() throws IOException {
         setWinLabel("DRAW!");
         killAllButtons();
-
     }
 
     private void killAllButtons(){

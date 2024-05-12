@@ -979,7 +979,9 @@ public class Client {
                     });
 
 
-                    System.out.println("You have drawn: " + tile.toStringPretty());
+
+                    if(tile != null){
+                    System.out.println("You have drawn: " + tile.toStringPretty());}
 
                     showDeck();
                     drawnATile = true;
@@ -995,6 +997,7 @@ public class Client {
                     } else {
                         System.out.println("Stop cheating!!");
                     }
+                    send("RSTA");
                     break;
 
                 case REDY:
