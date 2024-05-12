@@ -96,6 +96,7 @@ public class ClientThread implements Runnable {
     } catch (IOException e) {
       e.printStackTrace(System.err);
     }
+    // TODO the ping thread should probably not be started here.. (but in the run() method)
     pingThread = new ServerPingThread(this, PING_TIMEOUT);
     pingThread.setName("PingThread-" + id);
     pingThread.start();
@@ -144,10 +145,9 @@ public class ClientThread implements Runnable {
     ArrayList<String> arguments = decodeProtocolMessage(response);
     String cmdStr = arguments.remove(0);
     cmdStr = cmdStr.substring(1);
-    // TODO add log, if cmdStr is not of size 4
     ServerRequest command = ServerRequest.valueOf(cmdStr);
     switch (command) {
-      case PWIN, EMPT, CATS, STAT, NAMS, LEFT, JOND -> {
+      case STRT, PWIN, EMPT, CATS, STAT, NAMS, LEFT, JOND -> {
       }
       case PING -> {
         synchronized (pingThread) {
@@ -354,7 +354,6 @@ public class ClientThread implements Runnable {
   public void draw(String stackName) throws IOException, IllegalArgumentException {
     boolean isMainStack = isMainStack(stackName);
     Tile tile = lobby.gameState.drawTile(isMainStack, playerIndex);
-    String tileString;
     if (tile == null && stackName.equals("e")) {
       //code should never reach this line because of previous checks in handleRequest in case DRAW
       throw new IllegalArgumentException("exchangestack is empty");
@@ -362,7 +361,7 @@ public class ClientThread implements Runnable {
     if (tile == null) {
       endGameWithNoWinner();
     } else {
-      tileString = tile.toString();
+      String tileString = tile.toString();
       send(encodeProtocolMessage("+DRAW", tileString));
       sendState();
     }
@@ -431,7 +430,7 @@ public class ClientThread implements Runnable {
   public boolean checkIfValid(Tile tile, OrderedDeck deck) throws IOException {
     boolean isValid = lobby.validateMove(tile, deck, playerIndex);
     if (!isValid) {
-      LOGGER.error("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + deck.toString() + " as a deck.");
+      LOGGER.info("Player " + playerIndex + " did an invalid move: put " + tile + " on the next stack and had " + deck.toString() + " as a deck.");
       send(encodeProtocolMessage("+PUTT", "f", "f"));
       return false;
     }
