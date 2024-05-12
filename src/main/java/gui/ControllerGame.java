@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static game.Color.YELLOW;
@@ -241,6 +244,9 @@ public class ControllerGame implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4, zero5, zero6, zero7, zero8, zero9, zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10, one11));
         playerNames = new ArrayList<>(Arrays.asList(playerName0, playerName1, playerName2, playerName3));
+        for(Button button : deck){
+            button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
+        }
         puttButton.setDisable(true);
         disableStacks(true);
         client.setgameController(this);
@@ -552,6 +558,8 @@ public class ControllerGame implements Initializable {
         if (pressedButtons.size() == 1) {
             for (int i = 0; i < deck.size(); i++) {
                 if (pressedButtons.get(0).equals(deck.get(i))) {
+                    deck.get(i).setDisable(true);
+                    customizeButton(deck.get(i),true);
                     if(yourTurn){
                     puttButton.setDisable(false);}
                 }
@@ -563,6 +571,8 @@ public class ControllerGame implements Initializable {
         if (pressedButtons.size() == 2) {
             Button firstButton = pressedButtons.get(0);
             Button secondButton = pressedButtons.get(1);
+            firstButton.setDisable(false);
+            customizeButton(firstButton, false);
 
             if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
 
@@ -611,11 +621,15 @@ public class ControllerGame implements Initializable {
                 String secondTile = secondButton.getText();
                 Paint firstTilePaint = firstButton.getTextFill();
                 Paint secondTilePaint = secondButton.getTextFill();
+                Font firstTileFont = firstButton.getFont();
+                Font secondTileFont = secondButton.getFont();
 
                 firstButton.setText(secondTile);
                 firstButton.setTextFill(secondTilePaint);
                 secondButton.setText(firstTile);
                 secondButton.setTextFill(firstTilePaint);
+                firstButton.setFont(secondTileFont);
+                secondButton.setFont(firstTileFont);
 
                 pressedButtons.clear();
                 puttButton.setDisable(true);
@@ -657,6 +671,15 @@ public class ControllerGame implements Initializable {
         }
 
 
+    }
+
+    public void customizeButton(Button button, boolean bool){
+        if(bool){
+            button.setStyle("-fx-background-color: #c8c8c8; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
+
+        }else{
+            button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
+        }
     }
 
     /**
@@ -804,7 +827,21 @@ public class ControllerGame implements Initializable {
             broadcastButton.setText("Broadcast-Off");
         }
     }
+
+    @FXML
+    void tileHover(MouseEvent event) {
+        Button button = (Button) event.getTarget();
+        button.setStyle("-fx-background-color: #dadada; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
+
     }
+    @FXML
+    void noTileHover(MouseEvent event) {
+        Button button = (Button) event.getTarget();
+        button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");}
+
+
+    }
+
 
 
 
