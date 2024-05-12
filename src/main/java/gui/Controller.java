@@ -41,6 +41,12 @@ public class Controller implements Initializable {
     @FXML
     public VBox vBoxFinishedGames;
     @FXML
+    private TextArea areaRunningGames;
+    @FXML
+    private TextArea areaFinishedGames;
+    @FXML
+    private TextArea areaOpenLobbies;
+    @FXML
     private Button broadcastButton;
     @FXML
     private VBox whosOnlineVBox;
@@ -180,7 +186,6 @@ public class Controller implements Initializable {
         String backgroundImageURL = "/lobbyBackground.png";
         if (url.contains("/ourgame.fxml")) {
             backgroundImageURL = "/gameBackground.png";
-            stage.setFullScreen(true);
         }
 
         Image backgroundImage = new Image(getClass().getResourceAsStream(backgroundImageURL));
@@ -287,7 +292,6 @@ public class Controller implements Initializable {
      * @throws IOException If an I/O error occurs during scene switching.
      */
     public void joinPressed(ActionEvent actionEvent) throws IOException {
-
         switchToScene(actionEvent, "lobbySelection");
         client.setEvent(actionEvent);
     }
@@ -297,21 +301,19 @@ public class Controller implements Initializable {
      *
      * @param message The message to be displayed in the lobby view.
      */
-    public void setInput(String message) {
-        vBoxLobbies.getChildren().clear();
-        Label label = new Label(message);
-        label.setFont(Font.font("Arial", FontWeight.MEDIUM, 13));
-        label.setTextFill(Color.BLACK);
-        vBoxLobbies.getChildren().add(label);
-
+    public void showOpenGames(String message) {
+        areaOpenLobbies.clear();
+        areaOpenLobbies.appendText(message);
     }
 
     public void showFinishedGames(String message){
-        vBoxFinishedGames.getChildren().clear();
-        Label label = new Label(message);
-        label.setFont(Font.font("Bold", FontWeight.MEDIUM, 13));
-        label.setTextFill(Color.BLACK);
-        vBoxFinishedGames.getChildren().add(label);
+        areaFinishedGames.clear();
+        areaFinishedGames.appendText(message);
+    }
+
+    public void showRunningGames(String message){
+        areaRunningGames.clear();
+        areaRunningGames.appendText(message);
     }
 
     /**
@@ -330,6 +332,11 @@ public class Controller implements Initializable {
         args.add("LGAM");
         args.add("f");
         client.send(encodeProtocolMessage(args));
+
+        ArrayList<String> argus = new ArrayList<>();
+        argus.add("LGAM");
+        argus.add("r");
+        client.send(encodeProtocolMessage(argus));
     }
 
     /**

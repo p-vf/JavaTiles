@@ -783,7 +783,7 @@ public class Client {
                         if(arguments.get(1).isEmpty()){
                             String message = "No open lobbies available";
                             Platform.runLater(() -> {
-                                controller.setInput(message);
+                                controller.showOpenGames(message);
                             });
                         }else{
 
@@ -829,32 +829,49 @@ public class Client {
                             }
                             String message = sb.toString();
                             Platform.runLater(() -> {
-                                controller.setInput(message);
+                                controller.showOpenGames(message);
                             });
                         }
 
                     }
 
                     if (arguments.get(0).equals("r")) {
+                        if(arguments.get(1).isEmpty()){
+                            String message = "No ongoing games available";
+                            Platform.runLater(() -> {
+                                controller.showRunningGames(message);
+                            });
+                        }else{
+
+                            String argList = arguments.get(1);
+                            String[] status = argList.split(",");
+                            String infos = String.join(":", status);
+                            String[] splitString = infos.split(":");
+                            int[] intArray = new int[splitString.length];
+
+                            for (int i = 0; i < splitString.length; i++) {
+                                intArray[i] = Integer.parseInt(splitString[i]);
+
+                            }
 
 
-                        String argList = arguments.get(1);
-                        String[] status = argList.split(",");
-                        String infos = String.join(":", status);
-                        String[] splitString = infos.split(":");
-                        int[] intArray = new int[splitString.length];
-
-                        for (int i = 0; i < splitString.length; i++) {
-                            intArray[i] = Integer.parseInt(splitString[i]);
-
+                            System.out.println("Ongoing games");
+                            System.out.println("Lobbynumber:");
+                            for (int i = 0; i < intArray.length; i++) {
+                                System.out.println(intArray[i]);
+                            }
+                            StringBuilder output = new StringBuilder();
+                            output.append("Ongoing games\n");
+                            output.append("Lobbynumber:\n");
+                            for (int i = 0; i < intArray.length; i++) {
+                                output.append(intArray[i]).append("\n");
+                            }
+                            String outputString = output.toString();
+                            Platform.runLater(() -> {
+                                controller.showRunningGames(outputString);
+                            });
                         }
 
-
-                        System.out.println("Ongoing games");
-                        System.out.println("Lobbynumber:");
-                        for (int i = 0; i < intArray.length; i++) {
-                            System.out.println(intArray[i]);
-                        }
                     }
 
                     if (arguments.get(0).equals("f")) {
