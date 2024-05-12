@@ -569,7 +569,7 @@ public class Client {
                     System.out.println(arguments.get(0) + " won.");
                     Platform.runLater(() -> {
                         try {
-                            gameController.setWinLabel(arguments.get(0) + " won.");
+                            gameController.endGame(arguments.get(0));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -580,7 +580,7 @@ public class Client {
                     System.out.println("The game ended with a draw:");
                     Platform.runLater(() -> {
                         try {
-                            gameController.setWinLabel("DRAW!");
+                            gameController.endGame();
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

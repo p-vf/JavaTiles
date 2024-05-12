@@ -264,7 +264,6 @@ public class ControllerGame implements Initializable {
                 deck.get(i).setText("");
             } else {
                 createTile(deck.get(i), tiles[i].getColor(), tiles[i].getNumber());
-
                 }
             }
         if(!couldHaveNewlyJoined){
@@ -291,7 +290,7 @@ public class ControllerGame implements Initializable {
         private void createTile(Button tile, game.Color color, int tileNumber){
         if(tileNumber == 0){
             tile.setFont(Font.font("Algerian",22));
-            tile.setTextFill(Paint.valueOf(String.valueOf(color)));
+            tile.setTextFill(Paint.valueOf("#1b6538"));
             tile.setText("J");
         }
         else{
@@ -400,8 +399,25 @@ public class ControllerGame implements Initializable {
         if (tile != null) {
             createTile(exchangeStack0, tile.getColor(), tile.getNumber());
         }
+    }
 
+    public void endGame(String playerName) throws IOException {
+        setWinLabel(playerName + " won!");
+        killAllButtons();
 
+    }
+    public void endGame() throws IOException {
+        setWinLabel("DRAW!");
+        killAllButtons();
+
+    }
+
+    private void killAllButtons(){
+        for(Button button : deck){
+            button.setDisable(true);  //vielleicht mit neuen Steinen aus disable neue Methode machen die ds auch unsichtbar macht
+        }
+        exchangeStack0.setDisable(true);
+        mainStack.setDisable(true);
     }
 
     /**
