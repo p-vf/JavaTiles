@@ -446,6 +446,9 @@ public class Client {
             return null;
         }
     }
+    public void setLobby(boolean bool){
+        this.lobby = bool;
+    }
 
 
     /**
@@ -627,10 +630,14 @@ public class Client {
                     break;
 
                 case JOND:
+                    lobby = true;
                     send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " joined the lobby");
                     Platform.runLater(() -> {
                         controller.chatIncoming(arguments.get(0) + " joined the lobby");
+                        if(gameController != null){
+                            gameController.gameChatIncoming(arguments.get(0) + " joined the lobby");
+                        }
                     });
 
                     send(encodeProtocolMessage("+JOND"));
@@ -659,7 +666,7 @@ public class Client {
                     if (Integer.parseInt(arguments.get(1)) == playerID) {
                         Platform.runLater(() -> {
                             gameController.setYourTurn(true);
-                            gameController.setCouldHaveNewlyJoined(true);
+                            gameController.setAlreadyInGame(true);
                         });
 
                         Tile tile = parseTile(tileList.get(playerID));
@@ -903,15 +910,13 @@ public class Client {
                     break;
 
                 case JLOB:
-
-
                     String confirmation = arguments.get(0);
                     if (confirmation.equals("t")) {
+                        System.out.println("Joined lobby successfully");
+                        lobby = true;
                         Platform.runLater(() -> {
                             changeScene("lobbyScreen");
                         });
-                        System.out.println("Joined lobby successfully");
-                        lobby = true;
                     } else {
                         Platform.runLater(() -> {
                             controller.setLobbyWarning("The lobby with this lobby number is already full.");
@@ -1045,11 +1050,7 @@ public class Client {
                     showDeck();
                     if(gameController != null){
                         Platform.runLater(() -> {
-                            try {
-                                gameController.showDeck();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                            gameController.fillInDeck();
                         });
 
                     }
@@ -1095,7 +1096,8 @@ public class Client {
                     }
                     String pInLobby = sb.toString();
                     Platform.runLater(() -> {
-                        controller.showPlayersInLobby(pInLobby);
+                        if(gameController == null){
+                        controller.showPlayersInLobby(pInLobby);}
                     });
                     break;
 

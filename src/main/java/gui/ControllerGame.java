@@ -211,7 +211,7 @@ public class ControllerGame implements Initializable {
 
     private boolean yourTurn = false;
 
-    private boolean couldHaveNewlyJoined = false;
+    private boolean alreadyInGame = false;
 
 
 
@@ -244,6 +244,7 @@ public class ControllerGame implements Initializable {
         puttButton.setDisable(true);
         disableStacks(true);
         client.setgameController(this);
+        client.setLobby(true);
     }
 
     /**
@@ -257,22 +258,16 @@ public class ControllerGame implements Initializable {
         startButton.setDisable(true);
         startButton.setVisible(false);
         startPressed = true;
-        this.tiles = client.getTiles();
 
-        for (int i = 0; i < deck.size(); i++) {
-            if (tiles[i] == null) {
-                deck.get(i).setText("");
-            } else {
-                createTile(deck.get(i), tiles[i].getColor(), tiles[i].getNumber());
-                }
-            }
-        if(!couldHaveNewlyJoined){
+        fillInDeck();
+        if(!alreadyInGame){
             disableStacks(true);
         }
         else{
             disableStacks(false);
             if(client.getDeckTiles().length==15){
                 disableStacks(true);
+                client.send("JOND");
             }
         }
         Platform.runLater(() -> {
@@ -284,6 +279,18 @@ public class ControllerGame implements Initializable {
 
         });
 
+
+        }
+
+        public void fillInDeck(){
+        this.tiles = client.getTiles();
+            for (int i = 0; i < deck.size(); i++) {
+                if (tiles[i] == null) {
+                    deck.get(i).setText("");
+                } else {
+                    createTile(deck.get(i), tiles[i].getColor(), tiles[i].getNumber());
+                }
+            }
 
         }
 
@@ -342,8 +349,8 @@ public class ControllerGame implements Initializable {
         this.canYouPlayThisMove = canYouPlayThisMove;
     }
 
-    public void setCouldHaveNewlyJoined(boolean bool){
-        couldHaveNewlyJoined = bool;
+    public void setAlreadyInGame(boolean bool){
+        alreadyInGame = bool;
     }
 
 
@@ -716,7 +723,9 @@ public class ControllerGame implements Initializable {
      */
     @FXML
     void toGameChat(ActionEvent event) throws IOException {
+        System.out.println("to gameChat activated");
         String chatMessage = "/chat" + " " + gameChatField.getText();
+        System.out.println(chatMessage);
         if (broadcastPressed) {
             chatMessage = "/chat" + " " + "/all" + " " + gameChatField.getText();
         }
