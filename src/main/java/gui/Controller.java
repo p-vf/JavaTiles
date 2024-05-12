@@ -193,6 +193,7 @@ public class Controller implements Initializable {
                 System.exit(0);
             });
             stage.setResizable(true);
+            stage.setTitle("JavaTiles");
             stage.show();
         }
     }

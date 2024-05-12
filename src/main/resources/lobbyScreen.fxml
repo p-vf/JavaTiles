@@ -16,15 +16,15 @@
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Text fill="WHITE" layoutX="216.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
+            <Text fill="WHITE" layoutX="180.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Button fx:id="readyButton" layoutX="264.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
-            <Button id="leaveLobbyButton" layoutX="259.0" layoutY="227.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave Lobby" />
-            <Button id="showPlayersButton" layoutX="240.0" layoutY="268.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
-            <Button layoutX="244.0" layoutY="306.0" mnemonicParsing="false" onAction="#highscorePressed" text="Show Highscore-List" />
+            <Button fx:id="readyButton" layoutX="228.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
+            <Button id="leaveLobbyButton" layoutX="222.0" layoutY="230.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave Lobby" />
+            <Button id="showPlayersButton" layoutX="198.0" layoutY="269.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
+            <Button layoutX="205.0" layoutY="304.0" mnemonicParsing="false" onAction="#highscorePressed" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
@@ -34,7 +34,7 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="180.0" prefWidth="270.0" />
+            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="180.0" prefWidth="287.0" />
             <ScrollPane layoutX="14.0" layoutY="200.0" prefHeight="182.0" prefWidth="177.0">
                <content>
                   <VBox fx:id="highscoreVbox" prefHeight="180.0" prefWidth="270.0" />
@@ -43,13 +43,18 @@
          </children></Pane>
    </left>
    <right>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="289.0" prefWidth="198.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea fx:id="chatArea" editable="false" layoutX="-2.0" layoutY="-89.0" prefHeight="449.0" prefWidth="191.0" />
-            <TextField fx:id="chatInput" layoutX="-2.0" layoutY="361.0" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="192.0" />
-            <Button fx:id="broadcastButton" layoutX="-2.0" layoutY="387.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
-            <Button layoutX="104.0" layoutY="387.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
-         </children></Pane>
+            <Button layoutX="106.0" layoutY="373.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
+            <VBox prefHeight="365.0" prefWidth="192.0">
+               <children>
+                  <TextArea fx:id="chatArea" editable="false" prefHeight="449.0" prefWidth="191.0" />
+                  <TextField fx:id="chatInput" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="192.0" />
+               </children>
+            </VBox>
+            <Button fx:id="broadcastButton" layoutY="373.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
+         </children>
+      </Pane>
    </right>
    <bottom>
       <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
