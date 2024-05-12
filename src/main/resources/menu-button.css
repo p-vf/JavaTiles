@@ -1,19 +1,18 @@
 .menu-button {
-    -fx-background-color: #4CAF50; /* Green */
+    -fx-background-color: #654321; /* Green */
     -fx-text-fill: white;
-    -fx-font-size: 14pt;
+    -fx-border-color: #16512c;
+    -fx-border-radius: 2px;
     -fx-font-family: "Arial";
-    -fx-padding: 10px 20px;
-    -fx-background-radius: 5px;
+    -fx-background-radius: 2px;
 }
 
 .menu-button:hover {
-    -fx-background-color: #45a049; /* Darker Green */
+    -fx-background-color: #16512c; /* Darker Green */
 }
 
 .menu-button:pressed {
-    -fx-background-color: #4CAF50; /* Green */
-    -fx-background-insets: 0 1 1 0;
-    -fx-padding: 11px 19px 9px 21px;
+    -fx-background-color: #1b6538; /* Green */
+    -fx-background-insets: 0 0 1 0;
 
 }

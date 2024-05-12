@@ -137,12 +137,12 @@
                   </Button>
                </children>
             </TilePane>
-            <Button fx:id="puttButton" layoutX="658.0" layoutY="347.0" mnemonicParsing="false" onAction="#pressTile" text="put">
+            <Button fx:id="puttButton" layoutX="646.0" layoutY="344.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="32.0" prefWidth="50.0" stylesheets="@menu-button.css" text="put">
                <font>
                   <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="mainStack" layoutX="380.0" layoutY="195.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" text="M" textFill="#1b6538d4">
+            <Button fx:id="mainStack" layoutX="380.0" layoutY="195.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" text="M" textFill="#16512cd4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="22.0" />
                </font>
@@ -152,7 +152,7 @@
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="startButton" layoutX="375.0" layoutY="347.0" mnemonicParsing="false" onAction="#showDeck" text="start">
+            <Button fx:id="startButton" layoutX="375.0" layoutY="347.0" mnemonicParsing="false" onAction="#showDeck" prefHeight="30.0" prefWidth="60.0" stylesheets="@menu-button.css" text="start">
                <font>
                   <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
@@ -193,7 +193,10 @@
                </font>
             </Label>
             <TextField fx:id="changeNicknameField" layoutX="13.0" layoutY="13.0" onAction="#changeNickname" promptText="change nickname" />
-            <Label fx:id="changeNicknameWarning" layoutX="14.0" layoutY="40.0" prefHeight="19.0" prefWidth="317.0" />
+            <Label fx:id="changeNicknameWarning" layoutX="14.0" layoutY="40.0" prefHeight="19.0" prefWidth="317.0" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Label>
             <Button fx:id="exchangeStack3" disable="true" layoutX="148.0" layoutY="124.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                <font>
                   <Font name="Arial Rounded MT Bold" size="19.0" />
@@ -209,7 +212,7 @@
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="leaveLobbyButton" layoutX="688.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" stylesheets="@menu-button.css" text="Leave lobby">
+            <Button fx:id="leaveLobbyButton" layoutX="671.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" prefHeight="32.0" prefWidth="106.0" stylesheets="@menu-button.css" text="Leave lobby">
                <font>
                   <Font name="Arial Rounded MT Bold" size="12.0" />
                </font></Button>
