@@ -342,6 +342,20 @@ Client: `+STAT`
 
 ---
 
+## Spielzustand senden an den Spieler der gerade einen Stein abgelegt hat
+| Command | Response                                    | Sender |
+|---------|---------------------------------------------|--------|
+| `RSTA   | `+RSTA <exchangestacks> <currentplayeridx>` | Client |
+### Beschreibung
+Der Server schickt den obersten Stein der Austauschstapel in `<exchangestacks>`   
+und der Index des Spielers, der an der Reihe ist in `<currentplayeridx>`.
+
+### Beispiel
+Client: `RSTA`  
+Client: `+RSTA "9:BLACK \"%\" \"%\" \"%\"%" 0`  
+(Spieler mit playerindex 0 ist am Zug und der Erste exchangestack beinhaltet die schwarze Tile mit der Nummer 9, die anderen exchangestacks sind leer.)
+
+---
 
 
 ## Tile ziehen
