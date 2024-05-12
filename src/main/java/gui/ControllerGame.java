@@ -216,6 +216,9 @@ public class ControllerGame implements Initializable {
 
     private boolean alreadyInGame = false;
 
+    @FXML
+    private Button leaveLobbyButton;
+
 
 
 
@@ -247,6 +250,7 @@ public class ControllerGame implements Initializable {
         for(Button button : deck){
             button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
         }
+        leaveLobbyButton.getStyleClass().add("menu-button");
         puttButton.setDisable(true);
         disableStacks(true);
         client.setgameController(this);
@@ -426,7 +430,7 @@ public class ControllerGame implements Initializable {
 
     private void killAllButtons(){
         for(Button button : deck){
-            button.setDisable(true);  //vielleicht mit neuen Steinen aus disable neue Methode machen die ds auch unsichtbar macht
+            button.setDisable(true);
         }
         exchangeStack0.setDisable(true);
         mainStack.setDisable(true);
@@ -558,7 +562,6 @@ public class ControllerGame implements Initializable {
         if (pressedButtons.size() == 1) {
             for (int i = 0; i < deck.size(); i++) {
                 if (pressedButtons.get(0).equals(deck.get(i))) {
-                    deck.get(i).setDisable(true);
                     customizeButton(deck.get(i),true);
                     if(yourTurn){
                     puttButton.setDisable(false);}
@@ -571,7 +574,6 @@ public class ControllerGame implements Initializable {
         if (pressedButtons.size() == 2) {
             Button firstButton = pressedButtons.get(0);
             Button secondButton = pressedButtons.get(1);
-            firstButton.setDisable(false);
             customizeButton(firstButton, false);
 
             if (firstButton.equals(puttButton) ^ secondButton.equals(puttButton)) {
