@@ -27,7 +27,7 @@
                   <Font name="Arial" size="15.0" />
                </font>
             </Text>
-            <Button fx:id="showPlayersButton" layoutY="36.0" mnemonicParsing="false" onAction="#showOnlinePressed" text="Show players" />
+            <Button fx:id="showPlayersButton" layoutY="36.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="24.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
             <VBox layoutX="140.0" layoutY="120.0" prefHeight="260.0" prefWidth="275.0">
                <children>
                   <TextArea fx:id="areaOpenLobbies" editable="false" prefHeight="200.0" prefWidth="200.0" />
@@ -35,7 +35,7 @@
                   <TextArea fx:id="areaRunningGames" editable="false" prefHeight="200.0" prefWidth="262.0" />
                </children>
             </VBox>
-            <Button id="rBLobbySelection" layoutX="175.0" layoutY="77.0" mnemonicParsing="false" onAction="#refreshPressed" text="show open/finished/running games" />
+            <Button id="rBLobbySelection" layoutX="175.0" layoutY="77.0" mnemonicParsing="false" onAction="#refreshPressed" prefHeight="26.0" prefWidth="209.0" styleClass="menu-button" stylesheets="@menu-button.css" text="show open/finished/running games" />
             <Label fx:id="lobbyWarning" alignment="CENTER" layoutX="101.0" layoutY="458.0" prefHeight="16.0" prefWidth="353.0" textFill="WHITE">
                <font>
                   <Font name="Arial" size="14.0" />
@@ -84,8 +84,8 @@
                   </TextArea>
                   <TextField fx:id="chatInput" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="189.0" />
                </children></VBox>
-            <Button fx:id="broadcastButton" layoutY="417.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
-            <Button layoutX="129.0" layoutY="417.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
+            <Button fx:id="broadcastButton" layoutY="417.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="26.0" prefWidth="88.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
+            <Button layoutX="129.0" layoutY="417.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="27.0" prefWidth="72.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
          </children></Pane>
    </right>
 </BorderPane>

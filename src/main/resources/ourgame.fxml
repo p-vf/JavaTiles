@@ -137,7 +137,7 @@
                   </Button>
                </children>
             </TilePane>
-            <Button fx:id="puttButton" layoutX="646.0" layoutY="344.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="32.0" prefWidth="50.0" stylesheets="@menu-button.css" text="put">
+            <Button fx:id="puttButton" layoutX="646.0" layoutY="344.0" mnemonicParsing="false" onAction="#pressTile" prefHeight="32.0" prefWidth="50.0" styleClass="menu-button" stylesheets="@menu-button.css" text="put">
                <font>
                   <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
@@ -152,14 +152,14 @@
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="startButton" layoutX="375.0" layoutY="347.0" mnemonicParsing="false" onAction="#showDeck" prefHeight="30.0" prefWidth="60.0" stylesheets="@menu-button.css" text="start">
+            <Button fx:id="startButton" layoutX="375.0" layoutY="347.0" mnemonicParsing="false" onAction="#showDeck" prefHeight="30.0" prefWidth="60.0" styleClass="menu-button" stylesheets="@menu-button.css" text="start">
                <font>
                   <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
             </Button>
-            <Label fx:id="gameWarning" layoutX="103.0" layoutY="530.0" prefHeight="31.0" prefWidth="603.0">
+            <Label fx:id="gameWarning" layoutX="103.0" layoutY="530.0" prefHeight="31.0" prefWidth="603.0" textFill="WHITE">
                <font>
-                  <Font name="Arial Bold Italic" size="12.0" />
+                  <Font name="Arial Bold Italic" size="14.0" />
                </font>
             </Label>
             <Label fx:id="playerName0" alignment="CENTER" layoutX="102.0" layoutY="576.0" prefHeight="20.0" prefWidth="603.0" textAlignment="CENTER" textFill="WHITE">
@@ -182,7 +182,7 @@
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label id="winnerLabel" fx:id="winLabel" alignment="CENTER" disable="true" layoutX="39.0" layoutY="98.0" prefHeight="335.0" prefWidth="743.0">
+            <Label id="winnerLabel" fx:id="winLabel" alignment="CENTER" disable="true" layoutX="39.0" layoutY="98.0" prefHeight="335.0" prefWidth="743.0" textFill="WHITE">
                <font>
                   <Font name="Bookman Old Style Bold" size="35.0" />
                </font>
@@ -195,7 +195,7 @@
             <TextField fx:id="changeNicknameField" layoutX="13.0" layoutY="13.0" onAction="#changeNickname" promptText="change nickname" />
             <Label fx:id="changeNicknameWarning" layoutX="14.0" layoutY="40.0" prefHeight="19.0" prefWidth="317.0" textFill="WHITE">
                <font>
-                  <Font name="Arial" size="12.0" />
+                  <Font name="Arial Italic" size="14.0" />
                </font></Label>
             <Button fx:id="exchangeStack3" disable="true" layoutX="148.0" layoutY="124.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textFill="#c1c1c1d4">
                <font>
@@ -212,7 +212,7 @@
                   <Font name="Arial Rounded MT Bold" size="19.0" />
                </font>
             </Button>
-            <Button fx:id="leaveLobbyButton" layoutX="671.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" prefHeight="32.0" prefWidth="106.0" stylesheets="@menu-button.css" text="Leave lobby">
+            <Button fx:id="leaveLobbyButton" layoutX="671.0" layoutY="13.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" prefHeight="32.0" prefWidth="106.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Leave lobby">
                <font>
                   <Font name="Arial Rounded MT Bold" size="12.0" />
                </font></Button>
@@ -224,7 +224,7 @@
          <children>
             <TextArea fx:id="gameChatArea" editable="false" layoutY="119.0" prefHeight="541.0" prefWidth="200.0" />
             <TextField fx:id="gameChatField" layoutY="660.0" onAction="#toGameChat" prefHeight="29.0" prefWidth="201.0" />
-            <Button fx:id="broadcastButton" layoutY="699.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
+            <Button fx:id="broadcastButton" layoutY="699.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="31.0" prefWidth="101.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
          </children>
       </AnchorPane>
    </right>

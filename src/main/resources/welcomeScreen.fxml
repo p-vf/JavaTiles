@@ -20,7 +20,7 @@
             <Image url="@welcome.png" />
          </image>
       </ImageView>
-      <Button layoutX="278.0" layoutY="371.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="34.0" prefWidth="79.0" text="start">
+      <Button fx:id="startButton" layoutX="278.0" layoutY="371.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="34.0" prefWidth="79.0" styleClass="menu-button" stylesheets="@menu-button.css" text="start">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

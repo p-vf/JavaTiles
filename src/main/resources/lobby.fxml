@@ -16,13 +16,13 @@
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Button id="JoinButton" layoutX="216.0" layoutY="200.0" mnemonicParsing="false" onAction="#joinPressed" text="Join/Create Lobby" />
+            <Button id="JoinButton" fx:id="joinLobbyButton" layoutX="211.0" layoutY="200.0" mnemonicParsing="false" onAction="#joinPressed" prefHeight="25.0" prefWidth="121.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Join/Create Lobby" />
             <Text fill="WHITE" layoutX="188.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaTiles">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Button fx:id="showPlayersButton" layoutX="-15.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" text="Show players" />
+            <Button fx:id="showPlayersButton" layoutX="-15.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
          </children>
       </AnchorPane>
    </center>
@@ -50,9 +50,9 @@
    <bottom>
       <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="broadcastButton" layoutX="685.0" layoutY="2.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
+            <Button fx:id="broadcastButton" layoutX="685.0" layoutY="2.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="27.0" prefWidth="84.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
-            <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
+            <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="29.0" prefWidth="87.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
             <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />

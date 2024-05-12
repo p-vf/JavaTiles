@@ -108,6 +108,13 @@ public class Controller implements Initializable {
 
     private static boolean showUsername = false;
 
+    @FXML
+    private Button startButton;
+
+
+    @FXML
+    private Button joinLobbyButton;
+
 
     /**
      * Constructor for the Controller class.

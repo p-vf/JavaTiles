@@ -21,10 +21,10 @@
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Button fx:id="readyButton" layoutX="228.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" text="Not Ready" />
-            <Button id="leaveLobbyButton" layoutX="222.0" layoutY="230.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" text="Leave Lobby" />
-            <Button id="showPlayersButton" layoutX="198.0" layoutY="269.0" mnemonicParsing="false" onAction="#showPlayersPressed" text="Show players in lobby" />
-            <Button layoutX="205.0" layoutY="304.0" mnemonicParsing="false" onAction="#highscorePressed" text="Show Highscore-List" />
+            <Button fx:id="readyButton" layoutX="228.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" prefHeight="29.0" prefWidth="79.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Not Ready" />
+            <Button id="leaveLobbyButton" layoutX="222.0" layoutY="226.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" prefHeight="27.0" prefWidth="90.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Leave Lobby" />
+            <Button id="showPlayersButton" layoutX="200.0" layoutY="269.0" mnemonicParsing="false" onAction="#showPlayersPressed" prefHeight="25.0" prefWidth="134.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players in lobby" />
+            <Button layoutX="205.0" layoutY="304.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="23.0" prefWidth="129.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
@@ -45,14 +45,14 @@
    <right>
       <Pane prefHeight="289.0" prefWidth="198.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="106.0" layoutY="373.0" mnemonicParsing="false" onAction="#manualOpened" text="How to play?" />
+            <Button layoutX="104.0" layoutY="373.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="27.0" prefWidth="74.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
             <VBox prefHeight="365.0" prefWidth="192.0">
                <children>
                   <TextArea fx:id="chatArea" editable="false" prefHeight="449.0" prefWidth="191.0" />
                   <TextField fx:id="chatInput" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="192.0" />
                </children>
             </VBox>
-            <Button fx:id="broadcastButton" layoutY="373.0" mnemonicParsing="false" onAction="#broadcastPressed" text="Broadcast-Off" />
+            <Button fx:id="broadcastButton" layoutY="373.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="32.0" prefWidth="87.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
          </children>
       </Pane>
    </right>

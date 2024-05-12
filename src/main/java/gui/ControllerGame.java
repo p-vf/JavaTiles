@@ -250,9 +250,6 @@ public class ControllerGame implements Initializable {
         for(Button button : deck){
             button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
         }
-        leaveLobbyButton.getStyleClass().add("menu-button");
-        puttButton.getStyleClass().add("menu-button");
-        startButton.getStyleClass().add("menu-button");
         puttButton.setDisable(true);
         disableStacks(true);
         client.setgameController(this);
