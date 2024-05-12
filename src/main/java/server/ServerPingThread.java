@@ -9,8 +9,8 @@ import java.net.SocketException;
 import static java.lang.System.currentTimeMillis;
 
 /**
- * The ServerPingThread class represents a thread responsible for sending periodic PING messages
- * to a client to check for responsiveness.
+ * This class provides a thread that is responsible for sending periodic PING messages
+ * to a client and check for responsiveness.
  *
  * @author Pascal von Fellenberg
  * @author Istref Uka

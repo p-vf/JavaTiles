@@ -68,7 +68,8 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Sets the readiness status of the client.
+   * Sets the readiness status of the client. <p>
+   * This status is used to determine when all the players in a lobby are ready to start a game.
    *
    * @param newValue The new readiness status.
    */
@@ -77,7 +78,8 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Constructor of the EchoClientThread class.
+   * Constructor of the EchoClientThread class. <p>
+   * Sets up all the streams and starts a {@link ServerPingThread}.
    *
    * @param id     The id-number of the client which is always larger than 0.
    * @param socket The socket that is used to create the connection between client and server.
@@ -163,7 +165,6 @@ public class ClientThread implements Runnable {
    * @return The value represented by the string.
    * @throws IllegalArgumentException
    */
-
   private static boolean readFlag(String flag) throws IllegalArgumentException {
     boolean whisper = false;
     if (flag.equals("t")) {
@@ -177,7 +178,80 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Handles a request as described in the protocol.
+   * Handles a request as described in the protocol. <p>
+   * This method utilizes the following methods (list not entirely complete): <p>
+   * in the case of a LOGI request:
+   * <ul>
+   *   <li>{@link ClientThread#login(String newNickName)}</li>
+   * </ul>
+   * <p>
+   * in the case of a LOGO request:
+   * <ul>
+   *   <li>{@link ClientThread#logout()}</li>
+   * </ul>
+   * <p>
+   * in the case of a DRAW request:
+   * <ul>
+   *   <li>{@link ClientThread#notAllowedToDraw()}</li>
+   *   <li>{@link ClientThread#draw(String stackName)}</li>
+   * </ul>
+   * <p>
+   * in the case of a HIGH request:
+   * <ul>
+   * <li>{@link HighScores#getHighScores()}</li>
+   * </ul>
+   * <p>
+   * in the case of a PUTT request:
+   * <ul>
+   *   <li>{@link ClientThread#cantPutTile()}</li>
+   *   <li>{@link ClientThread#checkIfValid(Tile tile, OrderedDeck deck)}</li>
+   *   <li>{@link ClientThread#checkIfWon(OrderedDeck deck)}</li>
+   *   <li>{@link GameState#putTile(Tile tile, int playerIndex)}</li>
+   *   <li>{@link ClientThread#sendState()}</li>
+   * </ul>
+   * <p>
+   * in the case of a CATC request:
+   * <ul>
+   *   <li>{@link ClientThread#handleChat(ArrayList arguments)}</li>
+   * </ul>
+   * <p>
+   * in the case of a NAME request:
+   * <ul>
+   *   <li>{@link ClientThread#changeName(String newNickname)}</li>
+   *   <li>{@link ClientThread#sendNicknameList()}</li>
+   * </ul>
+   * <p>
+   * in the case of a LGAM request:
+   * <ul>
+   *   <li>{@link ClientThread#sendLobbiesWithState(String lobbyState)}</li>
+   * </ul>
+   * <p>
+   * in the case of a LPLA request:
+   * <ul>
+   *   <li>{@link ClientThread#listPlayersConnectedToServer()}</li>
+   * </ul>
+   * <p>
+   * in the case of a JLOB request:
+   * <ul>
+   *   <li>{@link ClientThread#joinOrCreateLobby(int lobbyNumber)}</li>
+   *   <li>{@link ClientThread#sendNicknameList()}</li>
+   * </ul>
+   * <p>
+   * in the case of a LLOB request:
+   * <ul>
+   *   <li>{@link ClientThread#removeFromLobby()}</li>
+   * </ul>
+   * <p>
+   * in the case of a REDY request:
+   * <ul>
+   *   <li>{@link ClientThread#notAllReady()}</li>
+   *   <li>{@link ClientThread#distributeDecks()}</li>
+   * </ul>
+   * <p>
+   * in the case of a WINC request:
+   * <ul>
+   *   <li>{@link ClientThread#activateCheatCode()}</li>
+   * </ul>
    *
    * @param request The request being handled. It must have the form defined in the protocol.
    * @throws IOException
@@ -203,7 +277,7 @@ public class ClientThread implements Runnable {
           String stackName = arguments.get(0);
           draw(stackName);
         }
-        case HIGH ->{
+        case HIGH -> {
           send(encodeProtocolMessage("+HIGH", HighScores.getHighScores()));
         }
 
@@ -212,16 +286,15 @@ public class ClientThread implements Runnable {
           Tile tile = Tile.parseTile(arguments.get(0));
           OrderedDeck deck = new OrderedDeck(Tile.stringsToTileArray(decodeProtocolMessage(arguments.get(1))));
           //TODO refactor so that you can give a tile and a tilearray as parameters to CheckiIfValid and CheckIfWOn
-          if(cantPutTile()) return;
-          if(!checkIfValid(tile, deck)) return;
-          if(checkIfWon(deck)) return;
+          if (cantPutTile()) return;
+          if (!checkIfValid(tile, deck)) return;
+          if (checkIfWon(deck)) return;
           send(encodeProtocolMessage("+PUTT", "t", "f"));
           lobby.gameState.putTile(tile, playerIndex);
           sendState();
         }
         case CATC -> {
           handleChat(arguments);
-
         }
         case PING -> send("+PING");
         case NAME -> {
@@ -232,7 +305,7 @@ public class ClientThread implements Runnable {
           }
         }
         case LGAM -> {
-          listDemandedGamestatus(arguments.get(0));
+          sendLobbiesWithState(arguments.get(0));
         }
         case LLPL -> {
           send(encodeProtocolMessage("+LLPL", NetworkUtils.getEncodedLobbiesWithPlayerList(server.getLobbies())));
@@ -269,12 +342,14 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Using this method you can either draw from the main stack or the exchange stack. If the main stack is
-   * empty and you try to draw from it, then the game will be ended with no winner. Sends response and game state accordingly to client.
+   * Draws from the specified stack (either from main or exchange stack) and sends a DRAW. <p>
+   * If there is an attempt at drawing from the empty main stack, the game is ended with no winner.
+   * This method utilizes the {@link ClientThread#endGameWithNoWinner()} method for this case.
+   * Otherwise, the method {@link ClientThread#sendState()} is used to inform each client of the new exchange stack configuration.
    *
-   * @param stackName should either be "m" for main stack or "e" for exchange stack.
-   * @throws IOException if send method fails.
-   * @throws IllegalArgumentException if exchange stack is empty and you still reach this method.
+   * @param stackName must either be "m" for main stack or "e" for exchange stack.
+   * @throws IOException              if {@link ClientThread#send(String)} fails to send the response.
+   * @throws IllegalArgumentException if exchange stack is empty, and you still reach this method.
    */
   public void draw(String stackName) throws IOException, IllegalArgumentException {
     boolean isMainStack = isMainStack(stackName);
@@ -294,8 +369,10 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Checks if the player is allowed to draw a tile. The player is allowed to draw only if it's the payers turn
-   * and he hasn't already drawn a tile. Sends response accordingly to client.
+   * Checks if the player is allowed to draw a tile and sends a empty DRAW response to the client if he is not allowed to draw. <p>
+   * The player is only allowed to draw if there are 4 players in the lobby, his index matches with the currentPlayerIndex of the gameState (meaning it's his turn), and he has 14 tiles in his deck. <p>
+   * If the player is not allowed to draw, this method sends {@code "+DRAW \"%\" <debugmessage>"} to the client, else it doesn't send anything.
+   * This method should only be used in the
    *
    * @return true if the player is not allowed to draw, false otherwise.
    * @throws IOException If an I/O error occurs while sending the response.
@@ -317,11 +394,13 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Checks if a given stack is the main stack.
+   * Checks if the given stack name is the name for the main stack or the name for the exchange stack.
+   * Returns {@code true} if {@param stackName} is {@code "m"}, {@code false} if {@param stackName} is {@code "e"}
+   * and throws an {@link IllegalArgumentException} if the {@param stackName} has neither of those values.
    *
-   * @param stackName The name of the stack. Must be "m" for main stack or "e" for exchange stack.
+   * @param stackName The name of the stack. Must be either "m" for main stack or "e" for exchange stack.
    * @return true if the stack is the main stack, false otherwise.
-   * @throws IllegalArgumentException if the stack specified is neither the main stack nor the exchange stack.
+   * @throws IllegalArgumentException if the stack name specified is neither the main stack nor the exchange stack.
    */
   public static boolean isMainStack(String stackName) {
     boolean isMainStack;
@@ -340,7 +419,9 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Checks if the player's move is valid. Sends response accordingly to client.
+   * Checks if the player's move is valid, if not it sends a PUTT response with the corresponding flag values to the client.
+   * This means that in the case of an invalid move, this method sends {@code "+PUTT f f"} to the client.
+   * The method {@link Lobby#validateMove(Tile, OrderedDeck, int)} is used to validate the move.
    *
    * @param tile The tile to be placed.
    * @param deck The player's deck.
@@ -358,7 +439,11 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Checks if the player has won. Sends response accordingly to client.
+   * Checks if the player has won, if that is the case ends the game and sends all the protocol responses and requests necessary (PWIN requests and PUTT response). <p>
+   * The method {@link OrderedDeck#isWinningDeck()} is used to check if the player has won.
+   * If the player has won, the game is ended with {@link Lobby#finishGame(String)},
+   * a PWIN request is sent to all clients in the lobby,
+   * and the following PUTT response is sent to the client: {@code "+PUTT t t"}
    *
    * @param deck The player's deck.
    * @return true if the player has won, false otherwise.
@@ -376,7 +461,10 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Checks if the player is allowed to put a tile. Sends response accordingly to client.
+   * Checks if the player is allowed to put a tile on the next exchange stack, sends a PUTT response accordingly. <p>
+   * The player is only allowed to put a tile on the next exchange stack,
+   * if the number of players in the lobby is exactly 4, it is his turn, and he has exactly 15 tiles in his deck.
+   * If the player is not allowed to put a tile on the next exchange stack, this method sends a PUTT response like the following to the client: {@code "+PUTT f f <debugmessage>"}
    *
    * @return true if the player is not allowed to put a tile, false otherwise.
    * @throws IOException If an I/O error occurs while sending the response.
@@ -400,19 +488,23 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * This method shows sends the demanded game status to the client which can either be open lobbies, running lobbies meaning
-   * lobbies that are currently playing or finished lobbies meaning lobbies that have finished playing. Sends response accordingly to client.
+   * Sends a LGAM response with the lobbies with the in {@param lobbyState} specified state. <p>
+   * If {@param lobbyState} is {@code "o"} the open lobbies (games) are sent,
+   * if {@param lobbyState} is {@code "r"} the running lobbies (games) are sent,
+   * and if {@param lobbyState} is {@code "f"} the finished lobbies (games) are sent. <p>
+   * Example: {@code "+LGAM o \"1:3 42:2%\""} is sent to the client <p>
+   * In this example, the server has two lobbies; lobby 1 has 3 players, lobby 42 has 2 players.
    *
-   * @param gameStatus which can be either "o" for open lobbies, "r" for running lobbies or "f" for finished lobbies.
-   * @throws IOException If an I/O error occurs while sending the response.
-   * @throws IllegalArgumentException if gameStatus is not equal to either of the parameters specified above.
+   * @param lobbyState which can be either "o" for open lobbies, "r" for running lobbies or "f" for finished lobbies.
+   * @throws IOException              If an I/O error occurs while sending the response.
+   * @throws IllegalArgumentException if lobbyStatus is not equal to either of the parameters specified above.
    */
-  private void listDemandedGamestatus(String gameStatus) throws IOException {
+  private void sendLobbiesWithState(String lobbyState) throws IOException {
     StringBuilder sb = new StringBuilder();
     ArrayList<Lobby> l;
-    switch (gameStatus) {
+    switch (lobbyState) {
       case "o" -> {
-        l = listLobbiesWithStatus(Lobby.LobbyState.OPEN);
+        l = listLobbiesWithState(Lobby.LobbyState.OPEN);
         for (var lobby : l) {
           sb.append(lobby.lobbyNumber);
           sb.append(":");
@@ -425,7 +517,7 @@ public class ClientThread implements Runnable {
         }
       }
       case "r" -> {
-        l = listLobbiesWithStatus(Lobby.LobbyState.RUNNING);
+        l = listLobbiesWithState(Lobby.LobbyState.RUNNING);
         for (var lobby : l) {
           sb.append(lobby.lobbyNumber);
           sb.append(" ");
@@ -436,7 +528,7 @@ public class ClientThread implements Runnable {
         }
       }
       case "f" -> {
-        l = listLobbiesWithStatus(Lobby.LobbyState.FINISHED);
+        l = listLobbiesWithState(Lobby.LobbyState.FINISHED);
         for (var lobby : l) {
           sb.append(lobby.lobbyNumber);
           sb.append(":");
@@ -455,16 +547,16 @@ public class ClientThread implements Runnable {
         throw new IllegalArgumentException();
       }
     }
-    send(encodeProtocolMessage("+LGAM", gameStatus, sb.toString()));
+    send(encodeProtocolMessage("+LGAM", lobbyState, sb.toString()));
   }
 
   /**
-   * This method is used when a player wants to cheat and win. It sends to the client a winning deck.
+   * Sets the deck of the client to a winning deck and sends it as a WINC response.
+   * The deck of the client gets set so that it has as many tiles as the client had before the cheat code was activated.
    *
    * @throws IOException If an I/O error occurs while sending the response.
    */
   private void activateCheatCode() throws IOException {
-    // TODO update the winner-configuration to be more overpowered
     ArrayList<Tile> winnerConf = new ArrayList<>(Arrays.asList(new Tile[]{
         new Tile(0, Color.BLACK),
         new Tile(2, Color.BLUE),
@@ -497,7 +589,8 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Distributes deck to clients as soon as all clients are ready to play.
+   * Initializes the game state of the lobby that the player is in and sends a STRT request to each player in the lobby. <p>
+   * To initialize the {@link Lobby#gameState}, the method {@link Lobby#startGame(int startPlayerIndex)} is used.
    *
    * @throws IOException If an I/O error occurs while sending the response.
    */
@@ -517,7 +610,7 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Checks if all players are ready or not.
+   * Checks whether all players are ready and sends a REDY response to the client.
    *
    * @return true if not all players are ready.
    * @throws IOException If an I/O error occurs while sending the response.
@@ -540,7 +633,8 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * This method lists all the players that are connected to the server.
+   * Sends an LPLA response to the client.
+   * The LPLA response contains all players connected to the server.
    *
    * @throws IOException If an I/O error occurs while sending the response.
    */
@@ -558,25 +652,25 @@ public class ClientThread implements Runnable {
 
   /**
    * Ends the game with no winner. This case occurs when there are no more tiles to be drawn from the
-   * main stack. Sends response accordingly to the client.
+   * main stack. Sends a DRAW response with empty tile argument to the client and an EMPT request to all players in the lobby.
    *
    * @throws IOException If an I/O error occurs while sending the response.
    */
   private void endGameWithNoWinner() throws IOException {
-    String tileString;
     System.out.println("Game ended with no winner");
-    tileString = "";
-    send(encodeProtocolMessage("+DRAW", tileString));
+    send(encodeProtocolMessage("+DRAW", ""));
+    // TODO (IMPORTANT!!!) should this not be a sendToLobby() call??
     send("EMPT");
     lobby.finishGame("");
   }
 
   /**
-   * Sends a string to the client.
-   * This string is supplemented with carriage return and line feed ("\r\n").
+   * Sends the specified string to the client.
+   * The provided string gets a carriage return and line feed ("\r\n") at the end of it before being sent.
+   * The provided string must NOT contain ANY Carriage returns or line feeds.
    *
-   * @param str String to be sent to the client.
-   * @throws IOException Thrown if the OutputStream throws an IOException.
+   * @param str String to be sent to the client; must not contain any carriage returns or line feeds.
+   * @throws IOException if the OutputStream throws an IOException.
    */
   public synchronized void send(String str) throws IOException {
     out.write((str + "\r\n").getBytes());
@@ -586,19 +680,19 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Logs the player in with a given nickname
+   * Logs the player in with a given nickname.
+   * To do that, the method {@link ClientThread#changeName(String newNickname)} is called.
    *
    * @param newNickname The new nickname of the player.
-   * @throws IOException If an I/O error occurs while logging in.
+   * @throws IOException If an I/O error occurs while sending the response.
    */
   private void login(String newNickname) throws IOException {
-    // TODO maybe don't send "+LOGI ..." here but inside the switch statement?
     changeName(newNickname);
     send(encodeProtocolMessage("+LOGI", this.nickname));
   }
 
   /**
-   * Ends the connection to the client.
+   * Ends the connection to the client by cleaning up all streams and removing the player from the server.
    * This method should be called when a connection interruption is detected or when the client wants to log out.
    */
   public void logout() {
@@ -622,8 +716,8 @@ public class ClientThread implements Runnable {
 
 
   /**
-   * Changes the player's name to the given name if it does not already exist.
-   * Otherwise, the name is modified so that it is unique on the server.
+   * Changes the player's name to a (possibly) altered version of the provided name.
+   * The string is only altered if there already is a player with the name that was provided to this method.
    *
    * @param newNickname The name to which the nickname should be changed.
    */
@@ -641,9 +735,13 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Handles a chat request by either sending it to everyone or just to one specific person.
+   * Handles a CATC request. <p>
+   * This is done with the arguments of the CATC request of the client. <p>
+   * Depending on whether the first argument is {@code "b"} (for broadcast), {@code "l"} (for lobby), or {@code "w"} (for whisper),
+   * the methods {@link Server#sendToAll(String str, ClientThread sender)}, {@link Lobby#sendToLobby(String str, ClientThread sender)}, or {@link ClientThread#send(String str)}
+   * are used respectively to send a CATS request containing the message and message type.
    *
-   * @param arguments The arguments of the chat request.
+   * @param arguments The arguments of the CATC request.
    */
   private void handleChat(ArrayList<String> arguments) throws IOException {
     String messageType = arguments.get(0);
@@ -677,10 +775,13 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Joins the lobby specified with lobbyNumber. If such a lobby doesn't exist it creates one.
-   * It then sends a message depending on if it created a new one, joined successfully or wasn't able to join because the lobby was already full.
+   * Puts the client in either an existing lobby or creates a new one with the player in it and returns if it was successful.
+   * This method utilizes the methods {@link Server#joinLobby(Lobby lobby, ClientThread client)} or {@link Server#createLobby(int lobbyNumber)} depending on the case.
+   * If the lobby that the client wanted to join is already full (has 4 players) then this method returns {@code false}.
+   * It then sends a JLOB response with the joinsuccessful flag set to {@code "t"} or {@code "f"} depending on whether it was successful.
    *
    * @param lobbyNumber The number of the lobby that the client wants to join or create.
+   * @return {@code true} iff the client joined a lobby successfully.
    * @throws IOException Whenever send() throws an IOException.
    */
   private boolean joinOrCreateLobby(int lobbyNumber) throws IOException {
@@ -690,32 +791,32 @@ public class ClientThread implements Runnable {
     }
     boolean createdNewLobby = false;
     //synchronized (server.lobbies) { // TODO is this synchronized block necessary?
-      Lobby potentialLobby = server.getLobby(lobbyNumber);
-      if (potentialLobby == null) {
-        potentialLobby = server.createLobby(lobbyNumber);
-        createdNewLobby = true;
-      }
-      if (server.joinLobby(potentialLobby, this)) {
-        send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobbyNumber));
-        lobby = potentialLobby;
-        playerIndex = lobby.getPlayerIndex(this);
-        return true;
-      }
-      send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
-      return false;
+    Lobby potentialLobby = server.getLobby(lobbyNumber);
+    if (potentialLobby == null) {
+      potentialLobby = server.createLobby(lobbyNumber);
+      createdNewLobby = true;
+    }
+    if (server.joinLobby(potentialLobby, this)) {
+      send(encodeProtocolMessage("+JLOB", "t", (createdNewLobby ? "Created new Lobby " : "Joined existing Lobby ") + lobbyNumber));
+      lobby = potentialLobby;
+      playerIndex = lobby.getPlayerIndex(this);
+      return true;
+    }
+    send(encodeProtocolMessage("+JLOB", "f", "Lobby " + lobbyNumber + " full already, couldn't join"));
+    return false;
     //}
   }
 
   /**
-   * Returns a list of all lobbies with the given status.
+   * Returns a list of all lobbies with the given state.
    *
-   * @param status The status of the lobbies to be returned.
-   * @return A list of all lobbies with the given status.
+   * @param state state of the lobbies to be returned.
+   * @return A list of all lobbies with the given state.
    */
-  private ArrayList<Lobby> listLobbiesWithStatus(Lobby.LobbyState status) {
+  private ArrayList<Lobby> listLobbiesWithState(Lobby.LobbyState state) {
     ArrayList<Lobby> lobbiesWithStatus = new ArrayList<>();
     for (var lobby : server.getLobbies()) {
-      if (lobby.getLobbyState() == status) {
+      if (lobby.getLobbyState() == state) {
         lobbiesWithStatus.add(lobby);
       }
     }
@@ -723,18 +824,19 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Sends the current state of the game to all clients.
+   * Sends STAT request to all clients. <p>
+   * This method utilizes the method {@link Lobby#getStatProtocolString()} to get the string to send to all players in the lobby.
    *
-   * @throws IOException If send() throws an IOException.
+   * @throws IOException If an I/O error occurs.
    */
-  private void sendState() {
+  private void sendState() throws IOException {
     lobby.sendToLobby(lobby.getStatProtocolString(), null);
   }
 
   /**
    * Sends the list of nicknames of players in the lobby to all clients.
    *
-   * @throws IOException Thrown if an I/O error occurs while sending the nickname list.
+   * @throws IOException if an I/O error occurs.
    */
   private void sendNicknameList() throws IOException {
     String names = lobby.getNicknameList();
@@ -742,21 +844,20 @@ public class ClientThread implements Runnable {
   }
 
   /**
-   * Removes the client from the lobby.
-   * If the client is not in a lobby, sends a failure message.
+   * Removes the client from the lobby and sends a LLOB response.
+   * If the player wasn't in a lobby, a LLOB with the flag {@code "f"}, else with the flag {@code "t"} is sent.
    *
-   * @throws IOException Thrown if an I/O error occurs while removing the client from the lobby.
+   * @throws IOException if an I/O error occurs.
    */
   private void removeFromLobby() throws IOException {
     if (lobby != null && playerIndex >= 0) {
       lobby.removePlayer(playerIndex);
       playerIndex = -1;
       send(encodeProtocolMessage("+LLOB", "t"));
-      lobby.sendToLobby(encodeProtocolMessage("LEFT",nickname), null);
+      lobby.sendToLobby(encodeProtocolMessage("LEFT", nickname), null);
       sendNicknameList();
       lobby = null;
-    }
-    else{
+    } else {
       send(encodeProtocolMessage("+LLOB", "f"));
     }
   }

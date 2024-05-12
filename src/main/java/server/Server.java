@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * The Server class represents a simple server that listens for client connections
+ * This class represents a simple server that listens for client connections
  * on a specified port and handles communication with multiple clients concurrently.
  *
  * @author Pascal von Fellenberg

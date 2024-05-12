@@ -11,7 +11,11 @@ import java.util.Arrays;
 import static game.Color.*;
 
 /**
- * Represents a deck that contains different tiles. Is only relevant for server-side calculations (validation).
+ * This class represents a deck that contains different tiles.
+ * It represents the tiles in an array that contains the counts of each tile,
+ * meaning it doesn't care about the order of the tiles in the deck, making some calculations more efficient and reliable.
+ * <p>
+ * This class is only relevant for server-side calculations (validation).
  */
 public class UnorderedDeck {
   private final Logger LOGGER = LogManager.getLogger(UnorderedDeck.class);
@@ -28,8 +32,9 @@ public class UnorderedDeck {
   }
 
   /**
-   * Constructs an UnorderedDeck instance from a list of {@link Tile} objects. This constructor initializes
-   * the deck with the given tiles, accounting for each tile's frequency.
+   * Constructs an UnorderedDeck instance from a list of {@link Tile} objects. <p>
+   * This constructor initializes the deck with the tiles in the given arraylist,
+   * meaning it adds as many occurrences of each tile as there are in the given arraylist.
    *
    * @param deck the list of {@link Tile} objects to initialize the deck with.
    */
@@ -72,7 +77,6 @@ public class UnorderedDeck {
    * @return the index corresponding to the given tile.
    */
   private static int tileToIndex(Tile tile) {
-    // TODO implement this
     Color color = tile.getColor();
     int number = tile.getNumber();
     // if the tile is a joker, the index is at the beginning of the array.

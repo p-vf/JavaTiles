@@ -9,7 +9,7 @@ import static game.Color.*;
 import java.util.*;
 
 /**
- * The GameState class handles the game state for our tile-based board game. It manages tile distribution
+ * This class handles the game state for our tile-based board game. It manages tile distribution
  * among players, tracks the main and exchange stacks, and maintains each player's personal deck. Key functionalities
  * include initializing the game with shuffled tiles, enabling players to draw or exchange tiles, and managing turn
  * order. It provides methods to check game conditions like visibility of tiles, drawing eligibility, and turn validation.

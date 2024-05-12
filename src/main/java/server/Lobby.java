@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import static utils.NetworkUtils.encodeProtocolMessage;
 
 /**
- * The Lobby class represents a game lobby in a server, handling player connections, game state management,
+ * This class represents a game lobby in a server, handling player connections, game state management,
  * and communication between clients in our tile-based game. It supports adding players to the lobby, starting the game,
  * validating moves, and managing the game lifecycle including the game's start, ongoing state, and conclusion.
  * <p>
@@ -163,18 +163,13 @@ public class Lobby {
    * @param cmd    A String that conforms to the network-protocol, should be a CATS-Command.
    * @param sender The client that sent the message (to which the message should not be sent).
    */
-  public void sendToLobby(String cmd, ClientThread sender) {
+  public void sendToLobby(String cmd, ClientThread sender) throws IOException{
     for (var p : players) {
       if (p == sender) {
         continue;
       }
-      try {
-        if(p != null){
-          p.send(cmd);
-        }
-
-      } catch (IOException e) {
-        LOGGER.error("From Lobby.sendToLobby():" + e.getMessage());
+      if(p != null){
+        p.send(cmd);
       }
     }
   }
@@ -265,7 +260,6 @@ public class Lobby {
    *                     This might happen due to network issues or problems with the client connections.
    */
   public void removePlayer(int playerIndex) throws IOException {
-    // TODO send message to all other clients that a player has been removed.
     lobbyState = LobbyState.OPEN;
     players.set(playerIndex, null);
     for (int i = 0; i < players.size(); i++) {
@@ -299,7 +293,7 @@ public class Lobby {
   }
 
   /**
-   * Represents the rough state of the lobby.
+   * This enum represents the state of the lobby relevant to all the players on the server.
    */
   public enum LobbyState {
 
