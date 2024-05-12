@@ -292,6 +292,12 @@ public class Lobby {
     lobbyState = LobbyState.FINISHED;
   }
 
+  public String getRstaProtocolString() {
+    String exchangeStacks = Tile.tileArrayToProtocolArgument(gameState.getVisibleTiles());
+    String currentPlayerIdx = Integer.toString(gameState.getCurrentPlayerIndex());
+    return encodeProtocolMessage("+RSTA", exchangeStacks, currentPlayerIdx);
+  }
+
   /**
    * This enum represents the state of the lobby relevant to all the players on the server.
    */

@@ -335,7 +335,7 @@ public class ClientThread implements Runnable {
           send(encodeProtocolMessage("+RNAM", nicknames));
         }
         case RSTA ->{
-          sendState();
+          sendStateToClientWhoJustPutTile();
         }
       }
     } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
@@ -833,6 +833,11 @@ public class ClientThread implements Runnable {
    */
   private void sendState() throws IOException {
     lobby.sendToLobby(lobby.getStatProtocolString(), null);
+  }
+
+  private void sendStateToClientWhoJustPutTile() throws IOException {
+    String state = lobby.getRstaProtocolString();
+    send(state);
   }
 
   /**

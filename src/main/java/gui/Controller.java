@@ -177,7 +177,13 @@ public class Controller implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(new StackPane(root), 900, 600);
 
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/lobbyBackground.png"));
+        String backgroundImageURL = "/lobbyBackground.png";
+        if (url.contains("/ourgame.fxml")) {
+            backgroundImageURL = "/gameBackground.png";
+            stage.setFullScreen(true);
+        }
+
+        Image backgroundImage = new Image(getClass().getResourceAsStream(backgroundImageURL));
         ImageView backgroundImageView = new ImageView(backgroundImage);
 
         backgroundImageView.fitWidthProperty().bind(scene.widthProperty());
