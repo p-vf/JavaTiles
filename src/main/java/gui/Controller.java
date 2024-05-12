@@ -181,7 +181,12 @@ public class Controller implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(new StackPane(root), 900, 600);
+        Scene scene;
+        if(!(url.contains("/ourgame.fxml"))){
+        scene = new Scene(new StackPane(root), 900, 600);}
+        else{
+            scene = new Scene(new StackPane(root));
+        }
 
         String backgroundImageURL = "/lobbyBackground.png";
         if (url.contains("/ourgame.fxml")) {
