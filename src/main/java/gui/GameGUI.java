@@ -12,6 +12,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * The GameGUI class represents the graphical user interface for the game application.
@@ -50,7 +51,7 @@ public class GameGUI extends Application implements Runnable {
             System.out.println("Closing application...");
             System.exit(0);
         });
-
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/JavaTiles_Logo.png"))));
         primaryStage.show();
         primaryStage.setResizable(false);
     }
