@@ -783,7 +783,7 @@ public class Client {
                         if(arguments.get(1).isEmpty()){
                             String message = "No open lobbies available";
                             Platform.runLater(() -> {
-                                controller.showOpenGames(message);
+                                controller.updateAreaLobbies(message);
                             });
                         }else{
 
@@ -829,7 +829,7 @@ public class Client {
                             }
                             String message = sb.toString();
                             Platform.runLater(() -> {
-                                controller.showOpenGames(message);
+                                controller.updateAreaLobbies(message);
                             });
                         }
 
@@ -839,7 +839,7 @@ public class Client {
                         if(arguments.get(1).isEmpty()){
                             String message = "No ongoing games available";
                             Platform.runLater(() -> {
-                                controller.showRunningGames(message);
+                                controller.updateAreaLobbies(message);
                             });
                         }else{
 
@@ -868,7 +868,7 @@ public class Client {
                             }
                             String outputString = output.toString();
                             Platform.runLater(() -> {
-                                controller.showRunningGames(outputString);
+                                controller.updateAreaLobbies(outputString);
                             });
                         }
 
@@ -878,7 +878,7 @@ public class Client {
                         if(arguments.get(1).isEmpty()){
                             String message = "No finished games available";
                             Platform.runLater(() -> {
-                                controller.showFinishedGames(message);
+                                controller.updateAreaLobbies(message);
                             });}else{
                             String argList = arguments.get(1);
                             String[] status = argList.split(",");
@@ -919,7 +919,10 @@ public class Client {
                                 output.append(lobbies[i]).append("\t\t\t\t").append(winners[i]).append("\n");
                             }
                             String outputString = output.toString();
-                            controller.showFinishedGames(outputString);
+                            Platform.runLater(() -> {
+                                controller.updateAreaLobbies(outputString);
+                            });
+
 
                         }
 
