@@ -119,6 +119,9 @@ public class Controller implements Initializable {
     @FXML
     private TextArea highScoreTextField;
 
+    @FXML
+    private TextArea areaLobbies;
+
 
     /**
      * Constructor for the Controller class.
@@ -317,20 +320,6 @@ public class Controller implements Initializable {
      *
      * @param message The message to be displayed in the lobby view.
      */
-    public void showOpenGames(String message) {
-        areaOpenLobbies.clear();
-        areaOpenLobbies.appendText(message);
-    }
-
-    public void showFinishedGames(String message){
-        areaFinishedGames.clear();
-        areaFinishedGames.appendText(message);
-    }
-
-    public void showRunningGames(String message){
-        areaRunningGames.clear();
-        areaRunningGames.appendText(message);
-    }
 
     /**
      * Handles the action event triggered by pressing the refresh button.
@@ -338,21 +327,36 @@ public class Controller implements Initializable {
      *
      * @throws IOException If an I/O error occurs during message sending.
      */
-    public void refreshPressed() throws IOException {
+
+    @FXML
+    void openGames(ActionEvent event) throws IOException{
         ArrayList<String> arg = new ArrayList<>();
         arg.add("LGAM");
         arg.add("o");
         client.send(encodeProtocolMessage(arg));
 
+    }
+    @FXML
+     void finishedGames(ActionEvent event) throws IOException{
         ArrayList<String> args = new ArrayList<>();
         args.add("LGAM");
         args.add("f");
         client.send(encodeProtocolMessage(args));
 
+    }
+@FXML
+     void runningGames(ActionEvent event) throws IOException{
         ArrayList<String> argus = new ArrayList<>();
         argus.add("LGAM");
         argus.add("r");
         client.send(encodeProtocolMessage(argus));
+    }
+
+    public void updateAreaLobbies(String message){
+        areaLobbies.clear();
+        areaLobbies.setVisible(true);
+        areaLobbies.appendText(message);
+
     }
 
     /**
