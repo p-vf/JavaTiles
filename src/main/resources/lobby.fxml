@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -22,31 +21,21 @@
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Button fx:id="showPlayersButton" layoutX="-20.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
-            <Button id="JoinButton" layoutX="212.0" layoutY="237.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="26.0" prefWidth="120.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
    <top>
-      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="showPlayersButton" layoutX="24.0" layoutY="15.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="121.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Who's Online" />
+            <Button id="JoinButton" layoutX="24.0" layoutY="50.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="26.0" prefWidth="120.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
+         </children></Pane>
    </top>
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane layoutX="25.0" layoutY="35.0" prefHeight="160.0" prefWidth="150.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="186.0">
-                     <children>
-                        <VBox fx:id="whosOnlineVBox" />
-                     </children></AnchorPane>
-              </content>
-            </ScrollPane>
-            <Text fill="WHITE" layoutX="51.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who's online?">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Text>
-            <TextArea fx:id="highScoreTextField" editable="false" layoutX="15.0" layoutY="200.0" prefHeight="180.0" prefWidth="170.0" visible="false" />
+            <TextArea fx:id="highScoreTextField" editable="false" layoutX="15.0" layoutY="194.0" prefHeight="150.0" prefWidth="170.0" visible="false" />
+            <TextArea fx:id="whosOnlineTextArea" editable="false" layoutX="15.0" layoutY="44.0" prefHeight="150.0" prefWidth="170.0" visible="false" />
          </children></Pane>
    </left>
    <bottom>
