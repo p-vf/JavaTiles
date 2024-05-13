@@ -43,7 +43,7 @@
          <children>
             <Button fx:id="broadcastButton" layoutX="685.0" layoutY="2.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="27.0" prefWidth="84.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
-            <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="29.0" prefWidth="87.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
+            <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="28.0" prefWidth="87.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How To Play?" />
             <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />

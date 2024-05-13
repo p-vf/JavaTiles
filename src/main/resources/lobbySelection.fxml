@@ -32,9 +32,9 @@
                   <Font name="Arial" size="14.0" />
                </font>
             </Label>
-            <Button layoutX="130.0" layoutY="81.0" mnemonicParsing="false" onAction="#openGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="open games" />
-            <Button layoutX="225.0" layoutY="81.0" mnemonicParsing="false" onAction="#finishedGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="finished games" />
-            <Button layoutX="320.0" layoutY="81.0" mnemonicParsing="false" onAction="#runningGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="running games" />
+            <Button layoutX="130.0" layoutY="81.0" mnemonicParsing="false" onAction="#openGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Open Games" />
+            <Button layoutX="225.0" layoutY="81.0" mnemonicParsing="false" onAction="#finishedGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Finished Games" />
+            <Button layoutX="320.0" layoutY="81.0" mnemonicParsing="false" onAction="#runningGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Running Games" />
          </children>
       </AnchorPane>
    </center>
@@ -71,7 +71,7 @@
                   <TextField fx:id="chatInput" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="189.0" />
                </children></VBox>
             <Button fx:id="broadcastButton" layoutY="417.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="26.0" prefWidth="88.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
-            <Button layoutX="125.0" layoutY="417.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="27.0" prefWidth="79.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
+            <Button layoutX="125.0" layoutY="417.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="27.0" prefWidth="79.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How To Play?" />
          </children></Pane>
    </right>
 </BorderPane>
