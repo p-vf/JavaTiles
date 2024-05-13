@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -22,29 +21,21 @@
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Button fx:id="showPlayersButton" layoutX="-15.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
          </children>
       </AnchorPane>
    </center>
    <top>
-      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="showPlayersButton" layoutX="24.0" layoutY="15.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="121.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Who's Online" />
+            <Button id="JoinButton" layoutX="24.0" layoutY="50.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="26.0" prefWidth="120.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
+         </children></Pane>
    </top>
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane layoutX="25.0" layoutY="35.0" prefHeight="330.0" prefWidth="150.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="186.0">
-                     <children>
-                        <VBox fx:id="whosOnlineVBox" />
-                     </children></AnchorPane>
-              </content>
-            </ScrollPane>
-            <Text fill="WHITE" layoutX="51.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who's online?">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Text>
+            <TextArea fx:id="highScoreTextField" editable="false" layoutX="15.0" layoutY="194.0" prefHeight="150.0" prefWidth="170.0" visible="false" />
+            <TextArea fx:id="whosOnlineTextArea" editable="false" layoutX="15.0" layoutY="44.0" prefHeight="150.0" prefWidth="170.0" visible="false" />
          </children></Pane>
    </left>
    <bottom>
@@ -52,7 +43,7 @@
          <children>
             <Button fx:id="broadcastButton" layoutX="685.0" layoutY="2.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="27.0" prefWidth="84.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
-            <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="29.0" prefWidth="87.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
+            <Button layoutX="800.0" layoutY="2.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="28.0" prefWidth="87.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How To Play?" />
             <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="50.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -68,7 +59,7 @@
          <children>
             <VBox layoutX="-15.0" layoutY="-71.0" prefHeight="471.0" prefWidth="201.0">
                <children>
-                  <TextArea fx:id="chatArea" editable="false" prefHeight="446.0" prefWidth="254.0" text="You are currently not in a&#10;lobby, therefore you can&#10;only chat with&#10;/all and /w [username]&#10;       &#10;" />
+                  <TextArea fx:id="chatArea" editable="false" prefHeight="446.0" prefWidth="254.0" text="You are currently not in a &#10;lobby, therefore you can &#10;only chat by toggling &#10;the broadcast button on or &#10;whispering with /w [username].&#10;&#10;" />
                   <TextField fx:id="chatInput" onAction="#chatInputPressed" />
                </children>
             </VBox>

@@ -41,6 +41,8 @@ public class Controller implements Initializable {
     @FXML
     public VBox vBoxFinishedGames;
     @FXML
+    private TextArea whosOnlineTextArea;
+    @FXML
     private TextArea areaRunningGames;
     @FXML
     private TextArea areaFinishedGames;
@@ -469,13 +471,8 @@ public class Controller implements Initializable {
     }
 
     public void showOnlinePlayers(String message){
-        Platform.runLater(() -> {
-            whosOnlineVBox.getChildren().clear();
-            Label label = new Label(message);
-            label.setFont(Font.font("Bold", FontWeight.BOLD, 12));
-            label.setTextFill(Color.BLACK);
-            whosOnlineVBox.getChildren().add(label);
-        });
+        whosOnlineTextArea.setVisible(true);
+        whosOnlineTextArea.appendText(message);
     }
 
     public void setNickname(String name){

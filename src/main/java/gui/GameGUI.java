@@ -54,7 +54,7 @@ public class GameGUI extends Application implements Runnable {
         primaryStage.show();
         primaryStage.setResizable(false);
     }
-    
+
     /**
      * The run method is called when the application is run as a separate thread.
      * It launches the JavaFX application.
