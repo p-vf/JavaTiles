@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
 
@@ -293,6 +294,9 @@ public class Lobby {
   }
 
   public String getRstaProtocolString() {
+    if (gameState == null) {
+      return encodeProtocolMessage("+RSTA", encodeProtocolMessage(new ArrayList<>(Arrays.asList("", "", "", ""))), "0");
+    }
     String exchangeStacks = Tile.tileArrayToProtocolArgument(gameState.getVisibleTiles());
     String currentPlayerIdx = Integer.toString(gameState.getCurrentPlayerIndex());
     return encodeProtocolMessage("+RSTA", exchangeStacks, currentPlayerIdx);
