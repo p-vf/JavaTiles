@@ -294,6 +294,8 @@ public class Client {
                         } else {
                             yourDeck.swap(row, col, row2, col2);
                             showDeck();
+                            if(gameController != null){
+                            gameController.setTextofGameWarning("");}
 
                             return null;
                         }
@@ -542,6 +544,7 @@ public class Client {
                         currentPlayerID = playerID;
 
                     } else {
+                        currentPlayerID = Integer.parseInt(arguments.get(1));
                         if (gameController != null) {
                             Platform.runLater(() -> {
                                 try {
@@ -696,6 +699,10 @@ public class Client {
                                 if (arguments.get(1).matches("\\d+")) {
                                     gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
                                 }
+                                if((this.playersInLobby.get(Integer.parseInt(arguments.get(1))).equals(""))){
+                                    gameController.setTurnLabel("Waiting for this player to connect...");
+                                }
+
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -706,6 +713,8 @@ public class Client {
                         Platform.runLater(() -> {
                             gameController.setPlayerNames(playersInLobby);
                         });
+
+                        currentPlayerID = Integer.parseInt(arguments.get(1));
 
                         drawnATile = false;
                         send(encodeProtocolMessage("+STAT"));
@@ -755,17 +764,16 @@ public class Client {
                     break;
 
                 case NAME:
-                    String oldnickname = nickname;
                     nickname = arguments.get(0);
                     if(gameController != null){
                     gameController.setNickname(nickname);
-                    gameController.gameChatIncoming(oldnickname + " changed his name to: " + nickname);
+                    gameController.gameChatIncoming("Your nickname has been changed to: " + nickname);
                     }
                     if(controller != null){
 
                         Platform.runLater(() -> {
                             controller.setNewNickname(nickname);
-                            controller.chatIncoming(oldnickname + " changed his name to: " + nickname);
+                            controller.chatIncoming("Your nickname has been changed to: " + nickname);
                         });
 
                     }
@@ -1008,6 +1016,10 @@ public class Client {
                     break;
 
                 case PUTT:
+                    Platform.runLater(() -> {
+                        gameController.setTextofGameWarning("");
+                    });
+
                     if (arguments.get(0).equals("t")) {
                         System.out.println("Valid input");
 
@@ -1157,12 +1169,16 @@ public class Client {
                         });
 
                     } else {
+                        currentPlayerID = Integer.parseInt(arguments.get(1));
 
                         Platform.runLater(() -> {
                             gameController.disableStacks(true);
                             try {
                                 if (arguments.get(1).matches("\\d+")) {
                                     gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
+                                }
+                                if((this.playersInLobby.get(Integer.parseInt(arguments.get(1))).equals(""))){
+                                    gameController.setTurnLabel("Waiting for this player to connect...");
                                 }
                             } catch (IOException e) {
                                 throw new RuntimeException(e);

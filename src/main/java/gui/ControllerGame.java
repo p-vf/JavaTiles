@@ -346,6 +346,7 @@ public class ControllerGame implements Initializable {
      */
     public void setTextofGameWarning(String text) {
         gameWarning.setVisible(true);
+        gameWarning.setText("");
         gameWarning.setText(text);
     }
 
