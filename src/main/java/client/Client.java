@@ -1124,6 +1124,61 @@ public class Client {
                     });
                     break;
 
+                case RSTA:
+                    send(encodeProtocolMessage("RNAM"));
+                    ArrayList<String> tileList = decodeProtocolMessage(arguments.get(0));
+                    exchangeStacks = stringsToTileArray(tileList);
+
+
+                    showExchangeStacks();
+                    if (Integer.parseInt(arguments.get(1)) == playerID) {
+                        Platform.runLater(() -> {
+                            gameController.setYourTurn(true);
+                            gameController.setAlreadyInGame(true);
+                        });
+
+                        Tile distile = parseTile(tileList.get(playerID));
+
+                        if (pressedStart && !(drawnATile)) {
+                            gameController.disableStacks(false);
+                        }
+                        Platform.runLater(() -> {
+                            gameController.setExchangeStack0(distile);
+                        });
+
+                        System.out.println("It's your turn.");
+                        currentPlayerID = playerID;
+                        Platform.runLater(() -> {
+                            try {
+                                gameController.setTurnLabel("It's your turn.");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+
+                    } else {
+
+                        Platform.runLater(() -> {
+                            gameController.disableStacks(true);
+                            try {
+                                if (arguments.get(1).matches("\\d+")) {
+                                    gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
+                                }
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Platform.runLater(() -> {
+                                gameController.setExchangeStacks(exchangeStacks, playerID);
+                            });
+                        });
+                        Platform.runLater(() -> {
+                            gameController.setPlayerNames(playersInLobby);
+                        });
+
+                        drawnATile = false;
+                    }
+                    break;
+
 
                 default:
                     break;
