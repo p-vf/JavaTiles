@@ -27,7 +27,7 @@
                   <Font name="Arial" size="15.0" />
                </font>
             </Text>
-            <Button fx:id="showPlayersButton" layoutY="36.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="24.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
+            <Button fx:id="showPlayersButton" layoutX="-8.0" layoutY="36.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="24.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
             <TextArea fx:id="areaLobbies" editable="false" layoutX="140.0" layoutY="120.0" prefHeight="121.0" prefWidth="275.0" visible="false" />
             <Label fx:id="lobbyWarning" alignment="CENTER" layoutX="101.0" layoutY="458.0" prefHeight="16.0" prefWidth="353.0" textFill="WHITE">
                <font>
@@ -37,6 +37,7 @@
             <Button layoutX="130.0" layoutY="81.0" mnemonicParsing="false" onAction="#openGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="open games" />
             <Button layoutX="225.0" layoutY="81.0" mnemonicParsing="false" onAction="#finishedGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="finished games" />
             <Button layoutX="320.0" layoutY="81.0" mnemonicParsing="false" onAction="#runningGames" prefHeight="27.0" prefWidth="95.0" styleClass="menu-button" stylesheets="@menu-button.css" text="running games" />
+            <Button layoutX="-8.0" layoutY="69.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="24.0" prefWidth="122.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
@@ -46,7 +47,7 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane layoutX="20.0" layoutY="35.0" prefHeight="210.0" prefWidth="150.0">
+            <ScrollPane layoutX="15.0" layoutY="35.0" prefHeight="144.0" prefWidth="170.0">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="182.0" prefWidth="151.0">
                      <children>
@@ -66,6 +67,7 @@
                </font></Label>
             <Label fx:id="nicknameWarning" layoutX="22.0" layoutY="448.0" textFill="WHITE" />
             <TextField fx:id="changeNickname" layoutX="21.0" layoutY="415.0" onAction="#toChangeUsername" promptText="change nickname" />
+            <TextArea fx:id="highScoreTextField" editable="false" layoutX="14.0" layoutY="179.0" prefHeight="180.0" prefWidth="170.0" visible="false" />
          </children></Pane>
    </left>
    <right>
@@ -81,7 +83,7 @@
                   <TextField fx:id="chatInput" onAction="#chatInputPressed" prefHeight="25.0" prefWidth="189.0" />
                </children></VBox>
             <Button fx:id="broadcastButton" layoutY="417.0" mnemonicParsing="false" onAction="#broadcastPressed" prefHeight="26.0" prefWidth="88.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Broadcast-Off" />
-            <Button layoutX="129.0" layoutY="417.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="27.0" prefWidth="72.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
+            <Button layoutX="136.0" layoutY="417.0" mnemonicParsing="false" onAction="#manualOpened" prefHeight="27.0" prefWidth="79.0" styleClass="menu-button" stylesheets="@menu-button.css" text="How to play?" />
          </children></Pane>
    </right>
 </BorderPane>
