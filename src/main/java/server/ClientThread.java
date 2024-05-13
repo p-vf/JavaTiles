@@ -380,10 +380,10 @@ public class ClientThread implements Runnable {
    * @throws IOException If an I/O error occurs while sending the response.
    */
   public boolean notAllowedToDraw() throws IOException {
-    if (lobby.getNumberOfPlayers() < 4) {
-      send(encodeProtocolMessage("+DRAW", "", "One or more players left the game, please wait until the lobby is full again"));
-      return true;
-    }
+    //if (lobby.getNumberOfPlayers() < 4) {
+    //  send(encodeProtocolMessage("+DRAW", "", "One or more players left the game, please wait until the lobby is full again"));
+    //  return true;
+    //}
     if (!lobby.gameState.isPlayersTurn(playerIndex)) {
       send(encodeProtocolMessage("+DRAW", "", "It is not your turn.. have some patience"));
       return true;
@@ -472,10 +472,10 @@ public class ClientThread implements Runnable {
    * @throws IOException If an I/O error occurs while sending the response.
    */
   public boolean cantPutTile() throws IOException {
-    if (lobby.getNumberOfPlayers() < 4) {
-      send(encodeProtocolMessage("+PUTT", "f", "f", "One or more players left the game, please wait until the lobby is full again"));
-      return true;
-    }
+    //if (lobby.getNumberOfPlayers() < 4) {
+    //  send(encodeProtocolMessage("+PUTT", "f", "f", "One or more players left the game, please wait until the lobby is full again"));
+    //  return true;
+    //}
     // this checks if it's the players turn rn
     if (!lobby.gameState.isPlayersTurn(playerIndex)) {
       send(encodeProtocolMessage("+PUTT", "f", "f", "It is not your turn.. have some patience"));
