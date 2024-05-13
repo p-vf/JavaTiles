@@ -22,21 +22,23 @@
             </Text>
             <Button fx:id="readyButton" layoutX="228.0" layoutY="187.0" mnemonicParsing="false" onAction="#readyPressed" prefHeight="29.0" prefWidth="79.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Not Ready" />
             <Button id="leaveLobbyButton" layoutX="222.0" layoutY="226.0" mnemonicParsing="false" onAction="#leaveLobbyPressed" prefHeight="27.0" prefWidth="90.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Leave Lobby" />
-            <Button id="showPlayersButton" layoutX="200.0" layoutY="269.0" mnemonicParsing="false" onAction="#showPlayersPressed" prefHeight="25.0" prefWidth="134.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players in lobby" />
-            <Button layoutX="205.0" layoutY="304.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="23.0" prefWidth="129.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
    <top>
-      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button id="showPlayersButton" layoutX="14.0" layoutY="28.0" mnemonicParsing="false" onAction="#showPlayersPressed" prefHeight="25.0" prefWidth="134.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players in lobby" />
+            <Button layoutX="14.0" layoutY="63.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="23.0" prefWidth="129.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
+         </children></Pane>
    </top>
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="180.0" prefWidth="286.0" />
+            <VBox fx:id="playersLobbyVbox" layoutX="14.0" layoutY="14.0" prefHeight="180.0" prefWidth="286.0" />
             <TextArea fx:id="highScoreTextField" editable="false" layoutX="5.0" layoutY="200.0" prefHeight="180.0" prefWidth="170.0" visible="false">
                <font>
-                  <Font name="Arial Bold" size="12.0" />
+                  <Font name="Arial" size="12.0" />
                </font></TextArea>
          </children></Pane>
    </left>
