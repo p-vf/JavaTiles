@@ -259,6 +259,7 @@ public class NetworkUtils {
 
       /** get names from lobby */
       RNAM,
+      /** send relevant game state to client that just put a tile */
       RSTA,
     }
 
@@ -281,7 +282,7 @@ public class NetworkUtils {
       /** check if connection is still working */
       PING,
 
-      /** send relevant game state to client */
+      /** send relevant game state all clients of the same lobby */
       STAT,
 
       /** send name list of lobby */

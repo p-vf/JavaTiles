@@ -163,6 +163,7 @@ public class Lobby {
    *
    * @param cmd    A String that conforms to the network-protocol, should be a CATS-Command.
    * @param sender The client that sent the message (to which the message should not be sent).
+   * @throws IllegalArgumentException If an I/O error occurs while sending the game state to the client.
    */
   public void sendToLobby(String cmd, ClientThread sender) throws IOException{
     for (var p : players) {
@@ -293,6 +294,15 @@ public class Lobby {
     lobbyState = LobbyState.FINISHED;
   }
 
+  /**
+   * Returns a protocol-encoded string conforming to the RSTA command used in the network protocol.
+   * This string contains the serialized data of the visible tiles on the game board along with the current player's index.
+   * The method formats the data for network transmission, ensuring that all clients in the lobby can synchronize
+   * their state with the server effectively.
+   *
+   * @return A String encoded for the RSTA command containing the current state of the game's visible tiles
+   * and the index of the player whose turn is current.
+   */
   public String getRstaProtocolString() {
     if (gameState == null) {
       return encodeProtocolMessage("+RSTA", encodeProtocolMessage(new ArrayList<>(Arrays.asList("", "", "", ""))), "0");
