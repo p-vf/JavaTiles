@@ -316,7 +316,7 @@ Server: `+REDY`
 | `STRT <startdeck> <playeridx>` | `+STRT`  | Server |
 ### Beschreibung
 Wird vom Server geschickt, wenn alle Spieler in einer Lobby den `REDY`-Command an den Server geschickt haben,  
-und 4 Spieler in der Lobby sind. In `<startdeck>` ist das Startdeck des Spielers enthalten (insgesamt 24 Werte, entweder leer oder eine Tile darstellend).  
+und 4 Spieler in der Lobby sind. In `<startdeck>` ist das Startdeck des Spielers enthalten (insgesamt 24 Werte, entweder leer oder einen Stein darstellend).  
 Sind in diesem Deck 15 Steine, ist der empfangende Client der Startspieler.  
 In `<playeridx>` wird eine Zahl übergeben, die den Index des empfangenden Clients darstellt, welcher für die Identifikation des Spielers wichtig ist. 
 
@@ -342,23 +342,23 @@ Client: `+STAT`
 
 ---
 
-## Spielzustand senden an den Spieler der gerade einen Stein abgelegt hat
+## Spielzustand auf Anfrage senden
 | Command | Response                                    | Sender |
 |---------|---------------------------------------------|--------|
 | `RSTA   | `+RSTA <exchangestacks> <currentplayeridx>` | Client |
 ### Beschreibung
-Der Server schickt den obersten Stein der Austauschstapel in `<exchangestacks>`   
+Der Server schickt auf Anfrage vom client den jeweils obersten Stein der Austauschstapel in `<exchangestacks>`   
 und der Index des Spielers, der an der Reihe ist in `<currentplayeridx>`.
 
 ### Beispiel
 Client: `RSTA`  
-Client: `+RSTA "9:BLACK \"%\" \"%\" \"%\"%" 0`  
-(Spieler mit playerindex 0 ist am Zug und der Erste exchangestack beinhaltet die schwarze Tile mit der Nummer 9, die anderen exchangestacks sind leer.)
+Server: `+RSTA "9:BLACK \"%\" \"%\" \"%\"%" 0` 
+(Spieler mit playerindex 0 ist am Zug und der Erste exchangeStack beinhaltet die schwarze 9, die anderen exchangeStacks sind leer.)
 
 ---
 
 
-## Tile ziehen
+## Stein ziehen
 | Command            | Response       | Sender |
 |--------------------|----------------|--------|
 | `DRAW <drawstack>` | `+DRAW <tile>` | Client |
@@ -384,7 +384,7 @@ zudem wird sein Deck ``<deck>`` an den Server geschickt, welcher dann dieses üb
 Die Flag `<won>` beschreibt, ob der Spieler mit diesem Zug gewonnen hat, falls wahr, wird
 das Spiel mit einem ``PWIN``-Command von der Serverseite beendet.
 Zudem wird vom Server mit der Flag `<valid>` mitgeteilt, ob die Konfiguration und der Spielzug gültig ist.
-Zuletzt wird auch noch vom Server das Exchangestack aktualisiert, auf welches man die tile drauflegt.
+Zuletzt wird auch noch vom Server das Exchangestack aktualisiert, auf welches man den Stein drauflegt.
 
 ### Beispiel
 Client: `PUTT 4:RED "\"%\" 3:RED 11:RED 12:RED 13:RED 2:BLUE 3:BLACK \"%\" \"%\" 11:BLUE 12:BLUE \"%\" 2:YELLOW 7:YELLOW \"%\" 1:YELLOW 1:RED \"%\" \"%\" \"%\" 9:BLACK 9:RED \"%\" \"%\"%"`  
