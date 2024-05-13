@@ -27,8 +27,8 @@
    <top>
       <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="showPlayersButton" layoutX="24.0" layoutY="15.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="121.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Who's Online" />
-            <Button id="JoinButton" layoutX="24.0" layoutY="50.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="26.0" prefWidth="120.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
+            <Button fx:id="showPlayersButton" layoutX="24.0" layoutY="15.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="130.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Who's Online" />
+            <Button id="JoinButton" layoutX="24.0" layoutY="50.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="26.0" prefWidth="130.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children></Pane>
    </top>
    <left>

@@ -28,8 +28,8 @@
    <top>
       <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
-            <Button id="showPlayersButton" layoutX="14.0" layoutY="28.0" mnemonicParsing="false" onAction="#showPlayersPressed" prefHeight="25.0" prefWidth="134.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Players In Lobby" />
-            <Button layoutX="14.0" layoutY="63.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="23.0" prefWidth="129.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
+            <Button id="showPlayersButton" layoutX="14.0" layoutY="28.0" mnemonicParsing="false" onAction="#showPlayersPressed" prefHeight="25.0" prefWidth="140.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Players In Lobby" />
+            <Button layoutX="14.0" layoutY="63.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="23.0" prefWidth="140.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children></Pane>
    </top>
    <left>
