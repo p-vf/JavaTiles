@@ -835,6 +835,13 @@ public class ClientThread implements Runnable {
     lobby.sendToLobby(lobby.getStatProtocolString(), null);
   }
 
+  /**
+   * Sends the current state of the game to the client who just made a move. This method is typically called after a player has successfully put a tile.
+   * It retrieves the state of the game using the {@link Lobby#getRstaProtocolString()} method and sends it to the client.
+   * This helps ensure that the client's view of the game state is synchronized with the server after their action.
+   *
+   * @throws IOException If an I/O error occurs while sending the game state to the client.
+   */
   private void sendStateToClientWhoJustPutTile() throws IOException {
     String state = lobby.getRstaProtocolString();
     send(state);
