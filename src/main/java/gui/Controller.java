@@ -116,6 +116,10 @@ public class Controller implements Initializable {
     private Button joinLobbyButton;
 
 
+    @FXML
+    private TextArea highScoreTextField;
+
+
     /**
      * Constructor for the Controller class.
      * Initializes the controller with the given client.
@@ -448,11 +452,8 @@ public class Controller implements Initializable {
      */
     public void setHighscore(String result) {
         Platform.runLater(() -> {
-            highscoreVbox.getChildren().clear();
-            Label label = new Label(result);
-            label.setFont(Font.font("Arial", 11));
-            label.setTextFill(Color.BLACK);
-            highscoreVbox.getChildren().add(label);
+            highScoreTextField.setVisible(true);
+            highScoreTextField.setText(result);
         });
     }
 

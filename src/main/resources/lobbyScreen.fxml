@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -34,12 +33,11 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="180.0" prefWidth="287.0" />
-            <ScrollPane layoutX="14.0" layoutY="200.0" prefHeight="182.0" prefWidth="177.0">
-               <content>
-                  <VBox fx:id="highscoreVbox" prefHeight="180.0" prefWidth="270.0" />
-               </content>
-            </ScrollPane>
+            <VBox fx:id="playersLobbyVbox" layoutX="14.0" prefHeight="180.0" prefWidth="286.0" />
+            <TextArea fx:id="highScoreTextField" editable="false" layoutX="5.0" layoutY="200.0" prefHeight="184.0" prefWidth="177.0" visible="false">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font></TextArea>
          </children></Pane>
    </left>
    <right>
@@ -64,7 +62,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="41.0" textFill="WHITE" />
+            <Label fx:id="nicknameWarning" layoutX="14.0" layoutY="41.0" prefHeight="17.0" prefWidth="0.0" textFill="WHITE" />
          </children></Pane>
    </bottom>
 </BorderPane>
