@@ -22,7 +22,8 @@
                   <Font name="System Bold" size="40.0" />
                </font>
             </Text>
-            <Button fx:id="showPlayersButton" layoutX="-15.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
+            <Button fx:id="showPlayersButton" layoutX="-20.0" layoutY="37.0" mnemonicParsing="false" onAction="#showOnlinePressed" prefHeight="25.0" prefWidth="86.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show players" />
+            <Button id="JoinButton" layoutX="212.0" layoutY="237.0" mnemonicParsing="false" onAction="#highscorePressed" prefHeight="26.0" prefWidth="120.0" styleClass="menu-button" stylesheets="@menu-button.css" text="Show Highscore-List" />
          </children>
       </AnchorPane>
    </center>
@@ -32,7 +33,7 @@
    <left>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane layoutX="25.0" layoutY="35.0" prefHeight="330.0" prefWidth="150.0">
+            <ScrollPane layoutX="25.0" layoutY="35.0" prefHeight="160.0" prefWidth="150.0">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="186.0">
                      <children>
@@ -45,6 +46,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
+            <TextArea fx:id="highScoreTextField" editable="false" layoutX="15.0" layoutY="200.0" prefHeight="180.0" prefWidth="170.0" visible="false" />
          </children></Pane>
    </left>
    <bottom>
