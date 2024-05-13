@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -27,30 +30,36 @@ public class GameGUI extends Application implements Runnable {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        // Load the FXML file
         URL fxmlLocation = getClass().getResource("/welcomeScreen.fxml");
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         Parent root = loader.load();
 
-        root.setStyle("-fx-background-color: #008000;");
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/lobbyBackground.png"));
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+
+        backgroundImageView.fitWidthProperty().bind(primaryStage.widthProperty());
+        backgroundImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+
+        Pane rootPane = (Pane) root;
+        rootPane.getChildren().add(0, backgroundImageView);
+
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setOnCloseRequest((WindowEvent ActionEvent) -> {
+
+        primaryStage.setOnCloseRequest((WindowEvent event) -> {
             System.out.println("Closing application...");
             System.exit(0);
         });
+
         primaryStage.show();
         primaryStage.setResizable(false);
     }
-
+    
     /**
      * The run method is called when the application is run as a separate thread.
      * It launches the JavaFX application.
      */
     public void run() {
         launch();
-
     }
-
-
 }
