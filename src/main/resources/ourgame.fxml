@@ -144,7 +144,7 @@
             </Button>
             <Button fx:id="mainStack" layoutX="380.0" layoutY="195.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" text="M" textFill="#16512cd4">
                <font>
-                  <Font name="Arial Rounded MT Bold" size="22.0" />
+                  <Font name="Arial Rounded MT Bold" size="21.0" />
                </font>
             </Button>
             <Button fx:id="exchangeStack0" layoutX="151.0" layoutY="265.0" maxHeight="70.0" maxWidth="50.0" minHeight="70.0" minWidth="50.0" mnemonicParsing="false" onAction="#draw" onMouseEntered="#tileHover" onMouseExited="#noTileHover" prefHeight="70.0" prefWidth="50.0" style="-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;" textAlignment="CENTER" textFill="#c1c1c1d4">

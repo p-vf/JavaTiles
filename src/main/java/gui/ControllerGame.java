@@ -310,7 +310,7 @@ public class ControllerGame implements Initializable {
             tile.setText("J");
         }
         else{
-            tile.setFont(Font.font("Arial Rounded MT Bold",19));
+            tile.setFont(Font.font("Arial Rounded MT Bold",18));
             tile.setTextFill(Paint.valueOf(String.valueOf(color)));
             tile.setText(""+tileNumber);
             if(color.equals(YELLOW)){
