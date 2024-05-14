@@ -212,6 +212,20 @@ class ClientThreadTest {
     playerIndexField.setAccessible(true);
     playerIndexField.set(clientThread, 0);
 
+    Field nickname = ClientThread.class.getDeclaredField("nickname");
+    nickname.setAccessible(true);
+    String nicknameOne = "player1";
+    nickname.set(clientThread, nicknameOne);
+
+    ArrayList<ClientThread> player = new ArrayList<>();
+    player.add(clientThread);
+
+    Field players = Lobby.class.getDeclaredField("players");
+    players.setAccessible(true);
+    players.set(this.lobby, player);
+
+
+
     outPutStream.set(clientThread, pipedOutputStream);//outContent is being set to out of clientThread
       try {
         clientThread.draw(args);

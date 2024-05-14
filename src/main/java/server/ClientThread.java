@@ -641,7 +641,6 @@ public class ClientThread implements Runnable {
   private void endGameWithNoWinner() throws IOException {
     System.out.println("Game ended with no winner");
     send(encodeProtocolMessage("+DRAW", ""));
-    // TODO (IMPORTANT!!!) should this not be a sendToLobby() call??
     lobby.sendToLobby("EMPT", null);
     lobby.finishGame("");
   }
