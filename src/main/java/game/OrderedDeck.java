@@ -20,15 +20,11 @@ import java.util.Arrays;
 
 public class OrderedDeck {
 
-  private static final Logger LOGGER = LogManager.getLogger(OrderedDeck.class);
-  /**
-   * height of each deck
-   */
-  public static final int DECK_HEIGHT = 2;
-  /**
-   * width of each deck
-   */
-  public static final int DECK_WIDTH = 12;
+  private static final Logger LOGGER = LogManager.getLogger(OrderedDeck.class); //Logger object for logging messages related to the OrderedDeck class.
+
+  public static final int DECK_HEIGHT = 2; //height of each deck
+
+  public static final int DECK_WIDTH = 12; //width of each deck
 
   private Tile[][] deck; // The 2D array representing the deck of tiles.
 
