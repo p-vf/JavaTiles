@@ -493,7 +493,6 @@ public class Controller implements Initializable {
 
     @FXML
     void toChangeUsername(ActionEvent event) throws IOException {
-        System.out.println("toChangeUsername wurde ausgelöst");
         ArrayList<String> args = new ArrayList<>();
         args.add("NAME");
         String newName = changeNickname.getText();

@@ -325,8 +325,8 @@ public class OrderedDeck {
             //System.out.println("Valid set: " + output);
           }
           if (!validSet && !validRun) {
-            System.out.println("Invalid section: " + output);
-            System.out.println("Returning false: Neither a valid set nor a valid run.");
+            //System.out.println("Invalid section: " + output);
+            //System.out.println("Returning false: Neither a valid set nor a valid run.");
             return false;
           }
           formationLength = 0;
@@ -338,7 +338,7 @@ public class OrderedDeck {
       formationLength = 0;
     }
 
-    System.out.println("Deck evaluation completed without errors. Deck is winning.");
+    //System.out.println("Deck evaluation completed without errors. Deck is winning.");
     return returnValue;
   }
 
@@ -367,7 +367,7 @@ public class OrderedDeck {
         LOGGER.error("Set in deck contains null");
         return false;
       }
-      System.out.println(currentTile.getNumber());
+      //System.out.println(currentTile.getNumber());
       if (currentTile.isJoker()) {
         continue;
       }
@@ -423,7 +423,7 @@ public class OrderedDeck {
     Color color = firstTile.getColor();
     int startNum = firstTile.getNumber();
     int jokerCountBeforeFirstNumber = 0;
-    System.out.println("from = " + from);
+    //System.out.println("from = " + from);
     for (int i = from; i < to; i++) {
       Tile currentTile = deckRow[i];
       if (currentTile == null) {
@@ -457,7 +457,7 @@ public class OrderedDeck {
       int compare = i - from + startNum- jokerCountBeforeFirstNumber;
       //System.out.println("compare = " + compare);
       if (currentTile.getNumber() != compare) { //TODO
-        System.out.println();
+        //System.out.println();
         return false;
       }
     }

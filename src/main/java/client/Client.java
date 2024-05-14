@@ -594,7 +594,6 @@ public class Client {
                     break;
 
                 case NAMS:
-                    System.out.println("Ich habe NAMS bekommen");
                     String thePlayers = arguments.get(0);
                     ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
                     playersInLobby.clear();
@@ -1109,7 +1108,6 @@ public class Client {
                     break;
 
                 case RNAM:
-                    System.out.println("Ich habe RNAM bekommen.");
                     String thePlayers = arguments.get(0);
                     ArrayList<String> currentPlayers = decodeProtocolMessage(thePlayers);
                     playersInLobby.clear();
