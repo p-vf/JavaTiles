@@ -137,7 +137,7 @@ public class HighScores {
       addEntryToHighscores("Phillip", todaysDate, 100);
       List<Triple<String, String, Integer>> entries = readHighscores();
       for (Triple<String, String, Integer> entry : entries) {
-        System.out.println(entry);
+        //System.out.println(entry);
       }
     } catch (IOException e) {
       e.printStackTrace(System.err);

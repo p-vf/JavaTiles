@@ -655,17 +655,12 @@ public class ControllerGame implements Initializable {
         args.add("/draw");
         Button pressedButton = (Button) event.getSource();
         if (pressedButton.equals(exchangeStack0)) {
-            System.out.println("exchangeStack wurde gedrückt");
-
             pressedButtons.clear();
             args.add("e");
             String message = client.handleInput(encodeProtocolMessage(args));
             client.send(message);
-
-
         }
         if (pressedButton.equals(mainStack)) {
-            System.out.println("mainStack wurde gedrückt");
             pressedButtons.clear();
             args.add("m");
             String message = client.handleInput(encodeProtocolMessage(args));
@@ -747,7 +742,6 @@ public class ControllerGame implements Initializable {
      */
     @FXML
     void toGameChat(ActionEvent event) throws IOException {
-        System.out.println("to gameChat activated");
         String chatMessage = "/chat" + " " + gameChatField.getText();
         System.out.println(chatMessage);
         if (broadcastPressed) {
