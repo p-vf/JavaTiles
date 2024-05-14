@@ -53,9 +53,8 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  */
 public class ControllerGame implements Initializable {
 
-    public Controller controller;
     @FXML
-    private Button broadcastButton;
+    private Button broadcastButton; // Button to enable or disable broadcast mode.
     @FXML
     private Label gameWarning; // Label for displaying game warnings.
 
@@ -208,8 +207,8 @@ public class ControllerGame implements Initializable {
 
     private boolean canYouPlayThisMove = false; // Flag indicating if the current player can play a move
 
-    private boolean broadcastPressed = false;
-    private boolean startPressed = false;
+    private boolean broadcastPressed = false; // Flag indicating if broadcast mode is enabled
+    private boolean startPressed = false; // Flag indicating if the start button has been pressed
     private boolean isCheatCode = false;
 
     private boolean yourTurn = false;
