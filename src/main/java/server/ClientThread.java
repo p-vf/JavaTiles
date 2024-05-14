@@ -157,26 +157,6 @@ public class ClientThread implements Runnable {
     }
   }
 
-
-  /**
-   * Reads a string and returns the boolean value it represents.
-   *
-   * @param flag Should be either "f" or "t".
-   * @return The value represented by the string.
-   * @throws IllegalArgumentException
-   */
-  private static boolean readFlag(String flag) throws IllegalArgumentException {
-    boolean whisper = false;
-    if (flag.equals("t")) {
-      whisper = true;
-    } else if (!flag.equals("f")) {
-      // Falls flag weder "t" noch "f" ist, wird whisper auf false gesetzt
-      // Alternativ könnte man auch eine Meldung ausgeben oder andere Aktionen ausführen
-      whisper = false;
-    }
-    return whisper;
-  }
-
   /**
    * Handles a request as described in the protocol. <p>
    * This method utilizes the following methods (list not entirely complete): <p>
