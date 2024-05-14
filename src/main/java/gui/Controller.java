@@ -389,6 +389,8 @@ public class Controller implements Initializable {
 
     /**
      * Displays the players in the lobby.
+     *
+     * @throws IOException if an I/O error occurs while sending messages to the server
      */
     public void showPlayersPressed() throws IOException {
         ArrayList<String> args = new ArrayList<>();

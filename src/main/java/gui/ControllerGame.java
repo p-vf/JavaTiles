@@ -257,7 +257,13 @@ public class ControllerGame implements Initializable {
 
     /**
      * Displays the deck of tiles in the game GUI.
+     * <p>
+     * This method is called to initialize and display the player's deck of tiles
+     * in the game interface. It disables the start button, updates the deck with
+     * the player's tiles, and manages the state of the exchange and main stacks.
+     * </p>
      *
+     * @throws IOException if an I/O error occurs during communication with the server
      */
     @FXML
     public void showDeck() throws IOException {
@@ -289,7 +295,13 @@ public class ControllerGame implements Initializable {
 
 
         }
-
+    /**
+     * Fills in the deck with the player's tiles.
+     * <p>
+     * This method retrieves the player's tiles from the client and updates the deck buttons
+     * to display the corresponding tile information. If a tile is null, the button text is cleared.
+     * </p>
+     */
         public void fillInDeck(){
         this.tiles = client.getTiles();
             for (int i = 0; i < deck.size(); i++) {
@@ -302,6 +314,17 @@ public class ControllerGame implements Initializable {
 
         }
 
+    /**
+     * Creates and styles a tile button based on its color and number.
+     * <p>
+     * This method sets the appropriate font, text color, and text for a tile button.
+     * If the tile number is 0, it is considered a joker and is styled differently.
+     * </p>
+     *
+     * @param tile the button representing the tile
+     * @param color the color of the tile
+     * @param tileNumber the number of the tile (0 for joker)
+     */
         private void createTile(Button tile, game.Color color, int tileNumber){
         if(tileNumber == 0){
             tile.setFont(Font.font("Algerian",22));
@@ -358,6 +381,11 @@ public class ControllerGame implements Initializable {
         this.canYouPlayThisMove = canYouPlayThisMove;
     }
 
+    /**
+     * Sets a flag indicating whether the player is already in a game.
+     *
+     * @param bool {@code true} if the player is already in a game, {@code false} otherwise
+     */
     public void setAlreadyInGame(boolean bool){
         alreadyInGame = bool;
     }
@@ -401,7 +429,14 @@ public class ControllerGame implements Initializable {
 
 
     }
-
+    /**
+     * Sets the player's turn status.
+     * <p>
+     * This method updates the `yourTurn` variable to indicate whether it is the player's turn.
+     * </p>
+     *
+     * @param bool true if it is the player's turn, false otherwise
+     */
     public void setYourTurn(boolean bool){
         yourTurn = bool;
     }
@@ -417,16 +452,43 @@ public class ControllerGame implements Initializable {
         }
     }
 
+    /**
+     * Ends the game and displays the winner's name.
+     * <p>
+     * This method sets the win label to display the winner's name and disables all buttons,
+     * which are important for the game.
+     * </p>
+     *
+     * @param playerName the name of the winning player
+     * @throws IOException if an I/O error occurs
+     */
     public void endGame(String playerName) throws IOException {
         setWinLabel(playerName + " won!");
         killAllButtons();
 
     }
+
+    /**
+     * Ends the game in a draw.
+     * <p>
+     * This method sets the win label to display "DRAW!" and disables all buttons,
+     * which are important for the game.
+     * </p>
+     *
+     * @throws IOException if an I/O error occurs
+     */
     public void endGame() throws IOException {
         setWinLabel("DRAW!");
         killAllButtons();
     }
 
+    /**
+     * Disables all buttons in the deck, the main and the exchange stack of the player.
+     * <p>
+     * This method iterates through all buttons in the deck and disables them.
+     * Additionally, it disables the exchange stack of the player and the main stack button.
+     * </p>
+     */
     private void killAllButtons(){
         for(Button button : deck){
             button.setDisable(true);
@@ -669,6 +731,18 @@ public class ControllerGame implements Initializable {
 
     }
 
+    /**
+     * Customizes the appearance of the given button based on the specified boolean value.
+     * <p>
+     * This method changes the style of the button to indicate its state. If the boolean value
+     * is true, the button's background color is set to light gray, and if false, it is set to white.
+     * </p>
+     *
+     * @param button the button to be customized
+     * @param bool   {@code true} to set the button's style to indicate that it has been pressed,
+     *               {@code false} to set it to set the button back to default.
+     */
+
     public void customizeButton(Button button, boolean bool){
         if(bool){
             button.setStyle("-fx-background-color: #c8c8c8; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
@@ -805,7 +879,16 @@ public class ControllerGame implements Initializable {
         }
     }
 
-
+    /**
+     * Handles the action event triggered by pressing the "Leave Lobby" button.
+     * <p>
+     * This method sets the event source in the client, constructs a message to leave the lobby,
+     * and sends the encoded message to the server.
+     * </p>
+     *
+     * @param event the ActionEvent triggered by pressing the "Leave Lobby" button
+     * @throws IOException if an I/O error occurs while sending messages to the server
+     */
     public void leaveLobbyPressed(ActionEvent event) throws IOException {
         client.setEvent(event);
         ArrayList<String> arg = new ArrayList<>();
@@ -813,6 +896,13 @@ public class ControllerGame implements Initializable {
         client.send(encodeProtocolMessage(arg));
     }
 
+    /**
+     * Toggles the broadcast mode and updates the text of the broadcast button accordingly.
+     * <p>
+     * This method toggles the boolean value {@code broadcastPressed} and updates the text
+     * of the broadcast button to indicate whether the broadcast mode is on or off.
+     * </p>
+     */
     public void broadcastPressed() {
         broadcastPressed = !broadcastPressed;
         if(broadcastPressed == true){
@@ -823,12 +913,32 @@ public class ControllerGame implements Initializable {
         }
     }
 
+    /**
+     * Handles the mouse hover event over a tile button.
+     * <p>
+     * This method is triggered when the mouse hovers over a tile button. It changes the background color
+     * of the button to indicate the hover effect.
+     * </p>
+     *
+     * @param event the MouseEvent triggered by hovering over a tile button
+     */
     @FXML
     void tileHover(MouseEvent event) {
         Button button = (Button) event.getTarget();
         button.setStyle("-fx-background-color: #dadada; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
 
     }
+
+
+    /**
+     * Handles the mouse hover exit event from a tile button.
+     * <p>
+     * This method is triggered when the mouse exits a tile button after hovering. It restores the default
+     * background color of the button.
+     * </p>
+     *
+     * @param event the MouseEvent triggered by exiting a tile button after hovering
+     */
     @FXML
     void noTileHover(MouseEvent event) {
         Button button = (Button) event.getTarget();

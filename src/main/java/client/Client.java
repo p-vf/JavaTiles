@@ -91,7 +91,7 @@ public class Client {
 
 
     /**
-     * Constructs a new EchoClient with the given socket.
+     * Constructs a new Client with the specified socket for communication with the server.
      *
      * @param socket the socket for communication with the server
      * @throws IOException if an I/O error occurs when creating the client
@@ -111,6 +111,7 @@ public class Client {
      * The main method to start the client.
      * It connects to the server, sets up input/output streams,
      * handles user input, and communicates with the server.
+     * It starts the guiThread.
      *
      * @param args the command-line arguments to specify the server's hostname and port
      */
@@ -199,11 +200,11 @@ public class Client {
 
 
     /**
-     * Initiates a new PingThread for the specified EchoClient.
+     * Initiates a new PingThread for the specified Client.
      * This method creates a new thread responsible for sending periodic PING messages
      * to the server to check for responsiveness.
      *
-     * @param client the EchoClient for which to start the ping thread
+     * @param client the Client for which to start the ping thread
      */
     private void ping(Client client) {
         client.pingThread = new ClientPingThread(client, 10000);
@@ -228,6 +229,7 @@ public class Client {
      *
      * @param input the input string provided by the user
      * @return a string representing the message to be sent to the server
+     * @throws IOException if an I/O Exception occurs while sending the encoded message
      */
     public String handleInput(String input) throws IOException {
         try {

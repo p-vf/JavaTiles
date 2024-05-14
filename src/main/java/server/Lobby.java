@@ -164,7 +164,7 @@ public class Lobby {
    *
    * @param cmd    A String that conforms to the network-protocol, should be a CATS-Command.
    * @param sender The client that sent the message (to which the message should not be sent).
-   * @throws IllegalArgumentException If an I/O error occurs while sending the game state to the client.
+   * @throws IOException If an I/O error occurs while sending the game state to the client.
    */
   public void sendToLobby(String cmd, ClientThread sender) throws IOException{
     for (var p : players) {

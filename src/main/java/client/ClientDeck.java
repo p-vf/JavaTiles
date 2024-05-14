@@ -66,6 +66,7 @@ public class ClientDeck {
      * The tiles are distributed into rows and columns of the deck.
      *
      * @param tileArray The array of tiles to populate the deck with.
+     * @return A 2D array representing the newly created deck populated with tiles.
      */
     public Tile[][] createDeckwithTileArray(Tile[] tileArray) {
         Tile[][] newDeck = new Tile[deck.length][deck[0].length];
