@@ -48,7 +48,7 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
-            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-9.0" textFill="WHITE">
+            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-9.0" prefHeight="17.0" prefWidth="190.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>
