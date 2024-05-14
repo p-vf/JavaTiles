@@ -471,6 +471,7 @@ public class Controller implements Initializable {
     }
 
     public void showOnlinePlayers(String message){
+        whosOnlineTextArea.clear();
         whosOnlineTextArea.setVisible(true);
         whosOnlineTextArea.appendText(message);
     }
