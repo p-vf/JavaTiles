@@ -60,7 +60,7 @@
       <Pane prefHeight="100.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <children>
             <TextField fx:id="changeNickname" layoutX="14.0" layoutY="14.0" onAction="#toChangeUsername" promptText="change nickname" />
-            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-8.0" textFill="WHITE">
+            <Label fx:id="nicknameLabel" layoutX="14.0" layoutY="-8.0" prefWidth="190.0" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Label>

@@ -157,7 +157,7 @@
                   <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
             </Button>
-            <Label fx:id="gameWarning" layoutX="103.0" layoutY="530.0" prefHeight="31.0" prefWidth="603.0" textFill="WHITE">
+            <Label fx:id="gameWarning" layoutX="255.0" layoutY="524.0" prefHeight="31.0" prefWidth="300.0" textFill="WHITE">
                <font>
                   <Font name="Arial Bold Italic" size="14.0" />
                </font>
@@ -167,17 +167,17 @@
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="playerName1" alignment="CENTER" layoutX="595.0" layoutY="219.0" prefHeight="20.0" prefWidth="363.0" rotate="-90.0" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="playerName1" alignment="CENTER" layoutX="595.0" layoutY="219.0" prefHeight="20.0" prefWidth="300.0" rotate="-90.0" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="playerName2" alignment="CENTER" layoutX="148.0" layoutY="14.0" prefHeight="20.0" prefWidth="505.0" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="playerName2" alignment="CENTER" layoutX="255.0" layoutY="17.0" prefHeight="20.0" prefWidth="300.0" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="playerName3" alignment="CENTER" layoutX="-180.0" layoutY="219.0" prefHeight="20.0" prefWidth="408.0" rotate="90.0" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="playerName3" alignment="CENTER" layoutX="-124.0" layoutY="236.0" prefHeight="20.0" prefWidth="300.0" rotate="90.0" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>

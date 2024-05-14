@@ -37,24 +37,11 @@ import static utils.NetworkUtils.encodeProtocolMessage;
  * It controls the various UI elements such as text fields, buttons, and displays.
  */
 public class Controller implements Initializable {
-    public TextField spectatorTextfield;
-    @FXML
-    public VBox vBoxFinishedGames;
     @FXML
     private TextArea whosOnlineTextArea;
-    @FXML
-    private TextArea areaRunningGames;
-    @FXML
-    private TextArea areaFinishedGames;
-    @FXML
-    private TextArea areaOpenLobbies;
-    @FXML
-    private Button broadcastButton;
-    @FXML
-    private VBox whosOnlineVBox;
 
     @FXML
-    private Button showPlayersButton;
+    private Button broadcastButton;
 
     @FXML
     private Label lobbyWarning; //The label for displaying lobby warnings.
@@ -74,9 +61,6 @@ public class Controller implements Initializable {
     private TextArea loginWarning; // The text area for displaying login warnings.
 
     @FXML
-    private VBox vBoxLobbies; // The VBox container for showing Lobbies
-
-    @FXML
     private TextArea chatArea; // The text area for displaying chat messages.
 
     @FXML
@@ -85,44 +69,32 @@ public class Controller implements Initializable {
     @FXML
     private VBox playersLobbyVbox; ///The VBox container for displaying players in lobby.
 
-    @FXML
-    private VBox highscoreVbox; //The VBox container for displaying highscores.
-
     public String lobbyNumber; // The number of the lobby
-
 
     private boolean isEmpty = false; //Flag to check if the lobby is empty.
 
     private boolean nameIsEmpty = false; //Flag to check if the given nickname is empty
 
+    @FXML
+    private TextField changeNickname; //Text field for changing the nickname.
 
     @FXML
-    private TextField changeNickname;
+    private Label nicknameLabel; //Label for displaying the current nickname.
 
     @FXML
-    private Label nicknameLabel;
+    private Label nicknameWarning; //Label for displaying a warning related to the nickname.
+
+    private boolean broadcastPressed = false; //Flag indicating whether the broadcast button is pressed.
+
+    private static String nickname; //Static variable holding the nickname.
+
+    private static boolean showUsername = false; //Static variable indicating whether to show the username.
 
     @FXML
-    private Label nicknameWarning;
-
-    private boolean broadcastPressed = false;
-    private static String nickname;
-
-    private static boolean showUsername = false;
+    private TextArea highScoreTextField; //TextArea component for displaying the high scores.
 
     @FXML
-    private Button startButton;
-
-
-    @FXML
-    private Button joinLobbyButton;
-
-
-    @FXML
-    private TextArea highScoreTextField;
-
-    @FXML
-    private TextArea areaLobbies;
+    private TextArea areaLobbies; //TextArea component for displaying available lobbies.
 
 
     /**
@@ -318,12 +290,6 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Sets the input message to the lobby view.
-     *
-     * @param message The message to be displayed in the lobby view.
-     */
-
-    /**
      * Handles the action event triggered by pressing the refresh button.
      * Sends a request to refresh the lobby.
      *
@@ -354,11 +320,15 @@ public class Controller implements Initializable {
         client.send(encodeProtocolMessage(argus));
     }
 
+    /**
+     * Updates the area displaying available lobbies with the given message.
+     *
+     * @param message the message to be displayed in the area
+     */
     public void updateAreaLobbies(String message){
         areaLobbies.clear();
         areaLobbies.setVisible(true);
         areaLobbies.appendText(message);
-
     }
 
     /**
@@ -377,11 +347,6 @@ public class Controller implements Initializable {
         arg.add(number);
         client.send(encodeProtocolMessage(arg));
     }
-
-    public String getLobbyNumber(){
-        return this.lobbyNumber;
-    }
-
 
     /**
      * Handles the action event triggered by pressing the ready button.
@@ -431,6 +396,11 @@ public class Controller implements Initializable {
         client.send(encodeProtocolMessage(args));
     }
 
+    /**
+     * Displays the players in the lobby using the provided message.
+     *
+     * @param message the message containing information about players in the lobby
+     */
     public void showPlayersInLobby(String message){
         playersLobbyVbox.getChildren().clear();
         Label label = new Label(message);
@@ -463,34 +433,65 @@ public class Controller implements Initializable {
         });
     }
 
-
+    /**
+     * Sends a request to the server to show online players.
+     *
+     * @param event the ActionEvent triggering the method
+     * @throws IOException if an I/O error occurs while sending the request
+     */
     public void showOnlinePressed(ActionEvent event) throws IOException {
         ArrayList<String> arg = new ArrayList<>();
         arg.add("LPLA");
         client.send(encodeProtocolMessage(arg));
     }
 
+    /**
+     * Displays the online players in the user interface.
+     *
+     * @param message the message containing online players' information
+     */
     public void showOnlinePlayers(String message){
         whosOnlineTextArea.clear();
         whosOnlineTextArea.setVisible(true);
         whosOnlineTextArea.appendText(message);
     }
 
+    /**
+     * Sets the nickname of the user.
+     *
+     * @param name the new nickname to set
+     */
     public void setNickname(String name){
         nickname = name;
     }
 
+    /**
+     * Sets a new nickname for the user and updates the nickname label in the UI.
+     *
+     * @param name the new nickname to set
+     */
     public void setNewNickname(String name){
         nickname = name;
         nicknameLabel.setText("Nickname: " + name);
     }
 
+    /**
+     * Sends a login request to the server when the start button is pressed.
+     *
+     * @param event the ActionEvent triggering the method
+     * @throws IOException if an I/O error occurs while sending the login request
+     */
     public void startPressed(ActionEvent event) throws IOException {
         client.setEvent(event);
         client.sendLogin();
     }
 
-
+    /**
+     * Handles the action when the user wants to change their username.
+     *
+     * @param event the ActionEvent triggering the method
+     * @throws IOException if an I/O error occurs while sending the username change request
+     */
     @FXML
     void toChangeUsername(ActionEvent event) throws IOException {
         ArrayList<String> args = new ArrayList<>();
@@ -518,6 +519,9 @@ public class Controller implements Initializable {
 
     }
 
+    /**
+     * Toggles the broadcast state and updates the broadcast button text accordingly.
+     */
     public void broadcastPressed() {
         broadcastPressed = !broadcastPressed;
         if(broadcastPressed == true){
@@ -528,13 +532,23 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     *
+     * @param location the location used to resolve relative paths for the root object
+     * @param resources the resources used to localize the root object
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        client.setgameController(null);
         if(nickname != null){
             nicknameLabel.setText("Nickname: " + nickname);
         }
     }
 
+    /**
+     * Opens the manual in a separate window.
+     */
     public void manualOpened() {
     Stage stage = new Stage();
     stage.setTitle("Manual");

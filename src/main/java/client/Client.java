@@ -83,13 +83,11 @@ public class Client {
     private ActionEvent event; // Event for GUI interaction
     private ArrayList<String> playersInLobby = new ArrayList<>(); // List of players in the lobby
 
-    private String[] arguments;
+    private Thread guiThread; //Thread responsible for handling GUI operations.
 
-    private Thread guiThread;
+    private String login; //Username of the logged-in player.
 
-    private String login;
-
-    private boolean drawnATile;
+    private boolean drawnATile; //Flag indicating whether a tile has been drawn.
 
 
     /**
@@ -132,8 +130,6 @@ public class Client {
 
             String loginData;
 
-            client.setArguments(args);
-
 
             String line = " ";
 
@@ -170,23 +166,16 @@ public class Client {
             System.out.println("Your connection to the server has been lost");
             System.out.println(e.getMessage());
             System.exit(0);
-
-
         }
-
-
     }
 
+    /**
+     * Sends the login information to the server.
+     *
+     * @throws IOException if an I/O error occurs while sending the login information.
+     */
     public void sendLogin() throws IOException {
         send(login);
-    }
-
-    public void setArguments(String[] arguments) {
-        this.arguments = arguments;
-    }
-
-    public String[] getArguments() {
-        return arguments;
     }
 
     /**
@@ -448,6 +437,12 @@ public class Client {
             return null;
         }
     }
+
+    /**
+     * Sets the status of the lobby.
+     *
+     * @param bool the boolean value indicating whether the lobby is active or not
+     */
     public void setLobby(boolean bool){
         this.lobby = bool;
     }
@@ -1063,6 +1058,7 @@ public class Client {
 
                 case LLOB:
                     Platform.runLater(() -> {
+                        gameController = null;
                         changeScene("lobbySelection");
                     });
 
@@ -1333,6 +1329,12 @@ public class Client {
     public Tile[] getTiles() {
         return deckTiles;
     }
+
+    /**
+     * Retrieves an array of tiles representing the deck.
+     *
+     * @return an array of Tile objects representing the tiles in the deck
+     */
     public Tile[] getDeckTiles(){
         return yourDeck.DeckToTileArray();
     }
@@ -1349,7 +1351,11 @@ public class Client {
         pressedStart = bool;
     }
 
-
+    /**
+     * Retrieves the nickname of the player.
+     *
+     * @return the nickname of the player
+     */
     public String getNickname(){
     return this.nickname;
     }
