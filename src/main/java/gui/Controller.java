@@ -471,6 +471,7 @@ public class Controller implements Initializable {
     }
 
     public void showOnlinePlayers(String message){
+        whosOnlineTextArea.clear();
         whosOnlineTextArea.setVisible(true);
         whosOnlineTextArea.appendText(message);
     }
@@ -541,22 +542,44 @@ public class Controller implements Initializable {
 
     ScrollPane scroll = new ScrollPane();
     VBox box = new VBox();
-    Image firstImage = new Image("/manualImageOne.jpg");
-    Image secImage = new Image("/manualImageTwo.jpg");
+    Image firstImage = new Image("/Manual_JavaTiles-1.png");
+    Image secImage = new Image("/Manual_JavaTiles-2.png");
+    Image thirdImage = new Image("/Manual_JavaTiles-3.png");
+    Image fourthImage = new Image("/Manual_JavaTiles-4.png");
+    Image fifthImage = new Image("/Manual_JavaTiles-5.png");
 
     ImageView firstImageView = new ImageView();
     ImageView secImageView = new ImageView();
+    ImageView thirdImageView = new ImageView();
+    ImageView fourthImageView = new ImageView();
+    ImageView fifthImageView = new ImageView();
 
     firstImageView.setImage(firstImage);
     firstImageView.setFitWidth(1200);
     firstImageView.setPreserveRatio(true);
     firstImageView.setSmooth(true);
+
     secImageView.setImage(secImage);
     secImageView.setFitWidth(1200);
     secImageView.setPreserveRatio(true);
     secImageView.setSmooth(true);
 
-    box.getChildren().addAll(firstImageView, secImageView);
+    thirdImageView.setImage(thirdImage);
+    thirdImageView.setFitWidth(1200);
+    thirdImageView.setPreserveRatio(true);
+    thirdImageView.setSmooth(true);
+
+    fourthImageView.setImage(fourthImage);
+    fourthImageView.setFitWidth(1200);
+    fourthImageView.setPreserveRatio(true);
+    fourthImageView.setSmooth(true);
+
+    fifthImageView.setImage(fifthImage);
+    fifthImageView.setFitWidth(1200);
+    fifthImageView.setPreserveRatio(true);
+    fifthImageView.setSmooth(true);
+
+    box.getChildren().addAll(firstImageView, secImageView, thirdImageView, fourthImageView, fifthImageView);
     scroll.setContent(box);
     Scene scene = new Scene(scroll,1280, 720);
     stage.setScene(scene);
