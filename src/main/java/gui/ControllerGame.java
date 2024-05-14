@@ -209,14 +209,14 @@ public class ControllerGame implements Initializable {
 
     private boolean broadcastPressed = false; // Flag indicating if broadcast mode is enabled
     private boolean startPressed = false; // Flag indicating if the start button has been pressed
-    private boolean isCheatCode = false;
+    private boolean isCheatCode = false; // Flag indicating if a cheat code has been entered
 
-    private boolean yourTurn = false;
+    private boolean yourTurn = false; // Flag indicating if it's the player's turn
 
-    private boolean alreadyInGame = false;
+    private boolean alreadyInGame = false; // Flag indicating if the player is already in a game
 
     @FXML
-    private Button leaveLobbyButton;
+    private Button leaveLobbyButton; // Button to leave the lobby
 
 
 

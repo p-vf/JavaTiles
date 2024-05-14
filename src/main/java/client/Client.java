@@ -1058,7 +1058,6 @@ public class Client {
 
                 case LLOB:
                     Platform.runLater(() -> {
-                        gameController = null;
                         changeScene("lobbySelection");
                     });
 
