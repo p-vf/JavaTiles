@@ -117,11 +117,9 @@ public class Lobby {
    * @return {@code true} if and only if the player was successfully added to the lobby.
    */
   public boolean addPlayer(ClientThread client) {
-    int playerCount = 0;
+    int oldPlayerCount = getNumberOfPlayers();
     for (int i = 0; i < players.size(); i++) {
-      if (players.get(i) != null) {
-        playerCount++;
-      } else {
+      if (players.get(i) == null) {
         players.set(i, client);
         if (gameState != null) {
           try {
@@ -132,10 +130,13 @@ public class Lobby {
             return false;
           }
         }
+        if (oldPlayerCount == 3) {
+          lobbyState = LobbyState.RUNNING;
+        }
         return true;
       }
     }
-    if (playerCount < 4) {
+    if (oldPlayerCount < 4) {
       players.add(client);
       return true;
     }
