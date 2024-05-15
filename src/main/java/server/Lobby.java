@@ -138,6 +138,9 @@ public class Lobby {
         }
         if (oldPlayerCount < 4) {
             players.add(client);
+            if (getNumberOfPlayers() == 4) {
+                lobbyState = LobbyState.RUNNING;
+            }
             return true;
         }
         return false;
