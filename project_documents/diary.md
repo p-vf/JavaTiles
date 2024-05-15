@@ -314,10 +314,14 @@ und sind zu dem Entschluss gekommen, dass es zeitlich etwas knapp wird und der Z
 vorhandenen Funktionen beeinträchtigen könnte und haben uns dagegen entschieden.
 - Danach haben wir unsere TODO-Liste aktualisiert.
 
-## 14.05.2024 Treffen im Lernoullianum
+## 13.05.2024 Übungsstunde (Boran, Pascal)
+- Das GUI wurde intensiv getestet und einige Fehler wurden noch gefunden. Diese wurden behoben. 
+- Letzte Optische Änderungen am GUI wurden in Einzelarbeit hinzugefügt. 
+
+## 14.05.2024 Treffen im Lernoullianum (Boran, Robin, Pascal, Istref)
 - Das Spiel ist nun fertiggestellt. 
-- An diesem Tag waren wir mit den letzten Aufnahmen unseres Spiels, wie auch mit der Erarbeitung der Presentation für den kommenden Freitag beschäftigt.
+- An diesem Tag waren wir mit den letzten Aufnahmen unseres Spiels, wie auch mit der Erarbeitung der Presentation für den kommenden Freitag beschäftigt. 
 - Die Aufnahmen beinhalten einserseits einige Screenshots des Spiels, wie auch das Videomaterial für unser gameplay. 
 - Wir entschieden uns dazu, in der Demo den Cheat-code zu verwenden um das Spielgeschehen zu beschleunigen. 
+- Ein Unit test war nicht mehr erfolgreich, diesen Fehler hat Istref behoben. 
 - Zum generellen Abschluss kann man sagen, dass wir sehr zufrieden mit unserem Spiel sind und der Art wie wir zusammengearbeitet haben. 
-
