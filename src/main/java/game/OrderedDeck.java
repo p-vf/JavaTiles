@@ -19,14 +19,14 @@ import java.util.Arrays;
  */
 
 public class OrderedDeck {
-
-  private static final Logger LOGGER = LogManager.getLogger(OrderedDeck.class); //Logger object for logging messages related to the OrderedDeck class.
-
-  public static final int DECK_HEIGHT = 2; //height of each deck
-
-  public static final int DECK_WIDTH = 12; //width of each deck
-
-  private Tile[][] deck; // The 2D array representing the deck of tiles.
+  /**Logger object for logging messages related to the OrderedDeck class.*/
+  private static final Logger LOGGER = LogManager.getLogger(OrderedDeck.class);
+  /**height of each deck*/
+  public static final int DECK_HEIGHT = 2;
+  /**width of each deck*/
+  public static final int DECK_WIDTH = 12;
+  /** The 2D array representing the deck of tiles.*/
+  private Tile[][] deck;
 
   private void setDeck(Tile[] tileArray) {
     deck = deckFromTileArray(tileArray);
@@ -60,16 +60,6 @@ public class OrderedDeck {
     return deck;
   }
 
-  /**
-   * Retrieves a specific tile from the deck based on its column and row indices.
-   *
-   * @param column The column index of the desired tile.
-   * @param row    The row index of the desired tile.
-   * @return The tile located at the specified column and row in the deck.
-   */
-  public Tile getTile(int column, int row) {
-    return deck[column][row];
-  }
 
   /**
    * Constructs a new ClientDeck object with a deck that has a height of 2 and a width of 12 and is filled with null values.
@@ -129,23 +119,7 @@ public class OrderedDeck {
   }
 
 
-  /**
-   * Adds a sequence of tiles to the deck, filling empty slots in a row-major order.
-   *
-   * @param tiles The tiles to add to the deck.
-   */
-  public void addTiles(Tile... tiles) {
-    int count = 0;
-    if (tiles.length > 0) {
-      for (int i = 0; i < deck.length; i++) {
-        for (int j = 0; j < deck[0].length && count < tiles.length; j++) {
-          if (deck[i][j] == null) {
-            deck[i][j] = tiles[count++];
-          }
-        }
-      }
-    }
-  }
+
 
   /**
    * Counts the total number of tiles currently present in the deck.
@@ -181,21 +155,7 @@ public class OrderedDeck {
     }
   }
 
-  /**
-   * Swaps the positions of two tiles within the deck.
-   *
-   * @param row1    The row index of the first tile.
-   * @param column1 The column index of the first tile.
-   * @param row2    The row index of the second tile.
-   * @param column2 The column index of the second tile.
-   */
-  public void swap(int row1, int column1, int row2, int column2) {
-    Tile temp = deck[row1][column1];
 
-    deck[row1][column1] = deck[row2][column2];
-    deck[row2][column2] = temp;
-
-  }
 
   /**
    * Returns the "unordered version" of the deck, meaning an instance of {@link UnorderedDeck} that contains each tile as often as it occurs in the deck.
@@ -314,12 +274,6 @@ public class OrderedDeck {
           }
           boolean validRun = isValidRun(tileRow, from, to);
           boolean validSet = isValidSet(tileRow, from, to);
-          if (validRun) {
-            //System.out.println("Valid run: " + output);
-          }
-          if (validSet) {
-            //System.out.println("Valid set: " + output);
-          }
           if (!validSet && !validRun) {
             //System.out.println("Invalid section: " + output);
             //System.out.println("Returning false: Neither a valid set nor a valid run.");

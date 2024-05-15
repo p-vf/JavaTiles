@@ -265,11 +265,6 @@ public class Lobby {
   public void removePlayer(int playerIndex) throws IOException {
     lobbyState = LobbyState.OPEN;
     players.set(playerIndex, null);
-    for (int i = 0; i < players.size(); i++) {
-      if (players.get(i) != null) {
-        //players.get(i).send(NetworkUtils.encodeProtocolMessage("LEFT", Integer.toString(i)));
-      }
-    }
   }
 
   /**
