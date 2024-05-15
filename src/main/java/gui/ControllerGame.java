@@ -219,8 +219,6 @@ public class ControllerGame implements Initializable {
     private Button leaveLobbyButton; // Button to leave the lobby
 
 
-
-
     /**
      * Sets the client instance for the controller.
      *
@@ -246,7 +244,7 @@ public class ControllerGame implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         deck = new ArrayList<>(Arrays.asList(zero0, zero1, zero2, zero3, zero4, zero5, zero6, zero7, zero8, zero9, zero10, zero11, one0, one1, one2, one3, one4, one5, one6, one7, one8, one9, one10, one11));
         playerNames = new ArrayList<>(Arrays.asList(playerName0, playerName1, playerName2, playerName3));
-        for(Button button : deck){
+        for (Button button : deck) {
             button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
         }
         puttButton.setDisable(true);
@@ -274,12 +272,11 @@ public class ControllerGame implements Initializable {
         startPressed = true;
 
         fillInDeck();
-        if(!alreadyInGame){
+        if (!alreadyInGame) {
             disableStacks(true);
-        }
-        else{
+        } else {
             disableStacks(false);
-            if(client.getDeckTiles().length==15){
+            if (client.getDeckTiles().length == 15) {
                 disableStacks(true);
                 client.send("JOND");
             }
@@ -294,7 +291,8 @@ public class ControllerGame implements Initializable {
         });
 
 
-        }
+    }
+
     /**
      * Fills in the deck with the player's tiles.
      * <p>
@@ -302,17 +300,17 @@ public class ControllerGame implements Initializable {
      * to display the corresponding tile information. If a tile is null, the button text is cleared.
      * </p>
      */
-        public void fillInDeck(){
+    public void fillInDeck() {
         this.tiles = client.getTiles();
-            for (int i = 0; i < deck.size(); i++) {
-                if (tiles[i] == null) {
-                    deck.get(i).setText("");
-                } else {
-                    createTile(deck.get(i), tiles[i].getColor(), tiles[i].getNumber());
-                }
+        for (int i = 0; i < deck.size(); i++) {
+            if (tiles[i] == null) {
+                deck.get(i).setText("");
+            } else {
+                createTile(deck.get(i), tiles[i].getColor(), tiles[i].getNumber());
             }
-
         }
+
+    }
 
     /**
      * Creates and styles a tile button based on its color and number.
@@ -321,26 +319,25 @@ public class ControllerGame implements Initializable {
      * If the tile number is 0, it is considered a joker and is styled differently.
      * </p>
      *
-     * @param tile the button representing the tile
-     * @param color the color of the tile
+     * @param tile       the button representing the tile
+     * @param color      the color of the tile
      * @param tileNumber the number of the tile (0 for joker)
      */
-        private void createTile(Button tile, game.Color color, int tileNumber){
-        if(tileNumber == 0){
-            tile.setFont(Font.font("Algerian",22));
+    private void createTile(Button tile, game.Color color, int tileNumber) {
+        if (tileNumber == 0) {
+            tile.setFont(Font.font("Algerian", 22));
             tile.setTextFill(Paint.valueOf("#1b6538"));
             tile.setText("J");
-        }
-        else{
-            tile.setFont(Font.font("Arial Rounded MT Bold",18));
+        } else {
+            tile.setFont(Font.font("Arial Rounded MT Bold", 18));
             tile.setTextFill(Paint.valueOf(String.valueOf(color)));
-            tile.setText(""+tileNumber);
-            if(color.equals(YELLOW)){
+            tile.setText("" + tileNumber);
+            if (color.equals(YELLOW)) {
                 tile.setTextFill(DARKGOLDENROD);
             }
         }
 
-        }
+    }
 
 
     /**
@@ -386,7 +383,7 @@ public class ControllerGame implements Initializable {
      *
      * @param bool {@code true} if the player is already in a game, {@code false} otherwise
      */
-    public void setAlreadyInGame(boolean bool){
+    public void setAlreadyInGame(boolean bool) {
         alreadyInGame = bool;
     }
 
@@ -429,6 +426,7 @@ public class ControllerGame implements Initializable {
 
 
     }
+
     /**
      * Sets the player's turn status.
      * <p>
@@ -437,7 +435,7 @@ public class ControllerGame implements Initializable {
      *
      * @param bool true if it is the player's turn, false otherwise
      */
-    public void setYourTurn(boolean bool){
+    public void setYourTurn(boolean bool) {
         yourTurn = bool;
     }
 
@@ -489,8 +487,8 @@ public class ControllerGame implements Initializable {
      * Additionally, it disables the exchange stack of the player and the main stack button.
      * </p>
      */
-    private void killAllButtons(){
-        for(Button button : deck){
+    private void killAllButtons() {
+        for (Button button : deck) {
             button.setDisable(true);
         }
         exchangeStack0.setDisable(true);
@@ -623,9 +621,10 @@ public class ControllerGame implements Initializable {
         if (pressedButtons.size() == 1) {
             for (int i = 0; i < deck.size(); i++) {
                 if (pressedButtons.get(0).equals(deck.get(i))) {
-                    customizeButton(deck.get(i),true);
-                    if(yourTurn){
-                    puttButton.setDisable(false);}
+                    customizeButton(deck.get(i), true);
+                    if (yourTurn) {
+                        puttButton.setDisable(false);
+                    }
                 }
             }
 
@@ -743,11 +742,11 @@ public class ControllerGame implements Initializable {
      *               {@code false} to set it to set the button back to default.
      */
 
-    public void customizeButton(Button button, boolean bool){
-        if(bool){
+    public void customizeButton(Button button, boolean bool) {
+        if (bool) {
             button.setStyle("-fx-background-color: #c8c8c8; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
 
-        }else{
+        } else {
             button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
         }
     }
@@ -800,8 +799,9 @@ public class ControllerGame implements Initializable {
         for (int i = 0; i < deck.size(); i++) {
             if ((deck.get(i).getText().isBlank()) && count == 0) {
                 count++;
-                if(tile != null){
-                createTile(deck.get(i), tile.getColor(), tile.getNumber());}
+                if (tile != null) {
+                    createTile(deck.get(i), tile.getColor(), tile.getNumber());
+                }
             }
         }
     }
@@ -831,11 +831,11 @@ public class ControllerGame implements Initializable {
                 gameChatIncoming("you need to press start first.");
             }
         }
-            if (messageToSend != null && !(isCheatCode)) {
-                client.send(messageToSend);
-            }
-            gameChatField.clear();
+        if (messageToSend != null && !(isCheatCode)) {
+            client.send(messageToSend);
         }
+        gameChatField.clear();
+    }
 
 
     /**
@@ -905,10 +905,10 @@ public class ControllerGame implements Initializable {
      */
     public void broadcastPressed() {
         broadcastPressed = !broadcastPressed;
-        if(broadcastPressed == true){
+        if (broadcastPressed == true) {
             broadcastButton.setText("Broadcast-On");
         }
-        if(broadcastPressed == false){
+        if (broadcastPressed == false) {
             broadcastButton.setText("Broadcast-Off");
         }
     }
@@ -942,10 +942,11 @@ public class ControllerGame implements Initializable {
     @FXML
     void noTileHover(MouseEvent event) {
         Button button = (Button) event.getTarget();
-        button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");}
-
-
+        button.setStyle("-fx-background-color: #fdfdfd; -fx-border-color: #c1c1c1; -fx-border-radius: 4px; -fx-cursor: HAND;");
     }
+
+
+}
 
 
 
