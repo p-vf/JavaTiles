@@ -285,8 +285,9 @@ public class Client {
                         } else {
                             yourDeck.swap(row, col, row2, col2);
                             showDeck();
-                            if(gameController != null){
-                            gameController.setTextofGameWarning("");}
+                            if (gameController != null) {
+                                gameController.setTextofGameWarning("");
+                            }
 
                             return null;
                         }
@@ -445,7 +446,7 @@ public class Client {
      *
      * @param bool the boolean value indicating whether the lobby is active or not
      */
-    public void setLobby(boolean bool){
+    public void setLobby(boolean bool) {
         this.lobby = bool;
     }
 
@@ -526,7 +527,7 @@ public class Client {
                     }
                     if (tileCount == 15) {
                         Platform.runLater(() -> {
-                                gameController.setYourTurn(true);
+                            gameController.setYourTurn(true);
                         });
 
                         System.out.println("It's your turn.");
@@ -614,7 +615,6 @@ public class Client {
                     }
 
 
-
                     System.out.println("The following players are in the lobby:");
 
                     for (int i = 0; i < nameArray.length; i++) {
@@ -634,7 +634,7 @@ public class Client {
                     System.out.println(arguments.get(0) + " joined the lobby");
                     Platform.runLater(() -> {
                         controller.chatIncoming(arguments.get(0) + " joined the lobby");
-                        if(gameController != null){
+                        if (gameController != null) {
                             gameController.gameChatIncoming(arguments.get(0) + " joined the lobby");
                         }
                     });
@@ -646,9 +646,10 @@ public class Client {
                     send(encodeProtocolMessage("RNAM"));
                     System.out.println(arguments.get(0) + " left the lobby");
                     String message = arguments.get(0) + " left the lobby";
-                    if(gameController != null){
-                    gameController.gameChatIncoming(message);}
-                    if(controller != null){
+                    if (gameController != null) {
+                        gameController.gameChatIncoming(message);
+                    }
+                    if (controller != null) {
                         controller.chatIncoming(message);
 
                     }
@@ -695,7 +696,7 @@ public class Client {
                                 if (arguments.get(1).matches("\\d+")) {
                                     gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
                                 }
-                                if((this.playersInLobby.get(Integer.parseInt(arguments.get(1))).equals(""))){
+                                if ((this.playersInLobby.get(Integer.parseInt(arguments.get(1))).equals(""))) {
                                     gameController.setTurnLabel("Waiting for this player to connect...");
                                 }
 
@@ -761,11 +762,11 @@ public class Client {
 
                 case NAME:
                     nickname = arguments.get(0);
-                    if(gameController != null){
-                    gameController.setNickname(nickname);
-                    gameController.gameChatIncoming("Your nickname has been changed to: " + nickname);
+                    if (gameController != null) {
+                        gameController.setNickname(nickname);
+                        gameController.gameChatIncoming("Your nickname has been changed to: " + nickname);
                     }
-                    if(controller != null){
+                    if (controller != null) {
 
                         Platform.runLater(() -> {
                             controller.setNewNickname(nickname);
@@ -784,12 +785,12 @@ public class Client {
                 case LGAM:
 
                     if (arguments.get(0).equals("o")) {
-                        if(arguments.get(1).isEmpty()){
+                        if (arguments.get(1).isEmpty()) {
                             String message = "No open lobbies available";
                             Platform.runLater(() -> {
                                 controller.updateAreaLobbies(message);
                             });
-                        }else{
+                        } else {
 
                             String argList = arguments.get(1);
                             String[] status = argList.split(" ");
@@ -840,12 +841,12 @@ public class Client {
                     }
 
                     if (arguments.get(0).equals("r")) {
-                        if(arguments.get(1).isEmpty()){
+                        if (arguments.get(1).isEmpty()) {
                             String message = "No ongoing games available";
                             Platform.runLater(() -> {
                                 controller.updateAreaLobbies(message);
                             });
-                        }else{
+                        } else {
 
                             String argList = arguments.get(1);
                             String[] status = argList.split(",");
@@ -879,11 +880,12 @@ public class Client {
                     }
 
                     if (arguments.get(0).equals("f")) {
-                        if(arguments.get(1).isEmpty()){
+                        if (arguments.get(1).isEmpty()) {
                             String message = "No finished games available";
                             Platform.runLater(() -> {
                                 controller.updateAreaLobbies(message);
-                            });}else{
+                            });
+                        } else {
                             String argList = arguments.get(1);
                             String[] status = argList.split(",");
                             String infos = String.join(":", status);
@@ -1003,9 +1005,9 @@ public class Client {
                     });
 
 
-
-                    if(tile != null){
-                    System.out.println("You have drawn: " + tile.toStringPretty());}
+                    if (tile != null) {
+                        System.out.println("You have drawn: " + tile.toStringPretty());
+                    }
 
                     showDeck();
                     drawnATile = true;
@@ -1079,7 +1081,7 @@ public class Client {
                     Tile[][] newDeck = yourDeck.createDeckwithTileArray(tilesArray);
                     yourDeck.setDeck(newDeck);
                     showDeck();
-                    if(gameController != null){
+                    if (gameController != null) {
                         Platform.runLater(() -> {
                             gameController.fillInDeck();
                         });
@@ -1126,8 +1128,9 @@ public class Client {
                     }
                     String pInLobby = sb.toString();
                     Platform.runLater(() -> {
-                        if(gameController == null){
-                        controller.showPlayersInLobby(pInLobby);}
+                        if (gameController == null) {
+                            controller.showPlayersInLobby(pInLobby);
+                        }
                     });
                     break;
 
@@ -1172,7 +1175,7 @@ public class Client {
                                 if (arguments.get(1).matches("\\d+")) {
                                     gameController.setTurnLabel("It's " + this.playersInLobby.get(Integer.parseInt(arguments.get(1))) + "'s turn.");
                                 }
-                                if((this.playersInLobby.get(Integer.parseInt(arguments.get(1))).equals(""))){
+                                if ((this.playersInLobby.get(Integer.parseInt(arguments.get(1))).equals(""))) {
                                     gameController.setTurnLabel("Waiting for this player to connect...");
                                 }
                             } catch (IOException e) {
@@ -1336,7 +1339,7 @@ public class Client {
      *
      * @return an array of Tile objects representing the tiles in the deck
      */
-    public Tile[] getDeckTiles(){
+    public Tile[] getDeckTiles() {
         return yourDeck.DeckToTileArray();
     }
 
@@ -1357,8 +1360,8 @@ public class Client {
      *
      * @return the nickname of the player
      */
-    public String getNickname(){
-    return this.nickname;
+    public String getNickname() {
+        return this.nickname;
     }
 
 }

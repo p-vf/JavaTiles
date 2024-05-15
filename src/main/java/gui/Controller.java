@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+
 import javafx.scene.image.Image;
 
 import static utils.NetworkUtils.encodeProtocolMessage;
@@ -170,9 +171,9 @@ public class Controller implements Initializable {
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene;
-        if(!(url.contains("/ourgame.fxml"))){
-        scene = new Scene(new StackPane(root), 900, 600);}
-        else{
+        if (!(url.contains("/ourgame.fxml"))) {
+            scene = new Scene(new StackPane(root), 900, 600);
+        } else {
             scene = new Scene(new StackPane(root));
         }
 
@@ -198,7 +199,7 @@ public class Controller implements Initializable {
             });
 
             stage.setResizable(false);
-            if(url.contains("/ourgame.fxml")){
+            if (url.contains("/ourgame.fxml")) {
                 stage.setResizable(true);
             }
 
@@ -207,7 +208,6 @@ public class Controller implements Initializable {
             stage.show();
         }
     }
-
 
 
     /**
@@ -224,7 +224,7 @@ public class Controller implements Initializable {
             switch (inputCommand) {
 
                 case "lobby":
-                    showUsername=true;
+                    showUsername = true;
                     sceneSwitcher(event, "/lobby.fxml");
                     break;
 
@@ -258,7 +258,7 @@ public class Controller implements Initializable {
      */
     public void chatInputPressed(ActionEvent event) throws IOException {
         String chatMessage = "/chat" + " " + chatInput.getText();
-        if(broadcastPressed == true){
+        if (broadcastPressed == true) {
             chatMessage = "/chat" + " " + "/all" + " " + chatInput.getText();
         }
         String messageToSend = client.handleInput(chatMessage);
@@ -297,23 +297,25 @@ public class Controller implements Initializable {
      */
 
     @FXML
-    void openGames(ActionEvent event) throws IOException{
+    void openGames(ActionEvent event) throws IOException {
         ArrayList<String> arg = new ArrayList<>();
         arg.add("LGAM");
         arg.add("o");
         client.send(encodeProtocolMessage(arg));
 
     }
+
     @FXML
-     void finishedGames(ActionEvent event) throws IOException{
+    void finishedGames(ActionEvent event) throws IOException {
         ArrayList<String> args = new ArrayList<>();
         args.add("LGAM");
         args.add("f");
         client.send(encodeProtocolMessage(args));
 
     }
-@FXML
-     void runningGames(ActionEvent event) throws IOException{
+
+    @FXML
+    void runningGames(ActionEvent event) throws IOException {
         ArrayList<String> argus = new ArrayList<>();
         argus.add("LGAM");
         argus.add("r");
@@ -325,7 +327,7 @@ public class Controller implements Initializable {
      *
      * @param message the message to be displayed in the area
      */
-    public void updateAreaLobbies(String message){
+    public void updateAreaLobbies(String message) {
         areaLobbies.clear();
         areaLobbies.setVisible(true);
         areaLobbies.appendText(message);
@@ -377,7 +379,6 @@ public class Controller implements Initializable {
     }
 
 
-
     /**
      * Sets the text of the ready button to the specified text.
      *
@@ -403,7 +404,7 @@ public class Controller implements Initializable {
      *
      * @param message the message containing information about players in the lobby
      */
-    public void showPlayersInLobby(String message){
+    public void showPlayersInLobby(String message) {
         playersLobbyVbox.getChildren().clear();
         Label label = new Label(message);
         label.setFont(Font.font("Bold", FontWeight.BOLD, 14));
@@ -452,7 +453,7 @@ public class Controller implements Initializable {
      *
      * @param message the message containing online players' information
      */
-    public void showOnlinePlayers(String message){
+    public void showOnlinePlayers(String message) {
         whosOnlineTextArea.clear();
         whosOnlineTextArea.setVisible(true);
         whosOnlineTextArea.appendText(message);
@@ -463,7 +464,7 @@ public class Controller implements Initializable {
      *
      * @param name the new nickname to set
      */
-    public void setNickname(String name){
+    public void setNickname(String name) {
         nickname = name;
     }
 
@@ -472,7 +473,7 @@ public class Controller implements Initializable {
      *
      * @param name the new nickname to set
      */
-    public void setNewNickname(String name){
+    public void setNewNickname(String name) {
         nickname = name;
         nicknameLabel.setText("Nickname: " + name);
     }
@@ -526,10 +527,10 @@ public class Controller implements Initializable {
      */
     public void broadcastPressed() {
         broadcastPressed = !broadcastPressed;
-        if(broadcastPressed == true){
+        if (broadcastPressed == true) {
             broadcastButton.setText("Broadcast-On");
         }
-        if(broadcastPressed == false){
+        if (broadcastPressed == false) {
             broadcastButton.setText("Broadcast-Off");
         }
     }
@@ -537,12 +538,12 @@ public class Controller implements Initializable {
     /**
      * Initializes the controller after its root element has been completely processed.
      *
-     * @param location the location used to resolve relative paths for the root object
+     * @param location  the location used to resolve relative paths for the root object
      * @param resources the resources used to localize the root object
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(nickname != null){
+        if (nickname != null) {
             nicknameLabel.setText("Nickname: " + nickname);
         }
     }
@@ -551,53 +552,53 @@ public class Controller implements Initializable {
      * Opens the manual in a separate window.
      */
     public void manualOpened() {
-    Stage stage = new Stage();
-    stage.setTitle("Manual");
+        Stage stage = new Stage();
+        stage.setTitle("Manual");
 
-    ScrollPane scroll = new ScrollPane();
-    VBox box = new VBox();
-    Image firstImage = new Image("/Manual_JavaTiles-1.png");
-    Image secImage = new Image("/Manual_JavaTiles-2.png");
-    Image thirdImage = new Image("/Manual_JavaTiles-3.png");
-    Image fourthImage = new Image("/Manual_JavaTiles-4.png");
-    Image fifthImage = new Image("/Manual_JavaTiles-5.png");
+        ScrollPane scroll = new ScrollPane();
+        VBox box = new VBox();
+        Image firstImage = new Image("/Manual_JavaTiles-1.png");
+        Image secImage = new Image("/Manual_JavaTiles-2.png");
+        Image thirdImage = new Image("/Manual_JavaTiles-3.png");
+        Image fourthImage = new Image("/Manual_JavaTiles-4.png");
+        Image fifthImage = new Image("/Manual_JavaTiles-5.png");
 
-    ImageView firstImageView = new ImageView();
-    ImageView secImageView = new ImageView();
-    ImageView thirdImageView = new ImageView();
-    ImageView fourthImageView = new ImageView();
-    ImageView fifthImageView = new ImageView();
+        ImageView firstImageView = new ImageView();
+        ImageView secImageView = new ImageView();
+        ImageView thirdImageView = new ImageView();
+        ImageView fourthImageView = new ImageView();
+        ImageView fifthImageView = new ImageView();
 
-    firstImageView.setImage(firstImage);
-    firstImageView.setFitWidth(1200);
-    firstImageView.setPreserveRatio(true);
-    firstImageView.setSmooth(true);
+        firstImageView.setImage(firstImage);
+        firstImageView.setFitWidth(1200);
+        firstImageView.setPreserveRatio(true);
+        firstImageView.setSmooth(true);
 
-    secImageView.setImage(secImage);
-    secImageView.setFitWidth(1200);
-    secImageView.setPreserveRatio(true);
-    secImageView.setSmooth(true);
+        secImageView.setImage(secImage);
+        secImageView.setFitWidth(1200);
+        secImageView.setPreserveRatio(true);
+        secImageView.setSmooth(true);
 
-    thirdImageView.setImage(thirdImage);
-    thirdImageView.setFitWidth(1200);
-    thirdImageView.setPreserveRatio(true);
-    thirdImageView.setSmooth(true);
+        thirdImageView.setImage(thirdImage);
+        thirdImageView.setFitWidth(1200);
+        thirdImageView.setPreserveRatio(true);
+        thirdImageView.setSmooth(true);
 
-    fourthImageView.setImage(fourthImage);
-    fourthImageView.setFitWidth(1200);
-    fourthImageView.setPreserveRatio(true);
-    fourthImageView.setSmooth(true);
+        fourthImageView.setImage(fourthImage);
+        fourthImageView.setFitWidth(1200);
+        fourthImageView.setPreserveRatio(true);
+        fourthImageView.setSmooth(true);
 
-    fifthImageView.setImage(fifthImage);
-    fifthImageView.setFitWidth(1200);
-    fifthImageView.setPreserveRatio(true);
-    fifthImageView.setSmooth(true);
+        fifthImageView.setImage(fifthImage);
+        fifthImageView.setFitWidth(1200);
+        fifthImageView.setPreserveRatio(true);
+        fifthImageView.setSmooth(true);
 
-    box.getChildren().addAll(firstImageView, secImageView, thirdImageView, fourthImageView, fifthImageView);
-    scroll.setContent(box);
-    Scene scene = new Scene(scroll,1280, 720);
-    stage.setScene(scene);
-    stage.show();
+        box.getChildren().addAll(firstImageView, secImageView, thirdImageView, fourthImageView, fifthImageView);
+        scroll.setContent(box);
+        Scene scene = new Scene(scroll, 1280, 720);
+        stage.setScene(scene);
+        stage.show();
     }
 }
 
