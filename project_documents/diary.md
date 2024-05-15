@@ -302,14 +302,22 @@ ohne Robin, da wir fanden, dass es nicht viel Sinn macht zu dritt daran zu arbei
 - noch zu klären: Müssen die Spieler vom Server während dem Spiel aufgelistet werden können?
 
 ## 7.-9.5.2024 Einzelarbeit
-- Wir haben am Manual und am QA-Konzept.
-- Wir haben über WhatsApp besprochen, dass wir probieren einen Zuschauer Modus einzufügen, falls dieser uns
+- Wir haben am Manual und am QA-Konzept gearbeitet.
+- Wir haben über WhatsApp besprochen, dass wir versuchen werden einen Zuschauer Modus einzufügen, falls dieser uns
 nicht zu viel Zeit kostet.
 - Einige Funktionalitäten und Designs wurden dem GUI hinzugefügt.
 - Ein Treffen wurde ausgemacht für den 10.05.2024 im Lernoullianum.
 
-## 10.05.2024 Treffen im Lernoullianum
+## 10.05.2024 Treffen im Lernoullianum (Boran, Robin, Pascal, Istref)
 - Beim Treffen haben wir als erstes Besprochen, ob wir den Zuschauer Modus nun implementieren oder nicht
 und sind zu dem Entschluss gekommen, dass es zeitlich etwas knapp wird und der Zuschauer Modus auch die anderen bereits
 vorhandenen Funktionen beeinträchtigen könnte und haben uns dagegen entschieden.
 - Danach haben wir unsere TODO-Liste aktualisiert.
+
+## 14.05.2024 Treffen im Lernoullianum
+- Das Spiel ist nun fertiggestellt. 
+- An diesem Tag waren wir mit den letzten Aufnahmen unseres Spiels, wie auch mit der Erarbeitung der Presentation für den kommenden Freitag beschäftigt.
+- Die Aufnahmen beinhalten einserseits einige Screenshots des Spiels, wie auch das Videomaterial für unser gameplay. 
+- Wir entschieden uns dazu, in der Demo den Cheat-code zu verwenden um das Spielgeschehen zu beschleunigen. 
+- Zum generellen Abschluss kann man sagen, dass wir sehr zufrieden mit unserem Spiel sind und der Art wie wir zusammengearbeitet haben. 
+
